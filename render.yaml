@@ -1,0 +1,52 @@
+databases:
+  - name: kastriottanaj-db
+    plan: free
+    databaseName: kastriottanaj
+    user: kastriot
+
+services:
+  # Django Backend API
+  - type: web
+    name: kastriottanaj-api
+    runtime: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kastriottanaj-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "kastriottanaj.com,www.kastriottanaj.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://kastriottanaj.com,https://www.kastriottanaj.com"
+      - key: SITE_DOMAIN
+        value: "kastriottanaj.com"
+      - key: PYTHON_VERSION
+        value: "3.11.11"
+
+  # React Frontend (Static Site)
+  - type: web
+    name: kastriottanaj-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: "https://kastriottanaj-api.onrender.com"

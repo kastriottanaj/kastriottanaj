@@ -1,0 +1,154 @@
+/* ===== Lead Capture Component ===== */
+.lead-capture {
+  width: 100%;
+  max-width: 520px;
+}
+
+.lead-capture__headline {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: inherit;
+}
+
+.lead-capture__subtext {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0 0 16px;
+}
+
+.lead-capture__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lead-capture__input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.lead-capture__input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.lead-capture__input:focus {
+  border-color: #3b82f6;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lead-capture__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lead-capture__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.35);
+}
+
+.lead-capture__btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lead-capture__privacy {
+  font-size: 12px;
+  opacity: 0.5;
+  margin: 8px 0 0;
+}
+
+.lead-capture__error {
+  color: #ef4444;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+/* Success state */
+.lead-capture--success {
+  text-align: center;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.lead-capture__success-icon {
+  font-size: 40px;
+  color: #22c55e;
+  margin-bottom: 12px;
+}
+
+.lead-capture--success h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+.lead-capture--success p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Hero variant */
+.lead-capture--hero {
+  margin: 0 auto;
+}
+
+/* CTA variant (wider, horizontal on desktop) */
+.lead-capture--cta {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.lead-capture--cta .lead-capture__headline {
+  font-size: 24px;
+  color: #fff;
+}
+
+/* Dark section inputs */
+.lead-capture--cta .lead-capture__input {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .lead-capture__headline {
+    font-size: 18px;
+  }
+
+  .lead-capture__btn {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+}
