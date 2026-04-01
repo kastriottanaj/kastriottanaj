@@ -275,7 +275,7 @@ export default function Home() {
             {(testimonials.length > 0 ? testimonials : [
               { id: 1, name: 'STS Company', role: 'SEO Strategy', company: 'Switzerland', rating: 5, content: 'Implemented a full SEO strategy and managed to rank the company on the first page of Google for important industry keywords.' },
               { id: 2, name: 'Faralda Crane Hotel', role: 'Local SEO', company: 'Amsterdam', rating: 5, content: 'Optimized Google Business Profile and implemented Local SEO strategy to increase visibility and help more guests discover and book the hotel.' },
-              { id: 3, name: 'Gardening Company', role: 'Website & SEO', company: 'Cologne, Germany', rating: 5, content: 'Built the website with WordPress and implemented an SEO strategy to rank higher for important local keywords in the German market.' },
+              { id: 3, name: 'AT BAU GmbH', role: 'Website & SEO', company: 'Cologne, Germany', rating: 5, content: 'Built the website with WordPress and implemented an SEO strategy to rank higher for important local keywords in the German market.' },
             ]).map(t => (
               <div key={t.id} className="testimonial-card testimonial-card--premium">
                 <div className="testimonial-card__stars">

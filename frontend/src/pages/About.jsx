@@ -17,7 +17,7 @@ const SKILLS = [
 const TIMELINE = [
   { year: '2021', title: 'Started in SEO at a Swiss Company', desc: 'Joined as an intern and quickly became the go-to person for SEO. Within two years, mastered the craft and started delivering real rankings.' },
   { year: '2022', title: 'First Page 1 Rankings', desc: 'Implemented SEO strategy for the STS company in Switzerland — ranked them on page 1 for their most important keywords.' },
-  { year: '2023', title: 'Expanded Across Europe', desc: 'Took on clients in Germany, Netherlands, and Kosovo — from a gardening company in Cologne to the Faralda Crane Hotel in Amsterdam.' },
+  { year: '2023', title: 'Expanded Across Europe', desc: 'Took on clients in Germany, Netherlands, and Kosovo — from AT BAU GmbH in Cologne to the Faralda Crane Hotel in Amsterdam.' },
   { year: '2024', title: 'AI + SEO Fusion', desc: 'Integrated AI-powered tools into SEO workflows, combining marketing expertise with automation to deliver faster, smarter results.' },
   { year: '2025+', title: 'Targeting the NYC Market', desc: 'Bringing battle-tested European SEO expertise to the most competitive market in the world — New York City.' },
 ];
