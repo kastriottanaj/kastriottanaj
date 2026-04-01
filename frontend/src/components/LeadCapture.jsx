@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaArrowRight, FaCheckCircle, FaSpinner } from 'react-icons/fa';
+import { submitContact } from '../services/api';
 import './LeadCapture.css';
 
 export default function LeadCapture({ variant = 'hero', headline, subtext }) {
@@ -11,17 +12,12 @@ export default function LeadCapture({ variant = 'hero', headline, subtext }) {
     if (!form.website || !form.email) return;
     setStatus('loading');
     try {
-      const res = await fetch('/api/contact/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: '',
-          email: form.email,
-          subject: 'Free SEO Audit Request',
-          message: `Website: ${form.website}`,
-        }),
+      await submitContact({
+        name: '',
+        email: form.email,
+        subject: 'Free SEO Audit Request',
+        message: `Website: ${form.website}`,
       });
-      if (!res.ok) throw new Error('Failed');
       setStatus('success');
     } catch {
       setStatus('error');

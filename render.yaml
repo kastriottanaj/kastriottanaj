@@ -27,6 +27,12 @@ services:
         value: "https://kastriottanaj.com,https://www.kastriottanaj.com"
       - key: SITE_DOMAIN
         value: "kastriottanaj.com"
+      - key: CONTACT_EMAIL
+        value: "kastriot.sym@gmail.com"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
       - key: PYTHON_VERSION
         value: "3.11.11"
 

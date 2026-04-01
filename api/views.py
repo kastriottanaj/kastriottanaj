@@ -85,7 +85,7 @@ class ContactCreateView(APIView):
                     subject=f'[kastriottanaj.com] {msg.subject}',
                     message=f'From: {msg.name} ({msg.email})\nCompany: {msg.company}\n\n{msg.message}',
                     from_email=settings.EMAIL_HOST_USER or 'noreply@kastriottanaj.com',
-                    recipient_list=[settings.EMAIL_HOST_USER or 'kastriot@kastriottanaj.com'],
+                    recipient_list=[settings.CONTACT_EMAIL],
                     fail_silently=True,
                 )
             except Exception:
