@@ -45,9 +45,6 @@ services:
         value: no-cache
     routes:
       - type: redirect
-        source: /sitemap.xml
-        destination: https://kastriottanaj-api.onrender.com/sitemap.xml
-      - type: redirect
         source: /admin/*
         destination: https://kastriottanaj-api.onrender.com/admin/*
       - type: rewrite
