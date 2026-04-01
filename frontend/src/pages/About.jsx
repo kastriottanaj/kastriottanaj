@@ -15,11 +15,11 @@ const SKILLS = [
 ];
 
 const TIMELINE = [
-  { year: '2021', title: 'Started SEO Journey', desc: 'Began specializing in SEO consulting, working with small businesses to improve their search visibility.' },
-  { year: '2022', title: 'Expanded to AI & Automation', desc: 'Integrated AI tools and automation workflows into SEO strategies, delivering faster results at scale.' },
-  { year: '2023', title: 'Serving International Clients', desc: 'Grew client base internationally, helping businesses across Europe and the USA rank on Google.' },
-  { year: '2024', title: 'Targeting the NYC Market', desc: 'Focused on the New York market, building expertise in local SEO for competitive NYC industries.' },
-  { year: '2025+', title: 'Building Authority in New York', desc: 'Establishing presence as a go-to SEO consultant for businesses in New York City.' },
+  { year: '2021', title: 'Started in SEO at a Swiss Company', desc: 'Joined as an intern and quickly became the go-to person for SEO. Within two years, mastered the craft and started delivering real rankings.' },
+  { year: '2022', title: 'First Page 1 Rankings', desc: 'Implemented SEO strategy for the STS company in Switzerland — ranked them on page 1 for their most important keywords.' },
+  { year: '2023', title: 'Expanded Across Europe', desc: 'Took on clients in Germany, Netherlands, and Kosovo — from a gardening company in Cologne to the Faralda Crane Hotel in Amsterdam.' },
+  { year: '2024', title: 'AI + SEO Fusion', desc: 'Integrated AI-powered tools into SEO workflows, combining marketing expertise with automation to deliver faster, smarter results.' },
+  { year: '2025+', title: 'Targeting the NYC Market', desc: 'Bringing battle-tested European SEO expertise to the most competitive market in the world — New York City.' },
 ];
 
 export default function About() {
@@ -27,7 +27,7 @@ export default function About() {
     <>
       <SEO
         title="About Kastriot Tanaj"
-        description="Learn about Kastriot Tanaj — an SEO consultant and AI automation expert with 5+ years of experience helping businesses in New York rank #1 on Google."
+        description="Learn about Kastriot Tanaj — an SEO consultant and AI automation expert with 4+ years of experience helping businesses across Europe and New York rank on Google."
         canonical="/about"
       />
       <PersonSchema />
@@ -40,12 +40,15 @@ export default function About() {
               <h1>Hi, I'm <span>Kastriot Tanaj</span></h1>
               <p className="about-hero__subtitle">
                 I'm an SEO consultant and AI automation expert helping businesses in New York
-                and beyond dominate search engine results. With over 5 years of experience,
-                I combine data-driven strategies with cutting-edge AI tools to deliver measurable results.
+                and beyond dominate search engine results. With 4+ years of hands-on experience
+                across Switzerland, Germany, the Netherlands, and Kosovo, I combine data-driven
+                strategies with cutting-edge AI tools to deliver measurable results.
               </p>
               <p>
-                My mission is simple: turn Google into your best salesperson. I believe every business
-                deserves to be found by the right customers at the right time — and I make that happen.
+                My mission is simple: turn Google into your best salesperson. I started as an intern
+                at a Swiss company, fell in love with SEO, and have been obsessed with rankings
+                ever since. I believe every business deserves to be found by the right customers
+                at the right time — and I make that happen.
               </p>
               <Link to="/contact" className="btn btn--primary">
                 Let's Work Together <FaArrowRight />
@@ -59,8 +62,8 @@ export default function About() {
       <section className="section section--alt">
         <div className="container">
           <div className="section__header">
-            <h2>Skills & Expertise</h2>
-            <p>What I bring to the table</p>
+            <h2>Skills & Certifications</h2>
+            <p>Google Cloud certified, SEMrush certified, and always learning</p>
           </div>
           <div className="skills-grid">
             {SKILLS.map(skill => (

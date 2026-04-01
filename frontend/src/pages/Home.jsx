@@ -41,8 +41,8 @@ export default function Home() {
             </h1>
             <p className="hero__subtitle">
               Every day you're not on page 1, your competitors are getting the calls, the leads,
-              and the revenue that should be yours. I fix that — with AI-powered SEO strategies
-              that have generated <strong>$4.2M+ in client revenue</strong>.
+              and the revenue that should be yours. I fix that — with data-driven SEO strategies
+              and AI-powered automation that deliver real, measurable results.
             </p>
 
             {/* Lead Capture — The Opt-in Bribe */}
@@ -54,23 +54,23 @@ export default function Home() {
               />
             </div>
 
-            {/* Authority Stats — Sharp as a tack */}
+            {/* Authority Stats */}
             <div className="hero__stats">
               <div className="hero__stat">
-                <strong>$4.2M+</strong>
-                <span>Revenue Generated</span>
+                <strong>4+</strong>
+                <span>Years in SEO</span>
               </div>
               <div className="hero__stat">
-                <strong>340%</strong>
-                <span>Avg. Traffic Increase</span>
-              </div>
-              <div className="hero__stat">
-                <strong>50+</strong>
-                <span>Businesses Ranked #1</span>
+                <strong>Page 1</strong>
+                <span>Rankings Delivered</span>
               </div>
               <div className="hero__stat">
                 <strong>5+</strong>
-                <span>Years in SEO</span>
+                <span>Businesses Helped</span>
+              </div>
+              <div className="hero__stat">
+                <strong>3</strong>
+                <span>Countries Served</span>
               </div>
             </div>
           </div>
@@ -229,29 +229,30 @@ export default function Home() {
               <h2>I'm Kastriot Tanaj — And I'm Obsessed With Getting You Results</h2>
               <p>
                 I'm not another faceless agency. I'm a real person who picks up the phone, answers
-                your emails, and loses sleep over your rankings — because your success is my success.
+                your emails, and genuinely cares about your rankings — because your success is my success.
               </p>
               <p>
-                Over the past 5+ years, I've helped over 50 businesses dominate Google — generating
-                over $4.2 million in trackable revenue. I combine the precision of data science with
-                the speed of AI to deliver results that traditional agencies simply can't match.
+                With 4+ years of hands-on SEO experience, I've helped businesses across Switzerland,
+                Germany, the Netherlands, and Kosovo rank on Google's first page. From a Swiss company
+                to a boutique hotel in Amsterdam, I combine deep SEO expertise with AI-powered tools
+                to deliver results that traditional agencies can't match.
               </p>
               <div className="authority-section__credentials">
                 <div className="credential">
                   <FaShieldAlt />
-                  <span>5+ Years SEO Experience</span>
+                  <span>4+ Years SEO Experience</span>
                 </div>
                 <div className="credential">
                   <FaGlobeAmericas />
-                  <span>Serving NYC & Worldwide</span>
+                  <span>Clients in 3+ Countries</span>
                 </div>
                 <div className="credential">
                   <FaChartLine />
-                  <span>$4.2M+ Revenue Generated</span>
+                  <span>Google & SEMrush Certified</span>
                 </div>
                 <div className="credential">
                   <FaTrophy />
-                  <span>50+ Businesses Ranked #1</span>
+                  <span>Page 1 Rankings Delivered</span>
                 </div>
               </div>
               <Link to="/about" className="btn btn--primary">
@@ -271,9 +272,9 @@ export default function Home() {
           </div>
           <div className="testimonials-grid">
             {(testimonials.length > 0 ? testimonials : [
-              { id: 1, name: 'Sarah Mitchell', role: 'CEO', company: 'NYC Wellness Co', rating: 5, content: 'Kastriot took us from page 5 to position 1 in just 4 months. Our organic leads went from 12/month to 89/month. The ROI is unbelievable.' },
-              { id: 2, name: 'Michael Torres', role: 'Founder', company: 'Manhattan Legal Group', rating: 5, content: 'We were spending $15K/month on Google Ads. Kastriot\'s SEO strategy cut our ad spend by 60% while actually increasing our total leads. He\'s a genius.' },
-              { id: 3, name: 'Emily Chen', role: 'Marketing Director', company: 'Brooklyn Eats', rating: 5, content: 'Other SEO agencies gave us reports full of jargon. Kastriot gives us results full of revenue. Our restaurant chain saw a 340% traffic increase in 6 months.' },
+              { id: 1, name: 'STS Company', role: 'SEO Strategy', company: 'Switzerland', rating: 5, content: 'Implemented a full SEO strategy and managed to rank the company on the first page of Google for important industry keywords.' },
+              { id: 2, name: 'Faralda Crane Hotel', role: 'Local SEO', company: 'Amsterdam', rating: 5, content: 'Optimized Google Business Profile and implemented Local SEO strategy to increase visibility and help more guests discover and book the hotel.' },
+              { id: 3, name: 'Gardening Company', role: 'Website & SEO', company: 'Cologne, Germany', rating: 5, content: 'Built the website with WordPress and implemented an SEO strategy to rank higher for important local keywords in the German market.' },
             ]).map(t => (
               <div key={t.id} className="testimonial-card testimonial-card--premium">
                 <div className="testimonial-card__stars">
@@ -363,17 +364,17 @@ export default function Home() {
         <div className="container">
           <div className="guarantee-section">
             <div className="guarantee-section__icon"><FaShieldAlt /></div>
-            <h2>My "Results or I Work Free" Guarantee</h2>
+            <h2>My Commitment to Transparency</h2>
             <p>
-              I'm so confident in my ability to grow your rankings that I offer this:
-              <strong> if you don't see measurable improvement in your organic traffic within 90 days,
-              I'll work for free until you do.</strong> No agency in NYC offers that — because most
-              of them can't deliver what I deliver.
+              I believe in honest, clear communication from day one.
+              <strong> You'll always know exactly what I'm doing, why I'm doing it,
+              and what results to expect.</strong> No hidden fees, no vague reports,
+              no empty promises.
             </p>
             <p className="guarantee-section__subtext">
               I only take on clients I know I can help. If your business isn't a good fit,
               I'll tell you upfront — and I might even refer you to someone who's better suited.
-              That's how confident I am.
+              That's how much I value trust.
             </p>
           </div>
         </div>
