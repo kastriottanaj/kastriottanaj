@@ -61,16 +61,16 @@ export default function Home() {
                 <span>Years in SEO</span>
               </div>
               <div className="hero__stat">
-                <strong>Page 1</strong>
-                <span>Rankings Delivered</span>
-              </div>
-              <div className="hero__stat">
-                <strong>5+</strong>
-                <span>Businesses Helped</span>
+                <strong>100+</strong>
+                <span>Clients Served</span>
               </div>
               <div className="hero__stat">
                 <strong>3</strong>
-                <span>Countries Served</span>
+                <span>SEO Agencies</span>
+              </div>
+              <div className="hero__stat">
+                <strong>Page 1</strong>
+                <span>Rankings Delivered</span>
               </div>
             </div>
           </div>
@@ -232,10 +232,11 @@ export default function Home() {
                 your emails, and genuinely cares about your rankings — because your success is my success.
               </p>
               <p>
-                With 4+ years of hands-on SEO experience, I've helped businesses across Switzerland,
-                Germany, the Netherlands, and Kosovo rank on Google's first page. From a Swiss company
-                to a boutique hotel in Amsterdam, I combine deep SEO expertise with AI-powered tools
-                to deliver results that traditional agencies can't match.
+                With 4+ years of hands-on SEO experience across 3 agencies and 100+ clients,
+                I've helped businesses across Switzerland, Germany, the Netherlands, and Kosovo
+                rank on Google's first page. From a Swiss company to a boutique hotel in Amsterdam,
+                I combine deep SEO expertise with AI-powered tools to deliver results that
+                traditional agencies can't match.
               </p>
               <div className="authority-section__credentials">
                 <div className="credential">
@@ -244,7 +245,7 @@ export default function Home() {
                 </div>
                 <div className="credential">
                   <FaGlobeAmericas />
-                  <span>Clients in 3+ Countries</span>
+                  <span>100+ Clients Across 3 Agencies</span>
                 </div>
                 <div className="credential">
                   <FaChartLine />

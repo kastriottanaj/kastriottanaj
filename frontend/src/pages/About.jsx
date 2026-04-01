@@ -40,15 +40,15 @@ export default function About() {
               <h1>Hi, I'm <span>Kastriot Tanaj</span></h1>
               <p className="about-hero__subtitle">
                 I'm an SEO consultant and AI automation expert helping businesses in New York
-                and beyond dominate search engine results. With 4+ years of hands-on experience
-                across Switzerland, Germany, the Netherlands, and Kosovo, I combine data-driven
+                and beyond dominate search engine results. With 4+ years of hands-on experience,
+                3 SEO agencies, and 100+ clients across multiple countries, I combine data-driven
                 strategies with cutting-edge AI tools to deliver measurable results.
               </p>
               <p>
                 My mission is simple: turn Google into your best salesperson. I started as an intern
                 at a Swiss company, fell in love with SEO, and have been obsessed with rankings
-                ever since. I believe every business deserves to be found by the right customers
-                at the right time — and I make that happen.
+                ever since. After working across agencies in Europe and managing campaigns for
+                100+ clients, I now bring that expertise directly to businesses ready to dominate Google.
               </p>
               <Link to="/contact" className="btn btn--primary">
                 Let's Work Together <FaArrowRight />
