@@ -70,6 +70,8 @@ class TestimonialSerializer(serializers.ModelSerializer):
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=False, allow_blank=True, default='')
+
     class Meta:
         model = ContactMessage
         fields = ['name', 'email', 'company', 'subject', 'message']
