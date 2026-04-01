@@ -4,10 +4,23 @@ from blog.models import Post
 from portfolio.models import Project, Service
 
 
-class StaticSitemap(Sitemap):
+class SiteDomain:
+    def __init__(self, domain):
+        self.domain = domain
+        self.name = domain
+
+
+class BaseSitemap(Sitemap):
+    protocol = 'https'
+
+    def get_urls(self, site=None, **kwargs):
+        site = SiteDomain(settings.SITE_DOMAIN)
+        return super().get_urls(site=site, **kwargs)
+
+
+class StaticSitemap(BaseSitemap):
     changefreq = 'weekly'
     priority = 1.0
-    protocol = 'https'
 
     def items(self):
         return ['/', '/about', '/services', '/blog', '/portfolio', '/contact']
@@ -16,10 +29,9 @@ class StaticSitemap(Sitemap):
         return item
 
 
-class BlogSitemap(Sitemap):
+class BlogSitemap(BaseSitemap):
     changefreq = 'weekly'
     priority = 0.8
-    protocol = 'https'
 
     def items(self):
         return Post.objects.filter(published=True)
@@ -31,10 +43,9 @@ class BlogSitemap(Sitemap):
         return f'/blog/{obj.slug}'
 
 
-class ProjectSitemap(Sitemap):
+class ProjectSitemap(BaseSitemap):
     changefreq = 'monthly'
     priority = 0.7
-    protocol = 'https'
 
     def items(self):
         return Project.objects.all()
@@ -46,10 +57,9 @@ class ProjectSitemap(Sitemap):
         return f'/portfolio/{obj.slug}'
 
 
-class ServiceSitemap(Sitemap):
+class ServiceSitemap(BaseSitemap):
     changefreq = 'monthly'
     priority = 0.9
-    protocol = 'https'
 
     def items(self):
         return Service.objects.all()
