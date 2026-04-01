@@ -84,14 +84,21 @@ class ContactCreateView(APIView):
         serializer = ContactMessageSerializer(data=request.data)
         if serializer.is_valid():
             msg = serializer.save()
+            recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
+            sender = getattr(settings, 'EMAIL_HOST_USER', '') or 'noreply@kastriottanaj.com'
             try:
                 send_mail(
                     subject=f'[kastriottanaj.com] {msg.subject}',
-                    message=f'From: {msg.name} ({msg.email})\nCompany: {msg.company}\n\n{msg.message}',
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.CONTACT_EMAIL],
+                    message=(
+                        f'From: {msg.name} ({msg.email})\n'
+                        f'Company: {msg.company}\n\n'
+                        f'{msg.message}'
+                    ),
+                    from_email=sender,
+                    recipient_list=[recipient],
                     fail_silently=False,
                 )
+                logger.info(f'Email sent to {recipient} for contact from {msg.email}')
             except Exception as e:
                 logger.error(f'Email send failed: {e}')
             return Response({'message': 'Message sent successfully.'}, status=status.HTTP_201_CREATED)

@@ -132,6 +132,12 @@ CORS_ALLOWED_ORIGINS = config(
     cast=Csv(),
 )
 
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://kastriottanaj.com,https://www.kastriottanaj.com',
+    cast=Csv(),
+)
+
 # Email (for contact form)
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
