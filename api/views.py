@@ -1,8 +1,12 @@
+import logging
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 from blog.models import Post, Category
 from portfolio.models import Service, Project, Testimonial
@@ -84,11 +88,11 @@ class ContactCreateView(APIView):
                 send_mail(
                     subject=f'[kastriottanaj.com] {msg.subject}',
                     message=f'From: {msg.name} ({msg.email})\nCompany: {msg.company}\n\n{msg.message}',
-                    from_email=settings.EMAIL_HOST_USER or 'noreply@kastriottanaj.com',
+                    from_email=settings.EMAIL_HOST_USER,
                     recipient_list=[settings.CONTACT_EMAIL],
-                    fail_silently=True,
+                    fail_silently=False,
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f'Email send failed: {e}')
             return Response({'message': 'Message sent successfully.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
