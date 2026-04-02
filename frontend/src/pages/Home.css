@@ -89,6 +89,21 @@
   margin-bottom: 48px;
 }
 
+.hero__whatsapp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.hero__whatsapp-divider {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 .hero__stats {
   display: flex;
   justify-content: center;
@@ -787,16 +802,6 @@
 
 .final-cta__trust svg {
   color: #22c55e;
-}
-
-.final-cta__whatsapp {
-  margin-top: 40px;
-}
-
-.final-cta__whatsapp p {
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 16px;
-  font-size: 1rem;
 }
 
 .whatsapp-btn {

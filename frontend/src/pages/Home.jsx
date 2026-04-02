@@ -54,6 +54,18 @@ export default function Home() {
               />
             </div>
 
+            <div className="hero__whatsapp">
+              <span className="hero__whatsapp-divider">Or talk to me directly</span>
+              <a
+                href="https://api.whatsapp.com/send/?phone=38348111611&text&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-btn"
+              >
+                <FaWhatsapp /> Chat on WhatsApp
+              </a>
+            </div>
+
             {/* Authority Stats */}
             <div className="hero__stats">
               <div className="hero__stat">
@@ -398,17 +410,6 @@ export default function Home() {
             <span><FaShieldAlt /> 100% Free</span>
             <span><FaCheckCircle /> No Obligation</span>
             <span><FaClock /> Takes 2 Minutes</span>
-          </div>
-          <div className="final-cta__whatsapp">
-            <p>Or skip the form — let's talk directly:</p>
-            <a
-              href="https://api.whatsapp.com/send/?phone=38348111611&text&type=phone_number&app_absent=0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whatsapp-btn"
-            >
-              <FaWhatsapp /> Chat on WhatsApp
-            </a>
           </div>
         </div>
       </section>
