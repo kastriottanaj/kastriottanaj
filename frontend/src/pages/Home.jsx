@@ -66,6 +66,17 @@ export default function Home() {
               </a>
             </div>
 
+            <div className="hero__calendly">
+              <a
+                href="https://calendly.com/kastriot-sym/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="calendly-btn"
+              >
+                <FaClock /> Book a Free 30-Min Call
+              </a>
+            </div>
+
             {/* Authority Stats */}
             <div className="hero__stats">
               <div className="hero__stat">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SEO from '../components/SEO';
 import { submitContact } from '../services/api';
-import { FaEnvelope, FaLinkedinIn, FaTwitter, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
+import { FaEnvelope, FaLinkedinIn, FaTwitter, FaMapMarkerAlt, FaWhatsapp, FaCalendarAlt } from 'react-icons/fa';
 import './Contact.css';
 
 export default function Contact() {
@@ -87,6 +87,13 @@ export default function Contact() {
                   <div>
                     <strong>WhatsApp</strong>
                     <a href="https://api.whatsapp.com/send/?phone=38348111611&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer">Message me on WhatsApp</a>
+                  </div>
+                </div>
+                <div className="contact-info__item">
+                  <FaCalendarAlt />
+                  <div>
+                    <strong>Book a Meeting</strong>
+                    <a href="https://calendly.com/kastriot-sym/30min" target="_blank" rel="noopener noreferrer">Schedule a free 30-min call</a>
                   </div>
                 </div>
               </div>

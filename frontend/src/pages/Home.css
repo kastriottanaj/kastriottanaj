@@ -104,6 +104,38 @@
   letter-spacing: 1px;
 }
 
+.hero__calendly {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.calendly-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s;
+}
+
+.calendly-btn svg {
+  font-size: 1.2rem;
+  color: #3b82f6;
+}
+
+.calendly-btn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #fff;
+}
+
 .hero__stats {
   display: flex;
   justify-content: center;
