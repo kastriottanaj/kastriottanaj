@@ -10,6 +10,7 @@ import Portfolio from './pages/Portfolio';
 import Contact from './pages/Contact';
 import ScrollToTop from './components/ScrollToTop';
 import ExitPopup from './components/ExitPopup';
+import CookieConsent from './components/CookieConsent';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <CookieConsent />
     </>
   );
 }
