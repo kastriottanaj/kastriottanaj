@@ -81,25 +81,29 @@ class TestimonialListView(generics.ListAPIView):
 # Contact
 class ContactCreateView(APIView):
     def post(self, request):
-        serializer = ContactMessageSerializer(data=request.data)
-        if serializer.is_valid():
-            msg = serializer.save()
-            recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
-            sender = getattr(settings, 'EMAIL_HOST_USER', '') or 'noreply@kastriottanaj.com'
-            try:
-                send_mail(
-                    subject=f'[kastriottanaj.com] {msg.subject}',
-                    message=(
-                        f'From: {msg.name} ({msg.email})\n'
-                        f'Company: {msg.company}\n\n'
-                        f'{msg.message}'
-                    ),
-                    from_email=sender,
-                    recipient_list=[recipient],
-                    fail_silently=False,
-                )
-                logger.info(f'Email sent to {recipient} for contact from {msg.email}')
-            except Exception as e:
-                logger.error(f'Email send failed: {e}')
-            return Response({'message': 'Message sent successfully.'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            serializer = ContactMessageSerializer(data=request.data)
+            if serializer.is_valid():
+                msg = serializer.save()
+                recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
+                sender = getattr(settings, 'EMAIL_HOST_USER', '') or 'noreply@kastriottanaj.com'
+                try:
+                    send_mail(
+                        subject=f'[kastriottanaj.com] {msg.subject}',
+                        message=(
+                            f'From: {msg.name} ({msg.email})\n'
+                            f'Company: {msg.company}\n\n'
+                            f'{msg.message}'
+                        ),
+                        from_email=sender,
+                        recipient_list=[recipient],
+                        fail_silently=False,
+                    )
+                    logger.info(f'Email sent to {recipient} for contact from {msg.email}')
+                except Exception as e:
+                    logger.error(f'Email send failed: {e}')
+                return Response({'message': 'Message sent successfully.'}, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f'Contact form error: {e}', exc_info=True)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
