@@ -4,7 +4,7 @@ const SITE = {
   name: 'Kastriot Tanaj',
   domain: 'kastriottanaj.com',
   url: 'https://kastriottanaj.com',
-  description: 'SEO Consultant & AI Automation Expert helping businesses in New York rank #1 on Google with data-driven SEO strategies.',
+  description: 'New York SEO consultant helping NYC businesses rank #1 on Google. Get a FREE SEO audit and AI-powered strategies that drive revenue.',
   image: 'https://kastriottanaj.com/og-image.jpg',
 };
 

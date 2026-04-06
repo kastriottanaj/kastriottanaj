@@ -22,7 +22,7 @@ export default function Home() {
     <>
       <SEO
         title="SEO Consultant New York | AI-Powered SEO Services NYC"
-        description="Kastriot Tanaj is a New York SEO consultant helping NYC businesses rank #1 on Google. Get a FREE SEO audit and AI-powered strategies that drive revenue."
+        description="New York SEO consultant helping NYC businesses rank #1 on Google. Get a FREE SEO audit and AI-powered strategies that drive revenue."
         canonical="/"
       />
       <LocalBusinessSchema />
