@@ -1,4 +1,5 @@
 import logging
+import threading
 
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -89,34 +90,33 @@ class ContactCreateView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         data = serializer.validated_data
-        recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
-        sender = getattr(settings, 'EMAIL_HOST_USER', '') or 'noreply@kastriottanaj.com'
 
-        # Try saving to DB, but don't let it block the email
+        # Save to DB (non-blocking if it fails)
         try:
             serializer.save()
         except Exception as e:
             logger.error(f'DB save failed: {e}')
 
-        # Send email
-        try:
-            send_mail(
-                subject=f'[kastriottanaj.com] {data.get("subject", "Contact Form")}',
-                message=(
-                    f'From: {data.get("name", "")} ({data.get("email", "")})\n'
-                    f'Company: {data.get("company", "")}\n\n'
-                    f'{data.get("message", "")}'
-                ),
-                from_email=sender,
-                recipient_list=[recipient],
-                fail_silently=False,
-            )
-            logger.info(f'Email sent to {recipient} from {data.get("email")}')
-        except Exception as e:
-            logger.error(f'Email send failed: {e}')
-            return Response(
-                {'error': f'Failed to send email: {str(e)}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+        # Send email in background thread to avoid Gunicorn timeout
+        def _send_email():
+            recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
+            sender = getattr(settings, 'EMAIL_HOST_USER', '') or 'noreply@kastriottanaj.com'
+            try:
+                send_mail(
+                    subject=f'[kastriottanaj.com] {data.get("subject", "Contact Form")}',
+                    message=(
+                        f'From: {data.get("name", "")} ({data.get("email", "")})\n'
+                        f'Company: {data.get("company", "")}\n\n'
+                        f'{data.get("message", "")}'
+                    ),
+                    from_email=sender,
+                    recipient_list=[recipient],
+                    fail_silently=False,
+                )
+                logger.info(f'Email sent to {recipient} from {data.get("email")}')
+            except Exception as e:
+                logger.error(f'Email send failed: {e}')
+
+        threading.Thread(target=_send_email, daemon=True).start()
 
         return Response({'message': 'Message sent successfully.'}, status=status.HTTP_201_CREATED)
