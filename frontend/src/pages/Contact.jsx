@@ -31,14 +31,14 @@ export default function Contact() {
   return (
     <>
       <SEO
-        title="Contact"
-        description="Get in touch with Kastriot Tanaj for SEO consulting, AI automation, or a free SEO audit. Serving businesses in New York and worldwide."
+        title="Contact | Free SEO Consultation NYC"
+        description="Get in touch with Kastriot Tanaj for a free SEO consultation. Book a call, WhatsApp, or email — serving businesses in New York City and worldwide."
         canonical="/contact"
       />
 
       <section className="page-hero">
         <div className="container">
-          <h1>Get in Touch</h1>
+          <h1>Contact Kastriot Tanaj — Free SEO Consultation</h1>
           <p>Ready to dominate Google? Let's talk about your SEO goals.</p>
         </div>
       </section>

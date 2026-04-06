@@ -26,14 +26,14 @@ export default function Blog() {
   return (
     <>
       <SEO
-        title="SEO Blog"
-        description="Read expert SEO tips, AI automation insights, and digital marketing strategies from Kastriot Tanaj. Stay ahead in the New York SEO landscape."
+        title="SEO Blog | Tips, AI Insights & NYC Marketing Strategies"
+        description="Expert SEO tips, AI automation insights, and digital marketing strategies from Kastriot Tanaj. Actionable advice for ranking higher in New York and beyond."
         canonical="/blog"
       />
 
       <section className="page-hero">
         <div className="container">
-          <h1>SEO Blog</h1>
+          <h1>SEO Blog — Tips & Strategies for New York Businesses</h1>
           <p>Insights, strategies, and tips on SEO, AI automation, and digital marketing</p>
         </div>
       </section>

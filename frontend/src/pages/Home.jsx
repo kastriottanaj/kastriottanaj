@@ -21,8 +21,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="NYC's #1 SEO Consultant | Get More Customers From Google"
-        description="Kastriot Tanaj helps NYC businesses dominate Google with AI-powered SEO strategies. Get your FREE SEO audit and discover hidden revenue in your search rankings."
+        title="SEO Consultant New York | AI-Powered SEO Services NYC"
+        description="Kastriot Tanaj is a New York SEO consultant helping NYC businesses rank #1 on Google. Get a FREE SEO audit and AI-powered strategies that drive revenue."
         canonical="/"
       />
       <LocalBusinessSchema />
@@ -37,7 +37,7 @@ export default function Home() {
               <FaTrophy /> NYC's Trusted SEO Consultant
             </div>
             <h1 className="hero__title">
-              Your NYC Competitors Are <span>Stealing Your Customers</span> on Google Right Now
+              New York SEO Consultant — <span>AI-Powered Strategies</span> That Get You to Page 1
             </h1>
             <p className="hero__subtitle">
               Every day you're not on page 1, your competitors are getting the calls, the leads,

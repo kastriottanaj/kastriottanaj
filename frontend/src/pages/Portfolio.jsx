@@ -23,14 +23,14 @@ export default function Portfolio() {
   return (
     <>
       <SEO
-        title="Portfolio & Case Studies"
-        description="See how Kastriot Tanaj has helped businesses in New York and beyond achieve top Google rankings with SEO strategies and AI automation."
+        title="SEO Portfolio & Case Studies | Proven Results"
+        description="See real SEO results: page 1 rankings for clients across Europe and New York. Case studies from STS Company, Faralda Crane Hotel, AT BAU GmbH, and more."
         canonical="/portfolio"
       />
 
       <section className="page-hero">
         <div className="container">
-          <h1>Portfolio & Case Studies</h1>
+          <h1>SEO Portfolio & Case Studies</h1>
           <p>Real results from real businesses — see how I've helped clients dominate search</p>
         </div>
       </section>
@@ -90,7 +90,7 @@ export default function Portfolio() {
                   </div>
                   <p>"{t.content}"</p>
                   <div className="testimonial-card__author">
-                    {t.avatar && <img src={t.avatar} alt={t.name} />}
+                    {t.avatar && <img src={t.avatar} alt={t.name} loading="lazy" />}
                     <div>
                       <strong>{t.name}</strong>
                       <span>{t.role}{t.company && `, ${t.company}`}</span>

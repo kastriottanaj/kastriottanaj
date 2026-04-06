@@ -61,7 +61,7 @@ export default function BlogPost() {
           </div>
 
           {post.featured_image && (
-            <img src={post.featured_image} alt={post.title} className="blog-post__image" />
+            <img src={post.featured_image} alt={post.title} className="blog-post__image" loading="lazy" />
           )}
 
           <div className="blog-post__content" dangerouslySetInnerHTML={{ __html: post.content }} />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import SEO from '../components/SEO';
+import SEO, { ServiceSchema } from '../components/SEO';
 import { getServices } from '../services/api';
 import { FaArrowRight, FaSearch, FaRobot, FaCogs, FaChalkboardTeacher } from 'react-icons/fa';
 import './Services.css';
@@ -59,14 +59,15 @@ export default function Services() {
   return (
     <>
       <SEO
-        title="SEO Services"
-        description="Expert SEO consulting services in New York — strategy, AI content systems, automation workflows, and coaching. Get a custom plan to rank #1 on Google."
+        title="SEO Services NYC | Strategy, AI Content & Automation"
+        description="Professional SEO services in New York: technical audits, AI-powered content, automation workflows, and 1-on-1 coaching. Custom strategies to rank #1 on Google."
         canonical="/services"
       />
+      <ServiceSchema />
 
       <section className="page-hero">
         <div className="container">
-          <h1>SEO Services</h1>
+          <h1>SEO Services in New York City</h1>
           <p>Expert SEO solutions to help your business dominate Google in New York and beyond</p>
         </div>
       </section>

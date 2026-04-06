@@ -17,7 +17,7 @@ export default function SEO({
   article,
   noindex = false,
 }) {
-  const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — SEO Consultant & AI Automation Expert in New York`;
+  const pageTitle = title || `${SITE.name} | SEO Consultant New York — AI-Powered SEO Services NYC`;
   const pageDescription = description || SITE.description;
   const pageImage = image || SITE.image;
   const pageUrl = canonical ? `${SITE.url}${canonical}` : SITE.url;
@@ -122,6 +122,51 @@ export function PersonSchema() {
       'https://www.linkedin.com/in/kastriottanaj',
       'https://twitter.com/kastriottanaj',
     ],
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+    </Helmet>
+  );
+}
+
+export function ServiceSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'SEO Consulting',
+    provider: {
+      '@type': 'ProfessionalService',
+      name: 'Kastriot Tanaj — SEO Consultant',
+      url: SITE.url,
+    },
+    areaServed: {
+      '@type': 'City',
+      name: 'New York',
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'SEO Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: 'SEO Strategy & Consulting' },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: 'AI-Powered Content Systems' },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: 'SEO Automation Workflows' },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: '1-on-1 SEO Coaching' },
+        },
+      ],
+    },
   };
 
   return (

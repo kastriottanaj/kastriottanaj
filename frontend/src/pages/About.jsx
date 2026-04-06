@@ -26,8 +26,8 @@ export default function About() {
   return (
     <>
       <SEO
-        title="About Kastriot Tanaj"
-        description="Learn about Kastriot Tanaj — an SEO consultant and AI automation expert with 4+ years of experience helping businesses across Europe and New York rank on Google."
+        title="About Kastriot Tanaj | SEO Expert New York"
+        description="Meet Kastriot Tanaj — SEO consultant with 4+ years experience, 100+ clients, and proven page 1 rankings across Europe. Now serving businesses in New York City."
         canonical="/about"
       />
       <PersonSchema />
@@ -37,7 +37,7 @@ export default function About() {
         <div className="container">
           <div className="about-hero__content">
             <div className="about-hero__text">
-              <h1>Hi, I'm <span>Kastriot Tanaj</span></h1>
+              <h1>About Kastriot Tanaj — <span>SEO Expert in New York</span></h1>
               <p className="about-hero__subtitle">
                 I'm an SEO consultant and AI automation expert helping businesses in New York
                 and beyond dominate search engine results. With 4+ years of hands-on experience,
