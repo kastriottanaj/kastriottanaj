@@ -124,6 +124,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+    'EXCEPTION_HANDLER': 'api.exceptions.custom_exception_handler',
 }
 
 # CORS — allow frontend dev server
