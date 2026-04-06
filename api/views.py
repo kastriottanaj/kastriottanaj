@@ -80,6 +80,9 @@ class TestimonialListView(generics.ListAPIView):
 
 # Contact
 class ContactCreateView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
     def post(self, request):
         try:
             serializer = ContactMessageSerializer(data=request.data)
