@@ -21,8 +21,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="SEO Consultant New York | AI-Powered SEO Services NYC"
-        description="New York SEO consultant helping NYC businesses rank #1 on Google. Get a FREE SEO audit and AI-powered strategies that drive revenue."
+        title="SEO & AI Automation Consultant New York | Kastriot Tanaj"
+        description="New York SEO consultant & AI automation expert helping NYC businesses rank #1 on Google and automate growth. FREE SEO audit + AI-powered strategies that drive revenue."
         canonical="/"
       />
       <LocalBusinessSchema />

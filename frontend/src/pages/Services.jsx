@@ -59,8 +59,8 @@ export default function Services() {
   return (
     <>
       <SEO
-        title="SEO Services NYC | Strategy, AI Content & Automation"
-        description="Professional SEO services in New York: technical audits, AI-powered content, automation workflows, and 1-on-1 coaching. Custom strategies to rank #1 on Google."
+        title="SEO & AI Automation Services NYC | Strategy, Content & Workflows"
+        description="Professional SEO and AI automation services in New York: technical audits, AI-powered content, business automation workflows, and 1-on-1 coaching. Custom strategies to rank #1 on Google."
         canonical="/services"
       />
       <ServiceSchema />
