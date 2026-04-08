@@ -72,7 +72,7 @@ export default function Contact() {
                   <FaLinkedinIn />
                   <div>
                     <strong>LinkedIn</strong>
-                    <a href="https://linkedin.com/in/kastriottanaj" target="_blank" rel="noopener noreferrer">linkedin.com/in/kastriottanaj</a>
+                    <a href="https://www.linkedin.com/in/seo-kastriot-tanaj/" target="_blank" rel="noopener noreferrer">linkedin.com/in/kastriottanaj</a>
                   </div>
                 </div>
                 <div className="contact-info__item">
