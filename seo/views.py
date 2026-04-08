@@ -9,7 +9,6 @@ def robots_txt(request):
         'Allow: /',
         '',
         f'Sitemap: https://{settings.SITE_DOMAIN}/sitemap.xml',
-        f'LLMs-txt: https://{settings.SITE_DOMAIN}/llms.txt',
     ]
     return HttpResponse('\n'.join(lines), content_type='text/plain')
 
