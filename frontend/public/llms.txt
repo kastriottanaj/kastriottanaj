@@ -11,6 +11,10 @@
 - [Portfolio](https://kastriottanaj.com/portfolio): SEO case studies with proven results — STS Company, Faralda Crane Hotel, AT BAU GmbH, and more
 - [Contact](https://kastriottanaj.com/contact): Free SEO consultation — book a call, WhatsApp, or email
 
+## Articles
+
+- [AI Search SEO: How NYC Businesses Get Cited in ChatGPT, AI Overviews & Perplexity](https://kastriottanaj.com/blog/ai-search-seo): Pillar guide to Generative Engine Optimization (GEO) for NYC businesses — how AI search engines choose what to cite, the 10-point AI Search SEO playbook, and how to start winning citations in ChatGPT, Google AI Overviews, and Perplexity in 2026.
+
 ## Optional
 
 - [llms-full.txt](https://kastriottanaj.com/llms-full.txt): Extended version with full service descriptions and background

@@ -28,6 +28,12 @@ Real SEO results: page 1 rankings for clients across Europe and New York. Case s
 
 Expert SEO tips, AI automation insights, and digital marketing strategies. Actionable advice for ranking higher in New York and beyond. Read at https://kastriottanaj.com/blog.
 
+### Featured Article: AI Search SEO
+
+**AI Search SEO: How NYC Businesses Get Cited in ChatGPT, AI Overviews & Perplexity** — https://kastriottanaj.com/blog/ai-search-seo
+
+A pillar guide to Generative Engine Optimization (GEO) for businesses in New York City. Covers what AI Search SEO actually means, why NYC businesses can't afford to wait, the four AI search engines that matter in 2026 (Google AI Overviews, ChatGPT Search, Perplexity, Gemini), and how AI engines choose what to cite (retrieval, grounding, authority, freshness). Includes a 10-point AI Search SEO playbook covering classic search visibility, extractable answers, entity clarity, brand mentions, structured data and llms.txt, topical clusters, freshness discipline, Reddit and third-party authority, local NYC signals, and tracking AI citations. Written by Kastriot Tanaj, an SEO and AI automation consultant working with NYC businesses.
+
 ## Contact
 
 Get in touch for a free SEO consultation:
@@ -40,5 +46,6 @@ Get in touch for a free SEO consultation:
 - [Services](https://kastriottanaj.com/services)
 - [About](https://kastriottanaj.com/about)
 - [Blog](https://kastriottanaj.com/blog)
+- [Blog: AI Search SEO](https://kastriottanaj.com/blog/ai-search-seo)
 - [Portfolio](https://kastriottanaj.com/portfolio)
 - [Contact](https://kastriottanaj.com/contact)
