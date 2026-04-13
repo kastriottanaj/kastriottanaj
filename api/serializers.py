@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from blog.models import Post, Category
+from blog.models import Post, Category, Tag
 from portfolio.models import Service, Project, Testimonial
 from contact.models import ContactMessage
 
@@ -10,8 +10,15 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug', 'description']
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'slug', 'description']
+
+
 class PostListSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
@@ -24,6 +31,7 @@ class PostListSerializer(serializers.ModelSerializer):
 
 class PostDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post

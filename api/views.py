@@ -9,11 +9,11 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-from blog.models import Post, Category
+from blog.models import Post, Category, Tag
 from portfolio.models import Service, Project, Testimonial
 from contact.models import ContactMessage
 from .serializers import (
-    PostListSerializer, PostDetailSerializer, CategorySerializer,
+    PostListSerializer, PostDetailSerializer, CategorySerializer, TagSerializer,
     ServiceSerializer, ProjectListSerializer, ProjectDetailSerializer,
     TestimonialSerializer, ContactMessageSerializer,
 )
@@ -24,15 +24,18 @@ class PostListView(generics.ListAPIView):
     serializer_class = PostListSerializer
 
     def get_queryset(self):
-        queryset = Post.objects.filter(published=True)
+        queryset = Post.objects.filter(published=True).prefetch_related('tags').select_related('category')
         category = self.request.query_params.get('category')
         if category:
             queryset = queryset.filter(category__slug=category)
-        return queryset
+        tag = self.request.query_params.get('tag')
+        if tag:
+            queryset = queryset.filter(tags__slug=tag)
+        return queryset.distinct()
 
 
 class PostDetailView(generics.RetrieveAPIView):
-    queryset = Post.objects.filter(published=True)
+    queryset = Post.objects.filter(published=True).prefetch_related('tags').select_related('category')
     serializer_class = PostDetailSerializer
     lookup_field = 'slug'
 
@@ -41,6 +44,18 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = None
+
+
+class TagListView(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    pagination_class = None
+
+
+class TagDetailView(generics.RetrieveAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    lookup_field = 'slug'
 
 
 # Portfolio

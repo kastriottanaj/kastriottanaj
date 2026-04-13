@@ -20,6 +20,23 @@ class Category(models.Model):
         return self.name
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=60)
+    slug = models.SlugField(unique=True, max_length=60)
+    description = models.TextField(blank=True, help_text='Short description used on /blog/tag/<slug>/ pages for SEO')
+
+    class Meta:
+        ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200)
@@ -27,7 +44,7 @@ class Post(models.Model):
     content = models.TextField()
     featured_image = models.ImageField(upload_to='blog/', blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')
-    tags = models.CharField(max_length=500, blank=True, help_text='Comma-separated tags')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
 
     # SEO fields
     meta_title = models.CharField(max_length=60, blank=True, help_text='SEO title (max 60 chars)')
