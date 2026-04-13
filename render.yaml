@@ -33,6 +33,12 @@ services:
         sync: false
       - key: EMAIL_HOST_PASSWORD
         sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
       - key: PYTHON_VERSION
         value: "3.11.11"
 
