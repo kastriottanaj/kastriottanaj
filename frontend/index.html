@@ -26,13 +26,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Prevent FOUC: white background + hide SEO fallback from users (crawlers still see it) -->
+    <style>
+      html, body { background: #fff; color: #334155; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; margin: 0; }
+      .seo-fallback { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+      .initial-loader { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #fff; z-index: 9999; }
+      .initial-loader__spinner { width: 36px; height: 36px; border: 3px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: initial-loader-spin 0.8s linear infinite; }
+      @keyframes initial-loader-spin { to { transform: rotate(360deg); } }
+      .app-ready .initial-loader { display: none; }
+    </style>
   </head>
   <body>
+    <div class="initial-loader"><div class="initial-loader__spinner"></div></div>
     <div id="root">
-      <!-- Fallback content for crawlers that don't execute JS — React replaces this on mount -->
-      <h1>New York SEO Consultant — AI-Powered Strategies That Get You to Page 1</h1>
-      <p>Kastriot Tanaj is an SEO consultant and AI automation expert helping businesses in New York rank #1 on Google. With 4+ years of experience, 100+ clients across 3 SEO agencies, and proven page 1 rankings across Europe, I deliver data-driven SEO strategies and AI-powered automation that drive real revenue.</p>
-      <p>Services: SEO Strategy & Consulting, AI-Powered Content Systems, Automation Workflows, 1-on-1 SEO Coaching. Serving New York City and worldwide.</p>
+      <div class="seo-fallback">
+        <h1>New York SEO Consultant — AI-Powered Strategies That Get You to Page 1</h1>
+        <p>Kastriot Tanaj is an SEO consultant and AI automation expert helping businesses in New York rank #1 on Google. With 4+ years of experience, 100+ clients across 3 SEO agencies, and proven page 1 rankings across Europe, I deliver data-driven SEO strategies and AI-powered automation that drive real revenue.</p>
+        <p>Services: SEO Strategy &amp; Consulting, AI-Powered Content Systems, Automation Workflows, 1-on-1 SEO Coaching. Serving New York City and worldwide.</p>
+      </div>
     </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

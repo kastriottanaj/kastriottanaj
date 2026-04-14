@@ -6,8 +6,8 @@ import ScrollToTop from './components/ScrollToTop';
 import ExitPopup from './components/ExitPopup';
 import CookieConsent from './components/CookieConsent';
 import PageLoader from './components/PageLoader';
+import Home from './pages/Home';
 
-const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
 const Blog = lazy(() => import('./pages/Blog'));

@@ -14,3 +14,5 @@ createRoot(document.getElementById('root')).render(
     </HelmetProvider>
   </StrictMode>,
 );
+
+document.documentElement.classList.add('app-ready');
