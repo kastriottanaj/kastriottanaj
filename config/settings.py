@@ -203,3 +203,6 @@ if not DEBUG:
 # Site info
 SITE_NAME = 'Kastriot Tanaj'
 SITE_DOMAIN = config('SITE_DOMAIN', default='kastriottanaj.com')
+
+# Render deploy hook for frontend (triggers rebuild on blog publish to refresh sitemap)
+RENDER_DEPLOY_HOOK_URL = config('RENDER_DEPLOY_HOOK_URL', default='')

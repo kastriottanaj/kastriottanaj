@@ -32,7 +32,7 @@ Pushing to `main` triggers Render to redeploy both services automatically:
 - `kastriottanaj-api` — Django backend (`./build.sh` runs migrations + collectstatic)
 - `kastriottanaj-frontend` — static React bundle (`npm run build`)
 
-Required Render env vars: `DATABASE_URL`, `SECRET_KEY`, `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `SITE_DOMAIN`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`.
+Required Render env vars: `DATABASE_URL`, `SECRET_KEY`, `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `SITE_DOMAIN`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `RENDER_DEPLOY_HOOK_URL` (frontend deploy hook — triggers sitemap rebuild on blog publish).
 
 ---
 
@@ -59,7 +59,7 @@ The post is live immediately at `kastriottanaj.com/blog/<slug>`.
 
 Once you check **Published** and save, the following happen without any manual step:
 
-1. **Sitemap inclusion** — the post URL appears in [`kastriottanaj.com/sitemap.xml`](https://kastriottanaj.com/sitemap.xml) on the next crawl. Powered by `BlogSitemap` in `seo/sitemaps.py`, which filters `Post.objects.filter(published=True)`. `lastmod` reflects `updated_at` (so edits re-signal freshness). Unpublishing removes the URL on the next crawl.
+1. **Sitemap inclusion (automatic)** — saving a published post fires a Django `post_save` signal (`blog/signals.py`) that POSTs to Render's frontend deploy hook (`RENDER_DEPLOY_HOOK_URL` env var). Render rebuilds the frontend, `frontend/scripts/generate-sitemap.mjs` (prebuild) fetches all published posts, tags, projects, and services from the API, and writes a fresh `frontend/public/sitemap.xml`. The new post is live in [`kastriottanaj.com/sitemap.xml`](https://kastriottanaj.com/sitemap.xml) within ~1–2 min. `lastmod` reflects `updated_at`. Unpublishing + saving also triggers a rebuild and removes the URL. `BlogSitemap` in `seo/sitemaps.py` still serves the dynamic sitemap at `kastriottanaj-api.onrender.com/sitemap.xml` as a backup source of truth.
 2. **JSON-LD Article schema** — the React `BlogPost` page auto-renders `<ArticleSchema>` with headline, description, image, `datePublished`, `dateModified`, and author (see `frontend/src/components/SEO.jsx` → `ArticleSchema`). No manual markup needed.
 3. **Open Graph + Twitter cards** — `<SEO type="article">` emits `og:title`, `og:description`, `og:image`, `article:published_time`, `article:modified_time`.
 4. **Canonical URL** — set to `/blog/<slug>` automatically; override via the `canonical_url` field only if republishing from elsewhere.
