@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import ExitPopup from './components/ExitPopup';
 import CookieConsent from './components/CookieConsent';
+import PageLoader from './components/PageLoader';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -22,7 +23,7 @@ export default function App() {
       <ExitPopup />
       <Navbar />
       <main>
-        <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+        <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

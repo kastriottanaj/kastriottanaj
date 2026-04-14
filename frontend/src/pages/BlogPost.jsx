@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import SEO, { ArticleSchema } from '../components/SEO';
+import PageLoader from '../components/PageLoader';
 import { getPost } from '../services/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import './Blog.css';
@@ -18,7 +19,7 @@ export default function BlogPost() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) return <div className="blog-loading" style={{ padding: '100px 0' }}>Loading...</div>;
+  if (loading) return <PageLoader label="Loading article…" />;
   if (!post) return (
     <div className="blog-empty" style={{ padding: '100px 24px' }}>
       <h2>Post Not Found</h2>
