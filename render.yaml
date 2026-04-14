@@ -58,9 +58,33 @@ services:
         name: Cache-Control
         value: no-cache
     routes:
+      # Admin goes to Django backend
       - type: redirect
         source: /admin/*
         destination: https://kastriottanaj-api.onrender.com/admin/*
+      # Strip trailing slash for canonical consistency (fixes GSC "duplicate without user-selected canonical")
+      - type: redirect
+        source: /about/
+        destination: /about
+      - type: redirect
+        source: /services/
+        destination: /services
+      - type: redirect
+        source: /blog/
+        destination: /blog
+      - type: redirect
+        source: /portfolio/
+        destination: /portfolio
+      - type: redirect
+        source: /contact/
+        destination: /contact
+      - type: redirect
+        source: /blog/tag/*/
+        destination: /blog/tag/*
+      - type: redirect
+        source: /blog/*/
+        destination: /blog/*
+      # SPA fallback
       - type: rewrite
         source: /*
         destination: /index.html
