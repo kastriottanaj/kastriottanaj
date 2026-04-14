@@ -46,6 +46,15 @@
         <p>Services: SEO Strategy &amp; Consulting, AI-Powered Content Systems, Automation Workflows, 1-on-1 SEO Coaching. Serving New York City and worldwide.</p>
       </div>
     </div>
+    <script>
+      // Strip trailing slash for canonical URL consistency (keeps "/" as-is)
+      (function () {
+        var p = location.pathname;
+        if (p.length > 1 && p.charAt(p.length - 1) === '/') {
+          history.replaceState(null, '', p.replace(/\/+$/, '') + location.search + location.hash);
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
