@@ -10,6 +10,8 @@ const api = axios.create({
 export const getPosts = (params) => api.get('/posts/', { params });
 export const getPost = (slug) => api.get(`/posts/${slug}/`);
 export const getCategories = () => api.get('/categories/');
+export const getTags = () => api.get('/tags/');
+export const getTag = (slug) => api.get(`/tags/${slug}/`);
 export const getServices = () => api.get('/services/');
 export const getProjects = (params) => api.get('/projects/', { params });
 export const getProject = (slug) => api.get(`/projects/${slug}/`);

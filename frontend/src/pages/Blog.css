@@ -153,7 +153,27 @@
 }
 
 .blog-post__tags {
-  color: #64748b;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.blog-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.blog-tag:hover {
+  background: #eff6ff;
+  color: #2563eb;
 }
 
 .blog-post__image {

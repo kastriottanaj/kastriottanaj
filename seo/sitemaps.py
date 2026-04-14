@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 from django.conf import settings
-from blog.models import Post
+from blog.models import Post, Tag
 from portfolio.models import Project, Service
 
 
@@ -41,6 +41,17 @@ class BlogSitemap(BaseSitemap):
 
     def location(self, obj):
         return f'/blog/{obj.slug}'
+
+
+class BlogTagSitemap(BaseSitemap):
+    changefreq = 'weekly'
+    priority = 0.6
+
+    def items(self):
+        return Tag.objects.filter(posts__published=True).distinct()
+
+    def location(self, obj):
+        return f'/blog/tag/{obj.slug}'
 
 
 class ProjectSitemap(BaseSitemap):

@@ -57,8 +57,17 @@ export default function BlogPost() {
           <h1>{post.title}</h1>
           <div className="blog-post__meta">
             <time>{new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
-            {post.tags && <span className="blog-post__tags">{post.tags}</span>}
           </div>
+
+          {post.tags?.length > 0 && (
+            <div className="blog-post__tags">
+              {post.tags.map(tag => (
+                <Link key={tag.slug} to={`/blog/tag/${tag.slug}`} className="blog-tag">
+                  #{tag.name}
+                </Link>
+              ))}
+            </div>
+          )}
 
           {post.featured_image && (
             <img src={post.featured_image} alt={post.title} className="blog-post__image" loading="lazy" />
