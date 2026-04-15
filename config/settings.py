@@ -190,6 +190,10 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 CONTACT_EMAIL = config('CONTACT_EMAIL', default='kastriot.sym@gmail.com')
 
+# MailerLite (lead capture → email automation)
+MAILERLITE_API_KEY = config('MAILERLITE_API_KEY', default='')
+MAILERLITE_GROUP_ID = config('MAILERLITE_GROUP_ID', default='')
+
 # Production security settings
 if not DEBUG:
     SECURE_SSL_REDIRECT = True

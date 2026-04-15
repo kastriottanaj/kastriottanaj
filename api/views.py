@@ -1,10 +1,11 @@
 import logging
 import threading
 
+import requests
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -112,26 +113,65 @@ class ContactCreateView(APIView):
         except Exception as e:
             logger.error(f'DB save failed: {e}')
 
-        # Send email in background thread to avoid Gunicorn timeout
-        def _send_email():
-            recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
-            sender = getattr(settings, 'EMAIL_HOST_USER', '') or 'noreply@kastriottanaj.com'
-            try:
-                send_mail(
-                    subject=f'[kastriottanaj.com] {data.get("subject", "Contact Form")}',
-                    message=(
-                        f'From: {data.get("name", "")} ({data.get("email", "")})\n'
-                        f'Company: {data.get("company", "")}\n\n'
-                        f'{data.get("message", "")}'
-                    ),
-                    from_email=sender,
-                    recipient_list=[recipient],
-                    fail_silently=False,
-                )
-                logger.info(f'Email sent to {recipient} from {data.get("email")}')
-            except Exception as e:
-                logger.error(f'Email send failed: {e}')
+        # Run notification email + MailerLite push in background to avoid Gunicorn timeout
+        def _process_lead():
+            lead_name = data.get('name', '').strip()
+            lead_email = data.get('email', '').strip()
+            lead_company = data.get('company', '').strip()
+            lead_subject = data.get('subject', 'Contact Form')
+            lead_message = data.get('message', '')
 
-        threading.Thread(target=_send_email, daemon=True).start()
+            # 1. Notification to Kastriot with Reply-To set to lead
+            recipient = getattr(settings, 'CONTACT_EMAIL', 'kastriot.sym@gmail.com')
+            sender = getattr(settings, 'EMAIL_HOST_USER', '')
+            if sender:
+                try:
+                    notification = EmailMessage(
+                        subject=f'[kastriottanaj.com] {lead_subject}',
+                        body=(
+                            f'From: {lead_name} ({lead_email})\n'
+                            f'Company: {lead_company}\n\n'
+                            f'{lead_message}'
+                        ),
+                        from_email=sender,
+                        to=[recipient],
+                        reply_to=[lead_email] if lead_email else None,
+                    )
+                    notification.send(fail_silently=False)
+                    logger.info(f'Notification sent to {recipient} for lead {lead_email}')
+                except Exception as e:
+                    logger.error(f'Notification send failed: {e}')
+
+            # 2. Push lead into MailerLite group → triggers automation
+            api_key = getattr(settings, 'MAILERLITE_API_KEY', '')
+            group_id = getattr(settings, 'MAILERLITE_GROUP_ID', '')
+            if api_key and group_id and lead_email:
+                try:
+                    response = requests.post(
+                        'https://connect.mailerlite.com/api/subscribers',
+                        headers={
+                            'Authorization': f'Bearer {api_key}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        json={
+                            'email': lead_email,
+                            'fields': {
+                                'name': lead_name,
+                                'company': lead_company,
+                            },
+                            'groups': [group_id],
+                            'status': 'active',
+                        },
+                        timeout=10,
+                    )
+                    if response.ok:
+                        logger.info(f'MailerLite: subscribed {lead_email} to group {group_id}')
+                    else:
+                        logger.error(f'MailerLite push failed: {response.status_code} {response.text}')
+                except Exception as e:
+                    logger.error(f'MailerLite push error: {e}')
+
+        threading.Thread(target=_process_lead, daemon=True).start()
 
         return Response({'message': 'Message sent successfully.'}, status=status.HTTP_201_CREATED)
