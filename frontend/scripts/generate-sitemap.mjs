@@ -12,7 +12,7 @@ const API_URL = process.env.VITE_API_URL || 'https://kastriottanaj-api.onrender.
 const STATIC_ROUTES = [
   { loc: '/', changefreq: 'weekly', priority: '1.0' },
   { loc: '/about', changefreq: 'weekly', priority: '1.0' },
-  { loc: '/services', changefreq: 'weekly', priority: '1.0' },
+  { loc: '/services', lastmod: '2026-04-15', changefreq: 'weekly', priority: '1.0' },
   { loc: '/blog', changefreq: 'weekly', priority: '1.0' },
   { loc: '/portfolio', changefreq: 'weekly', priority: '1.0' },
   { loc: '/contact', changefreq: 'weekly', priority: '1.0' },

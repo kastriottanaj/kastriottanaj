@@ -187,6 +187,29 @@ export function ServiceSchema() {
   );
 }
 
+export function FAQSchema({ faqs }) {
+  if (!faqs || faqs.length === 0) return null;
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(item => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schema)}</script>
+    </Helmet>
+  );
+}
+
 export function ArticleSchema({ title, description, url, image, publishedAt, updatedAt }) {
   const schema = {
     '@context': 'https://schema.org',
