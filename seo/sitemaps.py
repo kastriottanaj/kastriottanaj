@@ -23,10 +23,13 @@ class StaticSitemap(BaseSitemap):
     priority = 1.0
 
     def items(self):
-        return ['/', '/about', '/services', '/blog', '/portfolio', '/contact']
+        return ['/', '/about', '/services', '/blog', '/portfolio', '/contact', '/privacy']
 
     def location(self, item):
         return item
+
+    def get_priority(self, item):
+        return 0.3 if item == '/privacy' else 1.0
 
 
 class BlogSitemap(BaseSitemap):

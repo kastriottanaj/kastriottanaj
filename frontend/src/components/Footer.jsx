@@ -29,6 +29,7 @@ export default function Footer() {
             <Link to="/portfolio">Portfolio</Link>
             <Link to="/blog">Blog</Link>
             <Link to="/contact">Contact</Link>
+            <Link to="/privacy">Privacy Policy</Link>
           </div>
 
           <div className="footer__links">
@@ -49,6 +50,9 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <p>&copy; {year} Kastriot Tanaj. All rights reserved.</p>
+          <div className="footer__legal">
+            <Link to="/privacy">Privacy Policy</Link>
+          </div>
         </div>
       </div>
     </footer>
