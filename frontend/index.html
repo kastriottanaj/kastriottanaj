@@ -9,6 +9,7 @@
     <title>SEO & AI Automation Consultant New York | Kastriot Tanaj</title>
     <meta name="description" content="New York SEO consultant & AI automation expert helping NYC businesses rank #1 on Google and automate growth. FREE SEO audit + AI-powered strategies that drive revenue." />
     <meta name="author" content="Kastriot Tanaj" />
+    <link rel="canonical" id="canonical-tag" href="https://kastriottanaj.com/" />
 
     <!-- Geo targeting -->
     <meta name="geo.region" content="US-NY" />
@@ -52,6 +53,8 @@
         if (p.length > 1 && p.charAt(p.length - 1) === '/') {
           history.replaceState(null, '', p.replace(/\/+$/, '') + location.search + location.hash);
         }
+        var el = document.getElementById('canonical-tag');
+        if (el) el.setAttribute('href', 'https://kastriottanaj.com' + (location.pathname === '/' ? '/' : location.pathname));
       })();
     </script>
     <script type="module" src="/src/main.jsx"></script>

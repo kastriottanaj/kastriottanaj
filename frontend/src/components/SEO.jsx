@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SITE = {
@@ -22,11 +23,21 @@ export default function SEO({
   const pageImage = image || SITE.image;
   const pageUrl = canonical ? `${SITE.url}${canonical}` : SITE.url;
 
+  useEffect(() => {
+    let el = document.getElementById('canonical-tag');
+    if (!el) {
+      el = document.createElement('link');
+      el.setAttribute('rel', 'canonical');
+      el.setAttribute('id', 'canonical-tag');
+      document.head.appendChild(el);
+    }
+    el.setAttribute('href', pageUrl);
+  }, [pageUrl]);
+
   return (
     <Helmet>
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
-      <link rel="canonical" href={pageUrl} />
       {noindex && <meta name="robots" content="noindex,nofollow" />}
 
       {/* Open Graph */}
