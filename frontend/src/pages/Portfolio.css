@@ -4,6 +4,17 @@
   gap: 28px;
 }
 
+.cta-section .text-link-light {
+  color: #93c5fd;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cta-section .text-link-light:hover {
+  color: #fff;
+}
+
 .portfolio-card {
   background: #fff;
   border: 1px solid #e5e7eb;

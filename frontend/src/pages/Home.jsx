@@ -174,6 +174,11 @@ export default function Home() {
               </ul>
             </div>
           </div>
+          <div className="section__footer-link">
+            <Link to="/services" className="btn btn--primary">
+              See Full SEO &amp; AI Automation Services <FaArrowRight />
+            </Link>
+          </div>
         </div>
       </section>
 

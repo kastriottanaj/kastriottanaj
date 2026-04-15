@@ -50,6 +50,12 @@ export default function About() {
                 ever since. After working across agencies in Europe and managing campaigns for
                 100+ clients, I now bring that expertise directly to businesses ready to dominate Google.
               </p>
+              <p>
+                Curious what working together actually looks like? Explore my{' '}
+                <Link to="/services" className="text-link">SEO consulting and AI automation services</Link>{' '}
+                — from technical audits to AI-powered content systems and workflow automation
+                built for NYC businesses.
+              </p>
               <Link to="/contact" className="btn btn--primary">
                 Let's Work Together <FaArrowRight />
               </Link>

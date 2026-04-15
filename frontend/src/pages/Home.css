@@ -255,6 +255,11 @@
   color: #475569;
 }
 
+.section__footer-link {
+  margin-top: 48px;
+  text-align: center;
+}
+
 /* ===== BUTTONS ===== */
 .btn {
   display: inline-flex;

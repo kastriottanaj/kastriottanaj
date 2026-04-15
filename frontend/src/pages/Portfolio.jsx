@@ -106,7 +106,12 @@ export default function Portfolio() {
       <section className="cta-section">
         <div className="container">
           <h2>Want Results Like These?</h2>
-          <p>Let's build an SEO strategy that puts your business on top of Google.</p>
+          <p>
+            Let's build an SEO strategy that puts your business on top of Google.
+            Not sure where to start? See my{' '}
+            <Link to="/services" className="text-link-light">SEO &amp; AI automation services</Link>{' '}
+            to find the right fit.
+          </p>
           <Link to="/contact" className="btn btn--white">
             Start Your Project <FaArrowRight />
           </Link>

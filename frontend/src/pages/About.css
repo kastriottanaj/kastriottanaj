@@ -35,6 +35,17 @@
   margin: 0 0 32px;
 }
 
+.about-hero__text .text-link {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.about-hero__text .text-link:hover {
+  color: #1d4ed8;
+}
+
 /* Skills */
 .skills-grid {
   display: grid;
