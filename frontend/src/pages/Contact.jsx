@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { submitContact } from '../services/api';
+import { trackFormSubmit, trackOutboundClick } from '../utils/analytics';
 import { FaEnvelope, FaLinkedinIn, FaTwitter, FaMapMarkerAlt, FaWhatsapp, FaCalendarAlt } from 'react-icons/fa';
 import './Contact.css';
 
 export default function Contact() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', company: '', subject: '', message: '' });
   const [status, setStatus] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -19,11 +22,10 @@ export default function Contact() {
     setStatus(null);
     try {
       await submitContact(form);
-      setStatus('success');
-      setForm({ name: '', email: '', company: '', subject: '', message: '' });
+      trackFormSubmit('contact_form');
+      navigate('/thank-you?source=contact');
     } catch {
       setStatus('error');
-    } finally {
       setSubmitting(false);
     }
   };
@@ -86,14 +88,14 @@ export default function Contact() {
                   <FaWhatsapp />
                   <div>
                     <strong>WhatsApp</strong>
-                    <a href="https://api.whatsapp.com/send/?phone=38348111611&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer">Message me on WhatsApp</a>
+                    <a href="https://api.whatsapp.com/send/?phone=38348111611&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" onClick={() => trackOutboundClick('whatsapp', 'contact_page')}>Message me on WhatsApp</a>
                   </div>
                 </div>
                 <div className="contact-info__item">
                   <FaCalendarAlt />
                   <div>
                     <strong>Book a Meeting</strong>
-                    <a href="https://calendly.com/kastriot-sym/30min" target="_blank" rel="noopener noreferrer">Schedule a free 30-min call</a>
+                    <a href="https://calendly.com/kastriot-sym/30min" target="_blank" rel="noopener noreferrer" onClick={() => trackOutboundClick('calendly', 'contact_page')}>Schedule a free 30-min call</a>
                   </div>
                 </div>
               </div>
@@ -125,11 +127,6 @@ export default function Contact() {
                 <textarea id="message" name="message" rows="5" value={form.message} onChange={handleChange} required />
               </div>
 
-              {status === 'success' && (
-                <div className="contact-form__status contact-form__status--success">
-                  Message sent successfully! I'll get back to you soon.
-                </div>
-              )}
               {status === 'error' && (
                 <div className="contact-form__status contact-form__status--error">
                   Something went wrong. Please try again or email me directly.

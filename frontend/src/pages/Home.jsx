@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SEO, { LocalBusinessSchema, PersonSchema } from '../components/SEO';
 import { getTestimonials } from '../services/api';
 import LeadCapture from '../components/LeadCapture';
+import { trackOutboundClick } from '../utils/analytics';
 import {
   FaArrowRight, FaSearch, FaRobot, FaCogs,
   FaStar, FaCheckCircle, FaTimesCircle, FaChartLine, FaBolt,
@@ -61,6 +62,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="whatsapp-btn"
+                onClick={() => trackOutboundClick('whatsapp', 'home_hero')}
               >
                 <FaWhatsapp /> Chat on WhatsApp
               </a>
@@ -72,6 +74,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="calendly-btn"
+                onClick={() => trackOutboundClick('calendly', 'home_hero')}
               >
                 <FaClock /> Book a Free 30-Min Call
               </a>

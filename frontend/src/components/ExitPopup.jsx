@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { FaTimes, FaGift } from 'react-icons/fa';
 import LeadCapture from './LeadCapture';
 import './ExitPopup.css';
 
 export default function ExitPopup() {
   const [show, setShow] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem('exitPopupDismissed');
@@ -27,6 +29,13 @@ export default function ExitPopup() {
       document.removeEventListener('mouseout', handleMouseLeave);
     };
   }, []);
+
+  useEffect(() => {
+    if (show) {
+      setShow(false);
+      sessionStorage.setItem('exitPopupDismissed', 'true');
+    }
+  }, [location.pathname]);
 
   const dismiss = () => {
     setShow(false);

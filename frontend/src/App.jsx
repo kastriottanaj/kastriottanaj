@@ -16,6 +16,7 @@ const BlogTag = lazy(() => import('./pages/BlogTag'));
 const Portfolio = lazy(() => import('./pages/Portfolio'));
 const Contact = lazy(() => import('./pages/Contact'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const ThankYou = lazy(() => import('./pages/ThankYou'));
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/thank-you" element={<ThankYou />} />
           </Routes>
         </Suspense>
       </main>

@@ -1,0 +1,129 @@
+.thankyou {
+  padding: 96px 0 120px;
+  background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+  min-height: 70vh;
+}
+
+.thankyou .container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.thankyou__card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 56px 48px;
+  box-shadow: 0 8px 40px rgba(15, 23, 42, 0.06);
+  text-align: center;
+}
+
+.thankyou__icon {
+  font-size: 64px;
+  color: #10b981;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.thankyou__card h1 {
+  font-size: 38px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  margin: 0 0 16px;
+}
+
+.thankyou__lede {
+  font-size: 18px;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 auto 40px;
+  max-width: 520px;
+}
+
+.thankyou__next {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 28px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.thankyou__next h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 10px;
+}
+
+.thankyou__next p {
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 auto 24px;
+  max-width: 460px;
+}
+
+.thankyou__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.thankyou__ctas .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.thankyou__meanwhile {
+  text-align: left;
+  padding-top: 32px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.thankyou__meanwhile h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.thankyou__meanwhile ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.thankyou__meanwhile a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.thankyou__meanwhile a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .thankyou {
+    padding: 64px 0 80px;
+  }
+  .thankyou__card {
+    padding: 40px 24px;
+  }
+  .thankyou__card h1 {
+    font-size: 28px;
+  }
+  .thankyou__lede {
+    font-size: 16px;
+  }
+}
