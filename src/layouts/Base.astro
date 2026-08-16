@@ -4,6 +4,7 @@ import { SITE } from "../lib/site";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import IconSprite from "../components/IconSprite.astro";
+import CookieConsent from "../components/CookieConsent.astro";
 
 import "../styles/modernist.css";
 import "../styles/site.css";
@@ -29,14 +30,31 @@ const ogImage = new URL(image, SITE.url).href;
 <html lang="en">
   <head>
     <!-- Google tag (gtag.js) -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-9Q01WMYX5J"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function gtag(){window.dataLayer.push(arguments);}
 
+      let consentChoice = null;
+      try {
+        consentChoice = localStorage.getItem('cookie-consent');
+      } catch (_) {}
+
+      const optionalStorage = consentChoice === 'accepted' ? 'granted' : 'denied';
+      gtag('consent', 'default', {
+        ad_storage: optionalStorage,
+        ad_user_data: optionalStorage,
+        ad_personalization: optionalStorage,
+        analytics_storage: optionalStorage,
+        functionality_storage: optionalStorage,
+        personalization_storage: optionalStorage,
+        security_storage: 'granted',
+        wait_for_update: 500
+      });
+
+      gtag('js', new Date());
       gtag('config', 'G-9Q01WMYX5J');
     </script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-9Q01WMYX5J"></script>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -81,6 +99,7 @@ const ogImage = new URL(image, SITE.url).href;
     </main>
 
     <Footer />
+    <CookieConsent />
 
     <script>
       import "../scripts/site.js";

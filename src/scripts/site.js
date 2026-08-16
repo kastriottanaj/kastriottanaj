@@ -1,9 +1,65 @@
 /* Kastriot Tanaj — site behaviour.
-   Three jobs: the mobile nav, the homepage scroll-spy, and progressive
-   enhancement on the contact form. Everything here is optional — the site is
-   fully usable with this file blocked. */
+   Mobile nav, homepage scroll-spy, contact form enhancement, and cookie
+   consent controls. Everything here is optional — the site is fully usable
+   with this file blocked. */
 (() => {
   "use strict";
+
+  /* ── Cookie consent / Google Consent Mode v2 ──────────────────────────── */
+  const consentPanel = document.querySelector("[data-cookie-consent]");
+  const consentSettings = document.querySelector("[data-cookie-settings]");
+
+  if (consentPanel) {
+    const acceptButton = consentPanel.querySelector("[data-cookie-accept]");
+    const rejectButton = consentPanel.querySelector("[data-cookie-reject]");
+
+    const readChoice = () => {
+      try {
+        return localStorage.getItem("cookie-consent");
+      } catch (_) {
+        return null;
+      }
+    };
+
+    const saveChoice = (choice) => {
+      try {
+        localStorage.setItem("cookie-consent", choice);
+      } catch (_) {}
+    };
+
+    const updateConsent = (granted) => {
+      const value = granted ? "granted" : "denied";
+      if (typeof window.gtag === "function") {
+        window.gtag("consent", "update", {
+          ad_storage: value,
+          ad_user_data: value,
+          ad_personalization: value,
+          analytics_storage: value,
+          functionality_storage: value,
+          personalization_storage: value,
+        });
+      }
+    };
+
+    const closePanel = () => {
+      consentPanel.hidden = true;
+    };
+
+    const choose = (choice) => {
+      saveChoice(choice);
+      updateConsent(choice === "accepted");
+      closePanel();
+    };
+
+    acceptButton?.addEventListener("click", () => choose("accepted"));
+    rejectButton?.addEventListener("click", () => choose("rejected"));
+    consentSettings?.addEventListener("click", () => {
+      consentPanel.hidden = false;
+      acceptButton?.focus();
+    });
+
+    if (!readChoice()) consentPanel.hidden = false;
+  }
 
   /* ── Mobile navigation ─────────────────────────────────────────────────── */
   const toggle = document.querySelector(".nav__toggle");

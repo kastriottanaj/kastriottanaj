@@ -9,6 +9,9 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="footer__inner">
     <p class="footer__copy">© {year} {SITE.name} — kastriottanaj.com</p>
-    <a class="footer__link" href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    <div class="footer__links">
+      <button class="footer__link footer__button" type="button" data-cookie-settings>Cookie settings</button>
+      <a class="footer__link" href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    </div>
   </div>
 </footer>
