@@ -38,6 +38,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          script_stop: true
+          # No `script_stop` — v1 dropped that input, so passing it only earns a
+          # warning and does nothing. deploy.sh sets `-euo pipefail` itself, and
+          # the action fails the step on a non-zero exit anyway.
           # The server pulls and builds — same ARM64 architecture that runs it.
           script: /var/www/kastriottanaj/current/deploy/deploy.sh
