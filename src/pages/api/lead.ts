@@ -10,10 +10,22 @@ export const prerender = false;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/** Behind Caddy the socket address is always 127.0.0.1 — trust the proxy header. */
+/**
+ * Behind Caddy the socket address is always 127.0.0.1, so the real visitor has
+ * to come from a proxy header.
+ *
+ * CF-Connecting-IP first: with Cloudflare proxying, it is a single address that
+ * Cloudflare overwrites on every request, whereas X-Forwarded-For is a
+ * client-appendable list. Both are only trustworthy because the origin firewall
+ * restricts 80/443 to Cloudflare's ranges — see deploy/cloudflare-lockdown.sh.
+ */
 function clientIp(request: Request, fallback: string | undefined): string | null {
+  const cloudflare = request.headers.get("cf-connecting-ip");
+  if (cloudflare) return cloudflare.trim();
+
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0]!.trim();
+
   return fallback ?? null;
 }
 

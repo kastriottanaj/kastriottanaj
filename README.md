@@ -98,20 +98,42 @@ draft: false
 
 ## Deploying
 
-First time, on a fresh box as root:
+Target: Hetzner CAX11 in Nuremberg, with Cloudflare proxying in front.
+
+**Once**, store a Hetzner API token (Read & Write) outside the repo:
 
 ```sh
-# set REPO at the top of the script first
-bash deploy/setup-server.sh
+mkdir -p ~/.config/hcloud
+printf '%s' 'YOUR_TOKEN' > ~/.config/hcloud/token
+chmod 600 ~/.config/hcloud/token
 ```
 
-Then fill in `/etc/kastriottanaj/env` (see `.env.example`), point DNS at the box, and:
+Then, in order:
 
 ```sh
-sudo -u deploy /var/www/kastriottanaj/current/deploy/deploy.sh
-systemctl enable --now kastriottanaj
-systemctl reload caddy
+# 1. Create the server (idempotent — safe to re-run)
+bash deploy/provision-hetzner.sh
+
+# 2. Add the two A records in Cloudflare as "DNS only" (grey cloud) first,
+#    so Caddy's HTTP-01 challenge can reach the box.
+
+# 3. Provision it
+ssh root@<ip> 'bash -s' < deploy/setup-server.sh
+ssh root@<ip> 'nano /etc/kastriottanaj/env'     # RESEND_API_KEY, LEAD_TO_EMAIL
+
+# 4. First deploy
+ssh root@<ip> 'sudo -u deploy /var/www/kastriottanaj/current/deploy/deploy.sh'
+ssh root@<ip> 'systemctl enable --now kastriottanaj && systemctl reload caddy'
+
+# 5. Once HTTPS serves cleanly, flip both records to "Proxied" (orange) and set
+#    Cloudflare SSL/TLS to "Full (strict)".
+
+# 6. Optional, after the proxy is live — restrict the origin to Cloudflare
+bash deploy/cloudflare-lockdown.sh <ip>
 ```
+
+The grey-cloud-first ordering is not optional: with Cloudflare proxying from the
+start, Caddy cannot complete the HTTP-01 challenge and never gets a certificate.
 
 After that, pushing to `main` deploys: GitHub Actions builds as a check, then SSHes in and
 runs `deploy.sh`. Repo secrets needed: `SSH_HOST`, `SSH_USER`, `SSH_KEY`, optionally

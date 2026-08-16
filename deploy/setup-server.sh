@@ -10,7 +10,7 @@ set -euo pipefail
 DOMAIN="kastriottanaj.com"
 APP_USER="deploy"
 APP_ROOT="/var/www/kastriottanaj"
-REPO="git@github.com:REPLACE_ME/kastriottanaj.git"   # <- set before running
+REPO="https://github.com/kastriottanaj/kastriottanaj.git"
 NODE_MAJOR=24
 
 log() { printf "\n\033[1m==> %s\033[0m\n" "$*"; }
