@@ -1,0 +1,58 @@
+---
+import { SERVICE_OPTIONS } from "../lib/site";
+
+// Optional: set PUBLIC_TURNSTILE_SITE_KEY (and TURNSTILE_SECRET_KEY on the server)
+// to switch on Cloudflare Turnstile. Absent, the form still works — the honeypot
+// and the server-side rate limit carry spam duty on their own.
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+{/* No `novalidate` in the markup: without JS the browser validates natively and
+    posts for real. The enhancement script adds `novalidate` on init so it can
+    show the nicer inline messages instead. */}
+<form class="form" id="contact-form" method="POST" action="/api/lead">
+  <div class="form__row">
+    <div class="field">
+      <label for="name">Name</label>
+      <input class="input" type="text" id="name" name="name" placeholder="Your name" autocomplete="name" required maxlength="100" />
+      <p class="field__error" data-error-for="name" hidden></p>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input class="input" type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required maxlength="200" />
+      <p class="field__error" data-error-for="email" hidden></p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="service">What do you need help with?</label>
+    <select class="input input--select" id="service" name="service">
+      {SERVICE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="message">Message</label>
+    <textarea class="input" id="message" name="message" rows="4" placeholder="Tell me more about your goals or challenges..." required maxlength="5000"></textarea>
+    <p class="field__error" data-error-for="message" hidden></p>
+  </div>
+
+  {/* Honeypot: hidden from people, tempting to bots. */}
+  <div class="hp" aria-hidden="true">
+    <label for="company">Company</label>
+    <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+  </div>
+
+  {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="light" />}
+
+  <button class="btn btn-primary btn--lg form__submit" type="submit">Send message</button>
+</form>
+
+<div class="form-status" id="form-status" role="status" aria-live="polite" hidden>
+  <p class="form-status__title"></p>
+  <p class="form-status__body"></p>
+</div>
+
+{turnstileKey && (
+  <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+)}

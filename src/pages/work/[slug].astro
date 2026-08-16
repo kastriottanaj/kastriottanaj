@@ -1,0 +1,85 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const cases = await getCollection("work", ({ data }) => !data.draft);
+  return cases.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+};
+
+interface Props {
+  entry: CollectionEntry<"work">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, client, description, services, year, thumbCaption } = entry.data;
+
+const url = `${SITE.url}/work/${entry.id}/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: title,
+    description,
+    url,
+    about: { "@type": "Organization", name: client },
+    author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    ...(year ? { datePublished: String(year) } : {}),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Work", item: `${SITE.url}/work/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+---
+
+<Base title={`${title} — case study | ${SITE.name}`} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <a href="/work/">Work</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <header class="page-head">
+      <span class="kicker">Case study</span>
+      <h1 class="page-head__title">{title}</h1>
+      <p class="page-head__lede">{description}</p>
+      {
+        services.length > 0 && (
+          <p class="tags">
+            {services.map((service) => (
+              <span class="tag">{service}</span>
+            ))}
+          </p>
+        )
+      }
+    </header>
+
+    <figure class="thumb thumb--wide">
+      <figcaption>{thumbCaption ?? client}</figcaption>
+    </figure>
+
+    <div class="prose prose--narrow">
+      <Content />
+    </div>
+  </div>
+
+  <CtaBanner
+    title="Want results like this?"
+    lede="Tell me about your business and I'll tell you where the opportunity is."
+  />
+</Base>

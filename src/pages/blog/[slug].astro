@@ -1,0 +1,102 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+};
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, tags } = post.data;
+
+const url = `${SITE.url}/blog/${post.id}/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    datePublished: pubDate.toISOString(),
+    ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+    author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    publisher: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    keywords: tags.join(", "),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Insights", item: `${SITE.url}/blog/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<Base title={`${title} | ${SITE.name}`} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <a href="/blog/">Insights</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <article>
+      <header class="page-head">
+        <p class="post__date">
+          <time datetime={pubDate.toISOString()}>{dateFormat.format(pubDate)}</time>
+          {
+            updatedDate && (
+              <>
+                {" · updated "}
+                <time datetime={updatedDate.toISOString()}>{dateFormat.format(updatedDate)}</time>
+              </>
+            )
+          }
+        </p>
+        <h1 class="page-head__title">{title}</h1>
+        <p class="page-head__lede">{description}</p>
+        {
+          tags.length > 0 && (
+            <p class="tags">
+              {tags.map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </p>
+          )
+        }
+      </header>
+
+      <div class="prose prose--narrow">
+        <Content />
+      </div>
+    </article>
+  </div>
+
+  <CtaBanner
+    title="Want this kind of thinking applied to your site?"
+    lede="Tell me what you're working on and I'll tell you where I'd start."
+  />
+</Base>

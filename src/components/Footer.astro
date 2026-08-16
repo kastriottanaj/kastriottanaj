@@ -1,0 +1,14 @@
+---
+import { SITE } from "../lib/site";
+
+// Rendered at build time — no client JS needed to keep the year current, since
+// every deploy rebuilds. A stale year means a stale deploy, which is useful signal.
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p class="footer__copy">© {year} {SITE.name} — kastriottanaj.com</p>
+    <a class="footer__link" href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>

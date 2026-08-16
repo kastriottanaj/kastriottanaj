@@ -1,19 +1,9 @@
-/* Kastriot Tanaj — portfolio behaviour.
-   Replaces the design file's DCLogic component state with plain DOM code. */
+/* Kastriot Tanaj — site behaviour.
+   Three jobs: the mobile nav, the homepage scroll-spy, and progressive
+   enhancement on the contact form. Everything here is optional — the site is
+   fully usable with this file blocked. */
 (() => {
   "use strict";
-
-  /* ───────────────────────────────────────────────────────────────────────
-     Where contact submissions go.
-
-     Until this is set, the form validates and shows its confirmation but the
-     message is NOT delivered anywhere. Point it at a form endpoint that
-     accepts a POST (Formspree, Basin, a Netlify function, your own API) and
-     submissions start going through for real.
-
-     e.g. const ENDPOINT = "https://formspree.io/f/xxxxxxxx";
-     ─────────────────────────────────────────────────────────────────────── */
-  const ENDPOINT = "";
 
   /* ── Mobile navigation ─────────────────────────────────────────────────── */
   const toggle = document.querySelector(".nav__toggle");
@@ -41,16 +31,27 @@
     });
 
     // Leaving the narrow breakpoint clears the toggled state.
-    const wide = window.matchMedia("(min-width: 821px)");
-    wide.addEventListener("change", (e) => {
+    window.matchMedia("(min-width: 821px)").addEventListener("change", (e) => {
       if (e.matches) setMenu(false);
     });
   }
 
   /* ── Mark the section currently in view ────────────────────────────────── */
-  const navLinks = Array.from(document.querySelectorAll(".nav__links a"));
-  const sections = navLinks
-    .map((link) => document.querySelector(link.getAttribute("href")))
+  /* Only same-page anchors take part. Real page links (/services/, /blog/) are
+     marked server-side with aria-current="page" in Nav.astro. */
+  const anchorLinks = Array.from(document.querySelectorAll('.nav__links a[href*="#"]')).filter(
+    (link) => {
+      const href = link.getAttribute("href") || "";
+      const [path] = href.split("#");
+      return path === "" || path === "/" ? location.pathname === "/" || path === "" : false;
+    }
+  );
+
+  const sections = anchorLinks
+    .map((link) => {
+      const id = (link.getAttribute("href") || "").split("#")[1];
+      return id ? document.getElementById(id) : null;
+    })
     .filter(Boolean);
 
   if (sections.length && "IntersectionObserver" in window) {
@@ -69,10 +70,10 @@
           }
         });
 
-        navLinks.forEach((link) => {
-          const active = bestId !== null && link.getAttribute("href") === `#${bestId}`;
-          if (active) link.setAttribute("aria-current", "true");
-          else link.removeAttribute("aria-current");
+        anchorLinks.forEach((link) => {
+          const id = (link.getAttribute("href") || "").split("#")[1];
+          if (bestId !== null && id === bestId) link.setAttribute("aria-current", "true");
+          else if (link.getAttribute("aria-current") === "true") link.removeAttribute("aria-current");
         });
       },
       { rootMargin: "-76px 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] }
@@ -86,6 +87,10 @@
   const status = document.getElementById("form-status");
 
   if (form && status) {
+    // Hand validation over to this script now that we know it runs. Without it
+    // the browser's own required/type checks stay in charge.
+    form.setAttribute("novalidate", "");
+
     const showError = (name, message) => {
       const field = form.elements[name];
       const slot = form.querySelector(`[data-error-for="${name}"]`);
@@ -135,13 +140,6 @@
       event.preventDefault();
       clearErrors();
 
-      // Honeypot filled in → a bot. Show the confirmation, send nothing.
-      if (form.elements.company.value) {
-        form.hidden = true;
-        showStatus("Thanks — got it.", "I'll reply within a couple of business days.");
-        return;
-      }
-
       const problems = validate();
       if (problems.length) {
         problems.forEach(([field, message]) => showError(field, message));
@@ -155,24 +153,24 @@
       button.textContent = "Sending…";
 
       try {
-        if (ENDPOINT) {
-          const response = await fetch(ENDPOINT, {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            body: new FormData(form),
-          });
-          if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-        }
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form),
+        });
 
-        form.hidden = true;
-        showStatus("Thanks — got it.", "I'll reply within a couple of business days.");
+        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+        // Same destination the no-JS path lands on, so conversion tracking has
+        // one URL to watch.
+        window.location.assign("/thanks/");
       } catch (error) {
         console.error(error);
         button.disabled = false;
         button.textContent = label;
         showStatus(
           "That didn't send.",
-          "Something went wrong on the way. Please email me directly via LinkedIn and I'll pick it up there."
+          "Something went wrong on the way. Please reach me on LinkedIn and I'll pick it up there."
         );
       }
     });
@@ -191,8 +189,4 @@
       }
     });
   }
-
-  /* ── Footer year ───────────────────────────────────────────────────────── */
-  const year = document.getElementById("year");
-  if (year) year.textContent = String(new Date().getFullYear());
 })();

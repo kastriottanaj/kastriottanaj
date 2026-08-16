@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../lib/site";
+---
+
+<Base
+  title={`Page not found | ${SITE.name}`}
+  description="That page doesn't exist. Try the services, the case studies, or the writing."
+  noindex
+>
+  <div class="wrap">
+    <section class="page-head page-head--center">
+      <span class="kicker">404</span>
+      <h1 class="page-head__title">That page isn't here.</h1>
+      <p class="page-head__lede">
+        The link may be old, or the page may have moved. Everything worth reading is one of
+        these:
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/">Homepage</a>
+        <a class="btn btn-secondary btn--lg" href="/services/">Services</a>
+        <a class="btn btn-secondary btn--lg" href="/blog/">Insights</a>
+      </div>
+    </section>
+  </div>
+</Base>

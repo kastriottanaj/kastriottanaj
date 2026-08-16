@@ -1,0 +1,79 @@
+---
+import { Font } from "astro:assets";
+import { SITE } from "../lib/site";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import IconSprite from "../components/IconSprite.astro";
+
+import "../styles/modernist.css";
+import "../styles/site.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative image for og:image. Defaults to the hero. */
+  image?: string;
+  /** Set on pages that should stay out of the index (e.g. /thanks). */
+  noindex?: boolean;
+  /** JSON-LD objects, serialised into the head. */
+  schema?: Record<string, unknown>[];
+}
+
+const { title, description, image = SITE.ogImage, noindex = false, schema = [] } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#f3f2f2" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Insights`} href="/rss.xml" />
+
+    <Font cssVariable="--font-archivo" preload />
+
+    {
+      schema.map((entry) => (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(entry)}
+        />
+      ))
+    }
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <IconSprite />
+    <Nav />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import "../scripts/site.js";
+    </script>
+  </body>
+</html>

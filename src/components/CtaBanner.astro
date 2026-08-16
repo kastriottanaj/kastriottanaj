@@ -1,0 +1,24 @@
+---
+interface Props {
+  title?: string;
+  lede?: string;
+}
+
+const {
+  title = "Ready to grow traffic and cut manual work?",
+  lede = "Let's talk about your goals and the bottlenecks slowing your team down.",
+} = Astro.props;
+---
+
+<section class="cta">
+  <div class="cta__inner">
+    <div>
+      <h2 class="cta__title">{title}</h2>
+      <p class="cta__lede">{lede}</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn cta__btn" href="/#contact">Book a strategy call</a>
+      <a class="btn btn-ghost cta__ghost" href="/#contact">Start a project →</a>
+    </div>
+  </div>
+</section>
