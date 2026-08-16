@@ -1,9 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    Kastriot Tanaj — page layout.
 
-   The Modernist design system (ds/modernist.css) supplies every token and the
-   .btn / .input / .field / .tag / .nav component classes. This sheet only adds
-   page-level composition on top. Take colour, type and spacing from the
+   The Modernist design system (styles/modernist.css) supplies every token and
+   the .btn / .input / .field / .tag / .nav component classes. This sheet only
+   adds page-level composition on top. Take colour, type and spacing from the
    var(--…) tokens — never hard-code a hex the system already carries.
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -11,6 +11,12 @@
   --gutter: 32px;
   --measure: 1200px;
   --rule: 1px;
+
+  /* Archivo is self-hosted by Astro's Fonts API, which exposes it as
+     --font-archivo. Repoint the system's type tokens at it. Loaded after
+     modernist.css, so these win. */
+  --font-heading: var(--font-archivo), system-ui, sans-serif;
+  --font-body: var(--font-archivo), system-ui, sans-serif;
 }
 
 /* ── Utilities ───────────────────────────────────────────────────────────── */
@@ -523,8 +529,178 @@ textarea.input { min-height: 100px; }
 }
 .footer__link:hover { color: var(--color-accent-700); }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Inner pages — /services/*, /work/*, /blog/*
+   The homepage is a sequence of ruled bands; inner pages are a heading, a
+   column of prose, and the same bands underneath. Same tokens throughout.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 28px;
+  font-size: 12.5px;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.breadcrumb a { color: inherit; text-decoration: none; }
+.breadcrumb a:hover { color: var(--color-accent-700); text-decoration: underline; }
+.breadcrumb [aria-current="page"] { color: var(--color-text); font-weight: 600; }
+
+.page-head { padding: 40px 0 36px; max-width: 780px; }
+.page-head--center { margin-inline: auto; text-align: center; padding: 72px 0 80px; }
+.page-head--center .hero__actions,
+.page-head--center .hero__meta { justify-content: center; }
+
+.page-head__title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 10px 0 16px;
+}
+.page-head__lede {
+  font-size: 17px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-text) 72%, transparent);
+  margin: 0 0 20px;
+  max-width: 62ch;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+
+/* ── Article body ────────────────────────────────────────────────────────── */
+.article-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 48px;
+  align-items: start;
+  padding-bottom: 48px;
+  border-top: var(--rule) solid var(--color-divider);
+  padding-top: 40px;
+}
+
+.prose { max-width: 68ch; }
+.prose--narrow {
+  max-width: 68ch;
+  border-top: var(--rule) solid var(--color-divider);
+  padding: 40px 0 56px;
+}
+
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-top: 2em;
+}
+.prose h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 18px;
+  margin-top: 1.8em;
+}
+.prose p,
+.prose li { font-size: 16px; line-height: 1.7; }
+.prose ul, .prose ol { padding-left: 1.2em; }
+.prose li + li { margin-top: 0.5em; }
+.prose a { color: var(--color-accent-700); text-underline-offset: 2px; }
+.prose strong { font-weight: 600; }
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--color-surface);
+  padding: 2px 5px;
+}
+.prose pre {
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-100);
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.prose pre code { background: none; padding: 0; color: inherit; }
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 16px;
+  color: color-mix(in srgb, var(--color-text) 75%, transparent);
+}
+
+/* ── Service page sidebar ────────────────────────────────────────────────── */
+.includes {
+  border: var(--rule) solid var(--color-divider);
+  padding: 24px;
+  position: sticky;
+  top: 92px;
+}
+.includes__list { list-style: none; margin: 16px 0 0; padding: 0; }
+.includes__list li {
+  font-size: 14px;
+  line-height: 1.55;
+  padding: 12px 0 12px 22px;
+  position: relative;
+  border-top: var(--rule) solid var(--color-divider);
+}
+.includes__list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+.faq { border-top: var(--rule) solid var(--color-divider); margin-top: 16px; }
+.faq__item { border-bottom: var(--rule) solid var(--color-divider); }
+.faq__q {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 16px;
+  padding: 18px 0;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.faq__q::-webkit-details-marker { display: none; }
+.faq__q::after { content: "+"; color: var(--color-accent); font-size: 20px; line-height: 1; }
+.faq__item[open] .faq__q::after { content: "−"; }
+.faq__a {
+  font-size: 15px;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-text) 75%, transparent);
+  margin: 0;
+  padding: 0 0 20px;
+  max-width: 68ch;
+}
+
+/* ── Post metadata ───────────────────────────────────────────────────────── */
+.post__date {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  margin: 0 0 4px;
+}
+.post__title a,
+.case__title a { color: inherit; text-decoration: none; }
+.post__title a:hover,
+.case__title a:hover { color: var(--color-accent-700); }
+
+.thumb--wide { aspect-ratio: 16 / 7; margin: 0; }
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
+  .article-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .includes { position: static; }
+
   .hero {
     grid-template-columns: minmax(0, 1fr);
     gap: 32px;

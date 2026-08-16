@@ -1,0 +1,59 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const title = `Case studies & results | ${SITE.name}`;
+const description =
+  "Selected SEO and digital marketing work — what the brief was, what I did, and what came of it.";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Work", item: `${SITE.url}/work/` },
+    ],
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema}>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Work</span>
+      <h1 class="page-head__title">Selected results</h1>
+      <p class="page-head__lede">{description}</p>
+    </header>
+
+    <section class="section section--ruled">
+      <h2 class="sr-only">Case studies</h2>
+      <div class="cases">
+        {
+          cases.map((entry) => (
+            <article class="case">
+              <figure class="thumb">
+                <figcaption>{entry.data.thumbCaption ?? entry.data.client}</figcaption>
+              </figure>
+              <div class="case__body">
+                <h3 class="case__title">
+                  <a href={`/work/${entry.id}/`}>{entry.data.title}</a>
+                </h3>
+                <p class="case__desc">{entry.data.summary}</p>
+                <a class="arrow-link" href={`/work/${entry.id}/`}>View project →</a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <CtaBanner />
+</Base>

@@ -2,7 +2,10 @@
 /* Vendored verbatim from the Claude Design project
    (_ds/modernist-600330ab-3623-42f3-a548-4deae9e465ec/styles.css).
    Do not hand-edit — re-export from the design system instead. */
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap');
+/* The upstream Google Fonts @import was removed here — Archivo is self-hosted at
+   build time by Astro's Fonts API (see astro.config.mjs) and wired to
+   --font-heading / --font-body in site.css. This is the one edit to the vendored
+   file; re-exporting from the design system means removing this line again. */
 
 :root {
   --color-bg: #f3f2f2;

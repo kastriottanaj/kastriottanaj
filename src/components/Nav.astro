@@ -1,0 +1,35 @@
+---
+import { NAV, SITE } from "../lib/site";
+
+const { pathname } = Astro.url;
+
+/** A nav entry is current when its path prefix matches — /blog/ covers /blog/a-post/. */
+function isCurrent(href: string) {
+  if (href.startsWith("/#")) return false; // homepage anchors are handled by scroll-spy
+  return pathname === href || (href !== "/" && pathname.startsWith(href));
+}
+---
+
+<nav class="nav">
+  <a class="nav-brand" href="/">{SITE.name}</a>
+
+  <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+    <span class="nav__bars" aria-hidden="true"></span>
+    <span>Menu</span>
+  </button>
+
+  <div class="nav__menu" id="nav-menu">
+    <ul class="nav__links">
+      {
+        NAV.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="btn btn-primary" href="/#contact">Book a call</a>
+  </div>
+</nav>

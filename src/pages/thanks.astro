@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../lib/site";
+
+// noindex: this is a conversion destination, not a landing page. It is also
+// excluded from the sitemap in astro.config.mjs.
+---
+
+<Base
+  title={`Thanks — message received | ${SITE.name}`}
+  description="Your message came through. I'll get back to you within a couple of business days."
+  noindex
+>
+  <div class="wrap">
+    <section class="page-head page-head--center">
+      <span class="kicker">Message received</span>
+      <h1 class="page-head__title">Thanks — got it.</h1>
+      <p class="page-head__lede">
+        Your message came through and landed in my inbox. I'll get back to you within a
+        couple of business days — usually sooner.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/">Back to the homepage</a>
+        <a class="btn btn-secondary btn--lg" href="/blog/">Read some insights</a>
+      </div>
+      <p class="hero__meta">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
+        <span>In a hurry? Reach me on <a href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>.</span>
+      </p>
+    </section>
+  </div>
+</Base>

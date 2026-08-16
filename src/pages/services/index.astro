@@ -1,0 +1,66 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
+
+const title = "Services — SEO, Digital Marketing & AI Automation | Kastriot Tanaj";
+const description =
+  "SEO, digital marketing, AI automation and web development for businesses across Europe. Pick the service you need, or ask which one fits.";
+
+const breadcrumbs = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+    { "@type": "ListItem", position: 2, name: "Services", item: `${SITE.url}/services/` },
+  ],
+};
+
+const itemList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: services.map((service, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: service.data.title,
+    url: `${SITE.url}/services/${service.id}/`,
+  })),
+};
+---
+
+<Base title={title} description={description} schema={[breadcrumbs, itemList]}>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Services</span>
+      <h1 class="page-head__title">What I can help with</h1>
+      <p class="page-head__lede">
+        Four services that overlap more than they compete. Most engagements start with one
+        and grow into another — if you are not sure which you need, say so and I'll tell you
+        honestly.
+      </p>
+    </header>
+
+    <section class="section section--ruled">
+      <h2 class="sr-only">All services</h2>
+      <div class="ruled-grid ruled-grid--services">
+        {
+          services.map((service) => (
+            <div class="service">
+              <svg class="icon" aria-hidden="true"><use href={`#${service.data.icon}`} /></svg>
+              <h3 class="service__title">{service.data.navLabel ?? service.data.title}</h3>
+              <p class="service__desc">{service.data.short}</p>
+              <a class="arrow-link arrow-link--sm service__more" href={`/services/${service.id}/`}>
+                Learn more →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <CtaBanner />
+</Base>

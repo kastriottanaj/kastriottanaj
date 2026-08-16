@@ -1,0 +1,54 @@
+# systemd unit for the lead API.
+#
+# Install to /etc/systemd/system/kastriottanaj.service, then:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now kastriottanaj
+
+[Unit]
+Description=kastriottanaj.com — Astro lead API
+Documentation=https://kastriottanaj.com
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/var/www/kastriottanaj/current
+
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=4321
+Environment=LEADS_DB_PATH=/var/www/kastriottanaj/data/leads.db
+
+# Secrets live here, root-owned and chmod 600 — never in the repo.
+EnvironmentFile=/etc/kastriottanaj/env
+
+ExecStart=/usr/bin/node ./dist/server/entry.mjs
+
+Restart=always
+RestartSec=5
+StartLimitBurst=5
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kastriottanaj
+
+# Only bound to localhost, but hardened anyway — the process handles untrusted input.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+
+# The SQLite database is the only thing it may write to.
+ReadWritePaths=/var/www/kastriottanaj/data
+
+[Install]
+WantedBy=multi-user.target

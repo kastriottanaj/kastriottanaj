@@ -1,11 +1,18 @@
-# macOS
+# Build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Environment — never commit real keys
+.env
+.env.production
+.env.local
+
+# Lead database (lives on the server, not in the repo)
+data/
+
+# OS noise
 .DS_Store
-._*
-
-# Editors
-.vscode/
-.idea/
-*.swp
-
-# Vercel
-.vercel
+*.log
