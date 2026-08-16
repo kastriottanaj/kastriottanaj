@@ -47,6 +47,14 @@ mkdir -p "$APP_ROOT/data" "$APP_ROOT/backups" /etc/kastriottanaj /var/log/caddy
 chown -R "$APP_USER:$APP_USER" "$APP_ROOT"
 chown caddy:caddy /var/log/caddy
 
+# adduser --system creates the home as 0750, which Caddy (a different user)
+# cannot traverse — every request 403s with "permission denied" on dist/client.
+# Open traversal on the app root, but keep the lead database private to the
+# service user: it must not become readable just because the web server needs
+# to reach the build output two directories away.
+chmod 755 "$APP_ROOT"
+chmod 700 "$APP_ROOT/data" "$APP_ROOT/backups"
+
 log "Secrets file"
 if [[ ! -f /etc/kastriottanaj/env ]]; then
   cat > /etc/kastriottanaj/env <<'EOF'
