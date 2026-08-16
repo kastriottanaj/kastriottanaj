@@ -41,7 +41,7 @@
     });
 
     // Leaving the narrow breakpoint clears the toggled state.
-    const wide = window.matchMedia("(min-width: 861px)");
+    const wide = window.matchMedia("(min-width: 821px)");
     wide.addEventListener("change", (e) => {
       if (e.matches) setMenu(false);
     });
@@ -75,7 +75,7 @@
           else link.removeAttribute("aria-current");
         });
       },
-      { rootMargin: "-88px 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] }
+      { rootMargin: "-76px 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] }
     );
 
     sections.forEach((section) => observer.observe(section));
