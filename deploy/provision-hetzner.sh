@@ -16,9 +16,10 @@ TOKEN_FILE="${HCLOUD_TOKEN_FILE:-$HOME/.config/hcloud/token}"
 API="https://api.hetzner.cloud/v1"
 
 SERVER_NAME="kastriottanaj-web"
-SERVER_TYPE="cax11"       # 2 vCPU ARM64, 4GB RAM, 40GB NVMe
-LOCATION="nbg1"           # Nuremberg
-IMAGE="ubuntu-24.04"
+SERVER_TYPE="cx23"       # 2 vCPU x86, 4GB RAM, 40GB NVMe
+ARCH="x86"
+LOCATION="nbg1"          # Nuremberg
+IMAGE_NAME="ubuntu-24.04"
 SSH_KEY_NAME="kastriot-macbook"
 SSH_PUB_KEY="${SSH_PUB_KEY:-$HOME/.ssh/id_ed25519.pub}"
 FIREWALL_NAME="kastriottanaj-web-fw"
@@ -54,6 +55,36 @@ echo "  token OK — $(echo "$ME" | jq -r '.locations | length') locations visib
 
 api GET "/locations" | jq -e --arg l "$LOCATION" '.locations[] | select(.name == $l)' >/dev/null \
   || fail "Location ${LOCATION} not available"
+
+# ── Resolve the image ───────────────────────────────────────────────────────
+# "ubuntu-24.04" is NOT unique: Hetzner publishes an x86 and an arm image under
+# the same name. Passing the name with an arm server type silently resolves to
+# the x86 one and the create fails with the misleading error "unsupported
+# location for server type". Resolve by name AND architecture, and use the id.
+log "Resolving ${IMAGE_NAME} (${ARCH})"
+IMAGE_ID="$(api GET "/images?type=system&name=${IMAGE_NAME}&architecture=${ARCH}" \
+  | jq -r '.images[0].id // empty')"
+[[ -n "$IMAGE_ID" ]] || fail "No ${ARCH} image named ${IMAGE_NAME}"
+echo "  image id ${IMAGE_ID}"
+
+# ── Confirm the server type is actually in stock ────────────────────────────
+# Availability lives on server_types[].locations. Do NOT use /datacenters: it
+# was phased out on 2025-12-16 and still reports stale availability — it claimed
+# cax11 was in stock at nbg1-dc3 while every ARM type was sold out everywhere,
+# and the create then failed with "unsupported location for server type".
+log "Checking ${SERVER_TYPE} stock"
+TYPE_JSON="$(api GET "/server_types?name=${SERVER_TYPE}")"
+jq -e '.server_types[0]' <<<"$TYPE_JSON" >/dev/null || fail "Unknown server type ${SERVER_TYPE}"
+
+AVAILABLE_LOCS="$(jq -r '.server_types[0].locations[] | select(.available) | .name' <<<"$TYPE_JSON")"
+if [[ -z "$AVAILABLE_LOCS" ]]; then
+  fail "${SERVER_TYPE} is out of stock in every location right now"
+fi
+echo "  in stock at: $(echo "$AVAILABLE_LOCS" | tr '\n' ' ')"
+
+if ! grep -qx "$LOCATION" <<<"$AVAILABLE_LOCS"; then
+  fail "${SERVER_TYPE} not available in ${LOCATION}. In stock at: $(echo "$AVAILABLE_LOCS" | tr '\n' ' ')"
+fi
 
 # ── SSH key ─────────────────────────────────────────────────────────────────
 log "SSH key"
@@ -105,7 +136,7 @@ else
   CREATE="$(api POST "/servers" "$(jq -n \
     --arg name "$SERVER_NAME" \
     --arg type "$SERVER_TYPE" \
-    --arg image "$IMAGE" \
+    --argjson image "$IMAGE_ID" \
     --arg location "$LOCATION" \
     --argjson ssh_key "$SSH_KEY_ID" \
     --argjson fw "$FIREWALL_ID" \
