@@ -21,7 +21,7 @@ npm run check    # astro check — types and diagnostics
 | Web server | Caddy — static files, automatic TLS, reverse proxy for the API |
 | Host | Hetzner Cloud CAX11 (ARM64), Ubuntu 24.04 |
 | Fonts | Astro Fonts API — Archivo, self-hosted, preloaded |
-| Email | Resend (HTTPS API) |
+| Email | Hostinger SMTP (STARTTLS on port 587) |
 | Lead storage | SQLite via `node:sqlite` |
 | Spam | Honeypot + per-IP rate limit + optional Cloudflare Turnstile |
 | SEO | `@astrojs/sitemap`, `@astrojs/rss`, JSON-LD, `robots.txt`, `llms.txt` |
@@ -70,7 +70,7 @@ Browser  ──POST /api/lead──▶  Caddy  ──▶  Node :4321
                                              │
                                      SQLite (always)
                                              │
-                                     Resend → inbox
+                               Hostinger SMTP → inbox
                                              │
                               303 → /thanks/   (JS and no-JS alike)
 ```
@@ -119,7 +119,7 @@ bash deploy/provision-hetzner.sh
 
 # 3. Provision it
 ssh root@<ip> 'bash -s' < deploy/setup-server.sh
-ssh root@<ip> 'nano /etc/kastriottanaj/env'     # RESEND_API_KEY, LEAD_TO_EMAIL
+ssh root@<ip> 'nano /etc/kastriottanaj/env'     # set SMTP_PASSWORD
 
 # 4. First deploy
 ssh root@<ip> 'sudo -u deploy /var/www/kastriottanaj/current/deploy/deploy.sh'
@@ -154,9 +154,9 @@ Behind Caddy the socket is plain HTTP, so without those entries the reconstructe
 is `http://…`, the browser sends `https://…`, and every real submission 403s. Adding a
 domain to the site means adding it there too.
 
-**Hetzner blocks outbound ports 25 and 465** on new Cloud accounts, and a VPS IP has no
-sender reputation. That is why mail goes out over the Resend API rather than SMTP. Verify
-`kastriottanaj.com` in Resend and add its SPF and DKIM records, or mail lands in spam.
+**Hetzner blocks outbound ports 25 and 465** on new Cloud accounts. Hostinger SMTP uses
+STARTTLS on port 587 instead. The server authenticates as `kastriot@kastriottanaj.com`;
+keep its mailbox password only in `/etc/kastriottanaj/env`, never in this repository.
 
 ## Before launch
 
@@ -169,7 +169,7 @@ sender reputation. That is why mail goes out over the Resend API rather than SMT
 4. **Swap the case-study placeholders for real screenshots.** Each is a `.thumb` figure —
    replacing the `<figcaption>` with an `<img>` makes the hatch pattern get out of the way
    automatically.
-5. **Verify the Resend domain**, then send one real test enquiry end to end.
+5. **Set the Hostinger mailbox password**, then send one real test enquiry end to end.
 6. **Submit the sitemap** in Search Console: `https://kastriottanaj.com/sitemap-index.xml`.
 
 ## Design system

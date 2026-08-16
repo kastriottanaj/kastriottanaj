@@ -17,13 +17,15 @@
     "@astrojs/node": "^11.1.2",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^7.2.1"
+    "astro": "^7.2.1",
+    "nodemailer": "^9.0.5"
   },
   "allowScripts": {
     "esbuild@0.28.2": true
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/nodemailer": "^8.0.1",
     "typescript": "^6.0.3"
   }
 }

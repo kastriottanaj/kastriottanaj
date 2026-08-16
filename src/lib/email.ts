@@ -1,14 +1,6 @@
-/**
- * Lead notifications via the Resend HTTP API.
- *
- * Deliberately not SMTP: Hetzner blocks ports 25 and 465 on new Cloud accounts,
- * and a VPS IP has no sender reputation to speak of. An API call over 443 sends
- * from a domain that actually passes SPF/DKIM.
- *
- * Uses fetch rather than the Resend SDK — one less dependency for one endpoint.
- */
+import nodemailer from "nodemailer";
 
-const API = "https://api.resend.com/emails";
+/** Lead notifications sent through the Hostinger mailbox over STARTTLS. */
 
 export interface LeadEmail {
   name: string;
@@ -27,12 +19,14 @@ function escapeHtml(value: string): string {
 
 /** Resolves false when delivery fails — the caller has already stored the lead. */
 export async function sendLeadEmail(lead: LeadEmail): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.LEAD_FROM_EMAIL;
-  const to = process.env.LEAD_TO_EMAIL;
+  const host = process.env.SMTP_HOST ?? "smtp.hostinger.com";
+  const port = Number(process.env.SMTP_PORT ?? "587");
+  const user = process.env.SMTP_USER ?? "kastriot@kastriottanaj.com";
+  const password = process.env.SMTP_PASSWORD;
+  const to = process.env.LEAD_TO_EMAIL ?? "kastriot@kastriottanaj.com";
 
-  if (!apiKey || !from || !to) {
-    console.warn("[email] RESEND_API_KEY / LEAD_FROM_EMAIL / LEAD_TO_EMAIL not set — skipping send");
+  if (!password || !Number.isInteger(port) || port < 1 || port > 65535) {
+    console.warn("[email] SMTP_PASSWORD is missing or SMTP_PORT is invalid — skipping send");
     return false;
   }
 
@@ -55,32 +49,31 @@ export async function sendLeadEmail(lead: LeadEmail): Promise<boolean> {
   `;
 
   try {
-    const response = await fetch(API, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        // Hitting reply in the inbox writes back to the lead, not to yourself.
-        reply_to: lead.email,
-        subject: `New enquiry — ${lead.name} (${lead.service})`,
-        text,
-        html,
-      }),
-      signal: AbortSignal.timeout(10_000),
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      requireTLS: port !== 465,
+      auth: { user, pass: password },
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
+      tls: { minVersion: "TLSv1.2" },
     });
 
-    if (!response.ok) {
-      console.error(`[email] Resend returned ${response.status}: ${await response.text()}`);
-      return false;
-    }
+    await transporter.sendMail({
+      // Hostinger expects the sender to match the authenticated mailbox.
+      from: `Kastriot Tanaj Website <${user}>`,
+      to,
+      replyTo: lead.email,
+      subject: `New enquiry — ${lead.name.replace(/[\r\n]+/g, " ")} (${lead.service})`,
+      text,
+      html,
+    });
 
     return true;
   } catch (error) {
-    console.error("[email] send failed:", error);
+    console.error("[email] Hostinger SMTP send failed:", error);
     return false;
   }
 }

@@ -58,9 +58,11 @@ chmod 700 "$APP_ROOT/data" "$APP_ROOT/backups"
 log "Secrets file"
 if [[ ! -f /etc/kastriottanaj/env ]]; then
   cat > /etc/kastriottanaj/env <<'EOF'
-RESEND_API_KEY=
-LEAD_FROM_EMAIL=leads@kastriottanaj.com
-LEAD_TO_EMAIL=
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=587
+SMTP_USER=kastriot@kastriottanaj.com
+SMTP_PASSWORD=
+LEAD_TO_EMAIL=kastriot@kastriottanaj.com
 # TURNSTILE_SECRET_KEY=
 EOF
   echo "  created /etc/kastriottanaj/env — FILL THIS IN before the form can send mail"
@@ -124,7 +126,7 @@ Provisioned. Remaining steps, in order:
        A     www.${DOMAIN}   -> same
      (If you put Cloudflare in front, set those records to "Proxied".)
 
-  2. Fill in /etc/kastriottanaj/env  (RESEND_API_KEY, LEAD_TO_EMAIL).
+  2. Fill in SMTP_PASSWORD in /etc/kastriottanaj/env.
 
   3. First deploy:
        sudo -u ${APP_USER} ${APP_ROOT}/current/deploy/deploy.sh
