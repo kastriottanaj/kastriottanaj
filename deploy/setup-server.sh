@@ -55,6 +55,42 @@ chown caddy:caddy /var/log/caddy
 chmod 755 "$APP_ROOT"
 chmod 700 "$APP_ROOT/data" "$APP_ROOT/backups"
 
+log "SSH access for ${APP_USER}"
+# CI deploys by SSHing in as this user and running deploy.sh, but
+# `adduser --system` leaves it with no authorized_keys at all. Without this
+# block the handshake fails with "unable to authenticate, attempted methods
+# [none]" before deploy.sh is ever reached — and nothing on the box looks
+# wrong, so the cause is easy to miss.
+#
+# Root's keys are copied across so whoever provisioned the box can also reach
+# the deploy user. Pass a dedicated CI key to keep that separate from your
+# personal one — it can then be revoked on its own:
+#
+#   ssh root@<ip> "DEPLOY_SSH_PUB_KEY='$(cat ~/.ssh/kastriottanaj-ci.pub)' bash -s" \
+#     < deploy/setup-server.sh
+#
+SSH_DIR="$APP_ROOT/.ssh"
+AUTH_KEYS="$SSH_DIR/authorized_keys"
+install -d -m 700 -o "$APP_USER" -g "$APP_USER" "$SSH_DIR"
+touch "$AUTH_KEYS"
+
+# Re-running must not stack duplicate lines.
+add_key() {
+  [[ -n "${1:-}" ]] || return 0
+  grep -qxF "$1" "$AUTH_KEYS" || printf '%s\n' "$1" >> "$AUTH_KEYS"
+}
+
+if [[ -f /root/.ssh/authorized_keys ]]; then
+  while IFS= read -r line; do
+    [[ -n "${line// }" && "$line" != \#* ]] && add_key "$line"
+  done < /root/.ssh/authorized_keys
+fi
+add_key "${DEPLOY_SSH_PUB_KEY:-}"
+
+chown "$APP_USER:$APP_USER" "$AUTH_KEYS"
+chmod 600 "$AUTH_KEYS"
+echo "  $(grep -c . "$AUTH_KEYS") key(s) authorized for ${APP_USER}"
+
 log "Secrets file"
 if [[ ! -f /etc/kastriottanaj/env ]]; then
   cat > /etc/kastriottanaj/env <<'EOF'
