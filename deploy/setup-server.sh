@@ -57,8 +57,11 @@ LEAD_TO_EMAIL=
 EOF
   echo "  created /etc/kastriottanaj/env — FILL THIS IN before the form can send mail"
 fi
-chmod 600 /etc/kastriottanaj/env
-chown root:root /etc/kastriottanaj/env
+# root:deploy 640 — the build needs to read PUBLIC_* vars from here. This is not
+# a real widening: the service runs as deploy, so that user's processes already
+# carry these values in their environment at runtime.
+chown root:"$APP_USER" /etc/kastriottanaj/env
+chmod 640 /etc/kastriottanaj/env
 
 log "Clone"
 if [[ ! -d "$APP_ROOT/current/.git" ]]; then
@@ -66,6 +69,20 @@ if [[ ! -d "$APP_ROOT/current/.git" ]]; then
 else
   echo "  already cloned"
 fi
+
+log "Deploy user sudo rights"
+# deploy.sh restarts the service after building. Grant exactly that and nothing
+# else — no blanket NOPASSWD:ALL.
+cat > /etc/sudoers.d/kastriottanaj-deploy <<'EOF'
+deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart kastriottanaj, \
+                            /usr/bin/systemctl is-active kastriottanaj, \
+                            /usr/bin/systemctl status kastriottanaj
+EOF
+chmod 440 /etc/sudoers.d/kastriottanaj-deploy
+visudo -cf /etc/sudoers.d/kastriottanaj-deploy || { rm -f /etc/sudoers.d/kastriottanaj-deploy; echo "sudoers rule invalid"; exit 1; }
+
+# Root and deploy both touch this checkout; without this git refuses to operate.
+git config --global --add safe.directory "$APP_ROOT/current" 2>/dev/null || true
 
 log "Firewall"
 ufw allow OpenSSH

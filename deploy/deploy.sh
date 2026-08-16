@@ -29,9 +29,15 @@ npm ci --no-audit --no-fund
 
 log "Building"
 # PUBLIC_* vars are baked into the HTML, so they must be present at build time.
-set -a
-[[ -f /etc/kastriottanaj/env ]] && source /etc/kastriottanaj/env
-set +a
+# Test readability, not just existence: the file is root:deploy 640, and a bare
+# -f check passes for a file this user cannot actually open.
+if [[ -r /etc/kastriottanaj/env ]]; then
+  set -a
+  source /etc/kastriottanaj/env
+  set +a
+else
+  echo "  note: /etc/kastriottanaj/env not readable — building without PUBLIC_* vars"
+fi
 npm run build
 
 log "Restarting ${SERVICE}"
