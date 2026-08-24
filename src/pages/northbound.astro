@@ -2,8 +2,9 @@
 import "../styles/northbound.css";
 import "../styles/northbound-polish.css";
 
-const heroVideoUrl = import.meta.env.PUBLIC_HERO_VIDEO_URL || "/travel/shkoder.mp4";
-const heroPosterUrl = import.meta.env.PUBLIC_HERO_POSTER_URL;
+// Falls back to the committed 1080p web encode; the 4K master is gitignored.
+const heroVideoUrl = import.meta.env.PUBLIC_HERO_VIDEO_URL || "/video/shkoder-web-1080p.mp4";
+const heroPosterUrl = import.meta.env.PUBLIC_HERO_POSTER_URL || "/video/shkoder-poster.jpg";
 
 const regions = [
   { name: "Theth", note: "High trails & stone towers", cls: "theth" },
