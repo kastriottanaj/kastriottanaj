@@ -3,6 +3,9 @@
 # Nightly SQLite backup. Installed to /usr/local/bin/ and run from cron by
 # setup-server.sh.
 #
+# The file holds the newsletter subscriber list as well as the leads, so this is
+# also what stands between a disk failure and asking everyone to subscribe again.
+#
 # Uses the sqlite backup API via node:sqlite rather than copying the file —
 # a plain cp of a WAL-mode database mid-write produces a corrupt copy.
 

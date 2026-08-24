@@ -51,7 +51,7 @@ const uid = `nl-${source.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
         required
         maxlength="200"
       />
-      <p class="field__error" data-error-for="email" hidden></p>
+      <p class="field__error" id={`${uid}-email-error`} data-error-for="email" hidden></p>
     </div>
 
     {/* Honeypot: hidden from people, tempting to bots. */}

@@ -282,12 +282,15 @@
     const showFieldError = (message) => {
       emailField.setAttribute("aria-invalid", "true");
       if (!errorSlot) return;
+      // The slot is given its id in the markup, so it is unique per form.
+      emailField.setAttribute("aria-describedby", errorSlot.id);
       errorSlot.textContent = message;
       errorSlot.hidden = false;
     };
 
     const clearFieldError = () => {
       emailField.removeAttribute("aria-invalid");
+      emailField.removeAttribute("aria-describedby");
       if (!errorSlot) return;
       errorSlot.hidden = true;
       errorSlot.textContent = "";

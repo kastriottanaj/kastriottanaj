@@ -17,7 +17,11 @@ import { getDb } from "./sqlite.mjs";
 const TOKEN_BYTES = 24;
 
 /** How long before a repeated "subscribe" resends the confirmation mail. Stops
- *  the form being used to mailbomb a third party one submission at a time. */
+ *  the form being used to mailbomb a third party one submission at a time.
+ *
+ *  It only ever applies to an address still waiting to confirm: confirming
+ *  clears confirm_sent_at, so someone who unsubscribes and changes their mind
+ *  five minutes later gets a fresh link rather than silence. */
 const RESEND_COOLDOWN_MINUTES = 15;
 
 let schemaReady = false;
@@ -157,7 +161,8 @@ export function confirmSubscriber(confirmToken) {
     database
       .prepare(
         `UPDATE subscribers
-         SET status = 'confirmed', confirmed_at = datetime('now'), unsubscribed_at = NULL
+         SET status = 'confirmed', confirmed_at = datetime('now'),
+             unsubscribed_at = NULL, confirm_sent_at = NULL
          WHERE id = ?`
       )
       .run(row.id);

@@ -559,8 +559,9 @@ textarea.input { min-height: 100px; }
   border-top: var(--rule) solid var(--color-divider);
   padding: 32px 0 40px;
 }
-/* Dropped inside a section that already carries its own rule and heading. */
-.newsletter--compact { border-top: none; padding: 8px 0 32px; }
+/* Tucked under an article or a list rather than standing on its own page: the
+   rule still separates it, the kicker goes, and the block sits tighter. */
+.newsletter--compact { padding: 28px 0 32px; }
 
 .newsletter__intro { max-width: 58ch; margin-bottom: 20px; }
 .newsletter__title {

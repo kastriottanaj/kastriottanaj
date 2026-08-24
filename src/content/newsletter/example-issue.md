@@ -4,7 +4,7 @@ title: "The 20-minute technical SEO check"
 preheader: "Three things that quietly cost you traffic — and how to spot them fast."
 description: "The short technical pass I run on every new site before touching content or links."
 pubDate: 2026-08-24
-draft: false
+draft: true
 ---
 
 Hey — this file is the template for an issue. Rename it, write your own, set

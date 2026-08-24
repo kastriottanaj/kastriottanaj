@@ -2,13 +2,13 @@
 
 Astro site for Kastriot Tanaj — SEO, digital marketing and AI automation.
 
-Static HTML at build time, one server route for lead capture, deployed to a Hetzner
-Cloud box behind Caddy.
+Static HTML at build time, a handful of server routes for lead capture and the
+newsletter, deployed to a Hetzner Cloud box behind Caddy.
 
 ```sh
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # -> dist/client (static) + dist/server (lead API)
+npm run build    # -> dist/client (static) + dist/server (the /api routes)
 npm run check    # astro check — types and diagnostics
 ```
 
@@ -22,7 +22,8 @@ npm run check    # astro check — types and diagnostics
 | Host | Hetzner Cloud CAX11 (ARM64), Ubuntu 24.04 |
 | Fonts | Astro Fonts API — Archivo, self-hosted, preloaded |
 | Email | Hostinger SMTP (STARTTLS on port 587) |
-| Lead storage | SQLite via `node:sqlite` |
+| Storage | SQLite via `node:sqlite` — leads and newsletter subscribers |
+| Newsletter | Double opt-in, own list, sent from the same mailbox |
 | Spam | Honeypot + per-IP rate limit + optional Cloudflare Turnstile |
 | SEO | `@astrojs/sitemap`, `@astrojs/rss`, JSON-LD, `robots.txt`, `llms.txt` |
 
@@ -36,29 +37,41 @@ without it.
 src/
   content/            Markdown — the parts you edit most
     blog/             Posts
+    newsletter/       Newsletter issues
     services/         The four service pages
     work/             Case studies
   content.config.ts   Collection schemas
   pages/
-    api/lead.ts       The one server route (prerender = false)
+    api/              The server routes (prerender = false)
+      lead.ts         Contact form
+      subscribe.ts    Newsletter signup
+      newsletter/     confirm.ts, unsubscribe.ts
+    newsletter/       Landing page, archive, status pages, email artifacts
     services/, work/, blog/
     robots.txt.ts, llms.txt.ts, rss.xml.ts
   lib/
     site.ts           Site-wide copy, nav, service allowlist
-    db.ts             SQLite writes
-    email.ts          Resend delivery
+    sqlite.mjs        The one database connection
+    db.ts             Lead writes
+    newsletter-store.mjs   Subscribers, and who has had which issue
+    mailer.mjs        SMTP transport and the shared email shell
+    email.ts          Lead notification
+    newsletter-email.mjs   Confirm, welcome and issue mails
+    request.ts        Client IP, JSON-vs-redirect responses
     turnstile.ts      Optional captcha verification
     rate-limit.ts     Per-IP fixed window
   layouts/Base.astro  Head, meta, JSON-LD, nav, footer
   styles/
     modernist.css     Design system, vendored — see note below
     site.css          Page composition
+scripts/
+  send-newsletter.mjs Sends one issue to the confirmed list
 deploy/
   Caddyfile           Static + reverse proxy + headers
   kastriottanaj.service
   setup-server.sh     One-time provisioning
   deploy.sh           Pull, build, restart, health-check, roll back on failure
-  backup-leads.sh     Nightly SQLite backup
+  backup-leads.sh     Nightly SQLite backup (leads and subscribers alike)
 ```
 
 ## How a lead flows
@@ -75,11 +88,93 @@ Browser  ──POST /api/lead──▶  Caddy  ──▶  Node :4321
                               303 → /thanks/   (JS and no-JS alike)
 ```
 
-Storage happens **before** the email. If Resend is down the lead is still on disk, logged
+Storage happens **before** the email. If SMTP is down the lead is still on disk, logged
 as `stored as #N but not emailed`.
 
 Both the enhanced and no-JS paths land on `/thanks/`, so conversion tracking has one URL
 to watch.
+
+## The newsletter
+
+People subscribe from `/newsletter/`, the foot of every post, and the homepage. Every
+address goes through double opt-in, and everything is sent from the same Hostinger
+mailbox the contact form uses — no third-party sending service, no per-subscriber fee.
+
+```
+Browser ──POST /api/subscribe──▶  honeypot → rate limit → Turnstile → validate
+                                             │
+                                  subscribers row, status = pending
+                                             │
+                                  confirmation mail with a one-use token
+                                             │
+        GET /api/newsletter/confirm ──▶ status = confirmed, welcome mail
+                                             │
+        GET /api/newsletter/unsubscribe ──▶ status = unsubscribed
+```
+
+Nothing is ever sent to an address that has not confirmed. The same answer comes back
+whether an address is new, already on the list, or inside the fifteen-minute resend
+cooldown — a form that says "you are already subscribed" is a form that tells strangers
+who is on your list.
+
+### Writing and sending an issue
+
+An issue is one Markdown file. It becomes both the email and its web version at
+`/newsletter/archive/<slug>/`, so it is written once.
+
+```md
+---
+subject: "The subject line, written for an inbox"
+title: "Heading on the web version"
+preheader: "The grey line an inbox shows after the subject."
+description: "Meta description for the archived page."
+pubDate: 2026-08-25
+draft: false
+---
+```
+
+Commit it, push, and let the deploy build. Then, **on the server**:
+
+```sh
+cd /var/www/kastriottanaj/current
+set -a && source /etc/kastriottanaj/env && set +a
+
+node scripts/send-newsletter.mjs my-issue --dry-run          # counts, renders, sends nothing
+node scripts/send-newsletter.mjs my-issue --test you@you.com # one copy, to you
+node scripts/send-newsletter.mjs my-issue                    # the real thing
+```
+
+Every delivery is recorded, so an interrupted run is resumed by running it again — nobody
+gets the same issue twice. `--limit n` sends a first cautious batch, and `--rate n` sets
+messages per minute (default 20; a mailbox that fires everything at once looks like a
+compromised one).
+
+The send reads `dist/client/newsletter/email/<slug>.json`, which the build writes from the
+same Markdown. A draft has no such file, which is what makes drafts unsendable.
+
+### Deliverability
+
+The list is small and the sending mailbox is a real one, which is the easy case — but a
+newsletter is bulk mail and gets judged like it.
+
+- **SPF, DKIM and DMARC must all pass for kastriottanaj.com.** Hostinger publishes the
+  SPF and DKIM records; add them in Cloudflare DNS and check with a test to
+  `check-auth@verifier.port25.com` before the first real send.
+- **Watch the mailbox's sending limits.** Hostinger caps messages per hour and per day on
+  business mailboxes. Past a few hundred subscribers, either raise the plan's limit or
+  move issues to a dedicated sending service — the subscriber list is yours either way,
+  and `newsletter-email.mjs` is the only file that would change.
+- **Never import a list you did not collect here.** One purchased list is enough to burn
+  the domain that also sends your invoices.
+
+Checking the list, without needing `sqlite3` installed:
+
+```sh
+node --input-type=module -e "
+import { listStats } from './src/lib/newsletter-store.mjs';
+console.log(listStats());
+"
+```
 
 ## Content
 
@@ -170,7 +265,9 @@ keep its mailbox password only in `/etc/kastriottanaj/env`, never in this reposi
    replacing the `<figcaption>` with an `<img>` makes the hatch pattern get out of the way
    automatically.
 5. **Set the Hostinger mailbox password**, then send one real test enquiry end to end.
-6. **Submit the sitemap** in Search Console: `https://kastriottanaj.com/sitemap-index.xml`.
+6. **Add SPF and DKIM for the sending domain**, then subscribe yourself and walk the whole
+   newsletter loop once — confirm, receive, unsubscribe.
+7. **Submit the sitemap** in Search Console: `https://kastriottanaj.com/sitemap-index.xml`.
 
 ## Design system
 

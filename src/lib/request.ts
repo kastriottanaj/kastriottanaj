@@ -20,7 +20,7 @@ export function clientIp(request: Request, fallback?: string): string | null {
 }
 
 /** True when the caller is the enhancement script rather than a plain form post. */
-export function wantsJson(request: Request): boolean {
+function wantsJson(request: Request): boolean {
   return (request.headers.get("accept") ?? "").includes("application/json");
 }
 
