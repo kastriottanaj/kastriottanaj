@@ -1,0 +1,7 @@
+# The lossless source video is served from Vercel Blob on Hobby.
+# Keep it locally for development, but do not include it in the site deployment.
+public/travel/shkoder.mp4
+
+dist/
+data/
+deploy/

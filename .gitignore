@@ -16,3 +16,8 @@ data/
 # OS noise
 .DS_Store
 *.log
+.vercel
+.env*
+
+# 546 MB 4K master — served from Blob storage, never from the repo
+public/travel/

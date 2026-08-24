@@ -2,6 +2,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { defineConfig, fontProviders } from "astro/config";
 import node from "@astrojs/node";
+import vercel from "@astrojs/vercel";
 import sitemap from "@astrojs/sitemap";
 
 const BLOG_DIR = new URL("./src/content/blog/", import.meta.url);
@@ -51,6 +52,7 @@ function blogLastmods() {
 }
 
 const LASTMODS = blogLastmods();
+const IS_VERCEL = process.env.VERCEL === "1";
 
 export default defineConfig({
   site: "https://kastriottanaj.com",
@@ -60,7 +62,7 @@ export default defineConfig({
   output: "static",
 
   // Caddy serves dist/client directly; this server handles /api/* only.
-  adapter: node({ mode: "standalone" }),
+  adapter: IS_VERCEL ? vercel() : node({ mode: "standalone" }),
 
   integrations: [
     sitemap({
