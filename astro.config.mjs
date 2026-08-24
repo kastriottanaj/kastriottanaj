@@ -53,9 +53,47 @@ function blogLastmods() {
 
 const LASTMODS = blogLastmods();
 const IS_VERCEL = process.env.VERCEL === "1";
+const SITE_URL = "https://kastriottanaj.com";
+
+/**
+ * Google's video sitemap extension, keyed by the pathname the video sits on.
+ * Only videos that are the page's own content belong here — the decorative
+ * background loops on /northbound are deliberately left out, since Google
+ * flags videos that are not the main subject of the page they are declared on.
+ */
+const VIDEOS = new Map([
+  [
+    "/",
+    {
+      title: "Meet Kastriot Tanaj — SEO and AI automation",
+      description:
+        "A short introduction from Kastriot Tanaj, an SEO specialist and AI automation builder helping businesses across Europe grow visibility and automate repetitive marketing work.",
+      thumbnail_loc: `${SITE_URL}/video/kastriot-tanaj-poster.jpg`,
+      content_loc: `${SITE_URL}/video/kastriot-tanaj.mp4`,
+      // Whole seconds, as the spec requires — the file runs 36.83s.
+      duration: 37,
+      publication_date: "2026-08-24",
+      family_friendly: "yes",
+      live: "no",
+    },
+  ],
+]);
+
+/**
+ * Kept out of the sitemap: /thanks and the newsletter status pages are
+ * one-off destinations rather than landing pages, and /newsletter/email/*.json
+ * is a build artifact that scripts/send-newsletter.mjs reads off disk.
+ */
+const SITEMAP_EXCLUDED = [
+  "/thanks",
+  "/newsletter/check-inbox",
+  "/newsletter/confirmed",
+  "/newsletter/unsubscribed",
+  "/newsletter/email/",
+];
 
 export default defineConfig({
-  site: "https://kastriottanaj.com",
+  site: SITE_URL,
 
   // Static by default: every page is HTML on disk at build time. The single
   // exception is src/pages/api/lead.ts, which opts out with `prerender = false`.
@@ -66,10 +104,19 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      filter: (page) => !page.includes("/thanks"),
+      filter: (page) => !SITEMAP_EXCLUDED.some((path) => page.includes(path)),
+      // Declares xmlns:video on the urlset; without it the video tags below
+      // would be emitted into a document that never bound the prefix.
+      namespaces: { video: true },
       serialize(item) {
-        const lastmod = LASTMODS.get(new URL(item.url).pathname);
-        return lastmod ? { ...item, lastmod } : item;
+        const pathname = new URL(item.url).pathname;
+        const lastmod = LASTMODS.get(pathname);
+        const video = VIDEOS.get(pathname);
+        return {
+          ...item,
+          ...(lastmod ? { lastmod } : {}),
+          ...(video ? { video } : {}),
+        };
       },
     }),
   ],
