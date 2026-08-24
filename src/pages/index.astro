@@ -1,13 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
 
 import Base from "../layouts/Base.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import ContactForm from "../components/ContactForm.astro";
 import { SITE } from "../lib/site";
-
-import heroImage from "../assets/ai-seo.webp";
 
 const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -101,15 +98,21 @@ const website = {
           <span>Based in {SITE.based}</span>
         </p>
       </div>
-      <div class="hero__figure">
-        <Image
-          src={heroImage}
-          alt="Laptop showing an organic traffic analytics dashboard"
-          widths={[600, 900, 1200, 1672]}
-          sizes="(max-width: 900px) 100vw, 50vw"
-          loading="eager"
-          fetchpriority="high"
-        />
+      <div class="hero__figure hero__figure--video">
+        <video
+          class="hero__video"
+          src="/video/kastriot-tanaj.mp4"
+          poster="/video/kastriot-tanaj-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="Kastriot Tanaj introducing his work"
+        ></video>
+        <button class="hero__sound" type="button" data-hero-sound aria-pressed="false">
+          <span>Sound on</span>
+        </button>
       </div>
     </section>
 
@@ -298,4 +301,26 @@ const website = {
       </aside>
     </section>
   </div>
+<script>
+  const heroVideo = document.querySelector(".hero__video");
+  const soundBtn = document.querySelector("[data-hero-sound]");
+
+  if (heroVideo instanceof HTMLVideoElement) {
+    // Some browsers only honour autoplay once the muted flag is set in JS too.
+    heroVideo.muted = true;
+    const play = () => heroVideo.play().catch(() => {});
+    play();
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) play();
+    });
+
+    const soundLabel = soundBtn?.querySelector("span");
+    soundBtn?.addEventListener("click", () => {
+      heroVideo.muted = !heroVideo.muted;
+      soundBtn.setAttribute("aria-pressed", String(!heroVideo.muted));
+      if (soundLabel) soundLabel.textContent = heroVideo.muted ? "Sound on" : "Sound off";
+      play();
+    });
+  }
+</script>
 </Base>
