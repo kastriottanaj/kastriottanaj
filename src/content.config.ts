@@ -53,4 +53,21 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { blog, work, services };
+const newsletter = defineCollection({
+  loader: glob({ base: "./src/content/newsletter", pattern: "**/*.md" }),
+  schema: z.object({
+    /** The subject line. Written for an inbox, so it can differ from the title. */
+    subject: z.string(),
+    /** Heading on the web version of the issue. */
+    title: z.string(),
+    /** The grey line an inbox shows after the subject. Keep it under ~90 chars. */
+    preheader: z.string().default(""),
+    /** Meta description for the archived web version. */
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    /** Drafts build no page and no email artifact, so they cannot be sent. */
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, work, services, newsletter };

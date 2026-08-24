@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
 import { SITE } from "../../lib/site";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -93,6 +94,13 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
         <Content />
       </div>
     </article>
+
+    <NewsletterForm
+      source={`post-${post.id}`}
+      compact
+      heading="Liked this? The short version lands in your inbox."
+      lede="One email at a time on SEO, marketing and AI automation. Free, and one click to leave."
+    />
   </div>
 
   <CtaBanner

@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import { createTransport, escapeHtml, headerSafe, FROM_ADDRESS, FROM_NAME } from "./mailer.mjs";
 
 /** Lead notifications sent through the Hostinger mailbox over STARTTLS. */
 
@@ -9,26 +9,12 @@ export interface LeadEmail {
   message: string;
 }
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
 /** Resolves false when delivery fails — the caller has already stored the lead. */
 export async function sendLeadEmail(lead: LeadEmail): Promise<boolean> {
-  const host = process.env.SMTP_HOST ?? "smtp.hostinger.com";
-  const port = Number(process.env.SMTP_PORT ?? "587");
-  const user = process.env.SMTP_USER ?? "kastriot@kastriottanaj.com";
-  const password = process.env.SMTP_PASSWORD;
-  const to = process.env.LEAD_TO_EMAIL ?? "kastriot@kastriottanaj.com";
+  const to = process.env.LEAD_TO_EMAIL ?? FROM_ADDRESS;
 
-  if (!password || !Number.isInteger(port) || port < 1 || port > 65535) {
-    console.warn("[email] SMTP_PASSWORD is missing or SMTP_PORT is invalid — skipping send");
-    return false;
-  }
+  const transporter = createTransport();
+  if (!transporter) return false;
 
   const text = [
     `Name:    ${lead.name}`,
@@ -49,24 +35,11 @@ export async function sendLeadEmail(lead: LeadEmail): Promise<boolean> {
   `;
 
   try {
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure: port === 465,
-      requireTLS: port !== 465,
-      auth: { user, pass: password },
-      connectionTimeout: 10_000,
-      greetingTimeout: 10_000,
-      socketTimeout: 15_000,
-      tls: { minVersion: "TLSv1.2" },
-    });
-
     await transporter.sendMail({
-      // Hostinger expects the sender to match the authenticated mailbox.
-      from: `Kastriot Tanaj Website <${user}>`,
+      from: `${FROM_NAME} Website <${FROM_ADDRESS}>`,
       to,
       replyTo: lead.email,
-      subject: `New enquiry — ${lead.name.replace(/[\r\n]+/g, " ")} (${lead.service})`,
+      subject: `New enquiry — ${headerSafe(lead.name)} (${lead.service})`,
       text,
       html,
     });

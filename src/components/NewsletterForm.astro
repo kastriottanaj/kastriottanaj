@@ -1,0 +1,94 @@
+---
+interface Props {
+  /** Recorded with the subscriber, so it is visible later which page earns signups. */
+  source: string;
+  /** Set only where the page needs a link target — ids must stay unique. */
+  anchor?: string;
+  heading?: string;
+  lede?: string;
+  /** Strips the intro copy down for use inside another section. */
+  compact?: boolean;
+  buttonLabel?: string;
+}
+
+const {
+  source,
+  anchor,
+  heading = "Tips and tricks, straight to your inbox",
+  lede = "Short, practical notes on SEO, marketing and AI automation — the things that worked, and the ones that only looked like they did.",
+  compact = false,
+  buttonLabel = "Subscribe",
+} = Astro.props;
+
+// Same optional Turnstile switch as the contact form: unset means the honeypot
+// and the server-side rate limit carry spam duty alone.
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
+// Ids have to be unique — this component appears twice on some pages.
+const uid = `nl-${source.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
+---
+
+<section class:list={["newsletter", compact && "newsletter--compact"]} id={anchor}>
+  <div class="newsletter__intro">
+    {!compact && <span class="kicker">Newsletter</span>}
+    <h2 class="newsletter__title">{heading}</h2>
+    <p class="newsletter__lede">{lede}</p>
+  </div>
+
+  {/* No `novalidate` here: without JS the browser validates and posts for real. */}
+  <form class="newsletter__form" method="POST" action="/api/subscribe" data-newsletter-form>
+    <input type="hidden" name="source" value={source} />
+
+    <div class="field newsletter__field">
+      <label class="sr-only" for={`${uid}-email`}>Email address</label>
+      <input
+        class="input"
+        type="email"
+        id={`${uid}-email`}
+        name="email"
+        placeholder="you@company.com"
+        autocomplete="email"
+        required
+        maxlength="200"
+      />
+      <p class="field__error" data-error-for="email" hidden></p>
+    </div>
+
+    {/* Honeypot: hidden from people, tempting to bots. */}
+    <div class="hp" aria-hidden="true">
+      <label for={`${uid}-company`}>Company</label>
+      <input type="text" id={`${uid}-company`} name="company" tabindex="-1" autocomplete="off" />
+    </div>
+
+    {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="light" />}
+
+    <button class="btn btn-primary newsletter__submit" type="submit">{buttonLabel}</button>
+  </form>
+
+  <p class="newsletter__note">
+    You'll get one email asking you to confirm — nothing arrives until you click it.
+    Unsubscribe from any issue in one click.
+  </p>
+
+  <div class="newsletter__status" role="status" aria-live="polite" hidden data-newsletter-status>
+    <p class="newsletter__status-title"></p>
+    <p class="newsletter__status-body"></p>
+  </div>
+</section>
+
+{
+  turnstileKey && (
+    <script>
+      // Astro emits this bundle once per page, and the attribute guard keeps a
+      // second form (or the contact form) from loading the widget twice.
+      if (!document.querySelector("script[data-turnstile]")) {
+        const script = document.createElement("script");
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        script.async = true;
+        script.defer = true;
+        script.dataset.turnstile = "";
+        document.head.appendChild(script);
+      }
+    </script>
+  )
+}

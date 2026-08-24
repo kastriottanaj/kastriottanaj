@@ -1,0 +1,136 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
+import { SITE } from "../../lib/site";
+
+const issues = (await getCollection("newsletter", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const title = `Newsletter — tips on SEO, marketing & AI automation | ${SITE.name}`;
+const description =
+  "Short, practical emails on SEO, digital marketing and AI automation. No fixed schedule, no filler — and one-click unsubscribe on every issue.";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Newsletter",
+    url: `${SITE.url}/newsletter/`,
+    description,
+    author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Newsletter", item: `${SITE.url}/newsletter/` },
+    ],
+  },
+];
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<Base title={title} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">Newsletter</span>
+    </nav>
+
+    <header class="page-head">
+      <span class="kicker">Newsletter</span>
+      <h1 class="page-head__title">The stuff I'd tell you over coffee</h1>
+      <p class="page-head__lede">{description}</p>
+    </header>
+
+    <section class="section section--ruled">
+      <h2 class="kicker">What lands in your inbox</h2>
+      <div class="benefits">
+        <div class="benefit">
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-search" /></svg></span>
+          <h3 class="benefit__title">SEO that survives updates</h3>
+          <p class="benefit__desc">
+            What I change on real sites, why it works, and which "best practices" I've
+            stopped bothering with.
+          </p>
+        </div>
+        <div class="benefit">
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-megaphone" /></svg></span>
+          <h3 class="benefit__title">Experiments worth copying</h3>
+          <p class="benefit__desc">
+            Marketing tests with the numbers attached — including the ones that flopped,
+            so you can skip them.
+          </p>
+        </div>
+        <div class="benefit">
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-bot" /></svg></span>
+          <h3 class="benefit__title">Automations you can steal</h3>
+          <p class="benefit__desc">
+            Small AI workflows that remove an hour of manual work a week, described
+            closely enough to rebuild.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <NewsletterForm
+      source="newsletter-page"
+      anchor="subscribe"
+      heading="Subscribe — it's free"
+      lede="One email at a time, written by me, sent from kastriot@kastriottanaj.com. Your address is never shared or sold."
+      buttonLabel="Send me the tips"
+    />
+
+    {
+      issues.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">Past issues</h2>
+          <div class="posts">
+            {issues.map((issue) => (
+              <article class="post">
+                <p class="post__date">
+                  <time datetime={issue.data.pubDate.toISOString()}>
+                    {dateFormat.format(issue.data.pubDate)}
+                  </time>
+                </p>
+                <h3 class="post__title">
+                  <a href={`/newsletter/archive/${issue.id}/`}>{issue.data.title}</a>
+                </h3>
+                <p class="post__desc">{issue.data.description}</p>
+                <a class="arrow-link arrow-link--sm" href={`/newsletter/archive/${issue.id}/`}>
+                  Read this issue →
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section section--ruled">
+      <h2 class="kicker">The fine print</h2>
+      <div class="prose prose--narrow">
+        <p>
+          Subscribing is double opt-in: you'll get one email asking you to confirm, and
+          nothing else arrives unless you click it. Every issue after that carries an
+          unsubscribe link that works in a single click, with nothing to fill in.
+        </p>
+        <p>
+          I store your email address, the page you subscribed from, and the date — that's
+          it, and only so I can send the newsletter and prove the consent was real. It is
+          never shared, sold, or used to sell you something on someone else's behalf.
+          Want it deleted rather than just unsubscribed? <a href="/#contact">Ask me</a> and
+          it's gone.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>

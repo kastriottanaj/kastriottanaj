@@ -1,0 +1,35 @@
+---
+import Base from "../../layouts/Base.astro";
+import { SITE } from "../../lib/site";
+
+// noindex: the no-JS landing spot after submitting the form, not a page anyone
+// should arrive at from search. Also excluded from the sitemap.
+---
+
+<Base
+  title={`Check your inbox | ${SITE.name}`}
+  description="One more click and you're subscribed."
+  noindex
+>
+  <div class="wrap">
+    <section class="page-head page-head--center">
+      <span class="kicker">Almost there</span>
+      <h1 class="page-head__title">Check your inbox.</h1>
+      <p class="page-head__lede">
+        I've sent a short email asking you to confirm. Click the link inside and you're on
+        the list — until then, nothing else gets sent to you.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/blog/">Read something while you wait</a>
+        <a class="btn btn-secondary btn--lg" href="/">Back to the homepage</a>
+      </div>
+      <p class="hero__meta">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
+        <span>
+          Nothing there after a minute? Check spam, and add
+          kastriot@kastriottanaj.com to your contacts.
+        </span>
+      </p>
+    </section>
+  </div>
+</Base>

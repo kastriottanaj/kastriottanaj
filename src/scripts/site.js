@@ -1,7 +1,7 @@
 /* Kastriot Tanaj — site behaviour.
-   Mobile nav, homepage scroll-spy, contact form enhancement, and cookie
-   consent controls. Everything here is optional — the site is fully usable
-   with this file blocked. */
+   Mobile nav, homepage scroll-spy, contact and newsletter form enhancement,
+   and cookie consent controls. Everything here is optional — the site is fully
+   usable with this file blocked. */
 (() => {
   "use strict";
 
@@ -244,5 +244,126 @@
         slot.textContent = "";
       }
     });
+  }
+  /* ── Newsletter subscribe ──────────────────────────────────────────────── */
+  /* The same form can appear more than once on a page (footer of a post, plus
+     the block on /newsletter/), so everything here is per-form. */
+  const SUBSCRIBE_MESSAGES = {
+    email: "That email doesn't look right.",
+    rate_limited: "That's a few tries in a row. Give it ten minutes and try again.",
+    captcha: "The spam check didn't pass. Reload the page and try once more.",
+    mail: "I couldn't send the confirmation email just then. Try again in a minute.",
+    link: "That link has expired. Drop your email in again and I'll send a fresh one.",
+    server: "Something broke on my side. Try again in a minute.",
+  };
+
+  const newsletterForms = document.querySelectorAll("[data-newsletter-form]");
+
+  newsletterForms.forEach((form) => {
+    const section = form.closest(".newsletter");
+    const status = section?.querySelector("[data-newsletter-status]");
+    if (!status) return;
+
+    const statusTitle = status.querySelector(".newsletter__status-title");
+    const statusBody = status.querySelector(".newsletter__status-body");
+    const emailField = form.elements.email;
+    const errorSlot = form.querySelector('[data-error-for="email"]');
+
+    // Validation moves here now that we know this file runs.
+    form.setAttribute("novalidate", "");
+
+    const showStatus = (title, body, isError) => {
+      status.classList.toggle("newsletter__status--error", Boolean(isError));
+      if (statusTitle) statusTitle.textContent = title;
+      if (statusBody) statusBody.textContent = body || "";
+      status.hidden = false;
+    };
+
+    const showFieldError = (message) => {
+      emailField.setAttribute("aria-invalid", "true");
+      if (!errorSlot) return;
+      errorSlot.textContent = message;
+      errorSlot.hidden = false;
+    };
+
+    const clearFieldError = () => {
+      emailField.removeAttribute("aria-invalid");
+      if (!errorSlot) return;
+      errorSlot.hidden = true;
+      errorSlot.textContent = "";
+    };
+
+    form.addEventListener("input", () => {
+      if (emailField.getAttribute("aria-invalid") === "true") clearFieldError();
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearFieldError();
+      status.hidden = true;
+
+      const email = emailField.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        showFieldError(SUBSCRIBE_MESSAGES.email);
+        emailField.focus();
+        return;
+      }
+
+      const button = form.querySelector('button[type="submit"]');
+      const label = button.textContent;
+      button.disabled = true;
+      button.textContent = "Sending…";
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form),
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || !result.ok) {
+          throw Object.assign(new Error("subscribe failed"), { code: result.error });
+        }
+
+        // Nothing is subscribed yet — the confirmation click is what counts, so
+        // the wording has to send them to their inbox rather than celebrate.
+        form.hidden = true;
+        showStatus(
+          "Check your inbox.",
+          "I've sent you a short email — click the link inside and you're on the list."
+        );
+      } catch (error) {
+        button.disabled = false;
+        button.textContent = label;
+
+        const code = error.code;
+        if (code === "email") {
+          showFieldError(SUBSCRIBE_MESSAGES.email);
+          emailField.focus();
+          return;
+        }
+
+        showStatus("That didn't go through.", SUBSCRIBE_MESSAGES[code] || SUBSCRIBE_MESSAGES.server, true);
+      }
+    });
+  });
+
+  /* A no-JS post that failed comes back as /newsletter/?error=… — surface it
+     next to the form rather than leaving the visitor to guess. */
+  if (newsletterForms.length) {
+    const failure = new URLSearchParams(location.search).get("error");
+    if (failure) {
+      const first = newsletterForms[0].closest(".newsletter");
+      const status = first?.querySelector("[data-newsletter-status]");
+      if (status) {
+        status.classList.add("newsletter__status--error");
+        const title = status.querySelector(".newsletter__status-title");
+        const body = status.querySelector(".newsletter__status-body");
+        if (title) title.textContent = "That didn't go through.";
+        if (body) body.textContent = SUBSCRIBE_MESSAGES[failure] || SUBSCRIBE_MESSAGES.server;
+        status.hidden = false;
+      }
+    }
   }
 })();

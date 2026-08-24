@@ -1,0 +1,33 @@
+---
+import Base from "../../layouts/Base.astro";
+import { SITE } from "../../lib/site";
+
+// noindex: where the unsubscribe link lands. Excluded from the sitemap too.
+---
+
+<Base
+  title={`Unsubscribed | ${SITE.name}`}
+  description="You've been removed from the newsletter."
+  noindex
+>
+  <div class="wrap">
+    <section class="page-head page-head--center">
+      <span class="kicker">Done</span>
+      <h1 class="page-head__title">You're unsubscribed.</h1>
+      <p class="page-head__lede">
+        No more newsletter emails will be sent to that address. No hard feelings — the
+        work is still here whenever you need it.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/blog/">Read the insights</a>
+        <a class="btn btn-secondary btn--lg" href="/">Back to the homepage</a>
+      </div>
+      {/* A mail scanner can click a link before the person does, so the way back
+          has to be on this page rather than in a reply nobody sends. */}
+      <p class="hero__meta">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
+        <span>Didn't mean to? <a href="/newsletter/#subscribe">Subscribe again here</a>.</span>
+      </p>
+    </section>
+  </div>
+</Base>

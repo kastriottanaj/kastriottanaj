@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
 import { SITE } from "../../lib/site";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -67,6 +68,13 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
         }
       </div>
     </section>
+
+    <NewsletterForm
+      source="blog-index"
+      compact
+      heading="Get the next one before it's public"
+      lede="Subscribers get the short version by email first — practical notes on SEO, marketing and automation, and nothing else."
+    />
   </div>
 
   <CtaBanner />

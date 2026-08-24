@@ -1,0 +1,90 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import NewsletterForm from "../../../components/NewsletterForm.astro";
+import { SITE } from "../../../lib/site";
+
+/**
+ * The web version of an issue — the "read it in your browser" link at the foot
+ * of every email, and a page a subscriber can share with someone who is not one.
+ */
+export const getStaticPaths: GetStaticPaths = async () => {
+  const issues = await getCollection("newsletter", ({ data }) => !data.draft);
+  return issues.map((issue) => ({
+    params: { slug: issue.id },
+    props: { issue },
+  }));
+};
+
+interface Props {
+  issue: CollectionEntry<"newsletter">;
+}
+
+const { issue } = Astro.props;
+const { Content } = await render(issue);
+const { title, description, pubDate } = issue.data;
+
+const url = `${SITE.url}/newsletter/archive/${issue.id}/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    datePublished: pubDate.toISOString(),
+    author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    publisher: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    isPartOf: { "@type": "CreativeWorkSeries", name: "Kastriot Tanaj — Tips & Tricks" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Newsletter", item: `${SITE.url}/newsletter/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<Base title={`${title} | ${SITE.name}`} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <a href="/newsletter/">Newsletter</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <article>
+      <header class="page-head">
+        <p class="post__date">
+          Issue sent <time datetime={pubDate.toISOString()}>{dateFormat.format(pubDate)}</time>
+        </p>
+        <h1 class="page-head__title">{title}</h1>
+        <p class="page-head__lede">{description}</p>
+      </header>
+
+      <div class="prose prose--narrow">
+        <Content />
+      </div>
+    </article>
+
+    <NewsletterForm
+      source={`archive-${issue.id}`}
+      compact
+      heading="Get the next one by email"
+      lede="Issues like this land in your inbox first. Free, and one click to leave."
+    />
+  </div>
+</Base>

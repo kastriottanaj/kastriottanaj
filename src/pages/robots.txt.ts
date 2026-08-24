@@ -15,6 +15,12 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /thanks/
+Disallow: /newsletter/check-inbox/
+Disallow: /newsletter/confirmed/
+Disallow: /newsletter/unsubscribed/
+# Build artifacts the send script reads — the readable version of each issue
+# lives at /newsletter/archive/.
+Disallow: /newsletter/email/
 
 # AI crawlers — allowed. Uncomment a block to opt out of that one.
 # User-agent: GPTBot

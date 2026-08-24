@@ -1,0 +1,32 @@
+---
+import Base from "../../layouts/Base.astro";
+import { SITE } from "../../lib/site";
+
+// noindex: where the confirmation link lands. Excluded from the sitemap too.
+---
+
+<Base
+  title={`You're subscribed | ${SITE.name}`}
+  description="Your subscription is confirmed."
+  noindex
+>
+  <div class="wrap">
+    <section class="page-head page-head--center">
+      <span class="kicker">Confirmed</span>
+      <h1 class="page-head__title">You're on the list.</h1>
+      <p class="page-head__lede">
+        That's it — no account, no password. Issues arrive from
+        kastriot@kastriottanaj.com whenever I have something worth your inbox, and every
+        one of them has a one-click unsubscribe link at the bottom.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/newsletter/">See past issues</a>
+        <a class="btn btn-secondary btn--lg" href="/blog/">Read the insights</a>
+      </div>
+      <p class="hero__meta">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
+        <span>Got a question already? Just reply to any email — it comes straight to me.</span>
+      </p>
+    </section>
+  </div>
+</Base>

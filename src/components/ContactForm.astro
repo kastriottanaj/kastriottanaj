@@ -53,6 +53,19 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <p class="form-status__body"></p>
 </div>
 
-{turnstileKey && (
-  <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
-)}
+{
+  turnstileKey && (
+    <script>
+      // Guarded rather than a plain <script src>: the newsletter form can share
+      // a page with this one, and Turnstile must only be loaded once.
+      if (!document.querySelector("script[data-turnstile]")) {
+        const script = document.createElement("script");
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        script.async = true;
+        script.defer = true;
+        script.dataset.turnstile = "";
+        document.head.appendChild(script);
+      }
+    </script>
+  )
+}

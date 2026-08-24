@@ -95,8 +95,8 @@ const SITEMAP_EXCLUDED = [
 export default defineConfig({
   site: SITE_URL,
 
-  // Static by default: every page is HTML on disk at build time. The single
-  // exception is src/pages/api/lead.ts, which opts out with `prerender = false`.
+  // Static by default: every page is HTML on disk at build time. The exceptions
+  // are the routes under src/pages/api/, which opt out with `prerender = false`.
   output: "static",
 
   // Caddy serves dist/client directly; this server handles /api/* only.
