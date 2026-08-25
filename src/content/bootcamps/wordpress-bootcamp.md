@@ -91,34 +91,15 @@ modules:
 
 currency: "EUR"
 tiers:
-  - name: "Bootcamp"
-    price: 247
-    summary: "The complete course and the practical files needed to build alongside it."
+  - name: "WordPress Bootcamp"
+    price: 275
+    featured: true
+    summary: "One complete package: the full course and every practical file needed to build alongside it."
     features:
       - "10 modules and a complete start-to-launch workflow"
       - "Planning, launch and maintenance checklists"
       - "Reusable page and content templates"
       - "Lifetime access, including future updates"
-
-  - name: "Bootcamp Pro"
-    price: 447
-    badge: "MOST POPULAR"
-    featured: true
-    summary: "The course, plus expert feedback on the website you are building."
-    features:
-      - "Everything in Bootcamp"
-      - "A recorded review of your website from me"
-      - "Recommendations for design, speed, SEO and usability"
-      - "Private Q&A for questions about your own build"
-
-  - name: "Build Together"
-    price: 995
-    summary: "Build the site with direct guidance at the decisions that matter most."
-    features:
-      - "Everything in Bootcamp Pro"
-      - "Three private working sessions"
-      - "Help choosing the theme, plugins and site structure"
-      - "A final pre-launch review and handover plan"
 
 guarantee: "Fourteen days. Start the course, and if it does not give you a clearer and more reliable way to build your website, email me for a full refund — no form and no questions."
 
