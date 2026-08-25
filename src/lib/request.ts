@@ -2,6 +2,8 @@
 
 export const MAX_FORM_BYTES = 64 * 1024;
 
+export class PayloadTooLargeError extends Error {}
+
 /** Reject obviously oversized bodies before asking the multipart parser to
  * buffer them. Caddy enforces the same ceiling for streamed/chunked bodies. */
 export function requestTooLarge(request: Request): boolean {
@@ -9,6 +11,42 @@ export function requestTooLarge(request: Request): boolean {
   if (!raw) return false;
   const length = Number(raw);
   return !Number.isSafeInteger(length) || length < 0 || length > MAX_FORM_BYTES;
+}
+
+/** Read a form through a hard byte ceiling. Content-Length is only a fast
+ * rejection: the stream limit is what also covers chunked requests and false
+ * or missing length headers. */
+export async function limitedFormData(request: Request): Promise<FormData> {
+  if (requestTooLarge(request)) throw new PayloadTooLargeError("form body is too large");
+  if (!request.body) return request.formData();
+
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > MAX_FORM_BYTES) {
+        await reader.cancel();
+        throw new PayloadTooLargeError("form body is too large");
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const body = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return new Response(body, { headers: { "Content-Type": request.headers.get("content-type") ?? "" } }).formData();
 }
 
 /**

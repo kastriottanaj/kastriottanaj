@@ -3,7 +3,14 @@ import { subscribe, normalizeEmail } from "../../lib/newsletter-store.mjs";
 import { sendConfirmationEmail } from "../../lib/newsletter-email.mjs";
 import { verifyTurnstile } from "../../lib/turnstile";
 import { rateLimit } from "../../lib/rate-limit";
-import { clientIp, respond, methodNotAllowed, requestTooLarge, EMAIL_RE } from "../../lib/request";
+import {
+  clientIp,
+  respond,
+  methodNotAllowed,
+  limitedFormData,
+  PayloadTooLargeError,
+  EMAIL_RE,
+} from "../../lib/request";
 
 export const prerender = false;
 
@@ -15,10 +22,6 @@ const REDIRECTS = {
 };
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  if (requestTooLarge(request)) {
-    return respond(request, 413, { ok: false, error: "too_large" }, REDIRECTS);
-  }
-
   const ip = clientIp(request, clientAddress);
 
   const limit = rateLimit(`subscribe:${ip ?? "unknown"}`);
@@ -31,8 +34,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   let form: FormData;
   try {
-    form = await request.formData();
-  } catch {
+    form = await limitedFormData(request);
+  } catch (error) {
+    if (error instanceof PayloadTooLargeError) {
+      return respond(request, 413, { ok: false, error: "too_large" }, REDIRECTS);
+    }
     return respond(request, 400, { ok: false, error: "bad_request" }, REDIRECTS);
   }
 
