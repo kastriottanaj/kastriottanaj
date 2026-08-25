@@ -411,7 +411,7 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
   font-weight: var(--font-heading-weight);
 }
 
-/* ── Insights ────────────────────────────────────────────────────────────── */
+/* ── Blog ────────────────────────────────────────────────────────────── */
 .posts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

@@ -9,7 +9,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const title = `Insights on SEO, marketing & automation | ${SITE.name}`;
+const title = `Blog — SEO, marketing & automation | ${SITE.name}`;
 const description =
   "Notes on SEO, digital marketing and AI automation — what actually moves the needle, and what only looks like it does.";
 
@@ -17,7 +17,7 @@ const schema = [
   {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Insights",
+    name: "Blog",
     url: `${SITE.url}/blog/`,
     description,
     author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
@@ -27,7 +27,7 @@ const schema = [
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
-      { "@type": "ListItem", position: 2, name: "Insights", item: `${SITE.url}/blog/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE.url}/blog/` },
     ],
   },
 ];
@@ -42,7 +42,7 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 <Base title={title} description={description} schema={schema}>
   <div class="wrap">
     <header class="page-head">
-      <span class="kicker">Insights</span>
+      <span class="kicker">Blog</span>
       <h1 class="page-head__title">Notes on search, marketing and automation</h1>
       <p class="page-head__lede">{description}</p>
     </header>

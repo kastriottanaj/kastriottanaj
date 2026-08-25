@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   );
 
   return rss({
-    title: `${SITE.name} — Insights`,
+    title: `${SITE.name} — Blog`,
     description:
       "Notes on SEO, digital marketing and AI automation — what actually moves the needle.",
     site: context.site ?? SITE.url,
