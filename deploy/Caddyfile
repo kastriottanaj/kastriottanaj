@@ -20,6 +20,9 @@ kastriottanaj.com {
 	# X-Forwarded-For / X-Forwarded-Proto, which is what lets Astro's origin
 	# check and the rate limiter see the real client and scheme.
 	handle /api/* {
+		request_body {
+			max_size 64KB
+		}
 		reverse_proxy 127.0.0.1:4321
 	}
 

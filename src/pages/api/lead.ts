@@ -3,7 +3,7 @@ import { saveLead, markEmailed } from "../../lib/db";
 import { sendLeadEmail } from "../../lib/email";
 import { verifyTurnstile } from "../../lib/turnstile";
 import { rateLimit } from "../../lib/rate-limit";
-import { clientIp, respond, methodNotAllowed, EMAIL_RE } from "../../lib/request";
+import { clientIp, respond, methodNotAllowed, requestTooLarge, EMAIL_RE } from "../../lib/request";
 import { SERVICE_OPTIONS } from "../../lib/site";
 
 // Not a static file — this one runs on the Node server behind Caddy.
@@ -16,6 +16,10 @@ const REDIRECTS = {
 };
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  if (requestTooLarge(request)) {
+    return respond(request, 413, { ok: false, error: "too_large" }, REDIRECTS);
+  }
+
   const ip = clientIp(request, clientAddress);
 
   const limit = rateLimit(`lead:${ip ?? "unknown"}`);

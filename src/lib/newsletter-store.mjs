@@ -23,6 +23,7 @@ const TOKEN_BYTES = 24;
  *  clears confirm_sent_at, so someone who unsubscribes and changes their mind
  *  five minutes later gets a fresh link rather than silence. */
 const RESEND_COOLDOWN_MINUTES = 15;
+const CONFIRM_TOKEN_LIFETIME_HOURS = 48;
 
 let schemaReady = false;
 
@@ -123,17 +124,18 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
 
   if (cooling) return { outcome: "cooldown", confirmToken: null };
 
-  // Pending or previously unsubscribed: issue a fresh token and start over, so
-  // an old link from a forwarded mail cannot be replayed.
+  // Pending or previously unsubscribed: issue fresh tokens and start over, so
+  // links from an old or forwarded mail cannot change the new subscription.
   const confirmToken = token();
+  const unsubscribeToken = token();
   database
     .prepare(
       `UPDATE subscribers
-       SET status = 'pending', confirm_token = ?, confirm_sent_at = datetime('now'),
+       SET status = 'pending', confirm_token = ?, unsubscribe_token = ?, confirm_sent_at = datetime('now'),
            unsubscribed_at = NULL, source = COALESCE(?, source), ip = ?, user_agent = ?
        WHERE id = ?`
     )
-    .run(confirmToken, source, ip, userAgent, existing.id);
+    .run(confirmToken, unsubscribeToken, source, ip, userAgent, existing.id);
 
   return { outcome: "resent", confirmToken };
 }
@@ -151,8 +153,13 @@ export function confirmSubscriber(confirmToken) {
   const database = db();
 
   const row = database
-    .prepare("SELECT id, email, status, unsubscribe_token FROM subscribers WHERE confirm_token = ?")
-    .get(confirmToken);
+    .prepare(
+      `SELECT id, email, status, unsubscribe_token
+       FROM subscribers
+       WHERE confirm_token = ?
+         AND (status = 'confirmed' OR confirm_sent_at >= datetime('now', ?))`
+    )
+    .get(confirmToken, `-${CONFIRM_TOKEN_LIFETIME_HOURS} hours`);
 
   if (!row) return null;
 

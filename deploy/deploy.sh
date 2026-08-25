@@ -16,6 +16,16 @@ SERVICE="kastriottanaj"
 
 log() { printf "\n\033[1m==> %s\033[0m\n" "$*"; }
 
+rollback() {
+  echo "!! deployment failed — rolling back to ${PREVIOUS:0:8}"
+  git reset --hard "$PREVIOUS"
+  npm ci --no-audit --no-fund
+  npm run build
+  sudo systemctl restart "$SERVICE"
+  echo "!! rolled back. Check: journalctl -u ${SERVICE} -n 50"
+  exit 1
+}
+
 cd "$APP_ROOT"
 
 log "Fetching ${BRANCH}"
@@ -46,13 +56,7 @@ sudo systemctl restart "$SERVICE"
 # Give it a moment, then prove it actually came up.
 sleep 2
 if ! systemctl is-active --quiet "$SERVICE"; then
-  echo "!! ${SERVICE} failed to start — rolling back to ${PREVIOUS:0:8}"
-  git reset --hard "$PREVIOUS"
-  npm ci --no-audit --no-fund
-  npm run build
-  sudo systemctl restart "$SERVICE"
-  echo "!! rolled back. Check: journalctl -u ${SERVICE} -n 50"
-  exit 1
+  rollback
 fi
 
 log "Health check"
@@ -62,7 +66,8 @@ CODE="$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:4321/api
 if [[ "$CODE" == "400" || "$CODE" == "429" ]]; then
   echo "  API responding (HTTP ${CODE})"
 else
-  echo "  ! unexpected API response: HTTP ${CODE} — check journalctl -u ${SERVICE}"
+  echo "!! unexpected API response: HTTP ${CODE}"
+  rollback
 fi
 
 log "Deployed $(git rev-parse --short HEAD)"

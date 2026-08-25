@@ -845,6 +845,240 @@ textarea.input { min-height: 100px; }
 
 .thumb--wide { aspect-ratio: 16 / 7; margin: 0; }
 
+/* ── Bootcamps ────────────────────────────────────────────────────────────
+   A sales page is a long page, so everything here is built from the same
+   rules, spacing and colour tokens as the rest of the site rather than a
+   second visual language bolted on beneath the fold. */
+.section__lede {
+  font-size: 15px;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  max-width: 68ch;
+  margin: 12px 0 24px;
+}
+
+/* 320px lands on 3 / 2 / 1 columns across the breakpoints. Six outcomes divide
+   into all three, so no row is left part-full — same reason /services/ holds
+   four cards. Change the count and check the last row still fills. */
+.ruled-grid--outcomes { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.outcomes { list-style: none; margin: 0; padding: 0; }
+.outcome {
+  background: var(--color-bg);
+  padding: 20px 20px 20px 42px;
+  position: relative;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+.outcome::before {
+  content: "→";
+  position: absolute;
+  left: 20px;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ── Curriculum ──────────────────────────────────────────────────────────
+   Ruled rows rather than cards: a twelve-module list as twelve boxes reads
+   as a wall, and the numbering is what carries the sequence anyway. */
+.modules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--rule) solid var(--color-divider);
+}
+.module {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: var(--rule) solid var(--color-divider);
+}
+.module__num {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 15px;
+  color: var(--color-accent);
+  margin: 2px 0 0;
+}
+.module__body { min-width: 0; }
+.module__title { font-size: 17px; margin: 0; }
+.module__summary {
+  font-size: 14px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 6px 0 0;
+  max-width: 68ch;
+}
+.module__lessons {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.module__lessons li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  padding-left: 18px;
+  position: relative;
+  color: color-mix(in srgb, var(--color-text) 80%, transparent);
+}
+.module__lessons li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 8px;
+  height: var(--rule);
+  background: var(--color-accent);
+}
+
+/* ── Fit / not fit ───────────────────────────────────────────────────────── */
+.fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 16px;
+}
+.fit__title { font-size: 16px; margin: 0 0 12px; }
+.fit__list { list-style: none; margin: 0; padding: 0; }
+.fit__list li {
+  font-size: 14.5px;
+  line-height: 1.55;
+  padding: 12px 0 12px 26px;
+  position: relative;
+  border-top: var(--rule) solid var(--color-divider);
+}
+.fit__list li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 600;
+}
+.fit__list--yes li::before { content: "✓"; color: var(--color-accent); }
+.fit__list--no li::before {
+  content: "✕";
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+.fit__list--no li { color: color-mix(in srgb, var(--color-text) 70%, transparent); }
+
+/* ── Testimonials ────────────────────────────────────────────────────────── */
+.quotes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 16px;
+}
+.quote {
+  border: var(--rule) solid var(--color-divider);
+  padding: 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.quote__text {
+  font-size: 15.5px;
+  line-height: 1.65;
+  margin: 0;
+  quotes: "\201C" "\201D";
+}
+.quote__text::before { content: open-quote; color: var(--color-accent); }
+.quote__text::after { content: close-quote; color: var(--color-accent); }
+.quote__by {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  border-top: var(--rule) solid var(--color-divider);
+  padding-top: 14px;
+}
+.quote__name {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 13.5px;
+}
+.quote__role {
+  font-size: 12.5px;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+}
+
+/* ── Pricing tiers ───────────────────────────────────────────────────────
+   `.tier` layers onto `.plan` rather than replacing it, so the homepage
+   packages and the bootcamp tiers stay the same object visually. */
+.tier { gap: 10px; }
+.tier--featured { background: var(--color-neutral-100); }
+.tier__price { font-size: 26px; line-height: 1.1; margin: 4px 0 0; }
+.tier__note {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  margin-top: 4px;
+}
+.tier__features {
+  list-style: none;
+  margin: 8px 0 20px;
+  padding: 0;
+  border-top: var(--rule) solid var(--color-divider);
+}
+.tier__features li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  padding: 11px 0 11px 22px;
+  position: relative;
+  border-bottom: var(--rule) solid var(--color-divider);
+}
+.tier__features li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.tier .plan__cta { align-self: stretch; justify-content: center; }
+
+/* Hangs off the bottom of the pricing grid, so it has to span the full grid
+   width or the dropped top border reads as a rendering fault. The measure is
+   held on the text inside instead. */
+.guarantee {
+  border: var(--rule) solid var(--color-divider);
+  border-top: none;
+  padding: 20px 24px;
+  margin: 0;
+}
+.guarantee__text {
+  display: block;
+  max-width: 68ch;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-text) 80%, transparent);
+}
+
+/* ── Bootcamp cards on the index ─────────────────────────────────────────
+   Capped tracks rather than `1fr`: with one bootcamp on the page a stretchy
+   grid produces a single cell the width of the viewport, which reads as a
+   broken layout rather than as a card. `auto-fit` still fills the row once
+   there are three. */
+.ruled-grid--courses {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  /* --course-cols is set on the element from the number of bootcamps. Without
+     it a single card stretches the full width of the page and stops reading as
+     a card; the cap is what keeps one, two or three looking deliberate. */
+  max-width: calc(var(--course-cols, 3) * 380px);
+}
+.course-card__meta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  margin: 0;
+}
+.course-card .service__title a { color: inherit; text-decoration: none; }
+.course-card .service__title a:hover { color: var(--color-accent-700); }
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .article-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
@@ -884,6 +1118,8 @@ textarea.input { min-height: 100px; }
 
 @media (max-width: 520px) {
   :root { --gutter: 20px; }
+  .module { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .tier__price { font-size: 23px; }
   .form__row { grid-template-columns: minmax(0, 1fr); }
   .cta__inner { align-items: flex-start; }
   .cookie-consent { right: 12px; bottom: 12px; width: calc(100vw - 24px); padding: 20px; }

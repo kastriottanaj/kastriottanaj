@@ -7,6 +7,9 @@ export async function GET(context: APIContext) {
   const site = (context.site ?? new URL(SITE.url)).origin;
 
   const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
+  const bootcamps = (await getCollection("bootcamps", ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order
+  );
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
@@ -30,6 +33,16 @@ ${list(
     url: `/services/${s.id}/`,
     name: s.data.title,
     note: s.data.short,
+  }))
+)}
+
+## Bootcamps
+
+${list(
+  bootcamps.map((b) => ({
+    url: `/bootcamps/${b.id}/`,
+    name: b.data.title,
+    note: b.data.short,
   }))
 )}
 

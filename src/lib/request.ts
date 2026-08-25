@@ -1,5 +1,16 @@
 /** Small helpers shared by the API routes. */
 
+export const MAX_FORM_BYTES = 64 * 1024;
+
+/** Reject obviously oversized bodies before asking the multipart parser to
+ * buffer them. Caddy enforces the same ceiling for streamed/chunked bodies. */
+export function requestTooLarge(request: Request): boolean {
+  const raw = request.headers.get("content-length");
+  if (!raw) return false;
+  const length = Number(raw);
+  return !Number.isSafeInteger(length) || length < 0 || length > MAX_FORM_BYTES;
+}
+
 /**
  * Behind Caddy the socket address is always 127.0.0.1, so the real visitor has
  * to come from a proxy header.

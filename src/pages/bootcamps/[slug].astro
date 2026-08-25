@@ -1,0 +1,313 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
+import { SITE } from "../../lib/site";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const bootcamps = await getCollection("bootcamps", ({ data }) => !data.draft);
+  return bootcamps.map((bootcamp) => ({
+    params: { slug: bootcamp.id },
+    props: { bootcamp },
+  }));
+};
+
+interface Props {
+  bootcamp: CollectionEntry<"bootcamps">;
+}
+
+const { bootcamp } = Astro.props;
+const { Content } = await render(bootcamp);
+const {
+  title,
+  description,
+  headline,
+  format,
+  workload,
+  outcomes,
+  fit,
+  notFit,
+  modules,
+  currency,
+  tiers,
+  guarantee,
+  testimonials,
+  faq,
+} = bootcamp.data;
+
+const url = `${SITE.url}/bootcamps/${bootcamp.id}/`;
+
+const lessonCount = modules.reduce((total, module) => total + module.lessons.length, 0);
+
+/**
+ * A tier is on sale once it has a checkout URL, and not before. Everything that
+ * differs between a live page and a pre-launch one hangs off this single fact,
+ * so there is no second flag to forget to flip — pasting the payment links in
+ * is what opens enrolment.
+ */
+const onSale = tiers.some((tier) => tier.checkout);
+
+const money = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency,
+  maximumFractionDigits: 0,
+});
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: title,
+    description,
+    url,
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    ...(outcomes.length ? { teaches: outcomes } : {}),
+    hasCourseInstance: [
+      {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        ...(workload ? { courseWorkload: workload } : {}),
+      },
+    ],
+    offers: tiers.map((tier) => ({
+      "@type": "Offer",
+      name: tier.name,
+      price: tier.price,
+      priceCurrency: currency,
+      category: "Paid",
+      // Claiming InStock for a tier nobody can pay for is the kind of thing
+      // that gets structured data ignored site-wide.
+      availability: tier.checkout
+        ? "https://schema.org/InStock"
+        : "https://schema.org/PreOrder",
+      url: tier.checkout ?? `${url}#enrol`,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Bootcamps", item: `${SITE.url}/bootcamps/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base title={`${title} | ${SITE.name}`} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <a href="/bootcamps/">Bootcamps</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <header class="page-head">
+      <span class="kicker">Bootcamp</span>
+      <h1 class="page-head__title">{headline}</h1>
+      <p class="page-head__lede">{description}</p>
+
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="#enrol">
+          {onSale ? "See the tiers" : "Join the waitlist"}
+        </a>
+        <a class="btn btn-secondary btn--lg" href="#curriculum">What's inside →</a>
+      </div>
+
+      <p class="hero__meta">
+        {format}
+        {lessonCount > 0 && <> · {lessonCount} lessons</>}
+      </p>
+    </header>
+
+    {
+      outcomes.length > 0 && (
+        <section class="section section--ruled" id="outcomes">
+          <h2 class="kicker">What you'll be able to do</h2>
+          <ul class="ruled-grid ruled-grid--outcomes outcomes">
+            {outcomes.map((outcome) => (
+              <li class="outcome">{outcome}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      modules.length > 0 && (
+        <section class="section section--ruled" id="curriculum">
+          <h2 class="kicker">The curriculum</h2>
+          <p class="section__lede">
+            {modules.length} modules{lessonCount > 0 && <>, {lessonCount} lessons</>}. Taught in
+            the order you should do the work, which is not the order it is usually taught in.
+          </p>
+
+          <ol class="modules">
+            {modules.map((module, i) => (
+              <li class="module">
+                <p class="module__num">{String(i + 1).padStart(2, "0")}</p>
+                <div class="module__body">
+                  <h3 class="module__title">{module.title}</h3>
+                  <p class="module__summary">{module.summary}</p>
+                  {module.lessons.length > 0 && (
+                    <ul class="module__lessons">
+                      {module.lessons.map((lesson) => (
+                        <li>{lesson}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <div class="prose prose--narrow section section--ruled">
+      <Content />
+    </div>
+
+    {
+      (fit.length > 0 || notFit.length > 0) && (
+        <section class="section section--ruled" id="fit">
+          <h2 class="kicker">Who it's for</h2>
+          <div class="fit">
+            {fit.length > 0 && (
+              <div class="fit__col">
+                <h3 class="fit__title">This is for you if</h3>
+                <ul class="fit__list fit__list--yes">
+                  {fit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {notFit.length > 0 && (
+              <div class="fit__col">
+                <h3 class="fit__title">It isn't, if</h3>
+                <ul class="fit__list fit__list--no">
+                  {notFit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      testimonials.length > 0 && (
+        <section class="section section--ruled" id="testimonials">
+          <h2 class="kicker">What people say</h2>
+          <div class="quotes">
+            {testimonials.map((item) => (
+              <figure class="quote">
+                <blockquote class="quote__text">{item.quote}</blockquote>
+                <figcaption class="quote__by">
+                  <span class="quote__name">{item.name}</span>
+                  {item.role && <span class="quote__role">{item.role}</span>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section section--ruled" id="enrol">
+      <h2 class="kicker">{onSale ? "Enrol" : "Pricing"}</h2>
+      <p class="section__lede">
+        {
+          onSale
+            ? "One payment, lifetime access — or hands-on help, if a course is not what you need."
+            : "Enrolment is not open yet. These are the tiers it will open at, so you can decide now whether it is for you."
+        }
+      </p>
+
+      <div class="ruled-grid ruled-grid--plans">
+        {
+          tiers.map((tier) => (
+            <article class:list={["plan", "tier", tier.featured && "tier--featured"]}>
+              {tier.badge && <span class="tag badge">{tier.badge}</span>}
+              <h3 class="plan__title">{tier.name}</h3>
+              <p class="plan__price tier__price">
+                {money.format(tier.price)}
+                {tier.priceNote && <span class="tier__note">{tier.priceNote}</span>}
+              </p>
+              <p class="plan__desc">{tier.summary}</p>
+
+              {tier.features.length > 0 && (
+                <ul class="tier__features">
+                  {tier.features.map((feature) => (
+                    <li>{feature}</li>
+                  ))}
+                </ul>
+              )}
+
+              <a
+                class:list={["btn", tier.featured ? "btn-primary" : "btn-secondary", "plan__cta"]}
+                href={tier.checkout ?? "#waitlist"}
+                {...(tier.checkout ? { rel: "nofollow" } : {})}
+              >
+                {tier.checkout ? `Enrol — ${money.format(tier.price)}` : "Join the waitlist"}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+
+      {guarantee && <p class="guarantee"><span class="guarantee__text">{guarantee}</span></p>}
+    </section>
+
+    {
+      faq.length > 0 && (
+        <section class="section section--ruled" id="faq">
+          <h2 class="kicker">Common questions</h2>
+          <div class="faq">
+            {faq.map((item) => (
+              <details class="faq__item">
+                <summary class="faq__q">{item.q}</summary>
+                <p class="faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <NewsletterForm
+      source={`bootcamp-${bootcamp.id}`}
+      anchor="waitlist"
+      heading={onSale ? "Not ready yet?" : "Tell me when it opens"}
+      lede={
+        onSale
+          ? "Get the same thinking in shorter form — practical notes on SEO, marketing and AI automation, every couple of weeks."
+          : "One email when enrolment opens, and practical SEO notes in the meantime. No countdown timers."
+      }
+      buttonLabel={onSale ? "Subscribe" : "Keep me posted"}
+    />
+  </div>
+
+  <CtaBanner
+    title="Would you rather I just did it?"
+    lede="The bootcamp teaches the workflow. If you want it run on your site instead, that is a different conversation — and a shorter one."
+  />
+</Base>

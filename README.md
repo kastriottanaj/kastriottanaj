@@ -37,6 +37,7 @@ without it.
 src/
   content/            Markdown — the parts you edit most
     blog/             Posts
+    bootcamps/        The paid courses — curriculum, tiers, FAQ
     newsletter/       Newsletter issues
     services/         The four service pages
     work/             Case studies
@@ -47,6 +48,7 @@ src/
       subscribe.ts    Newsletter signup
       newsletter/     confirm.ts, unsubscribe.ts
     newsletter/       Landing page, archive, status pages, email artifacts
+    bootcamps/        Index and the sales page for each bootcamp
     services/, work/, blog/
     robots.txt.ts, llms.txt.ts, rss.xml.ts
   lib/
@@ -176,6 +178,62 @@ console.log(listStats());
 "
 ```
 
+## Bootcamps
+
+A bootcamp is one Markdown file in `src/content/bootcamps/`. It renders the whole sales
+page — curriculum, pricing tiers, fit lists, FAQ and the `Course` structured data — so the
+page is edited by editing frontmatter, not the template.
+
+```md
+---
+title: "SEO Bootcamp"
+headline: "The promise, above the fold."
+format: "Self-paced · 10 modules · lifetime access"
+workload: "PT14H"        # schema.org courseWorkload, ISO 8601
+outcomes: [...]          # also becomes schema.org `teaches`
+fit: [...]               # "this is for you if"
+notFit: [...]            # and who it is not for
+modules: [{ title, summary, lessons: [...] }]
+tiers: [{ name, price, summary, features: [...], checkout }]
+---
+```
+
+### Opening enrolment
+
+**`checkout` is the switch.** A tier with a payment URL is on sale; a tier without one is
+not, and the page says so honestly rather than pretending:
+
+| | tier has `checkout` | tier has no `checkout` |
+| --- | --- | --- |
+| Button | "Enrol — €297", links to the payment page | "Join the waitlist", links to the signup form |
+| `Offer.availability` | `InStock` | `PreOrder` |
+| Page copy | "One payment, lifetime access…" | "Enrolment is not open yet…" |
+
+So launching is one edit: paste the payment links into the tiers and deploy. There is no
+second flag to remember, which is the point — a page that claims `InStock` for something
+nobody can buy is how structured data gets ignored site-wide.
+
+Payments are set to go through **Paysera** (the first EMI licensed by the Central Bank of
+Kosovo, so the money lands in euros without a US intermediary). Each tier gets its own
+payment link, and the link is the only thing this repository needs to know about it —
+nothing here handles card data.
+
+Waitlist signups go through the existing newsletter double opt-in, tagged with the source
+`bootcamp-<slug>`, so it is visible later which page earned them.
+
+### Before selling anything
+
+- **Delivering the course is not built yet.** The sales page sells; where the lessons
+  actually live — a hosted platform, or a member area on this box — is still open.
+- **`testimonials` is deliberately empty.** Real quotes, from real people, with
+  permission, or none. Invented social proof undoes everything the rest of the page is
+  trying to earn.
+- **Check the guarantee is one you will honour.** It is stated in the FAQ and again above
+  the fold of the pricing section, and it is worded as a promise, not a hedge.
+- **Distance selling means a refund right.** Fourteen days is already the EU baseline for
+  digital goods bought at a distance; the copy commits to it plainly. Terms and a privacy
+  note should be linked from the checkout before the first sale.
+
 ## Content
 
 Everything routine is Markdown in `src/content/`. Adding a post means adding a file — the
@@ -268,6 +326,9 @@ keep its mailbox password only in `/etc/kastriottanaj/env`, never in this reposi
 6. **Add SPF and DKIM for the sending domain**, then subscribe yourself and walk the whole
    newsletter loop once — confirm, receive, unsubscribe.
 7. **Submit the sitemap** in Search Console: `https://kastriottanaj.com/sitemap-index.xml`.
+8. **Decide how the bootcamp is delivered**, then paste the Paysera links into
+   `src/content/bootcamps/seo-bootcamp.md`. Until then the page runs as a waitlist, which
+   is a fine way to find out whether anyone wants it.
 
 ## Design system
 
