@@ -678,6 +678,52 @@ textarea.input { min-height: 100px; }
   margin-top: 20px;
 }
 
+/* ── WhatsApp button ────────────────────────────────────────────────────── */
+/* Fixed in the bottom-right on every page. Sits under the consent dialog in
+   the stack and stands down while that dialog is open — one corner, one thing
+   at a time. Needs no JS, so it survives a blocked script file. */
+.whatsapp-fab {
+  position: fixed;
+  z-index: 900;
+  right: max(20px, var(--gutter));
+  bottom: max(20px, var(--gutter));
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 13px 17px;
+  border: var(--rule) solid var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-text) 18%, transparent);
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+/* The one place the WhatsApp green appears — enough to confirm the affordance
+   without importing another brand colour into the palette. */
+.whatsapp-fab:hover,
+.whatsapp-fab:focus-visible {
+  background: #25d366;
+  border-color: var(--color-text);
+  color: var(--color-text);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--color-text) 18%, transparent);
+}
+.whatsapp-fab__icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: currentColor;
+}
+.cookie-consent:not([hidden]) ~ .whatsapp-fab { display: none; }
+/* The button is fixed, so the footer's last row needs room to sit clear of it
+   once the page is scrolled to the end — otherwise it covers the LinkedIn link. */
+.footer__inner { padding-bottom: 96px; }
+
 /* ═══════════════════════════════════════════════════════════════════════════
    Inner pages — /services/*, /work/*, /blog/*
    The homepage is a sequence of ruled bands; inner pages are a heading, a
@@ -1123,6 +1169,14 @@ textarea.input { min-height: 100px; }
   .form__row { grid-template-columns: minmax(0, 1fr); }
   .cta__inner { align-items: flex-start; }
   .cookie-consent { right: 12px; bottom: 12px; width: calc(100vw - 24px); padding: 20px; }
+  .whatsapp-fab { right: 12px; bottom: 12px; padding: 14px; }
+  .whatsapp-fab__label {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
   .cookie-consent__actions { flex-direction: column-reverse; }
   .cookie-consent__actions .btn { width: 100%; }
 }
@@ -1137,5 +1191,5 @@ textarea.input { min-height: 100px; }
 }
 
 @media print {
-  .nav, .skip-link, .form, .newsletter, .cta, .cookie-consent { display: none; }
+  .nav, .skip-link, .form, .newsletter, .cta, .cookie-consent, .whatsapp-fab { display: none; }
 }

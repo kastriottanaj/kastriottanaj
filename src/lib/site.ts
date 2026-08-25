@@ -13,6 +13,9 @@ export const SITE = {
   countryName: "Kosovo",
   based: "Pristina, Kosovo — working remotely worldwide",
   linkedin: "https://www.linkedin.com/in/seo-kastriot-tanaj/",
+  /** Digits only, country code first — the format wa.me expects (+383 48 111 611). */
+  whatsapp: "38348111611",
+  whatsappGreeting: "Hi Kastriot — I came from kastriottanaj.com and I'd like to talk about a project.",
   ogImage: "/assets/ai-seo.webp",
 } as const;
 
