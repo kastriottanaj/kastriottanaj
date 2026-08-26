@@ -5,6 +5,13 @@ summary: "SEO and on-page work that expanded organic reach into new regions."
 description: "How on-page and technical SEO expanded Gerti Foods' organic reach into new regions."
 services: ["SEO", "On-page optimisation", "Content strategy"]
 thumbCaption: "Gerti Foods — product photo"
+video:
+  src: "/video/gerti-foods.mp4"
+  poster: "/video/gerti-foods-poster.jpg"
+  title: "Gerti Foods case study — SEO that expanded organic reach"
+  description: "Kastriot Tanaj walks through the Gerti Foods case study: the technical and on-page SEO work that grew the brand's organic visibility and opened up new regional markets."
+  duration: 118
+  date: "2026-08-26"
 order: 1
 ---
 

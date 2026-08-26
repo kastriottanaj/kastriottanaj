@@ -19,9 +19,17 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, client, description, services, year, thumbCaption } = entry.data;
+const { title, client, description, services, year, thumbCaption, video } = entry.data;
 
 const url = `${SITE.url}/work/${entry.id}/`;
+const absolute = (path: string) => new URL(path, SITE.url).href;
+
+/** 118 -> "PT1M58S". */
+function isoDuration(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `PT${minutes ? `${minutes}M` : ""}${rest}S`;
+}
 
 const schema = [
   {
@@ -34,6 +42,20 @@ const schema = [
     author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
     ...(year ? { datePublished: String(year) } : {}),
   },
+  ...(video
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoObject",
+          name: video.title,
+          description: video.description,
+          thumbnailUrl: absolute(video.poster),
+          contentUrl: absolute(video.src),
+          uploadDate: video.date,
+          duration: isoDuration(video.duration),
+        },
+      ]
+    : []),
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -69,9 +91,23 @@ const schema = [
       }
     </header>
 
-    <figure class="thumb thumb--wide">
-      <figcaption>{thumbCaption ?? client}</figcaption>
-    </figure>
+    {
+      video ? (
+        <figure class="case-video">
+          {/* Two minutes of narration: it waits to be played rather than
+              autoplaying, and preload="none" keeps the file off the wire
+              until someone asks for it. */}
+          <video controls preload="none" playsinline poster={video.poster} width="464" height="832">
+            <source src={video.src} type="video/mp4" />
+          </video>
+          <figcaption>{video.title}</figcaption>
+        </figure>
+      ) : (
+        <figure class="thumb thumb--wide">
+          <figcaption>{thumbCaption ?? client}</figcaption>
+        </figure>
+      )
+    }
 
     <div class="prose prose--narrow">
       <Content />

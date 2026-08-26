@@ -317,6 +317,32 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
 .thumb:has(img) figcaption { display: none; }
 
+/* A recorded walkthrough stands in for the placeholder thumb. The clips are
+   shot 9:16, so the frame is capped rather than stretched across the column. */
+.case-video {
+  margin: 0 0 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.case-video video {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 9 / 16;
+  background: var(--color-neutral-900);
+  border: var(--rule) solid var(--color-divider);
+}
+.case-video figcaption {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--color-neutral-700);
+  text-align: center;
+  max-width: 44ch;
+  margin: 0;
+}
+
 /* ── Ruled grid ──────────────────────────────────────────────────────────
    Internal 2px rules with no borders on the cells: each cell casts a hard
    shadow into the gap on its right and bottom. Filling the gap from the

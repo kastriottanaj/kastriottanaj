@@ -29,6 +29,23 @@ const work = defineCollection({
     /** Placeholder caption used until a real screenshot is dropped in. */
     thumbCaption: z.string().optional(),
     image: z.string().optional(),
+    /**
+     * A recorded walkthrough of the case study. When present it stands in for
+     * the placeholder thumb, and the page earns a VideoObject and a sitemap
+     * entry — the video is the subject of the page, not decoration.
+     */
+    video: z
+      .object({
+        src: z.string(),
+        poster: z.string(),
+        title: z.string(),
+        description: z.string(),
+        /** Whole seconds — the video sitemap spec rejects fractions. */
+        duration: z.number().int().positive(),
+        /** ISO date the clip was published. */
+        date: z.string(),
+      })
+      .optional(),
     order: z.number().default(99),
     draft: z.boolean().default(false),
   }),
