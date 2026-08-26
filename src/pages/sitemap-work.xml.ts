@@ -1,6 +1,12 @@
 import { getCollection } from "astro:content";
 import { sitemapResponse } from "../lib/sitemap";
+import { EVIDENCE_IMAGES } from "../lib/gerti-evidence";
 import { SITE } from "../lib/site";
+
+/** Content images a hand-built case-study page renders, keyed by its slug. */
+const bespokeImages: Record<string, string[]> = {
+  "gerti-foods": EVIDENCE_IMAGES,
+};
 
 export async function GET() {
   const work = await getCollection("work");
@@ -10,6 +16,12 @@ export async function GET() {
       const { video } = item.data;
       return {
         path: `/work/${item.id}/`,
+        // The poster is a rendered image in its own right, so it is listed for
+        // Google Images as well as being the video's thumbnail.
+        images: [
+          ...(bespokeImages[item.id] ?? []),
+          ...(video ? [video.poster] : []),
+        ],
         // A case study's own walkthrough is the subject of the page, so unlike
         // decorative footage it belongs in the sitemap.
         ...(video && {
