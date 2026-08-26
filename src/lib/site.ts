@@ -5,8 +5,8 @@ export const SITE = {
   name: "Kastriot Tanaj",
   title: "Kastriot Tanaj — SEO, Digital Marketing & AI Automation",
   description:
-    "I help growing businesses improve search visibility, attract better leads, and automate repetitive marketing tasks — from Pristina, Kosovo to clients worldwide.",
-  tagline: "SEO and AI automation for businesses that want more leads and less manual work.",
+    "I help businesses across Europe grow visibility, win better leads, and automate repetitive marketing work — SEO, digital marketing, and AI automation.",
+  tagline: "SEO and AI automation that bring more traffic and less busywork.",
   jobTitle: "SEO Specialist & AI Automation Builder",
   locality: "Pristina",
   country: "XK",
@@ -29,7 +29,7 @@ export const NAV = [
   { href: "/work/", label: "Work" },
   { href: "/#process", label: "Process" },
   { href: "/#pricing", label: "Pricing" },
-  { href: "/blog/", label: "Insights" },
+  { href: "/blog/", label: "Blog" },
   { href: "/newsletter/", label: "Newsletter" },
   { href: "/#contact", label: "Contact" },
 ] as const;

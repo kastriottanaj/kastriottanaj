@@ -82,249 +82,255 @@ const website = {
 ---
 
 <Base title={SITE.title} description={SITE.description} schema={[person, business, website]}>
-  <div class="home" id="top">
+  <div class="wrap" id="top">
     <!-- ── Hero ─────────────────────────────────────────────────────────── -->
     <section class="hero">
-      <div class="hero__copy">
+      <div>
         <span class="kicker">SEO · Digital Marketing · AI Automation</span>
         <h1 class="hero__title">{SITE.tagline}</h1>
         <p class="hero__lede">
-          I help growing businesses improve search visibility, attract better leads, and
-          automate repetitive marketing tasks — from Pristina, Kosovo to clients worldwide.
+          I help businesses across Europe grow visibility, win better leads, and automate
+          repetitive marketing work — without adding more manual tasks.
         </p>
         <div class="hero__actions">
-          <a class="btn btn-primary btn--lg" href={SITE.whatsappUrl} target="_blank" rel="noopener">
-            Book a strategy call
-          </a>
+          <a class="btn btn-primary btn--lg" href="/#contact">Book a strategy call</a>
           <a class="btn btn-secondary btn--lg" href="/work/">See case studies</a>
         </div>
         <p class="hero__meta">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-globe" /></svg>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
           <span>Based in {SITE.based}</span>
         </p>
       </div>
-
-      <figure class="hero__figure hero__figure--mockup">
-        <img
-          class="mockup-source"
-          src="/assets/design-company.png"
-          alt="Kastriot Tanaj in his workspace"
-          width="1448"
-          height="1086"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </figure>
+      <div class="hero__figure hero__figure--video">
+        <video
+          class="hero__video"
+          src="/video/kastriot-tanaj.mp4"
+          poster="/video/kastriot-tanaj-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="Kastriot Tanaj introducing his work"
+        ></video>
+        <button class="hero__sound" type="button" data-hero-sound aria-pressed="false">
+          <span>Sound on</span>
+        </button>
+      </div>
     </section>
 
-    <div class="wrap home__showcase">
-      <!-- ── Stats ──────────────────────────────────────────────────────── -->
-      <section class="section section--stats" aria-label="By the numbers">
-        <ul class="stats">
-          <li><p class="stat__value">4.5+</p><p class="stat__label">Years in SEO &amp; marketing</p></li>
-          <li><p class="stat__value">10+</p><p class="stat__label">Businesses helped rank &amp; grow</p></li>
-          <li><p class="stat__value">36</p><p class="stat__label">Certifications earned</p></li>
-          <li><p class="stat__value">5</p><p class="stat__label">Industries served</p></li>
-        </ul>
-      </section>
+    <!-- ── Stats ────────────────────────────────────────────────────────── -->
+    <section class="section section--stats" aria-label="By the numbers">
+      <ul class="stats">
+        <li><p class="stat__value">4.5+</p><p class="stat__label">Years in SEO &amp; marketing</p></li>
+        <li><p class="stat__value">10+</p><p class="stat__label">Businesses helped rank &amp; grow</p></li>
+        <li><p class="stat__value">36</p><p class="stat__label">Certifications earned</p></li>
+        <li><p class="stat__value">5</p><p class="stat__label">Industries served</p></li>
+      </ul>
+    </section>
 
-      <!-- ── Benefits ───────────────────────────────────────────────────── -->
-      <section class="section section--benefits">
-        <h2 class="sr-only">What working together gets you</h2>
-        <div class="benefits">
-          <div class="benefit">
-            <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-trending" /></svg></span>
-            <h3 class="benefit__title">Rank higher</h3>
-            <p class="benefit__desc">Technical SEO, on-page fixes, and content strategy built for Google and AI search.</p>
-          </div>
-          <div class="benefit">
-            <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-users" /></svg></span>
-            <h3 class="benefit__title">Turn traffic into leads</h3>
-            <p class="benefit__desc">Digital marketing systems that improve visibility, conversion paths, and follow-up.</p>
-          </div>
-          <div class="benefit">
-            <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-bot" /></svg></span>
-            <h3 class="benefit__title">Automate the busywork</h3>
-            <p class="benefit__desc">Custom AI and Python workflows for reporting, lead handling, and content operations.</p>
-          </div>
+    <!-- ── Benefits ─────────────────────────────────────────────────────── -->
+    <section class="section section--benefits">
+      <h2 class="sr-only">What working together gets you</h2>
+      <div class="benefits">
+        <div class="benefit">
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-trending" /></svg></span>
+          <h3 class="benefit__title">Rank higher</h3>
+          <p class="benefit__desc">Technical SEO, on-page fixes, and content strategy built for Google and AI search.</p>
         </div>
-      </section>
-
-      <!-- ── Featured results ───────────────────────────────────────────── -->
-      <section class="section section--featured" id="work">
-        <h2 class="kicker">Featured results</h2>
-        <div class="cases">
-          {
-            cases.map((entry) => (
-              <article class="case">
-                <figure class={`thumb thumb--${entry.id}`}>
-                  <img
-                    class="mockup-source"
-                    src="/assets/design-company.png"
-                    alt={entry.data.thumbCaption ?? entry.data.client}
-                    width="1448"
-                    height="1086"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
-                <div class="case__body">
-                  <h3 class="case__title">{entry.data.title}</h3>
-                  <p class="case__desc">{entry.data.summary}</p>
-                  <a class="arrow-link" href={`/work/${entry.id}/`}>View project →</a>
-                </div>
-              </article>
-            ))
-          }
+        <div class="benefit">
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-users" /></svg></span>
+          <h3 class="benefit__title">Turn traffic into leads</h3>
+          <p class="benefit__desc">Digital marketing systems that improve visibility, conversion paths, and follow-up.</p>
         </div>
-      </section>
+        <div class="benefit">
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-bot" /></svg></span>
+          <h3 class="benefit__title">Automate the busywork</h3>
+          <p class="benefit__desc">Custom AI and Python workflows for reporting, lead handling, and content operations.</p>
+        </div>
+      </div>
+    </section>
 
-      <!-- ── Services ───────────────────────────────────────────────────── -->
-      <section class="section section--services" id="services">
-        <h2 class="kicker">Services</h2>
-        <div class="ruled-grid ruled-grid--services">
-          {
-            services.map((service) => (
-              <div class="service">
-                <svg class="icon" aria-hidden="true"><use href={`#${service.data.icon}`} /></svg>
-                <h3 class="service__title">{service.data.navLabel ?? service.data.title}</h3>
-                <p class="service__desc">{service.data.short}</p>
-                <a class="arrow-link arrow-link--sm service__more" href={`/services/${service.id}/`}>
-                  Learn more →
-                </a>
+    <!-- ── Featured results ─────────────────────────────────────────────── -->
+    <section class="section section--ruled" id="work">
+      <h2 class="kicker">Featured results</h2>
+      <div class="cases">
+        {
+          cases.map((entry) => (
+            <article class="case">
+              <figure class="thumb"><figcaption>{entry.data.thumbCaption ?? entry.data.client}</figcaption></figure>
+              <div class="case__body">
+                <h3 class="case__title">{entry.data.title}</h3>
+                <p class="case__desc">{entry.data.summary}</p>
+                <a class="arrow-link" href={`/work/${entry.id}/`}>View project →</a>
               </div>
-            ))
-          }
-        </div>
-      </section>
-    </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
 
-    <CtaBanner />
+    <!-- ── Services ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled" id="services">
+      <h2 class="kicker">Services</h2>
+      <div class="ruled-grid ruled-grid--services">
+        {
+          services.map((service) => (
+            <div class="service">
+              <svg class="icon" aria-hidden="true"><use href={`#${service.data.icon}`} /></svg>
+              <h3 class="service__title">{service.data.navLabel ?? service.data.title}</h3>
+              <p class="service__desc">{service.data.short}</p>
+              <a class="arrow-link arrow-link--sm service__more" href={`/services/${service.id}/`}>
+                Learn more →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </section>
 
-    <div class="wrap home__below">
-      <!-- ── Process ────────────────────────────────────────────────────── -->
-      <section class="section section--ruled" id="process">
-        <h2 class="kicker">How I work</h2>
-        <ol class="steps">
-          <li class="step">
-            <svg class="icon icon--md" aria-hidden="true"><use href="#i-search" /></svg>
-            <p class="step__num">01</p>
-            <h3 class="step__title">Discover &amp; audit</h3>
-            <p class="step__desc">A full technical, content, and competitor audit — no guesswork, just opportunities.</p>
-          </li>
-          <li class="step">
-            <svg class="icon icon--md" aria-hidden="true"><use href="#i-map" /></svg>
-            <p class="step__num">02</p>
-            <h3 class="step__title">Strategy &amp; roadmap</h3>
-            <p class="step__desc">A prioritized plan tied to your goals — traffic, leads, or revenue.</p>
-          </li>
-          <li class="step">
-            <svg class="icon icon--md" aria-hidden="true"><use href="#i-sliders" /></svg>
-            <p class="step__num">03</p>
-            <h3 class="step__title">Build &amp; optimize</h3>
-            <p class="step__desc">Site, content, and technical fixes shipped and measured, not left in a slide deck.</p>
-          </li>
-          <li class="step">
-            <svg class="icon icon--md" aria-hidden="true"><use href="#i-bot" /></svg>
-            <p class="step__num">04</p>
-            <h3 class="step__title">Automate &amp; scale</h3>
-            <p class="step__desc">Repetitive work handed off to automations, so growth doesn't mean more headcount.</p>
-          </li>
-          <li class="step">
-            <svg class="icon icon--md" aria-hidden="true"><use href="#i-phone" /></svg>
-            <p class="step__num">05</p>
-            <h3 class="step__title">Track &amp; report</h3>
-            <p class="step__desc">Clear, honest reporting on what moved and why — no vanity metrics.</p>
-          </li>
-        </ol>
-      </section>
+    <!-- ── Process ──────────────────────────────────────────────────────── -->
+    <section class="section section--ruled" id="process">
+      <h2 class="kicker">How I work</h2>
+      <ol class="steps">
+        <li class="step">
+          <svg class="icon icon--md" aria-hidden="true"><use href="#i-search" /></svg>
+          <p class="step__num">01</p>
+          <h3 class="step__title">Discover &amp; audit</h3>
+          <p class="step__desc">A full technical, content, and competitor audit — no guesswork, just opportunities.</p>
+        </li>
+        <li class="step">
+          <svg class="icon icon--md" aria-hidden="true"><use href="#i-map" /></svg>
+          <p class="step__num">02</p>
+          <h3 class="step__title">Strategy &amp; roadmap</h3>
+          <p class="step__desc">A prioritized plan tied to your goals — traffic, leads, or revenue.</p>
+        </li>
+        <li class="step">
+          <svg class="icon icon--md" aria-hidden="true"><use href="#i-sliders" /></svg>
+          <p class="step__num">03</p>
+          <h3 class="step__title">Build &amp; optimize</h3>
+          <p class="step__desc">Site, content, and technical fixes shipped and measured, not left in a slide deck.</p>
+        </li>
+        <li class="step">
+          <svg class="icon icon--md" aria-hidden="true"><use href="#i-bot" /></svg>
+          <p class="step__num">04</p>
+          <h3 class="step__title">Automate &amp; scale</h3>
+          <p class="step__desc">Repetitive work handed off to automations, so growth doesn't mean more headcount.</p>
+        </li>
+        <li class="step">
+          <svg class="icon icon--md" aria-hidden="true"><use href="#i-phone" /></svg>
+          <p class="step__num">05</p>
+          <h3 class="step__title">Track &amp; report</h3>
+          <p class="step__desc">Clear, honest reporting on what moved and why — no vanity metrics.</p>
+        </li>
+      </ol>
+    </section>
 
-      <!-- ── Packages ───────────────────────────────────────────────────── -->
-      <section class="section section--ruled" id="pricing">
-        <h2 class="kicker">Packages</h2>
-        <div class="ruled-grid ruled-grid--plans">
-          <article class="plan">
-            <h3 class="plan__title">SEO Audit &amp; Sprint</h3>
-            <p class="plan__desc">A focused technical, on-page, and content audit with an action plan you can use right away. Perfect for getting started with SEO.</p>
-            <p class="plan__price">Custom pricing</p>
-            <a class="btn btn-secondary plan__cta" href={SITE.whatsappUrl} target="_blank" rel="noopener">Get a quote</a>
-          </article>
+    <!-- ── Packages ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled" id="pricing">
+      <h2 class="kicker">Packages</h2>
+      <div class="ruled-grid ruled-grid--plans">
+        <article class="plan">
+          <h3 class="plan__title">SEO Audit &amp; Sprint</h3>
+          <p class="plan__desc">A focused technical, on-page, and content audit with an action plan you can use right away. Perfect for getting started with SEO.</p>
+          <p class="plan__price">Custom pricing</p>
+          <a class="btn btn-secondary plan__cta" href="/#contact">Get a quote</a>
+        </article>
 
-          <article class="plan">
-            <span class="tag badge">MOST POPULAR</span>
-            <h3 class="plan__title">Growth Partner</h3>
-            <p class="plan__desc">An ongoing SEO &amp; digital marketing partnership — strategy, execution, and reporting every month. Built for teams ready to scale.</p>
-            <p class="plan__price">Custom pricing</p>
-            <a class="btn btn-primary plan__cta" href={SITE.whatsappUrl} target="_blank" rel="noopener">Get a quote</a>
-          </article>
+        <article class="plan">
+          <span class="tag badge">MOST POPULAR</span>
+          <h3 class="plan__title">Growth Partner</h3>
+          <p class="plan__desc">An ongoing SEO &amp; digital marketing partnership — strategy, execution, and reporting every month. Built for teams ready to scale.</p>
+          <p class="plan__price">Custom pricing</p>
+          <a class="btn btn-primary plan__cta" href="/#contact">Get a quote</a>
+        </article>
 
-          <article class="plan">
-            <h3 class="plan__title">Automation Build</h3>
-            <p class="plan__desc">A custom AI/Python automation for reporting, lead handling, or content workflows. Built to save hours and run on autopilot.</p>
-            <p class="plan__price">Custom pricing</p>
-            <a class="btn btn-secondary plan__cta" href={SITE.whatsappUrl} target="_blank" rel="noopener">Get a quote</a>
-          </article>
-        </div>
-      </section>
+        <article class="plan">
+          <h3 class="plan__title">Automation Build</h3>
+          <p class="plan__desc">A custom AI/Python automation for reporting, lead handling, or content workflows. Built to save hours and run on autopilot.</p>
+          <p class="plan__price">Custom pricing</p>
+          <a class="btn btn-secondary plan__cta" href="/#contact">Get a quote</a>
+        </article>
+      </div>
+    </section>
 
-      <!-- ── Insights ───────────────────────────────────────────────────── -->
-      <section class="section section--ruled" id="blog">
-        <h2 class="kicker">Insights</h2>
-        <div class="posts">
-          {
-            posts.map((post) => (
-              <article class="post">
-                <h3 class="post__title">{post.data.title}</h3>
-                <p class="post__desc">{post.data.description}</p>
-                <a class="arrow-link arrow-link--sm" href={`/blog/${post.id}/`}>Read the post →</a>
-              </article>
-            ))
-          }
-        </div>
-      </section>
+    <!-- ── Blog ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled" id="blog">
+      <h2 class="kicker">Blog</h2>
+      <div class="posts">
+        {
+          posts.map((post) => (
+            <article class="post">
+              <h3 class="post__title">{post.data.title}</h3>
+              <p class="post__desc">{post.data.description}</p>
+              <a class="arrow-link arrow-link--sm" href={`/blog/${post.id}/`}>Read the post →</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
 
-      <NewsletterForm
-        source="home"
-        compact
-        heading="Tips and tricks, straight to your inbox"
-        lede="Short, practical emails on SEO, marketing and AI automation — the things that worked, and the ones that only looked like they did."
-      />
-
-      <!-- ── Contact ────────────────────────────────────────────────────── -->
-      <section class="contact" id="contact">
-        <div>
-          <span class="kicker">Let's connect</span>
-          <h2 class="contact__title">Let's automate your growth.</h2>
-          <p class="contact__lede">
-            Tell me a bit about your business and what you're trying to fix or grow — I'll get
-            back to you within a couple of days.
-          </p>
-          <ContactForm />
-        </div>
-
-        <aside class="details">
-          <h2 class="kicker">Details</h2>
-          <div>
-            <p class="details__label">WhatsApp</p>
-            <a class="details__link" href={SITE.whatsappUrl} target="_blank" rel="noopener">
-              {SITE.phoneDisplay}
-            </a>
-          </div>
-          <div>
-            <p class="details__label">Based in</p>
-            <p class="details__value">{SITE.based}</p>
-          </div>
-          <div>
-            <p class="details__label">LinkedIn</p>
-            <a class="details__link" href={SITE.linkedin} target="_blank" rel="noopener">/in/seo-kastriot-tanaj</a>
-          </div>
-          <div>
-            <p class="details__label">Resume</p>
-            <a class="details__link" href="/assets/kastriot-tanaj-cv.pdf" download>Download CV →</a>
-          </div>
-        </aside>
-      </section>
-    </div>
-
+    <NewsletterForm
+      source="home"
+      compact
+      heading="Tips and tricks, straight to your inbox"
+      lede="Short, practical emails on SEO, marketing and AI automation — the things that worked, and the ones that only looked like they did."
+    />
   </div>
+
+  <CtaBanner />
+
+  <!-- ── Contact ────────────────────────────────────────────────────────── -->
+  <div class="wrap">
+    <section class="contact" id="contact">
+      <div>
+        <span class="kicker">Let's connect</span>
+        <h2 class="contact__title">Let's automate your growth.</h2>
+        <p class="contact__lede">
+          Tell me a bit about your business and what you're trying to fix or grow — I'll get
+          back to you within a couple of days.
+        </p>
+
+        <ContactForm />
+      </div>
+
+      <aside class="details">
+        <h2 class="kicker">Details</h2>
+        <div>
+          <p class="details__label">Based in</p>
+          <p class="details__value">{SITE.based}</p>
+        </div>
+        <div>
+          <p class="details__label">LinkedIn</p>
+          <a class="details__link" href={SITE.linkedin} target="_blank" rel="noopener">/in/seo-kastriot-tanaj</a>
+        </div>
+        <div>
+          <p class="details__label">Resume</p>
+          <a class="details__link" href="/assets/kastriot-tanaj-cv.pdf" download>Download CV →</a>
+        </div>
+      </aside>
+    </section>
+  </div>
+<script>
+  const heroVideo = document.querySelector(".hero__video");
+  const soundBtn = document.querySelector("[data-hero-sound]");
+
+  if (heroVideo instanceof HTMLVideoElement) {
+    // Some browsers only honour autoplay once the muted flag is set in JS too.
+    heroVideo.muted = true;
+    const play = () => heroVideo.play().catch(() => {});
+    play();
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) play();
+    });
+
+    const soundLabel = soundBtn?.querySelector("span");
+    soundBtn?.addEventListener("click", () => {
+      heroVideo.muted = !heroVideo.muted;
+      soundBtn.setAttribute("aria-pressed", String(!heroVideo.muted));
+      if (soundLabel) soundLabel.textContent = heroVideo.muted ? "Sound on" : "Sound off";
+      play();
+    });
+  }
+</script>
 </Base>
