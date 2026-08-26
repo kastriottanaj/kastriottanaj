@@ -5,17 +5,21 @@ export const SITE = {
   name: "Kastriot Tanaj",
   title: "Kastriot Tanaj — SEO, Digital Marketing & AI Automation",
   description:
-    "I help businesses across Europe grow visibility, win better leads, and automate repetitive marketing work — SEO, digital marketing, and AI automation.",
-  tagline: "SEO and AI automation that bring more traffic and less busywork.",
+    "I help growing businesses improve search visibility, attract better leads, and automate repetitive marketing tasks — from Pristina, Kosovo to clients worldwide.",
+  tagline: "SEO and AI automation for businesses that want more leads and less manual work.",
   jobTitle: "SEO Specialist & AI Automation Builder",
   locality: "Pristina",
   country: "XK",
   countryName: "Kosovo",
   based: "Pristina, Kosovo — working remotely worldwide",
-  linkedin: "https://www.linkedin.com/in/seo-kastriot-tanaj/",
+  phone: "+38348111611",
+  phoneDisplay: "+383 48 111 611",
   /** Digits only, country code first — the format wa.me expects (+383 48 111 611). */
   whatsapp: "38348111611",
   whatsappGreeting: "Hi Kastriot — I came from kastriottanaj.com and I'd like to talk about a project.",
+  whatsappUrl:
+    "https://wa.me/38348111611?text=Hi%20Kastriot%20%E2%80%94%20I%20came%20from%20kastriottanaj.com%20and%20I%27d%20like%20to%20talk%20about%20a%20project.",
+  linkedin: "https://www.linkedin.com/in/seo-kastriot-tanaj/",
   ogImage: "/assets/ai-seo.webp",
 } as const;
 
@@ -25,7 +29,7 @@ export const NAV = [
   { href: "/work/", label: "Work" },
   { href: "/#process", label: "Process" },
   { href: "/#pricing", label: "Pricing" },
-  { href: "/blog/", label: "Blog" },
+  { href: "/blog/", label: "Insights" },
   { href: "/newsletter/", label: "Newsletter" },
   { href: "/#contact", label: "Contact" },
 ] as const;

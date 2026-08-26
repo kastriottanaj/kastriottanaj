@@ -1,4 +1,6 @@
 ---
+import { SITE } from "../lib/site";
+
 interface Props {
   title?: string;
   lede?: string;
@@ -17,8 +19,8 @@ const {
       <p class="cta__lede">{lede}</p>
     </div>
     <div class="cta__actions">
-      <a class="btn cta__btn" href="/#contact">Book a strategy call</a>
-      <a class="btn btn-ghost cta__ghost" href="/#contact">Start a project →</a>
+      <a class="btn cta__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">Book a strategy call</a>
+      <a class="btn btn-ghost cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">Start a project →</a>
     </div>
   </div>
 </section>

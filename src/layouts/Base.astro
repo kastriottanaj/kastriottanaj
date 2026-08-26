@@ -25,6 +25,7 @@ const { title, description, image = SITE.ogImage, noindex = false, schema = [] }
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(image, SITE.url).href;
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -89,7 +90,7 @@ const ogImage = new URL(image, SITE.url).href;
     }
   </head>
 
-  <body>
+  <body class={isHome ? "home-page" : undefined}>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <IconSprite />
