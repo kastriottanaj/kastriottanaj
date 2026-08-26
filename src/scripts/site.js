@@ -138,6 +138,24 @@
     sections.forEach((section) => observer.observe(section));
   }
 
+  /* ── Case-study sticky action bar ──────────────────────────────────────── */
+  /* The bar only earns its place once the hero's own buttons have gone. It
+     starts hidden in the markup, so a blocked script leaves the page with the
+     floating WhatsApp button it always had rather than two overlapping calls. */
+  const stickyBar = document.querySelector("[data-sticky-cta]");
+  const stickyAfter = document.querySelector("[data-sticky-after]");
+
+  if (stickyBar && stickyAfter && "IntersectionObserver" in window) {
+    const stickyObserver = new IntersectionObserver(
+      ([entry]) => {
+        stickyBar.dataset.visible = String(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    stickyObserver.observe(stickyAfter);
+  }
+
   /* ── Contact form ──────────────────────────────────────────────────────── */
   const form = document.getElementById("contact-form");
   const status = document.getElementById("form-status");

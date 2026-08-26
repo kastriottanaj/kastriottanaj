@@ -1,10 +1,11 @@
 ---
 title: "Gerti Foods"
 client: "Gerti Foods"
-summary: "SEO and on-page work that expanded organic reach into new regions."
-description: "How on-page and technical SEO expanded Gerti Foods' organic reach into new regions."
+summary: "SEO that took a Kosovo food producer from zero organic traffic to 1,800 monthly Google impressions."
+description: "On-page and technical SEO took Gerti Foods from zero organic traffic to 1,800 monthly Google impressions and average position 7.7 in 90 days."
 services: ["SEO", "On-page optimisation", "Content strategy"]
 thumbCaption: "Gerti Foods — product photo"
+year: 2026
 video:
   src: "/video/gerti-foods.mp4"
   poster: "/video/gerti-foods-poster.jpg"
@@ -15,16 +16,8 @@ video:
 order: 1
 ---
 
-## The brief
-
-<!-- TODO: what the business sold, which markets it wanted, and where organic
-     search sat before the engagement. -->
-
-## What I did
-
-<!-- TODO: the technical fixes, the on-page changes, the content built. -->
-
-## The outcome
-
-<!-- TODO: real numbers only — traffic, rankings, or enquiries, with the window
-     they were measured over. Leave this out entirely rather than estimating. -->
+<!-- This entry carries the metadata only: the card on /work/, the meta
+     description, the video sitemap entry and the llms.txt line. The page
+     itself is hand-built at src/pages/work/gerti-foods.astro, because the
+     evidence gallery, the metric ribbon and the plotted chart are structure
+     rather than prose. Editing the copy means editing that file. -->

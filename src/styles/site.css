@@ -17,6 +17,8 @@
      modernist.css, so these win. */
   --font-heading: var(--font-archivo), system-ui, sans-serif;
   --font-body: var(--font-archivo), system-ui, sans-serif;
+  /* The stack the figcaptions and date lines below already spell out by hand. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ── Utilities ───────────────────────────────────────────────────────────── */
@@ -1150,6 +1152,594 @@ textarea.input { min-height: 100px; }
 }
 .course-card .service__title a { color: inherit; text-decoration: none; }
 .course-card .service__title a:hover { color: var(--color-accent-700); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Case study — the long form used on /work/gerti-foods/
+
+   A designed argument rather than a templated page: a claim, the numbers that
+   back it, and the screenshots those numbers were read off. Built from the
+   same tokens as everything else — the accent is --color-accent, the rules are
+   --color-divider, the corners are square, because the system says so. The
+   approved mockup carried its own hairline (#DCDAD7) and a 10px radius; both
+   are mapped onto the system here rather than imported alongside it.
+
+   Prefixed .cs- so a second case study can pick the whole thing up.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.cs-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  margin: 0 0 18px;
+}
+.cs-eyebrow--muted { color: color-mix(in srgb, var(--color-text) 70%, transparent); }
+
+.cs-h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(26px, 3.4vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+  max-width: 20ch;
+}
+
+.cs-lede {
+  font-size: 17px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent);
+  max-width: 58ch;
+  margin: 0;
+}
+.cs-lede--brief { margin-bottom: 34px; }
+
+/* padding-block rather than the shorthand: these elements are also .wrap, and
+   the shorthand there owns the inline padding. */
+.cs-section {
+  padding-block: 66px;
+  border-top: var(--rule) solid var(--color-divider);
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.cs-hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: center;
+  padding-block: 24px 56px;
+}
+.cs-hero .breadcrumb { padding-top: 28px; margin-bottom: 22px; }
+
+.cs-hero__title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(29px, 4.6vw, 52px);
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+  margin: 0 0 20px;
+  max-width: 15ch;
+}
+.cs-mark { color: var(--color-accent); }
+
+.cs-hero__sub {
+  font-size: 18.5px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 85%, transparent);
+  max-width: 46ch;
+  margin: 0 0 30px;
+}
+
+.cs-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+/* 52px clears the 44px tap target with room to spare, and matches the mockup. */
+.cs-actions .btn {
+  min-height: 52px;
+  padding-inline: 26px;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.cs-actions .btn-secondary { border-width: 1.5px; border-color: var(--color-text); }
+
+.cs-contact {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.cs-contact a { color: var(--color-text); font-weight: 700; text-decoration: none; }
+.cs-contact a:hover { color: var(--color-accent-700); text-decoration: underline; }
+/* The separator travels with the clause it introduces, so a wrapped line reads
+   "| Working with…" rather than leaving a bare pipe on the row above. */
+.cs-contact__sep { opacity: 0.45; margin-right: 6px; }
+.cs-pip {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex: none;
+}
+
+/* ── Hero video ──────────────────────────────────────────────────────────
+   Shot 9:16. Letterboxing it into a wide frame wastes the column and shrinks
+   the one face on the page, so the frame is 4/5 and the source is cropped into
+   it — `center 28%` keeps his head clear of the top edge. */
+.cs-video {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-neutral-900);
+  border: var(--rule) solid var(--color-divider);
+}
+.cs-video__el {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+}
+/* Both overlays sit above the frame but take no pointer events, so the native
+   controls underneath stay clickable and scrubbable. */
+.cs-video__shade,
+.cs-video__caption { pointer-events: none; }
+.cs-video__shade {
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.78) 100%);
+}
+/* Lifted clear of the control bar rather than sitting on the scrubber. */
+.cs-video__caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 64px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #fff;
+}
+.cs-video__line {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+  max-width: 24ch;
+}
+.cs-video__meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+/* ── Results ribbon ──────────────────────────────────────────────────────
+   Full-bleed ink with the measure held on the inner .wrap, the same way the
+   .cta band works. */
+.cs-ribbon { background: var(--color-text); color: var(--color-bg); }
+.cs-ribbon > .wrap { padding-block: 22px 26px; }
+.cs-ribbon__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding-bottom: 16px;
+  border-bottom: var(--rule) solid rgba(255, 255, 255, 0.18);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+.cs-ribbon__top b { color: #fff; font-weight: 600; }
+
+/* Hairlines drawn by the gap showing the band through, so a wrapped row
+   leaves no orphaned rule. */
+.cs-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--rule);
+  background: rgba(255, 255, 255, 0.18);
+  list-style: none;
+  margin: var(--rule) 0 0;
+  padding: 0;
+}
+.cs-metric { background: var(--color-text); padding: 20px 20px 18px; }
+.cs-metric__value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(26px, 3vw, 34px);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  margin: 0;
+}
+.cs-metric__delta {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0;
+  color: #5fd08a;
+  margin-left: 8px;
+}
+.cs-metric__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+  margin: 9px 0 0;
+}
+
+/* ── What moved ──────────────────────────────────────────────────────────── */
+.cs-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+.cs-glyph {
+  width: 34px; height: 34px;
+  color: var(--color-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cs-value__title {
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  margin: 16px 0 8px;
+}
+.cs-value__body {
+  font-size: 15px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 0;
+}
+
+/* ── Brief, steps, chart ─────────────────────────────────────────────────── */
+.cs-body {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.cs-steps { list-style: none; margin: 0; padding: 0; }
+.cs-step {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px 0;
+  border-top: var(--rule) solid var(--color-divider);
+}
+.cs-step:first-child { border-top: none; padding-top: 0; }
+.cs-step__num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-accent-700);
+  padding-top: 3px;
+}
+.cs-step__title { font-size: 16.5px; letter-spacing: -0.015em; margin: 0 0 5px; }
+.cs-step__body {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 0;
+}
+
+.cs-chart {
+  background: #fff;
+  border: var(--rule) solid var(--color-divider);
+  padding: 26px 26px 20px;
+}
+.cs-chart__cap {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 0 0 4px;
+}
+.cs-chart__big {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 30px;
+  letter-spacing: -0.03em;
+  margin: 0 0 18px;
+}
+/* The ratio is declared so the box is reserved before the SVG lays out. */
+.cs-chart__svg { display: block; width: 100%; height: auto; aspect-ratio: 520 / 190; }
+.cs-chart__stats {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+  margin: 18px 0 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.cs-chart__stats b { color: var(--color-text); font-size: 15px; }
+
+/* ── Outcome ─────────────────────────────────────────────────────────────── */
+.cs-proof {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 28px;
+  margin-top: 34px;
+  align-items: stretch;
+}
+/* Dashed, because it is a slot waiting for a real quote rather than a card. */
+.cs-quoteslot {
+  border: 1.5px dashed var(--color-divider);
+  background: rgba(255, 255, 255, 0.55);
+  padding: 28px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+.cs-quoteslot__tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  margin: 0 0 14px;
+}
+.cs-quoteslot__text {
+  font-size: 20px;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  /* Grey enough to read as unfinished, dark enough to still pass AA. */
+  color: color-mix(in srgb, var(--color-text) 62%, transparent);
+  max-width: 34ch;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+.cs-quoteslot__by { display: flex; align-items: center; gap: 12px; }
+.cs-avatar {
+  width: 42px; height: 42px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 13px;
+}
+.cs-quoteslot__name { display: block; font-size: 14px; font-weight: 700; }
+.cs-quoteslot__role {
+  display: block;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+
+.cs-result { background: var(--color-text); color: var(--color-bg); padding: 28px; }
+.cs-result__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+  margin: 0;
+}
+.cs-result__value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 56px;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 6px 0 10px;
+}
+.cs-result__body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.76);
+  margin: 14px 0 0;
+}
+
+/* ── Evidence ────────────────────────────────────────────────────────────── */
+.cs-ev-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+  margin-top: 38px;
+}
+.cs-ev {
+  margin: 0;
+  background: #fff;
+  border: var(--rule) solid var(--color-divider);
+  overflow: hidden;
+}
+.cs-ev img { width: 100%; height: auto; }
+.cs-ev figcaption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  padding: 11px 14px;
+  border-top: var(--rule) solid var(--color-divider);
+  margin: 0;
+}
+.cs-ev figcaption b { color: var(--color-text); font-weight: 600; }
+.cs-ev--2 { grid-column: span 2; }
+.cs-ev--4 { grid-column: span 4; }
+.cs-ev--6 { grid-column: span 6; }
+.cs-ev-stack { grid-column: span 2; display: grid; gap: 18px; }
+
+.cs-speed {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--rule);
+  background: var(--color-divider);
+  border: var(--rule) solid var(--color-divider);
+  list-style: none;
+  margin: 34px 0 0;
+  padding: 0;
+}
+.cs-speed li { background: #fff; padding: 16px 18px; }
+.cs-speed__value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 24px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0;
+}
+.cs-speed__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 6px 0 0;
+}
+
+/* ── Work with me ────────────────────────────────────────────────────────── */
+.cs-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 38px;
+}
+.cs-card {
+  background: #fff;
+  border: var(--rule) solid var(--color-divider);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  min-height: 212px;
+  transition: border-color 0.15s ease;
+}
+.cs-card:hover { border-color: var(--color-text); }
+.cs-card__kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 0 0 14px;
+}
+.cs-card__title { font-size: 20px; letter-spacing: -0.025em; margin: 0 0 10px; }
+.cs-card__body {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 0 0 12px;
+}
+/* The 8px block padding is the target, not the look: it takes a bare text link
+   past the 24px minimum without moving it — the 12px above plus this makes the
+   same 20px gap the card had before. */
+.cs-card__cta {
+  margin-top: auto;
+  align-self: flex-start;
+  padding-block: 8px;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 14.5px;
+  color: var(--color-accent-700);
+  text-decoration: none;
+}
+.cs-card__cta:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+/* ── Mobile action bar ───────────────────────────────────────────────────
+   Hidden on desktop and hidden until site.js flips data-visible, which it only
+   does once the hero has scrolled away. With the script blocked the attribute
+   never changes, the bar never shows, and the floating WhatsApp button stays
+   where it is — so the page keeps a persistent call either way. */
+.cs-sticky { display: none; }
+
+@media (max-width: 900px) {
+  .cs-hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 40px; }
+  .cs-body { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .cs-proof { grid-template-columns: minmax(0, 1fr); }
+  .cs-values { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .cs-cards { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .cs-speed { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+  /* One column, mockup order — with the two Ubersuggest panels holding a 2-up
+     row, which they stay legible at because they are small crops to begin with. */
+  .cs-ev-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-ev--2, .cs-ev--4, .cs-ev--6 { grid-column: span 2; }
+  .cs-ev-stack { grid-column: span 2; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .cs-section { padding-block: 44px; }
+  .cs-hero { padding-bottom: 32px; }
+  .cs-hero__title { font-size: 29px; line-height: 1.06; max-width: none; }
+  .cs-hero__sub { font-size: 15px; line-height: 1.5; margin-bottom: 22px; }
+
+  /* Stacked and full-width: two 52px bars beat two half-width ones on a thumb. */
+  .cs-actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .cs-actions .btn { width: 100%; }
+
+  .cs-video { margin-inline: 0; }
+  .cs-video__caption { bottom: 58px; padding-inline: 18px; }
+  .cs-video__line { font-size: 15px; }
+
+  .cs-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-values, .cs-cards { grid-template-columns: minmax(0, 1fr); }
+  .cs-chart__stats { grid-template-columns: minmax(0, 1fr); }
+  .cs-result__value { font-size: 44px; }
+  .cs-quoteslot__text { font-size: 18px; }
+
+  .cs-sticky {
+    position: fixed;
+    z-index: 950;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-bg) 97%, transparent);
+    border-top: var(--rule) solid var(--color-divider);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .cs-sticky[data-visible="false"] {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .cs-sticky__btn { flex: 1; min-height: 50px; font-size: 15.5px; }
+  .cs-sticky__wa {
+    width: 50px; height: 50px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  .cs-sticky__wa svg { width: 24px; height: 24px; fill: currentColor; }
+  .cs-sticky__wa:hover { background: #25d366; color: var(--color-text); }
+
+  /* The two would otherwise stack in the same corner. */
+  body:has(.cs-sticky[data-visible="true"]) .whatsapp-fab { display: none; }
+  /* The footer already reserves 96px for the floating button; the bar needs more. */
+  body:has(.cs-sticky) .footer__inner {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-card, .cs-sticky { transition: none; }
+}
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {

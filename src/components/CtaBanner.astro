@@ -4,11 +4,14 @@ import { SITE } from "../lib/site";
 interface Props {
   title?: string;
   lede?: string;
+  /** The second, outlined button. Pages that want a different ask override it. */
+  ghostLabel?: string;
 }
 
 const {
   title = "Ready to grow traffic and cut manual work?",
   lede = "Let's talk about your goals and the bottlenecks slowing your team down.",
+  ghostLabel = "Start a project →",
 } = Astro.props;
 ---
 
@@ -20,7 +23,7 @@ const {
     </div>
     <div class="cta__actions">
       <a class="btn cta__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">Book a strategy call</a>
-      <a class="btn btn-ghost cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">Start a project →</a>
+      <a class="btn btn-ghost cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">{ghostLabel}</a>
     </div>
   </div>
 </section>

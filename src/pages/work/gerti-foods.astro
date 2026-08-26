@@ -1,0 +1,601 @@
+---
+/**
+ * Gerti Foods — hand-built case study.
+ *
+ * Every other entry in the `work` collection renders through [slug].astro, and
+ * that route deliberately skips this one (see the filter there). The page is
+ * built by hand because the parts that carry the argument — the metric ribbon,
+ * the plotted traffic chart and the screenshot gallery — are structure rather
+ * than prose, and markdown would only get in the way of them.
+ *
+ * Every figure below is read off a screenshot in /assets/gerti-evidence/.
+ * Do not round, restate or refresh a number without changing the screenshot
+ * beside it.
+ */
+import { getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+const entry = await getEntry("work", "gerti-foods");
+if (!entry) throw new Error("src/content/work/gerti-foods.md is missing.");
+
+const { title, client, description, video } = entry.data;
+const url = `${SITE.url}/work/gerti-foods/`;
+const absolute = (path: string) => new URL(path, SITE.url).href;
+
+/** 118 -> "PT1M58S". Same helper as [slug].astro. */
+function isoDuration(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `PT${minutes ? `${minutes}M` : ""}${rest}S`;
+}
+
+/* ── The numbers, each tied to the screenshot it came from ──────────────── */
+
+const metrics = [
+  { value: "1.8K", delta: "↑67%", spoken: "up 67 percent", label: "Impressions" },
+  { value: "62", delta: "↑19%", spoken: "up 19 percent", label: "Clicks" },
+  { value: "7.7", delta: null, spoken: null, label: "Average position" },
+  { value: "5", delta: "↑400%", spoken: "up 400 percent", label: "Keywords ranking" },
+];
+
+const values = [
+  {
+    title: "Technical foundation first",
+    body: "Indexing, sitemaps, speed and product markup fixed before a single word was rewritten. On-page score 73/100, GTmetrix grade A, 1.1s LCP.",
+    paths: ['<rect x="3" y="5" width="26" height="22" rx="2"/><path d="M3 11h26M8 17h8M8 21h13"/>'],
+  },
+  {
+    title: "Pages written for buyers",
+    body: "Titles, H1s and product copy rebuilt around the terms wholesale and retail buyers type — not the words the catalogue used internally.",
+    paths: ['<circle cx="14" cy="14" r="9"/><path d="M21 21l7 7M11 14h6M14 11v6"/>'],
+  },
+  {
+    title: "Reach past one market",
+    body: "The catalogue now works in Albanian, English and German, mapped to real demand next door, so the same products earn impressions in markets they never served.",
+    paths: ['<circle cx="16" cy="16" r="12"/><path d="M4 16h24M16 4c4 4 4 20 0 24M16 4c-4 4-4 20 0 24"/>'],
+  },
+];
+
+const steps = [
+  {
+    n: "01",
+    title: "Technical audit and fixes",
+    body: "Crawl and indexation cleanup, sitemap, Core Web Vitals, product structured data.",
+  },
+  {
+    n: "02",
+    title: "Keyword and intent map",
+    body: "Five commercial terms with genuine demand. One page owns each, no cannibalisation.",
+  },
+  {
+    n: "03",
+    title: "On-page rebuild",
+    body: "Titles, meta descriptions, H1s, internal links and image alt text rewritten against that map.",
+  },
+  {
+    n: "04",
+    title: "Content for new regions",
+    body: "Region-aware pages in Albanian, English and German so the catalogue competes outside Kosovo.",
+  },
+];
+
+const chartStats = [
+  { figure: "3.4%", label: "average click-through rate" },
+  { figure: "+96%", label: "organic traffic month on month" },
+  { figure: "14", label: "referring backlinks (+7.7%)" },
+  { figure: "73", label: "on-page SEO score" },
+];
+
+/* Intrinsic sizes are the real file dimensions — they reserve the box so the
+   gallery cannot shift as the screenshots decode. */
+const evidence = {
+  gsc: {
+    src: "/assets/gerti-evidence/gsc-performance-28d.jpg",
+    width: 1240,
+    height: 658,
+    alt: "Google Search Console performance chart for gertifoods.com over 28 days: 62 clicks, 1.8K impressions, 3.4% CTR, average position 7.7",
+    strong: "Google Search Console",
+    caption: "28 days · 62 clicks · 1.8K impressions · 3.4% CTR · avg. position 7.7",
+  },
+  indicators: {
+    src: "/assets/gerti-evidence/ubersuggest-key-indicators.jpg",
+    width: 383,
+    height: 349,
+    alt: "Ubersuggest key SEO indicators: 5 organic keywords up 400%, organic traffic 55 up 96.4%, 14 backlinks up 7.7%",
+    strong: "Ubersuggest",
+    caption: "keywords, traffic, backlinks",
+  },
+  onpage: {
+    src: "/assets/gerti-evidence/ubersuggest-onpage-score.jpg",
+    width: 362,
+    height: 266,
+    alt: "Ubersuggest on-page SEO score for gertifoods.com: 73, rated high",
+    strong: "On-page score",
+    caption: "73 / 100",
+  },
+  gtmetrix: {
+    src: "/assets/gerti-evidence/gtmetrix-report.jpg",
+    width: 1240,
+    height: 454,
+    alt: "GTmetrix report for gertifoods.com: grade A, 95% performance, 97% structure, 1.1s largest contentful paint, 66ms total blocking time, 0.08 cumulative layout shift",
+    strong: "GTmetrix",
+    caption: "grade A · 95% performance · 97% structure · LCP 1.1s · TBT 66ms · CLS 0.08",
+  },
+  traffic: {
+    src: "/assets/gerti-evidence/ubersuggest-organic-traffic.jpg",
+    width: 900,
+    height: 740,
+    alt: "Ubersuggest monthly organic traffic for gertifoods.com: flat at zero from August 2025 to May 2026, then rising to 55 visits by July 2026",
+    strong: "Organic traffic",
+    caption: "nine flat months, then the climb",
+  },
+  insights: {
+    src: "/assets/gerti-evidence/gsc-insights.jpg",
+    width: 1240,
+    height: 322,
+    alt: "Google Search Console insights panel: 62 clicks up 19 percent, 1.8K impressions up 67 percent over the last 28 days",
+    strong: "Search Console insights",
+    caption: "clicks +19% · impressions +67% month on month",
+  },
+};
+
+const speed = [
+  { value: "A", label: "GTmetrix grade" },
+  { value: "95%", label: "Performance" },
+  { value: "1.1s", label: "LCP" },
+  { value: "66ms", label: "Total blocking time" },
+  { value: "0.08", label: "Layout shift" },
+];
+
+/* No /services/#geo or /services/#content anchor exists, so each card points at
+   the nearest real page rather than a link that lands nowhere. */
+const cards = [
+  {
+    kicker: "01 · Foundation",
+    title: "Technical & on-page SEO",
+    body: "Audit, fixes and a rewritten page structure built around what your buyers search for.",
+    cta: "See what's included →",
+    href: "/services/seo/",
+  },
+  {
+    kicker: "02 · Visibility",
+    title: "AI search visibility (GEO)",
+    body: "Get named in ChatGPT, Gemini and AI Overviews when buyers ask for your category.",
+    cta: "Check your AI visibility →",
+    href: "/services/",
+  },
+  {
+    kicker: "03 · Growth",
+    title: "Content strategy & production",
+    body: "A keyword-to-page map and the content to fill it, in Albanian, English or German.",
+    cta: "See the content plan →",
+    href: "/services/digital-marketing/",
+  },
+];
+
+const pageTitle = `Gerti Foods SEO case study — 0 to 1.8K monthly impressions | ${SITE.name}`;
+
+/* CreativeWork rather than Article, to match the shape the other case studies
+   already emit through [slug].astro. */
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: title,
+    description,
+    url,
+    about: { "@type": "Organization", name: client },
+    author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    datePublished: "2026",
+  },
+  ...(video
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoObject",
+          name: video.title,
+          description: video.description,
+          thumbnailUrl: absolute(video.poster),
+          contentUrl: absolute(video.src),
+          uploadDate: video.date,
+          duration: isoDuration(video.duration),
+        },
+      ]
+    : []),
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Work", item: `${SITE.url}/work/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  image={evidence.gsc.src}
+  schema={schema}
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+  <section class="cs-hero-band" data-sticky-after>
+    <div class="wrap cs-hero">
+      <div class="cs-hero__copy">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span aria-hidden="true">/</span>
+          <a href="/work/">Work</a> <span aria-hidden="true">/</span>
+          <span aria-current="page">Gerti Foods</span>
+        </nav>
+
+        <p class="cs-eyebrow">Case study · SEO for food brands</p>
+        <h1 class="cs-hero__title">
+          SEO that took Gerti Foods from <span class="cs-mark">zero</span> to 1,800 monthly Google impressions
+        </h1>
+        <p class="cs-hero__sub">
+          On-page and technical SEO for a Kosovo food producer — five commercial keywords now
+          ranking at an average position of 7.7, and organic buyers arriving from regions the
+          brand had never reached. Ninety days, no ad spend.
+        </p>
+
+        <div class="cs-actions">
+          <a class="btn btn-primary" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+            Book a strategy call
+          </a>
+          <a class="btn btn-secondary" href="#evidence">See the proof</a>
+        </div>
+
+        <p class="cs-contact">
+          <span class="cs-pip" aria-hidden="true"></span>
+          WhatsApp <a href={SITE.whatsappUrl} target="_blank" rel="noopener">{SITE.phoneDisplay}</a>
+          <span>
+            <span class="cs-contact__sep" aria-hidden="true">|</span>
+            Working with food &amp; FMCG brands in Kosovo, Albania and DACH
+          </span>
+        </p>
+      </div>
+
+      {
+        video && (
+          <figure class="cs-video">
+            {/* Two minutes of Kastriot on camera — the page's primary evidence,
+                so it plays in place rather than linking out. preload="metadata"
+                fetches the header only; the poster carries the first frame. */}
+            <video
+              class="cs-video__el"
+              controls
+              playsinline
+              preload="metadata"
+              poster={video.poster}
+              width="464"
+              height="832"
+            >
+              <source src={video.src} type="video/mp4" />
+            </video>
+            <div class="cs-video__shade" aria-hidden="true" />
+            <figcaption class="cs-video__caption">
+              <span class="cs-video__line">Me, on camera, on what actually changed.</span>
+              <span class="cs-video__meta">{video.title}</span>
+            </figcaption>
+          </figure>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ── Results ribbon ─────────────────────────────────────────────────── -->
+  <section class="cs-ribbon" aria-label="Headline results">
+    <div class="wrap">
+      <p class="cs-ribbon__top">
+        <span>Verified in Google Search Console · last 28 days</span>
+        <span><b>gertifoods.com</b> · exported 26 Aug 2026</span>
+      </p>
+      <ul class="cs-metrics">
+        {
+          metrics.map((metric) => (
+            <li class="cs-metric">
+              <p class="cs-metric__value">
+                {metric.value}
+                {metric.delta && (
+                  <>
+                    <span class="cs-metric__delta" aria-hidden="true">{metric.delta}</span>
+                    <span class="sr-only">, {metric.spoken}</span>
+                  </>
+                )}
+              </p>
+              <p class="cs-metric__label">{metric.label}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── What moved ─────────────────────────────────────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">What actually moved</p>
+    <h2 class="cs-h2">Three changes did most of the work</h2>
+    <div class="cs-values">
+      {
+        values.map((value) => (
+          <div class="cs-value">
+            <svg
+              class="cs-glyph"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+              focusable="false"
+              set:html={value.paths.join("")}
+            />
+            <h3 class="cs-value__title">{value.title}</h3>
+            <p class="cs-value__body">{value.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── The brief / what I did / the chart ─────────────────────────────── -->
+  <section class="cs-section wrap" id="breakdown">
+    <div class="cs-body">
+      <div>
+        <p class="cs-eyebrow">The brief</p>
+        <h2 class="cs-h2">A real product range with no search presence</h2>
+        <p class="cs-lede cs-lede--brief">
+          Gerti Foods supplies par-baked byrek and tortillas at industrial scale from Prizren —
+          the product a bakery, hotel, restaurant or supermarket bakes off in 15–20 minutes and
+          sells fresh, with no baker on staff. Real customers, real repeat orders, and nine
+          straight months at zero organic traffic. The brief was to make the range findable, and
+          to find out whether the same demand existed outside Kosovo.
+        </p>
+
+        <p class="cs-eyebrow cs-eyebrow--muted">What I did</p>
+        <ol class="cs-steps">
+          {
+            steps.map((step) => (
+              <li class="cs-step">
+                <span class="cs-step__num" aria-hidden="true">{step.n}</span>
+                <div>
+                  <h3 class="cs-step__title">{step.title}</h3>
+                  <p class="cs-step__body">{step.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="cs-chart">
+        <p class="cs-chart__cap">Monthly organic traffic · Aug 2025 – Jul 2026</p>
+        <p class="cs-chart__big">0 → 55 visits</p>
+        {/* Hand-plotted against the Ubersuggest series in the gallery below:
+            flat at zero through May 26, ~28 in Jun 26, 55 in Jul 26. */}
+        <svg
+          class="cs-chart__svg"
+          viewBox="0 0 520 190"
+          role="img"
+          aria-label="Organic traffic flat at zero until May 2026, rising to 55 in July 2026"
+        >
+          <defs>
+            <linearGradient id="cs-fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ec3013" stop-opacity=".22" />
+              <stop offset="100%" stop-color="#ec3013" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <g stroke="#d7d3d3" stroke-width="1">
+            <line x1="34" y1="18" x2="510" y2="18" />
+            <line x1="34" y1="65" x2="510" y2="65" />
+            <line x1="34" y1="112" x2="510" y2="112" />
+            <line x1="34" y1="158" x2="510" y2="158" />
+          </g>
+          <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#605d5d">
+            <text x="8" y="22">60</text>
+            <text x="8" y="69">40</text>
+            <text x="8" y="116">20</text>
+            <text x="8" y="162">0</text>
+            <text x="34" y="180">Aug 25</text>
+            <text x="228" y="180">Feb 26</text>
+            <text x="380" y="180">May 26</text>
+            <text x="466" y="180">Jul 26</text>
+          </g>
+          <path
+            d="M40 158 L83 158 L126 158 L169 158 L212 158 L255 158 L298 158 L341 158 L384 158 L427 92 L470 30 L470 158 Z"
+            fill="url(#cs-fade)"
+          />
+          <polyline
+            points="40,158 83,158 126,158 169,158 212,158 255,158 298,158 341,158 384,158 427,92 470,30"
+            fill="none"
+            stroke="#ec3013"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+          <circle cx="470" cy="30" r="5" fill="#fff" stroke="#ec3013" stroke-width="2.5" />
+          <circle cx="427" cy="92" r="4" fill="#fff" stroke="#ec3013" stroke-width="2" />
+        </svg>
+        <ul class="cs-chart__stats">
+          {
+            chartStats.map((stat) => (
+              <li>
+                <b>{stat.figure}</b> {stat.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The outcome ────────────────────────────────────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">The outcome</p>
+    <h2 class="cs-h2">Page-one visibility, from a standing start</h2>
+    <div class="cs-proof">
+      <!-- TODO: replace with approved client quote -->
+      <figure class="cs-quoteslot">
+        <div>
+          <p class="cs-quoteslot__tag">Client quote — to add</p>
+          <blockquote class="cs-quoteslot__text">
+            Two or three sentences from Gerti in their own words: what changed for the business,
+            not for the rankings.
+          </blockquote>
+        </div>
+        <figcaption class="cs-quoteslot__by">
+          <span class="cs-avatar" aria-hidden="true">GF</span>
+          <span>
+            <span class="cs-quoteslot__name">Gerti Foods</span>
+            <span class="cs-quoteslot__role">Owner · gertifoods.com</span>
+          </span>
+        </figcaption>
+      </figure>
+
+      <div class="cs-result">
+        <p class="cs-result__label">Average position</p>
+        <p class="cs-result__value">7.7</p>
+        <p class="cs-result__label">from unranked</p>
+        <p class="cs-result__body">
+          Five commercial keywords sitting inside the top ten, with impressions still climbing
+          month on month.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The evidence ───────────────────────────────────────────────────── -->
+  <section class="cs-section wrap" id="evidence">
+    <p class="cs-eyebrow">The evidence</p>
+    <h2 class="cs-h2">Every number here, screenshotted from the source</h2>
+    <p class="cs-lede">
+      Google Search Console, Ubersuggest and GTmetrix, all pulled on 26 August 2026. Nothing
+      recreated, nothing rounded up.
+    </p>
+
+    <div class="cs-ev-grid">
+      <figure class="cs-ev cs-ev--4">
+        <img
+          src={evidence.gsc.src}
+          alt={evidence.gsc.alt}
+          width={evidence.gsc.width}
+          height={evidence.gsc.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption><b>{evidence.gsc.strong}</b> — {evidence.gsc.caption}</figcaption>
+      </figure>
+
+      <div class="cs-ev-stack">
+        {
+          [evidence.indicators, evidence.onpage].map((shot) => (
+            <figure class="cs-ev">
+              <img
+                src={shot.src}
+                alt={shot.alt}
+                width={shot.width}
+                height={shot.height}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption><b>{shot.strong}</b> — {shot.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      <figure class="cs-ev cs-ev--4">
+        <img
+          src={evidence.gtmetrix.src}
+          alt={evidence.gtmetrix.alt}
+          width={evidence.gtmetrix.width}
+          height={evidence.gtmetrix.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption><b>{evidence.gtmetrix.strong}</b> — {evidence.gtmetrix.caption}</figcaption>
+      </figure>
+
+      <figure class="cs-ev cs-ev--2">
+        <img
+          src={evidence.traffic.src}
+          alt={evidence.traffic.alt}
+          width={evidence.traffic.width}
+          height={evidence.traffic.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption><b>{evidence.traffic.strong}</b> — {evidence.traffic.caption}</figcaption>
+      </figure>
+
+      <figure class="cs-ev cs-ev--6">
+        <img
+          src={evidence.insights.src}
+          alt={evidence.insights.alt}
+          width={evidence.insights.width}
+          height={evidence.insights.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption><b>{evidence.insights.strong}</b> — {evidence.insights.caption}</figcaption>
+      </figure>
+    </div>
+
+    <ul class="cs-speed">
+      {
+        speed.map((cell) => (
+          <li>
+            <p class="cs-speed__value">{cell.value}</p>
+            <p class="cs-speed__label">{cell.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ── Work with me ───────────────────────────────────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">Work with me</p>
+    <h2 class="cs-h2">The same three levers, for your brand</h2>
+    <div class="cs-cards">
+      {
+        cards.map((card) => (
+          <article class="cs-card">
+            <p class="cs-card__kicker">{card.kicker}</p>
+            <h3 class="cs-card__title">{card.title}</h3>
+            <p class="cs-card__body">{card.body}</p>
+            <a class="cs-card__cta" href={card.href}>{card.cta}</a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBanner
+    title="Want results like this?"
+    lede="Tell me about your business and I'll tell you where the opportunity is."
+    ghostLabel={`WhatsApp ${SITE.phoneDisplay}`}
+  />
+
+  <!-- Mobile only. Hidden until the hero scrolls away — see site.js. Without
+       JS it never appears and the floating WhatsApp button stays instead. -->
+  <div class="cs-sticky" data-sticky-cta data-visible="false">
+    <a class="btn btn-primary cs-sticky__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+      Book a call
+    </a>
+    <a
+      class="cs-sticky__wa"
+      href={SITE.whatsappUrl}
+      target="_blank"
+      rel="noopener"
+      aria-label={`Chat with ${SITE.name} on WhatsApp`}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488" />
+      </svg>
+    </a>
+  </div>
+</Base>
