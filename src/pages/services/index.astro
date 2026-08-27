@@ -5,6 +5,9 @@ import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 
 const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
+const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
 
 const title = "Services — SEO, Digital Marketing & AI Automation | Kastriot Tanaj";
 const description =
@@ -60,6 +63,30 @@ const itemList = {
         }
       </div>
     </section>
+
+    {
+      useCases.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">By industry</h2>
+          <p class="section__lede">
+            Same services, different first move. These say what I'd look at first in a
+            specific market.
+          </p>
+          <div class="ruled-grid ruled-grid--services">
+            {useCases.map((useCase) => (
+              <div class="service">
+                <svg class="icon" aria-hidden="true"><use href={`#${useCase.data.icon}`} /></svg>
+                <h3 class="service__title">{useCase.data.navLabel ?? useCase.data.title}</h3>
+                <p class="service__desc">{useCase.data.short}</p>
+                <a class="arrow-link arrow-link--sm service__more" href={`/use-cases/${useCase.id}/`}>
+                  Learn more →
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
   </div>
 
   <CtaBanner />

@@ -70,6 +70,42 @@ const services = defineCollection({
   }),
 });
 
+const useCases = defineCollection({
+  loader: glob({ base: "./src/content/use-cases", pattern: "**/*.md" }),
+  schema: z.object({
+    title: z.string(),
+    /** Short label for cards and cross-links, when the full title is too long. */
+    navLabel: z.string().optional(),
+    /** Meta description, and the lede under the H1. */
+    description: z.string(),
+    /** One line, used on the /use-cases/ grid and the cross-link from /services/. */
+    short: z.string(),
+    /** Sprite id from IconSprite.astro, e.g. "i-search". */
+    icon: z.string().default("i-search"),
+    /** Who the page is for. Also becomes schema.org `audience`. */
+    audience: z.string(),
+    /** What is broken in this market — the reason the page exists at all. */
+    problems: z
+      .array(z.object({ title: z.string(), detail: z.string() }))
+      .default([]),
+    /** The work itself, in the order it actually happens. */
+    plays: z
+      .array(z.object({ title: z.string(), detail: z.string() }))
+      .default([]),
+    /**
+     * What the business can do afterwards. Capabilities, not forecasts: an
+     * industry page has no client behind it, so it must not imply numbers that
+     * only a case study can honestly claim.
+     */
+    outcomes: z.array(z.string()).default([]),
+    /** Ids from the services collection. Rendered as links, so they must exist. */
+    services: z.array(z.string()).default([]),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
+    order: z.number().default(99),
+    draft: z.boolean().default(false),
+  }),
+});
+
 const newsletter = defineCollection({
   loader: glob({ base: "./src/content/newsletter", pattern: "**/*.md" }),
   schema: z.object({
@@ -159,4 +195,4 @@ const bootcamps = defineCollection({
   }),
 });
 
-export const collections = { blog, work, services, newsletter, bootcamps };
+export const collections = { blog, work, services, useCases, newsletter, bootcamps };

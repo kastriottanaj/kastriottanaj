@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const title = `Use cases — SEO & automation by industry | ${SITE.name}`;
+const description =
+  "How the SEO, web and automation work applies to a specific industry — what breaks in that market, and what I'd do about it.";
+
+const breadcrumbs = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+    { "@type": "ListItem", position: 2, name: "Use cases", item: `${SITE.url}/use-cases/` },
+  ],
+};
+
+const itemList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: useCases.map((useCase, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: useCase.data.title,
+    url: `${SITE.url}/use-cases/${useCase.id}/`,
+  })),
+};
+---
+
+<Base title={title} description={description} schema={[breadcrumbs, itemList]}>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Use cases</span>
+      <h1 class="page-head__title">Built for your industry</h1>
+      <p class="page-head__lede">
+        The services are the same four everywhere. What changes is which problem is
+        costing you money — and that is almost entirely a function of the market you sell
+        into. These pages say what I'd look at first in yours.
+      </p>
+    </header>
+
+    <section class="section section--ruled">
+      <h2 class="sr-only">All use cases</h2>
+      <div class="ruled-grid ruled-grid--services">
+        {
+          useCases.map((useCase) => (
+            <div class="service">
+              <svg class="icon" aria-hidden="true"><use href={`#${useCase.data.icon}`} /></svg>
+              <h3 class="service__title">{useCase.data.navLabel ?? useCase.data.title}</h3>
+              <p class="service__desc">{useCase.data.short}</p>
+              <a class="arrow-link arrow-link--sm service__more" href={`/use-cases/${useCase.id}/`}>
+                Learn more →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section section--ruled">
+      <h2 class="kicker">Not listed?</h2>
+      <p class="section__lede">
+        Most of the work is industry-agnostic underneath — a crawl is a crawl, and a lead
+        that goes unanswered is lost in every market. If yours has no page here yet, the <a
+          href="/services/">services</a> cover the same ground, and the <a href="/work/"
+        >case studies</a> show how it lands in practice.
+      </p>
+    </section>
+  </div>
+
+  <CtaBanner />
+</Base>

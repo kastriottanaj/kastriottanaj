@@ -1,0 +1,188 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const useCases = await getCollection("useCases", ({ data }) => !data.draft);
+  return useCases.map((useCase) => ({
+    params: { slug: useCase.id },
+    props: { useCase },
+  }));
+};
+
+interface Props {
+  useCase: CollectionEntry<"useCases">;
+}
+
+const { useCase } = Astro.props;
+const { Content } = await render(useCase);
+const { title, description, audience, problems, plays, outcomes, faq, services } =
+  useCase.data;
+
+/* The `services` frontmatter holds collection ids, and the page renders them as
+   links — so a typo would ship a 404. Resolve against the collection and drop
+   anything that does not exist rather than trusting the string. */
+const allServices = await getCollection("services");
+const related = services
+  .map((id) => allServices.find((service) => service.id === id))
+  .filter((service): service is CollectionEntry<"services"> => Boolean(service));
+
+const url = `${SITE.url}/use-cases/${useCase.id}/`;
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: "SEO and marketing automation",
+    areaServed: "Europe",
+    audience: { "@type": "BusinessAudience", audienceType: audience },
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Use cases", item: `${SITE.url}/use-cases/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base title={`${title} | ${SITE.name}`} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <a href="/use-cases/">Use cases</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <header class="page-head">
+      <span class="kicker">Use case</span>
+      <h1 class="page-head__title">{title}</h1>
+      <p class="page-head__lede">{description}</p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/#contact">Book a strategy call</a>
+      </div>
+      <p class="hero__meta">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-users" /></svg>
+        <span>For {audience.toLowerCase()}</span>
+      </p>
+    </header>
+
+    {
+      problems.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">Where it breaks</h2>
+          <div class="ruled-grid ruled-grid--services">
+            {problems.map((problem) => (
+              <div class="service">
+                <h3 class="service__title">{problem.title}</h3>
+                <p class="service__desc">{problem.detail}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {/* Plain `prose` inside a ruled section, not `prose--narrow`: that modifier
+        carries its own 68ch border-top, which under a full-width ruled grid
+        renders as a second, half-width rule a few pixels below the first. */}
+    <section class="section section--ruled">
+      <div class="prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      plays.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">What I'd do</h2>
+          <ol class="steps">
+            {plays.map((play, i) => (
+              <li class="step">
+                <p class="step__num">{String(i + 1).padStart(2, "0")}</p>
+                <h3 class="step__title">{play.title}</h3>
+                <p class="step__desc">{play.detail}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    {
+      outcomes.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">What changes</h2>
+          <ul class="ruled-grid ruled-grid--outcomes outcomes">
+            {outcomes.map((outcome) => (
+              <li class="outcome">{outcome}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      related.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">Services this draws on</h2>
+          <div class="ruled-grid ruled-grid--services">
+            {related.map((service) => (
+              <div class="service">
+                <svg class="icon" aria-hidden="true"><use href={`#${service.data.icon}`} /></svg>
+                <h3 class="service__title">{service.data.navLabel ?? service.data.title}</h3>
+                <p class="service__desc">{service.data.short}</p>
+                <a class="arrow-link arrow-link--sm service__more" href={`/services/${service.id}/`}>
+                  Learn more →
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <section class="section section--ruled">
+          <h2 class="kicker">Common questions</h2>
+          <div class="faq">
+            {faq.map((item) => (
+              <details class="faq__item">
+                <summary class="faq__q">{item.q}</summary>
+                <p class="faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+
+  <CtaBanner
+    title="Selling property and relying on the portals?"
+    lede="Tell me what your site looks like and I'll tell you where the demand is leaking."
+  />
+</Base>

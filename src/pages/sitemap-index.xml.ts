@@ -8,6 +8,7 @@ export async function GET() {
   return sitemapIndexResponse([
     { path: "/sitemap-pages.xml" },
     { path: "/sitemap-services.xml" },
+    { path: "/sitemap-use-cases.xml" },
     {
       path: "/sitemap-blog.xml",
       lastmod: newest(posts.map((post) => post.data.updatedDate ?? post.data.pubDate)),
