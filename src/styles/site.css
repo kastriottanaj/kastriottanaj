@@ -1577,6 +1577,7 @@ textarea.input { min-height: 100px; }
 }
 .cs-ev figcaption b { color: var(--color-text); font-weight: 600; }
 .cs-ev--2 { grid-column: span 2; }
+.cs-ev--3 { grid-column: span 3; }
 .cs-ev--4 { grid-column: span 4; }
 .cs-ev--6 { grid-column: span 6; }
 .cs-ev-stack { grid-column: span 2; display: grid; gap: 18px; }
@@ -1674,7 +1675,7 @@ textarea.input { min-height: 100px; }
   /* One column, mockup order — with the two Ubersuggest panels holding a 2-up
      row, which they stay legible at because they are small crops to begin with. */
   .cs-ev-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .cs-ev--2, .cs-ev--4, .cs-ev--6 { grid-column: span 2; }
+  .cs-ev--2, .cs-ev--3, .cs-ev--4, .cs-ev--6 { grid-column: span 2; }
   .cs-ev-stack { grid-column: span 2; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 

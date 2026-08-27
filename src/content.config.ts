@@ -100,6 +100,23 @@ const useCases = defineCollection({
     outcomes: z.array(z.string()).default([]),
     /** Ids from the services collection. Rendered as links, so they must exist. */
     services: z.array(z.string()).default([]),
+    /**
+     * A recorded walkthrough. Same shape as the one on `work`: when present the
+     * page earns a VideoObject and a video sitemap entry, because the clip is
+     * the subject of the page rather than decoration.
+     */
+    video: z
+      .object({
+        src: z.string(),
+        poster: z.string(),
+        title: z.string(),
+        description: z.string(),
+        /** Whole seconds — the video sitemap spec rejects fractions. */
+        duration: z.number().int().positive(),
+        /** ISO date the clip was published. */
+        date: z.string(),
+      })
+      .optional(),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     order: z.number().default(99),
     draft: z.boolean().default(false),

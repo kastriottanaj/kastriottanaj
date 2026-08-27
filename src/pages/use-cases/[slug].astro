@@ -6,7 +6,16 @@ import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const useCases = await getCollection("useCases", ({ data }) => !data.draft);
+  /* Use cases that own a hand-built page under src/pages/use-cases/ and so must
+     not also be generated here — two routes emitting the same URL collide.
+     Declared inside: Astro hoists getStaticPaths into its own scope, so it
+     cannot see module-level consts. */
+  const bespoke = new Set(["real-estate"]);
+
+  const useCases = await getCollection(
+    "useCases",
+    ({ data, id }) => !data.draft && !bespoke.has(id),
+  );
   return useCases.map((useCase) => ({
     params: { slug: useCase.id },
     props: { useCase },

@@ -1,0 +1,563 @@
+---
+/**
+ * Real estate — hand-built use case, backed by the AS Real Estate engagement.
+ *
+ * Every other entry in the `useCases` collection renders through [slug].astro,
+ * and that route deliberately skips this one (see the filter there). Built by
+ * hand for the same reason as work/gerti-foods.astro: the metric ribbon, the
+ * plotted indexing chart and the screenshot gallery are structure rather than
+ * prose, and markdown would only get in the way of them.
+ *
+ * `problems`, `plays` and `faq` still come from the markdown frontmatter, so
+ * the words stay editable without touching this file.
+ *
+ * Every figure below is read off a screenshot in /assets/as-real-estate-evidence/.
+ * Do not round, restate or refresh a number without changing the screenshot
+ * beside it.
+ */
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import { EVIDENCE as evidence } from "../../lib/as-real-estate-evidence";
+
+const entry = await getEntry("useCases", "real-estate");
+if (!entry) throw new Error("src/content/use-cases/real-estate.md is missing.");
+
+const { title, description, audience, problems, plays, faq, services, video } =
+  entry.data;
+const url = `${SITE.url}/use-cases/real-estate/`;
+const absolute = (path: string) => new URL(path, SITE.url).href;
+
+/** 117 -> "PT1M57S". Same helper as the other case-study routes. */
+function isoDuration(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `PT${minutes ? `${minutes}M` : ""}${rest}S`;
+}
+
+/* Service ids resolved against the collection, so a typo cannot ship a 404. */
+const allServices = await getCollection("services");
+const related = services
+  .map((id) => allServices.find((service) => service.id === id))
+  .filter((service): service is CollectionEntry<"services"> => Boolean(service));
+
+/* ── The numbers, each tied to the screenshot it came from ──────────────── */
+
+/* All four are the same three-month Search Console window, so the ribbon states
+   one period and one export date and every cell is checkable against it. The
+   +75% / +38% deltas belong to the 28-day insights export instead, and are
+   labelled as such down in the chart stats — mixing the two windows up here
+   would put a number on the page that no single screenshot supports. */
+const metrics = [
+  { value: "182", label: "Clicks" },
+  { value: "3.67K", label: "Impressions" },
+  { value: "6.8", label: "Average position" },
+  { value: "345", label: "AI impressions" },
+];
+
+const values = [
+  {
+    title: "Indexation before anything else",
+    body: "A listings site that is not in the index cannot rank, whatever the copy says. Crawl and sitemap work took the site from 11 indexed pages to 46 — the fix that made every number after it possible.",
+    paths: ['<rect x="3" y="5" width="26" height="22" rx="2"/><path d="M3 11h26M8 17h8M8 21h13"/>'],
+  },
+  {
+    title: "Fast enough to survive a phone",
+    body: "Property gets browsed on mobile, mid-commute, on a bad connection. GTmetrix grade A, 100% performance, main content painted in 539ms and zero blocking time.",
+    paths: ['<path d="M18 3L7 18h8l-1 11 11-15h-8z"/>'],
+  },
+  {
+    title: "Found where buyers now look",
+    body: "345 impressions inside Google's generative AI features, plus 246 Business Profile interactions and 13 calls placed straight from the listing — surfaces that never touch the website at all.",
+    paths: ['<circle cx="16" cy="16" r="12"/><path d="M4 16h24M16 4c4 4 4 20 0 24M16 4c-4 4-4 20 0 24"/>'],
+  },
+];
+
+const chartStats = [
+  { figure: "5%", label: "average click-through rate" },
+  { figure: "+75%", label: "clicks, last 28 days" },
+  { figure: "+38%", label: "impressions, last 28 days" },
+  { figure: "246", label: "Business Profile interactions" },
+];
+
+const speed = [
+  { value: "A", label: "GTmetrix grade" },
+  { value: "100%", label: "Performance" },
+  { value: "539ms", label: "LCP" },
+  { value: "0ms", label: "Total blocking time" },
+  { value: "0.03", label: "Layout shift" },
+];
+
+const pageTitle = `Real estate SEO use case — AS Real Estate | ${SITE.name}`;
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: "SEO and marketing automation",
+    areaServed: "Europe",
+    audience: { "@type": "BusinessAudience", audienceType: audience },
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  ...(video
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoObject",
+          name: video.title,
+          description: video.description,
+          thumbnailUrl: absolute(video.poster),
+          contentUrl: absolute(video.src),
+          uploadDate: video.date,
+          duration: isoDuration(video.duration),
+        },
+      ]
+    : []),
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Use cases", item: `${SITE.url}/use-cases/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  image={evidence.performance.src}
+  schema={schema}
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+  <section class="cs-hero-band" data-sticky-after>
+    <div class="wrap cs-hero">
+      <div class="cs-hero__copy">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span aria-hidden="true">/</span>
+          <a href="/use-cases/">Use cases</a> <span aria-hidden="true">/</span>
+          <span aria-current="page">Real estate</span>
+        </nav>
+
+        <p class="cs-eyebrow">Use case · SEO for estate agencies</p>
+        <h1 class="cs-hero__title">
+          SEO that put AS Real Estate on page one — and inside Google's <span class="cs-mark">AI answers</span>
+        </h1>
+        <p class="cs-hero__sub">
+          Technical, on-page and local SEO for a Kosovo estate agency. Eleven indexed pages
+          became 46; three months of Search Console show 182 clicks across 3.67K impressions at
+          an average position of 6.8, with 345 more impressions inside Google's AI features and
+          13 calls placed straight from the Business Profile.
+        </p>
+
+        <div class="cs-actions">
+          <a class="btn btn-primary" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+            Book a strategy call
+          </a>
+          <a class="btn btn-secondary" href="#evidence">See the proof</a>
+        </div>
+
+        <p class="cs-contact">
+          <span class="cs-pip" aria-hidden="true"></span>
+          WhatsApp <a href={SITE.whatsappUrl} target="_blank" rel="noopener">{SITE.phoneDisplay}</a>
+          <span>
+            <span class="cs-contact__sep" aria-hidden="true">|</span>
+            Working with estate agencies and developers in Kosovo and the region
+          </span>
+        </p>
+      </div>
+
+      {
+        video && (
+          <figure class="cs-video">
+            {/* Two minutes of Kastriot on camera. preload="metadata" fetches the
+                header only; the poster carries the first frame. */}
+            <video
+              class="cs-video__el"
+              controls
+              playsinline
+              preload="metadata"
+              poster={video.poster}
+              width="464"
+              height="832"
+            >
+              <source src={video.src} type="video/mp4" />
+            </video>
+            <div class="cs-video__shade" aria-hidden="true" />
+            <figcaption class="cs-video__caption">
+              <span class="cs-video__line">Me, on camera, on what actually changed.</span>
+              <span class="cs-video__meta">{video.title}</span>
+            </figcaption>
+          </figure>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ── Results ribbon ─────────────────────────────────────────────────── -->
+  <section class="cs-ribbon" aria-label="Headline results">
+    <div class="wrap">
+      <p class="cs-ribbon__top">
+        <span>Verified in Google Search Console · last 3 months</span>
+        <span><b>asrealestate-rks.com</b> · exported 27 Aug 2026</span>
+      </p>
+      <ul class="cs-metrics">
+        {
+          metrics.map((metric) => (
+            <li class="cs-metric">
+              <p class="cs-metric__value">{metric.value}</p>
+              <p class="cs-metric__label">{metric.label}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── What moved ─────────────────────────────────────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">What actually moved</p>
+    <h2 class="cs-h2">Three changes did most of the work</h2>
+    <div class="cs-values">
+      {
+        values.map((value) => (
+          <div class="cs-value">
+            <svg
+              class="cs-glyph"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+              focusable="false"
+              set:html={value.paths.join("")}
+            />
+            <h3 class="cs-value__title">{value.title}</h3>
+            <p class="cs-value__body">{value.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── The brief / what I did / the chart ─────────────────────────────── -->
+  <section class="cs-section wrap" id="breakdown">
+    <div class="cs-body">
+      <div>
+        <p class="cs-eyebrow">The brief</p>
+        <h2 class="cs-h2">A real agency Google could barely see</h2>
+        <p class="cs-lede cs-lede--brief">
+          AS Real Estate sells property in Kosovo — first apartments through to investment
+          purchases, with the listings living on asrealestate-rks.com. The inventory and the
+          local reputation were already there. What was not there was the index: at the end of
+          May, Google held eleven pages of the site. An agency in that position is not
+          competing with the portals badly, it is not competing at all, and every enquiry it
+          gets is one the portals decided to pass along.
+        </p>
+
+        <p class="cs-eyebrow cs-eyebrow--muted">What I did</p>
+        <ol class="cs-steps">
+          {
+            plays.map((play, i) => (
+              <li class="cs-step">
+                <span class="cs-step__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 class="cs-step__title">{play.title}</h3>
+                  <p class="cs-step__body">{play.detail}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="cs-chart">
+        <p class="cs-chart__cap">Pages indexed · May – Aug 2026</p>
+        <p class="cs-chart__big">11 → 46 pages</p>
+        {/* Hand-plotted against the Search Console indexing series in the
+            gallery below: flat around 11–15 through June, a step to 42 at the
+            start of July, a plateau near 50, settling at 46. */}
+        <svg
+          class="cs-chart__svg"
+          viewBox="0 0 520 190"
+          role="img"
+          aria-label="Indexed pages flat around eleven through June 2026, stepping up to 42 at the start of July and settling at 46 by late August"
+        >
+          <defs>
+            <linearGradient id="cs-fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ec3013" stop-opacity=".22" />
+              <stop offset="100%" stop-color="#ec3013" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <g stroke="#d7d3d3" stroke-width="1">
+            <line x1="34" y1="18" x2="510" y2="18" />
+            <line x1="34" y1="65" x2="510" y2="65" />
+            <line x1="34" y1="112" x2="510" y2="112" />
+            <line x1="34" y1="158" x2="510" y2="158" />
+          </g>
+          <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#605d5d">
+            <text x="8" y="22">60</text>
+            <text x="8" y="69">40</text>
+            <text x="8" y="116">20</text>
+            <text x="8" y="162">0</text>
+            <text x="34" y="180">May 26</text>
+            <text x="196" y="180">Jun 26</text>
+            <text x="330" y="180">Jul 26</text>
+            <text x="466" y="180">Aug 26</text>
+          </g>
+          {/* 0 -> y158, 60 -> y18: y = 158 - (value / 60) * 140. */}
+          <path
+            d="M40 132 L100 130 L160 123 L220 123 L280 123 L300 60 L340 46 L400 41 L460 43 L470 51 L470 158 L40 158 Z"
+            fill="url(#cs-fade)"
+          />
+          <polyline
+            points="40,132 100,130 160,123 220,123 280,123 300,60 340,46 400,41 460,43 470,51"
+            fill="none"
+            stroke="#ec3013"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+          <circle cx="300" cy="60" r="4" fill="#fff" stroke="#ec3013" stroke-width="2" />
+          <circle cx="470" cy="51" r="5" fill="#fff" stroke="#ec3013" stroke-width="2.5" />
+        </svg>
+        <ul class="cs-chart__stats">
+          {
+            chartStats.map((stat) => (
+              <li>
+                <b>{stat.figure}</b> {stat.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The outcome ────────────────────────────────────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">The outcome</p>
+    <h2 class="cs-h2">Top-ten average, on the agency's own pages</h2>
+    <div class="cs-proof">
+      <!-- TODO: replace with approved client quote -->
+      <figure class="cs-quoteslot">
+        <div>
+          <p class="cs-quoteslot__tag">Client quote — to add</p>
+          <blockquote class="cs-quoteslot__text">
+            Two or three sentences from AS Real Estate in their own words: what changed for the
+            agency, not for the rankings.
+          </blockquote>
+        </div>
+        <figcaption class="cs-quoteslot__by">
+          <span class="cs-avatar" aria-hidden="true">AS</span>
+          <span>
+            <span class="cs-quoteslot__name">AS Real Estate</span>
+            <span class="cs-quoteslot__role">asrealestate-rks.com</span>
+          </span>
+        </figcaption>
+      </figure>
+
+      <div class="cs-result">
+        <p class="cs-result__label">Average position</p>
+        <p class="cs-result__value">6.8</p>
+        <p class="cs-result__label">across 3.67K impressions</p>
+        <p class="cs-result__body">
+          Page one on average over three months — earned on pages the agency owns, not rented
+          from a portal for as long as the invoices keep clearing.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The evidence ───────────────────────────────────────────────────── -->
+  <section class="cs-section wrap" id="evidence">
+    <p class="cs-eyebrow">The evidence</p>
+    <h2 class="cs-h2">Every number here, screenshotted from the source</h2>
+    <p class="cs-lede">
+      Google Search Console, Google Business Profile and GTmetrix, all pulled on 27 August 2026.
+      Nothing recreated, nothing rounded up.
+    </p>
+
+    <div class="cs-ev-grid">
+      <figure class="cs-ev cs-ev--6">
+        <img
+          src={evidence.performance.src}
+          alt={evidence.performance.alt}
+          width={evidence.performance.width}
+          height={evidence.performance.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption><b>{evidence.performance.strong}</b> — {evidence.performance.caption}</figcaption>
+      </figure>
+
+      {
+        [
+          evidence.insights,
+          evidence.clicks,
+          evidence.generativeAi,
+          evidence.indexing,
+        ].map((shot) => (
+          <figure class="cs-ev cs-ev--3">
+            <img
+              src={shot.src}
+              alt={shot.alt}
+              width={shot.width}
+              height={shot.height}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><b>{shot.strong}</b> — {shot.caption}</figcaption>
+          </figure>
+        ))
+      }
+
+      <figure class="cs-ev cs-ev--6">
+        <img
+          src={evidence.gtmetrix.src}
+          alt={evidence.gtmetrix.alt}
+          width={evidence.gtmetrix.width}
+          height={evidence.gtmetrix.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption><b>{evidence.gtmetrix.strong}</b> — {evidence.gtmetrix.caption}</figcaption>
+      </figure>
+
+      {
+        [evidence.localPerformance, evidence.localCalls].map((shot) => (
+          <figure class="cs-ev cs-ev--3">
+            <img
+              src={shot.src}
+              alt={shot.alt}
+              width={shot.width}
+              height={shot.height}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption><b>{shot.strong}</b> — {shot.caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <ul class="cs-speed">
+      {
+        speed.map((cell) => (
+          <li>
+            <p class="cs-speed__value">{cell.value}</p>
+            <p class="cs-speed__label">{cell.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ── Where it breaks, in this market generally ──────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">In your market</p>
+    <h2 class="cs-h2">Four things break on almost every agency site</h2>
+    <p class="cs-lede">
+      AS Real Estate had the third one badly, which is what eleven indexed pages looks like from
+      the inside. The other three are just as common, and none of them show up in a rankings
+      report — they show up in a crawl.
+    </p>
+    <div class="ruled-grid ruled-grid--services">
+      {
+        problems.map((problem) => (
+          <div class="service">
+            <h3 class="service__title">{problem.title}</h3>
+            <p class="service__desc">{problem.detail}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── FAQ ────────────────────────────────────────────────────────────── -->
+  {
+    faq.length > 0 && (
+      <section class="cs-section wrap">
+        <p class="cs-eyebrow">Common questions</p>
+        <h2 class="cs-h2">What agencies ask first</h2>
+        <div class="faq">
+          {faq.map((item) => (
+            <details class="faq__item">
+              <summary class="faq__q">{item.q}</summary>
+              <p class="faq__a">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ── Work with me ───────────────────────────────────────────────────── -->
+  {
+    related.length > 0 && (
+      <section class="cs-section wrap">
+        <p class="cs-eyebrow">Work with me</p>
+        <h2 class="cs-h2">The same levers, for your agency</h2>
+        <div class="cs-cards">
+          {related.map((service, i) => (
+            <article class="cs-card">
+              <p class="cs-card__kicker">
+                {String(i + 1).padStart(2, "0")} · {service.data.navLabel ?? service.data.title}
+              </p>
+              <h3 class="cs-card__title">{service.data.title}</h3>
+              <p class="cs-card__body">{service.data.short}</p>
+              <a class="cs-card__cta" href={`/services/${service.id}/`}>
+                See what's included →
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBanner
+    title="Selling property and relying on the portals?"
+    lede="Tell me what your site looks like and I'll tell you where the demand is leaking."
+    ghostLabel={`WhatsApp ${SITE.phoneDisplay}`}
+  />
+
+  <!-- Mobile only. Hidden until the hero scrolls away — see site.js. Without
+       JS it never appears and the floating WhatsApp button stays instead. -->
+  <div class="cs-sticky" data-sticky-cta data-visible="false">
+    <a class="btn btn-primary cs-sticky__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+      Book a call
+    </a>
+    <a
+      class="cs-sticky__wa"
+      href={SITE.whatsappUrl}
+      target="_blank"
+      rel="noopener"
+      aria-label={`Chat with ${SITE.name} on WhatsApp`}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488" />
+      </svg>
+    </a>
+  </div>
+</Base>
