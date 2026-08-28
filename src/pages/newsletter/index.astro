@@ -1,12 +1,15 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import NewsletterForm from "../../components/NewsletterForm.astro";
 import { SITE } from "../../lib/site";
 
+/* The mockup's "Read a sample →" needs a real issue behind it. Until one is
+   published the link has nowhere to go, so the line is left out rather than
+   pointing at a 404. */
 const issues = (await getCollection("newsletter", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const sampleHref = issues.length ? `/newsletter/archive/${issues[0].id}/` : null;
 
 const title = `Newsletter — tips on SEO, marketing & AI automation | ${SITE.name}`;
 const description =
@@ -31,106 +34,755 @@ const schema = [
   },
 ];
 
-const dateFormat = new Intl.DateTimeFormat("en-GB", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+// Same optional switch as the contact form: unset means the honeypot and the
+// server-side rate limit carry spam duty alone.
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <Base title={title} description={description} schema={schema}>
-  <div class="wrap">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">Newsletter</span>
-    </nav>
+  <div class="nl-page">
+    <section class="nl-hero">
+      <div class="nl-hero__copy">
+        <p class="nl-eyebrow">Practical newsletter</p>
+        <h1 class="nl-hero__title">
+          Get Practical SEO, Marketing <br />&amp; AI Automation Tips in Your Inbox
+        </h1>
+        <p class="nl-hero__lede">
+          Short, useful emails based on real client work — no fixed schedule, <br />no
+          filler, and one-click unsubscribe.
+        </p>
 
-    <header class="page-head">
-      <span class="kicker">Newsletter</span>
-      <h1 class="page-head__title">The stuff I'd tell you over coffee</h1>
-      <p class="page-head__lede">{description}</p>
-    </header>
+        {/* .newsletter is the hook site.js looks for: it finds the status panel
+            by walking up from the form. */}
+        <div class="newsletter nl-signup">
+          {/* No `novalidate`: without JS the browser validates and posts for real. */}
+          <form class="nl-form" method="POST" action="/api/subscribe" data-newsletter-form>
+            <input type="hidden" name="source" value="newsletter-hero" />
 
-    <section class="section section--ruled">
-      <h2 class="kicker">What lands in your inbox</h2>
-      <div class="benefits">
-        <div class="benefit">
-          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-search" /></svg></span>
-          <h3 class="benefit__title">SEO that survives updates</h3>
-          <p class="benefit__desc">
-            What I change on real sites, why it works, and which "best practices" I've
-            stopped bothering with.
-          </p>
+            <div class="nl-form__field">
+              <label class="sr-only" for="nl-hero-email">Email address</label>
+              <input
+                class="nl-input"
+                type="email"
+                id="nl-hero-email"
+                name="email"
+                placeholder="you@company.com"
+                autocomplete="email"
+                required
+                maxlength="200"
+              />
+              <p class="field__error" id="nl-hero-email-error" data-error-for="email" hidden></p>
+            </div>
+
+            {/* Honeypot: hidden from people, tempting to bots. */}
+            <div class="hp" aria-hidden="true">
+              <label for="nl-hero-company">Company</label>
+              <input type="text" id="nl-hero-company" name="company" tabindex="-1" autocomplete="off" />
+            </div>
+
+            {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="light" />}
+
+            <button class="nl-button" type="submit">Send me the tips</button>
+          </form>
+
+          <p class="nl-hero__note">Free. Double opt-in. Unsubscribe in one click.</p>
+
+          <div
+            class="newsletter__status nl-status"
+            role="status"
+            aria-live="polite"
+            hidden
+            data-newsletter-status
+          >
+            <p class="newsletter__status-title"></p>
+            <p class="newsletter__status-body"></p>
+          </div>
         </div>
-        <div class="benefit">
-          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-megaphone" /></svg></span>
-          <h3 class="benefit__title">Experiments worth copying</h3>
-          <p class="benefit__desc">
-            Marketing tests with the numbers attached — including the ones that flopped,
-            so you can skip them.
-          </p>
+      </div>
+
+      <div class="nl-hero__visual">
+        <img
+          src="/assets/newsletter/kastriot-tanaj-newsletter.webp"
+          width="1672"
+          height="941"
+          alt="A laptop showing a content outline next to a notebook of SEO experiment notes and a cup of coffee"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <section class="nl-trust" aria-label="What subscribing gets you">
+      <div class="nl-trust__item">
+        <svg class="nl-trust__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="8" width="18" height="4" rx="1"></rect>
+          <path d="M12 8v13"></path>
+          <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path>
+          <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"></path>
+        </svg>
+        <div>
+          <h2>Free to join</h2>
+          <p>No paywall, no catch. <br />Just useful emails.</p>
         </div>
-        <div class="benefit">
-          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-bot" /></svg></span>
-          <h3 class="benefit__title">Automations you can steal</h3>
-          <p class="benefit__desc">
-            Small AI workflows that remove an hour of manual work a week, described
-            closely enough to rebuild.
-          </p>
+      </div>
+
+      <div class="nl-trust__item">
+        <svg class="nl-trust__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h.01"></path>
+          <path d="M3 12h.01"></path>
+          <path d="M3 18h.01"></path>
+          <path d="M8 6h13"></path>
+          <path d="M8 12h13"></path>
+          <path d="M8 18h13"></path>
+        </svg>
+        <div>
+          <h2>Short &amp; practical</h2>
+          <p>Quick reads you can <br />use the same day.</p>
+        </div>
+      </div>
+
+      <div class="nl-trust__item">
+        <svg class="nl-trust__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="7" r="4"></circle>
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+        </svg>
+        <div>
+          <h2>From real client work</h2>
+          <p>Battle-tested ideas from <br />actual projects.</p>
+        </div>
+      </div>
+
+      <div class="nl-trust__item">
+        <svg class="nl-trust__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 4.1 12 6"></path>
+          <path d="m5.1 8-2.9-.8"></path>
+          <path d="m6 12-1.9 2"></path>
+          <path d="M7.2 2.2 8 5.1"></path>
+          <path
+            d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"
+          ></path>
+        </svg>
+        <div>
+          <h2>One-click unsubscribe</h2>
+          <p>Leave anytime with <br />one click.</p>
         </div>
       </div>
     </section>
 
-    <NewsletterForm
-      source="newsletter-page"
-      anchor="subscribe"
-      heading="Subscribe — it's free"
-      lede="One email at a time, written by me, sent from kastriot@kastriottanaj.com. Your address is never shared or sold."
-      buttonLabel="Send me the tips"
-    />
+    <section class="nl-inbox" aria-labelledby="nl-inbox-title">
+      <h2 class="nl-eyebrow" id="nl-inbox-title">What lands in your inbox</h2>
 
-    {
-      issues.length > 0 && (
-        <section class="section section--ruled">
-          <h2 class="kicker">Past issues</h2>
-          <div class="posts">
-            {issues.map((issue) => (
-              <article class="post">
-                <p class="post__date">
-                  <time datetime={issue.data.pubDate.toISOString()}>
-                    {dateFormat.format(issue.data.pubDate)}
-                  </time>
-                </p>
-                <h3 class="post__title">
-                  <a href={`/newsletter/archive/${issue.id}/`}>{issue.data.title}</a>
-                </h3>
-                <p class="post__desc">{issue.data.description}</p>
-                <a class="arrow-link arrow-link--sm" href={`/newsletter/archive/${issue.id}/`}>
-                  Read this issue →
-                </a>
-              </article>
-            ))}
+      <div class="nl-cards">
+        <article class="nl-card">
+          <span class="nl-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+          </span>
+          <div>
+            <h3>SEO that survives updates</h3>
+            <p>
+              What I change on real sites, why it works, and which “best practices”
+              I've stopped bothering with.
+            </p>
           </div>
-        </section>
-      )
-    }
+        </article>
 
-    <section class="section section--ruled">
-      <h2 class="kicker">The fine print</h2>
-      <div class="prose prose--narrow">
-        <p>
-          Subscribing is double opt-in: you'll get one email asking you to confirm, and
-          nothing else arrives unless you click it. Every issue after that carries an
-          unsubscribe link that works in a single click, with nothing to fill in.
-        </p>
-        <p>
-          I store your email address, the page you subscribed from, and the date — that's
-          it, and only so I can send the newsletter and prove the consent was real. It is
-          never shared, sold, or used to sell you something on someone else's behalf.
-          Want it deleted rather than just unsubscribed? <a href="/#contact">Ask me</a> and
-          it's gone.
-        </p>
+        <article class="nl-card">
+          <span class="nl-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M10 2v7.31a1 1 0 0 1-.14.51L3.6 20.4a1 1 0 0 0 .86 1.6h15.08a1 1 0 0 0 .86-1.6L14.14 9.82a1 1 0 0 1-.14-.51V2"></path>
+              <path d="M8.5 2h7"></path>
+              <path d="M7 16h10"></path>
+            </svg>
+          </span>
+          <div>
+            <h3>Experiments worth copying</h3>
+            <p>
+              Marketing tests with the numbers attached — including the ones that
+              flopped, so you can skip them.
+            </p>
+          </div>
+        </article>
+
+        <article class="nl-card">
+          <span class="nl-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 8V4H8"></path>
+              <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+              <path d="M2 14h2"></path>
+              <path d="M20 14h2"></path>
+              <path d="M15 13v2"></path>
+              <path d="M9 13v2"></path>
+            </svg>
+          </span>
+          <div>
+            <h3>Automations you can steal</h3>
+            <p>
+              Small AI workflows that remove manual work, described closely enough
+              to rebuild.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="nl-sample" aria-labelledby="nl-sample-title">
+      <h2 class="nl-sample__eyebrow" id="nl-sample-title">A taste of the next email</h2>
+
+      <div class="nl-sample__row">
+        <article class="nl-email">
+          <p class="nl-email__subject">
+            <span class="nl-email__label">Subject:</span>
+            <span class="nl-email__line">The SEO task I'd do before publishing another article</span>
+          </p>
+
+          <div class="nl-email__body">
+            <p>Before you hit publish on your next article, do this one thing.</p>
+            <p>Most content fails because of what's <strong>missing</strong>, not what's written.</p>
+            <p>Here's the quick pre-publish check I use with clients...</p>
+            {sampleHref && <a class="nl-email__link" href={sampleHref}>Read a sample →</a>}
+          </div>
+        </article>
+
+        <div class="nl-why">
+          <div class="nl-why__item">
+            <svg class="nl-why__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+            <div>
+              <h3>Built for action</h3>
+              <p>Clear steps, not theory.</p>
+            </div>
+          </div>
+
+          <div class="nl-why__item">
+            <svg class="nl-why__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3.5V2"></path>
+              <path d="m6.8 5.3-1-1"></path>
+              <path d="m17.2 5.3 1-1"></path>
+              <path d="M4.5 11H3"></path>
+              <path d="M21 11h-1.5"></path>
+              <path d="M12 5.5a5.5 5.5 0 0 0-3.2 9.98V17h6.4v-1.52A5.5 5.5 0 0 0 12 5.5Z"></path>
+              <path d="M9.5 20h5"></path>
+            </svg>
+            <div>
+              <h3>One idea at a time</h3>
+              <p>Focused emails you can <br />actually finish.</p>
+            </div>
+          </div>
+
+          <div class="nl-why__item">
+            <svg class="nl-why__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="7" r="4"></circle>
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            </svg>
+            <div>
+              <h3>Written by Kastriot</h3>
+              <p>No team. No outsourcing. <br />Just real work.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter nl-cta" id="subscribe">
+      <p class="nl-cta__title">Useful enough to open. Short enough to finish.</p>
+
+      <form class="nl-form nl-form--cta" method="POST" action="/api/subscribe" data-newsletter-form>
+        <input type="hidden" name="source" value="newsletter-footer" />
+
+        <div class="nl-form__field">
+          <label class="sr-only" for="nl-cta-email">Email address</label>
+          <input
+            class="nl-input"
+            type="email"
+            id="nl-cta-email"
+            name="email"
+            placeholder="you@company.com"
+            autocomplete="email"
+            required
+            maxlength="200"
+          />
+          <p class="field__error" id="nl-cta-email-error" data-error-for="email" hidden></p>
+        </div>
+
+        <div class="hp" aria-hidden="true">
+          <label for="nl-cta-company">Company</label>
+          <input type="text" id="nl-cta-company" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+
+        {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="light" />}
+
+        <button class="nl-button nl-button--light" type="submit">Subscribe free</button>
+      </form>
+
+      <div
+        class="newsletter__status nl-status nl-status--cta"
+        role="status"
+        aria-live="polite"
+        hidden
+        data-newsletter-status
+      >
+        <p class="newsletter__status-title"></p>
+        <p class="newsletter__status-body"></p>
       </div>
     </section>
   </div>
 </Base>
+
+{
+  turnstileKey && (
+    <script>
+      // The attribute guard keeps the second form from loading the widget twice.
+      if (!document.querySelector("script[data-turnstile]")) {
+        const script = document.createElement("script");
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        script.async = true;
+        script.defer = true;
+        script.dataset.turnstile = "";
+        document.head.appendChild(script);
+      }
+    </script>
+  )
+}
+
+<style is:global>
+  body:has(.nl-page) {
+    --nl-red: #e8300f;
+    --nl-ink: #201e1d;
+    --nl-muted: #5f5f5f;
+    --nl-rule: #cecdcc;
+    --nl-card-line: #e0dfde;
+    --nl-card-bg: #faf9f8;
+    /* Lines the section padding up with the 1112px content column, and keeps a
+       32px gutter once the viewport is narrower than it. */
+    --nl-pad: max(32px, calc((100vw - 1112px) / 2 + 32px));
+    background: #f4f3f2;
+  }
+
+  /* The fixed WhatsApp bubble lands on top of the closing Subscribe button,
+     so this page uses the nav's "Book a call" as its contact route instead. */
+  body:has(.nl-page) .whatsapp-fab { display: none; }
+
+  .nl-page {
+    color: var(--nl-ink);
+    /* Every band is full-bleed; the gutter is applied per section. */
+    overflow-x: clip;
+  }
+
+  /* The shared .newsletter block styles are for the stacked form used elsewhere
+     on the site — here the two forms sit inside their own bands. */
+  .nl-page .newsletter { border-top: 0; padding: 0; }
+
+  .nl-eyebrow {
+    margin: 0;
+    color: var(--nl-red);
+    font-family: var(--font-heading);
+    font-size: 11.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .nl-hero {
+    position: relative;
+    padding: 44px var(--nl-pad) 39px;
+    border-bottom: 1px solid var(--nl-rule);
+  }
+
+  .nl-hero__copy { position: relative; z-index: 1; }
+  .nl-hero__copy .nl-eyebrow { margin-bottom: 16px; }
+
+  .nl-hero__title {
+    margin: 0;
+    font-size: 37.5px;
+    line-height: 42px;
+    letter-spacing: -0.022em;
+  }
+
+  .nl-hero__lede {
+    margin: 9px 0 0;
+    color: var(--nl-muted);
+    font-size: 15.5px;
+    line-height: 23px;
+  }
+
+  .nl-signup { margin-top: 12px; }
+
+  .nl-form { display: flex; align-items: flex-start; gap: 8px; }
+  /* site.js swaps the form for the status panel with .hidden — the display
+     rule above would otherwise keep it on screen. */
+  .nl-form[hidden] { display: none; }
+  .nl-form__field { position: relative; }
+
+  .nl-input {
+    width: 321px;
+    height: 39px;
+    padding: 0 14px;
+    border: 1px solid #cbcac9;
+    border-radius: 2px;
+    background: #f8f7f6;
+    color: var(--nl-ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+  }
+  .nl-input::placeholder { color: #8a8886; }
+  .nl-input:focus-visible { outline: 2px solid var(--nl-red); outline-offset: 1px; }
+  .nl-input[aria-invalid="true"] { border-color: var(--nl-red); }
+
+  .nl-button {
+    width: 146px;
+    height: 39px;
+    flex: none;
+    border: 0;
+    border-radius: 2px;
+    background: var(--nl-red);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .nl-button:hover { background: #cf260b; }
+  .nl-button:disabled { opacity: 0.75; cursor: default; }
+
+  .nl-hero__note {
+    margin: 12px 0 0;
+    color: #6f6d6b;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .nl-page .nl-status {
+    max-width: 480px;
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--nl-ink);
+    color: #f4f3f2;
+  }
+  .nl-page .nl-status.newsletter__status--error { background: #ae1800; }
+  .nl-page .nl-status .newsletter__status-title { font-size: 14px; margin: 0 0 3px; }
+  .nl-page .nl-status .newsletter__status-body { font-size: 13px; }
+
+  .nl-hero__visual {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 45%;
+    /* The photo dissolves into the page rather than butting against the copy. */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 20%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 20%);
+  }
+  .nl-hero__visual img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ── Trust strip ──────────────────────────────────────────────────────── */
+  .nl-trust {
+    min-height: 96px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding-inline: var(--nl-pad);
+    border-bottom: 1px solid var(--nl-rule);
+  }
+  .nl-trust__item {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 14px 16px;
+  }
+  .nl-trust__item + .nl-trust__item { border-left: 1px solid var(--nl-rule); }
+  .nl-trust__icon {
+    width: 29px;
+    height: 29px;
+    flex: none;
+    fill: none;
+    stroke: var(--nl-ink);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .nl-trust__item h2 { margin: 0; font-size: 12.5px; line-height: 1.2; }
+  .nl-trust__item p {
+    margin: 7px 0 0;
+    color: var(--nl-muted);
+    font-size: 12.5px;
+    line-height: 17px;
+  }
+
+  /* ── What lands in your inbox ─────────────────────────────────────────── */
+  .nl-inbox { padding: 26px var(--nl-pad) 0; }
+  .nl-inbox .nl-eyebrow { margin-bottom: 12px; }
+
+  .nl-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .nl-card {
+    min-height: 118px;
+    display: flex;
+    align-items: flex-start;
+    gap: 17px;
+    padding: 16px 16px 14px;
+    border: 1px solid var(--nl-card-line);
+    border-radius: 5px;
+    background: var(--nl-card-bg);
+  }
+  .nl-card__icon {
+    width: 52px;
+    height: 52px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border: 1px solid #d9d8d7;
+    border-radius: 5px;
+  }
+  .nl-card__icon svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: var(--nl-ink);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .nl-card h3 { margin: 6px 0 0; font-size: 13.5px; line-height: 1.2; letter-spacing: -0.005em; }
+  .nl-card p {
+    margin: 6px 0 0;
+    color: #4f4d4c;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 19px;
+  }
+
+  /* ── A taste of the next email ────────────────────────────────────────── */
+  .nl-sample { padding: 19px var(--nl-pad) 24px; }
+  .nl-sample__eyebrow {
+    margin: 0 0 11px;
+    color: var(--nl-red);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  .nl-sample__row {
+    display: grid;
+    grid-template-columns: minmax(0, 671fr) minmax(0, 377fr);
+    align-items: start;
+  }
+
+  .nl-email {
+    padding: 20px;
+    border: 1px solid var(--nl-card-line);
+    border-radius: 5px;
+    background: var(--nl-card-bg);
+  }
+  .nl-email__subject {
+    display: flex;
+    gap: 24px;
+    margin: 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dedddc;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .nl-email__label { color: #83817f; }
+  .nl-email__line { font-weight: 700; color: var(--nl-ink); }
+
+  .nl-email__body { padding-top: 12px; }
+  .nl-email__body p {
+    margin: 0 0 11.5px;
+    color: #4a4846;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .nl-email__body p:last-child { margin-bottom: 0; }
+  .nl-email__body strong { font-weight: 700; color: var(--nl-ink); }
+  .nl-email__link {
+    display: inline-block;
+    color: var(--nl-red);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .nl-email__link:hover { text-decoration: underline; }
+
+  .nl-why {
+    display: flex;
+    flex-direction: column;
+    margin-left: 26px;
+    padding-left: 21px;
+    border-left: 1px solid var(--nl-rule);
+  }
+  .nl-why__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 0;
+  }
+  .nl-why__item + .nl-why__item { border-top: 1px solid var(--nl-rule); }
+  .nl-why__icon {
+    width: 31px;
+    height: 31px;
+    flex: none;
+    fill: none;
+    stroke: var(--nl-ink);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .nl-why__item h3 { margin: 0; font-size: 15px; line-height: 1.2; }
+  .nl-why__item p {
+    margin: 6px 0 0;
+    color: var(--nl-muted);
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  /* ── Closing subscribe band ───────────────────────────────────────────── */
+  .nl-page .nl-cta {
+    min-height: 76px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 17px var(--nl-pad);
+    background: var(--nl-red);
+    color: #fff;
+    scroll-margin-top: 70px;
+  }
+  .nl-cta__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .nl-form--cta { gap: 10px; }
+  .nl-form--cta .nl-input {
+    width: 353px;
+    height: 41px;
+    border-color: transparent;
+    background: #f8f7f6;
+  }
+  .nl-button--light {
+    width: 159px;
+    height: 41px;
+    background: #fff;
+    color: var(--nl-red);
+  }
+  .nl-button--light:hover { background: #f2e6e3; }
+  .nl-page .nl-status--cta {
+    flex: 1 1 100%;
+    max-width: none;
+    margin-top: 0;
+    background: #a01500;
+    color: #fff;
+  }
+  .nl-cta .field__error { color: #fff; }
+
+  /* ── Narrower desktops ────────────────────────────────────────────────── */
+  @media (max-width: 1100px) and (min-width: 861px) {
+    .nl-hero__title { font-size: 34px; line-height: 38px; }
+    .nl-hero__visual { width: 40%; }
+    .nl-trust__item { gap: 14px; padding-inline: 10px; }
+    .nl-why { margin-left: 20px; padding-left: 16px; }
+  }
+
+  /* ── Tablet ───────────────────────────────────────────────────────────── */
+  @media (max-width: 860px) and (min-width: 721px) {
+    .nl-hero__visual { display: none; }
+    .nl-hero__title br,
+    .nl-hero__lede br { display: none; }
+    .nl-hero__title { font-size: 34px; line-height: 38px; }
+    .nl-trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nl-trust__item:nth-child(3) { border-left: 0; }
+    .nl-trust__item:nth-child(n + 3) { border-top: 1px solid var(--nl-rule); }
+    .nl-cards { grid-template-columns: minmax(0, 1fr); }
+    .nl-card p br { display: none; }
+    .nl-sample__row { grid-template-columns: minmax(0, 1fr); }
+    .nl-why { margin: 20px 0 0; padding: 0; border-left: 0; border-top: 1px solid var(--nl-rule); }
+  }
+
+  /* ── Mobile ───────────────────────────────────────────────────────────── */
+  @media (max-width: 720px) {
+    body:has(.nl-page) { --nl-pad: 16px; }
+
+    .nl-hero {
+      padding: 26px var(--nl-pad) 28px;
+    }
+    .nl-hero__visual { display: none; }
+    .nl-hero__copy .nl-eyebrow { margin-bottom: 14px; }
+    .nl-hero__title { font-size: 29px; line-height: 33px; }
+    .nl-hero__title br { display: none; }
+    .nl-hero__lede { margin-top: 16px; font-size: 15px; line-height: 24px; }
+    .nl-hero__lede br { display: none; }
+
+    .nl-signup { margin-top: 20px; }
+    .nl-form { flex-direction: column; gap: 10px; }
+    .nl-form__field { width: 100%; }
+    .nl-input { width: 100%; height: 46px; }
+    .nl-button { width: 100%; height: 46px; font-size: 15px; }
+    .nl-hero__note { font-size: 13px; }
+
+    .nl-trust {
+      min-height: 0;
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: 4px;
+    }
+    .nl-trust__item {
+      justify-content: flex-start;
+      gap: 18px;
+      padding: 16px 0;
+    }
+    .nl-trust__item + .nl-trust__item {
+      border-left: 0;
+      border-top: 1px solid var(--nl-rule);
+    }
+    .nl-trust__icon { width: 30px; height: 30px; }
+    .nl-trust__item h2 { font-size: 15px; }
+    .nl-trust__item p { margin-top: 5px; font-size: 13.5px; line-height: 19px; }
+    .nl-trust__item p br { display: none; }
+
+    .nl-inbox { padding-top: 24px; }
+    .nl-inbox .nl-eyebrow { margin-bottom: 16px; }
+    .nl-cards { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .nl-card { min-height: 0; padding: 14px; gap: 14px; }
+    .nl-card__icon { width: 46px; height: 46px; }
+    .nl-card__icon svg { width: 24px; height: 24px; }
+    .nl-card h3 { margin-top: 4px; font-size: 16px; }
+    .nl-card p { font-size: 12.5px; line-height: 20px; }
+
+    .nl-sample { padding-top: 24px; padding-bottom: 24px; }
+    .nl-sample__row { grid-template-columns: minmax(0, 1fr); }
+    .nl-email { padding: 16px; }
+    .nl-email__subject { flex-direction: column; gap: 6px; font-size: 12.5px; }
+    .nl-email__body p { font-size: 12.5px; }
+    .nl-why {
+      margin: 18px 0 0;
+      padding: 0;
+      border-left: 0;
+      border-top: 1px solid var(--nl-rule);
+    }
+    .nl-why__item p br { display: none; }
+
+    .nl-page .nl-cta {
+      display: block;
+      padding: 18px var(--nl-pad) 20px;
+    }
+    .nl-cta__title { font-size: 19px; line-height: 1.25; }
+    .nl-form--cta { margin-top: 14px; flex-direction: column; gap: 10px; }
+    .nl-form--cta .nl-input { width: 100%; height: 46px; }
+    .nl-button--light { width: 100%; height: 46px; font-size: 15px; }
+  }
+</style>

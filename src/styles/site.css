@@ -615,6 +615,10 @@ textarea.input { min-height: 100px; }
   gap: 12px;
   max-width: 560px;
 }
+/* site.js swaps the form for the status panel by setting .hidden on it — an
+   author `display` beats the UA rule for [hidden], so restate it here or the
+   form stays on screen under "Check your inbox". */
+.newsletter__form[hidden] { display: none; }
 /* The field carries the error slot, so it grows and the button does not. */
 .newsletter__field { flex: 1 1 240px; min-width: 0; }
 .newsletter__submit { flex: 0 0 auto; min-height: 36px; }
