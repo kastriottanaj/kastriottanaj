@@ -1,16 +1,11 @@
 ---
-import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 
-const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
-  (a, b) => a.data.order - b.data.order
-);
-
-const title = `Case studies & results | ${SITE.name}`;
+const title = `Selected work | ${SITE.name}`;
 const description =
-  "Selected SEO and digital marketing work — what the brief was, what I did, and what came of it.";
+  "Case studies for businesses that want more search visibility, qualified leads, and less manual work.";
 
 const schema = [
   {
@@ -25,35 +20,584 @@ const schema = [
 ---
 
 <Base title={title} description={description} schema={schema}>
-  <div class="wrap">
-    <header class="page-head">
-      <span class="kicker">Work</span>
-      <h1 class="page-head__title">Selected results</h1>
-      <p class="page-head__lede">{description}</p>
-    </header>
+  <div class="work-page">
+    <div class="work-wrap">
+      <section class="work-hero" aria-labelledby="work-title">
+        <div class="work-hero__copy">
+          <p class="work-eyebrow">Selected work</p>
+          <h1 class="work-hero__title" id="work-title">
+            SEO and automation<br />that deliver measurable<br />growth
+          </h1>
+          <p class="work-hero__lede">{description}</p>
+          <div class="work-hero__actions">
+            <a class="work-button work-button--primary" href="#case-studies">Explore case studies</a>
+            <a
+              class="work-button work-button--secondary"
+              href={SITE.whatsappUrl}
+              target="_blank"
+              rel="noopener"
+            >Book a strategy call</a>
+          </div>
+        </div>
 
-    <section class="section section--ruled">
-      <h2 class="sr-only">Case studies</h2>
-      <div class="cases">
-        {
-          cases.map((entry) => (
-            <article class="case">
-              <figure class="thumb">
-                <figcaption>{entry.data.thumbCaption ?? entry.data.client}</figcaption>
-              </figure>
-              <div class="case__body">
-                <h3 class="case__title">
-                  <a href={`/work/${entry.id}/`}>{entry.data.title}</a>
-                </h3>
-                <p class="case__desc">{entry.data.summary}</p>
-                <a class="arrow-link" href={`/work/${entry.id}/`}>View project →</a>
-              </div>
-            </article>
-          ))
-        }
-      </div>
-    </section>
+        <figure class="work-hero__visual">
+          <img
+            src="/assets/work/hero-projects.png"
+            width="586"
+            height="265"
+            alt="Gerti Foods ajvar, Faralda Crane Hotel, and an STS Bau installer"
+          />
+        </figure>
+      </section>
+
+      <section class="work-metrics" aria-label="Selected work results">
+        <div class="work-metric">
+          <svg class="work-metric__icon" viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M4 27h4v-7H4v7Zm10 0h4V14h-4v13Zm10 0h4V9h-4v18Z"></path>
+            <path d="m4 15 7-7 5 5L27 2"></path>
+            <path d="M21 2h6v6"></path>
+          </svg>
+          <div>
+            <p class="work-metric__value">1,800</p>
+            <p class="work-metric__label">monthly Google impressions</p>
+          </div>
+        </div>
+
+        <div class="work-metric">
+          <svg class="work-metric__icon" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="13" cy="10" r="5"></circle>
+            <path d="M3 28v-3a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7v3H3Z"></path>
+            <circle cx="24" cy="11" r="3.5"></circle>
+            <path d="M23 19h2a5 5 0 0 1 5 5v4h-4"></path>
+          </svg>
+          <div>
+            <p class="work-metric__value">178</p>
+            <p class="work-metric__label">monthly organic visits</p>
+          </div>
+        </div>
+
+        <div class="work-metric">
+          <svg class="work-metric__icon" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="13"></circle>
+            <path d="M3 16h26M16 3c4 4 6 8 6 13s-2 9-6 13M16 3c-4 4-6 8-6 13s2 9 6 13"></path>
+          </svg>
+          <div>
+            <p class="work-metric__value">3</p>
+            <p class="work-metric__label">markets served</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="work-benefits" aria-label="How the work helps">
+        <div class="work-benefit">
+          <svg class="work-benefit__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="21" cy="21" r="14"></circle>
+            <path d="m32 32 11 11"></path>
+          </svg>
+          <div>
+            <h2>More qualified visibility</h2>
+            <p>SEO built around the searches<br />that lead to business.</p>
+          </div>
+        </div>
+
+        <div class="work-benefit">
+          <svg class="work-benefit__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M20 4h8l1.5 6a17 17 0 0 1 4 2.3l5.8-1.8 4 7-4.3 4.2c.2 1.5.2 3 0 4.6l4.3 4.2-4 7-5.8-1.8a17 17 0 0 1-4 2.3L28 44h-8l-1.5-6a17 17 0 0 1-4-2.3l-5.8 1.8-4-7L9 26.3a17 17 0 0 1 0-4.6l-4.3-4.2 4-7 5.8 1.8a17 17 0 0 1 4-2.3L20 4Z"></path>
+            <circle cx="24" cy="24" r="6"></circle>
+          </svg>
+          <div>
+            <h2>Less manual work</h2>
+            <p>Automation that removes<br />repetitive tasks and bottlenecks.</p>
+          </div>
+        </div>
+
+        <div class="work-benefit">
+          <svg class="work-benefit__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M5 42h8V29H5v13Zm15 0h8V19h-8v23Zm15 0h8V7h-8v35Z"></path>
+          </svg>
+          <div>
+            <h2>Decisions backed by data</h2>
+            <p>Clear reporting tied to outcomes,<br />not vanity metrics.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="work-projects" id="case-studies" aria-labelledby="case-studies-title">
+        <h2 class="sr-only" id="case-studies-title">Case studies</h2>
+
+        <article class="work-feature">
+          <p class="work-eyebrow work-feature__eyebrow--mobile">Featured case study</p>
+          <div class="work-feature__media">
+            <img
+              src="/assets/work/gerti-feature.png"
+              width="515"
+              height="157"
+              alt="A bowl and jar of Gerti Foods ajvar with bread"
+            />
+          </div>
+          <div class="work-feature__body">
+            <p class="work-eyebrow work-feature__eyebrow--desktop">Featured case study</p>
+            <h3>From zero organic traffic to<br />1,800 monthly Google impressions</h3>
+            <p>SEO that took a Kosovo food producer from zero organic traffic<br class="work-desktop-only" /> to 1,800 monthly Google impressions.</p>
+            <a href="/work/gerti-foods/">View Gerti Foods project →</a>
+          </div>
+        </article>
+
+        <div class="work-card-grid">
+          <article class="work-card">
+            <img
+              src="/assets/work/gerti-card.png"
+              width="319"
+              height="86"
+              alt="Gerti Foods ajvar and bread"
+            />
+            <div class="work-card__body">
+              <h3>Gerti Foods</h3>
+              <p>0 → 1,800 monthly impressions</p>
+              <a href="/work/gerti-foods/">View project →</a>
+            </div>
+          </article>
+
+          <article class="work-card">
+            <img
+              src="/assets/work/faralda-card.png"
+              width="343"
+              height="86"
+              alt="Faralda Crane Hotel in Amsterdam at sunset"
+            />
+            <div class="work-card__body">
+              <h3>Faralda Crane Hotel, Amsterdam</h3>
+              <p class="work-card__muted">Local search and Google Business Profile</p>
+              <a href="/work/faralda-crane-hotel/">View project →</a>
+            </div>
+          </article>
+
+          <article class="work-card">
+            <img
+              src="/assets/work/sts-card.png"
+              width="343"
+              height="86"
+              alt="An STS Bau installer working on lightning protection"
+            />
+            <div class="work-card__body">
+              <h3>STS Bau</h3>
+              <p>1 → 178 monthly organic visits</p>
+              <a href="/work/sts-company/">View project →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
   </div>
 
   <CtaBanner />
+
+  <a
+    class="work-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label="Contact Kastriot Tanaj"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M13.8 16.6a1 1 0 0 0 1.2-.3l.4-.5A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.5.4a1 1 0 0 0-.3 1.2 14 14 0 0 0 6.4 6.4Z"></path>
+    </svg>
+    <span>Contact</span>
+  </a>
 </Base>
+
+<style is:global>
+  body:has(.work-page) {
+    --work-red: #e82e0f;
+    --work-ink: #202020;
+    --work-muted: #5f5f5f;
+    --work-rule: #cecdcc;
+    background: #f3f2f1;
+  }
+
+  body:has(.work-page) .whatsapp-fab { display: none; }
+
+  body:has(.work-page) .nav {
+    min-height: 44px;
+    padding: 7px max(32px, calc((100vw - 1112px) / 2 + 32px));
+    border-bottom-color: var(--work-rule);
+    border-bottom-width: 1px;
+    background: #f3f2f1;
+  }
+
+  body:has(.work-page) .nav .nav-brand { font-size: 16px; line-height: 1; }
+  body:has(.work-page) .nav__menu { gap: 26px; }
+  body:has(.work-page) .nav__links { gap: 24px; }
+  body:has(.work-page) .nav__links a { font-size: 11px; font-weight: 600; }
+  body:has(.work-page) .nav__menu .btn {
+    min-height: 29px;
+    padding: 7px 16px;
+    font-size: 11px;
+    background: var(--work-red);
+  }
+
+  .work-page { color: var(--work-ink); }
+  .work-wrap {
+    width: min(100%, 1112px);
+    margin-inline: auto;
+    padding-inline: 32px;
+  }
+
+  .work-eyebrow {
+    margin: 0;
+    color: var(--work-red);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+  }
+
+  .work-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 365px) minmax(0, 586px);
+    column-gap: 79px;
+    align-items: start;
+    padding-block: 12px 20px;
+  }
+
+  .work-hero__copy { padding-top: 13px; }
+  .work-hero__copy .work-eyebrow { margin-bottom: 14px; }
+  .work-hero__title {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+  .work-hero__lede {
+    max-width: 41ch;
+    margin: 13px 0 0;
+    color: var(--work-muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .work-hero__actions { display: flex; gap: 12px; margin-top: 14px; }
+  .work-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 33px;
+    border: 1px solid var(--work-red);
+    color: var(--work-red);
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+  }
+  .work-button--primary { width: 180px; background: var(--work-red); color: #fff; }
+  .work-button--secondary { width: 174px; }
+  .work-button:hover { background: #cf260b; border-color: #cf260b; color: #fff; }
+
+  .work-hero__visual {
+    width: 586px;
+    height: 265px;
+    margin: 0;
+    overflow: hidden;
+  }
+  .work-hero__visual img { width: 100%; height: 100%; object-fit: cover; }
+
+  .work-metrics {
+    min-height: 63px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-block: 1px solid var(--work-rule);
+  }
+  .work-metric {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 17px;
+    padding: 10px 20px;
+  }
+  .work-metric__icon {
+    width: 31px;
+    height: 31px;
+    flex: none;
+    fill: none;
+    stroke: var(--work-red);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .work-metric__value {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .work-metric__label { margin: 5px 0 0; color: #4f4f4f; font-size: 11px; line-height: 1.2; }
+
+  .work-benefits {
+    min-height: 90px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+  }
+  .work-benefit {
+    min-width: 0;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-inline: 24px;
+  }
+  .work-benefit:first-child { padding-left: 24px; }
+  .work-benefit + .work-benefit { border-left: 1px solid var(--work-rule); }
+  .work-benefit__icon {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    fill: none;
+    stroke: var(--work-red);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .work-benefit h2 { margin: 0 0 4px; font-size: 15.5px; line-height: 1.15; }
+  .work-benefit p { margin: 0; color: var(--work-muted); font-size: 11.5px; line-height: 1.5; }
+
+  .work-projects { padding-bottom: 11px; scroll-margin-top: 56px; }
+  .work-feature {
+    height: 159px;
+    display: grid;
+    grid-template-columns: 515px minmax(0, 1fr);
+    overflow: hidden;
+    border: 1px solid #bfbebd;
+    border-radius: 4px;
+  }
+  .work-feature__eyebrow--mobile { display: none; }
+  .work-feature__media { min-width: 0; height: 100%; overflow: hidden; }
+  .work-feature__media img { width: 100%; height: 100%; object-fit: cover; }
+  .work-feature__body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 15px 24px 13px;
+  }
+  .work-feature__body .work-eyebrow { margin-bottom: 7px; font-size: 11px; }
+  .work-feature__body h3 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .work-feature__body > p:not(.work-eyebrow) {
+    margin: 8px 0 0;
+    color: var(--work-muted);
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+  .work-feature__body a,
+  .work-card__body a {
+    color: var(--work-red);
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .work-feature__body a { margin-top: 6px; }
+  .work-feature__body a:hover,
+  .work-card__body a:hover { text-decoration: underline; }
+
+  .work-card-grid {
+    display: grid;
+    grid-template-columns: 319px repeat(2, minmax(0, 1fr));
+    gap: 19px;
+    margin-top: 15px;
+  }
+  .work-card {
+    height: 167px;
+    overflow: hidden;
+    border: 1px solid #bfbebd;
+    border-radius: 4px;
+  }
+  .work-card > img { width: 100%; height: 86px; object-fit: cover; }
+  .work-card__body {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 9px 11px 8px;
+  }
+  .work-card__body h3 { margin: 0; font-size: 14px; line-height: 1.15; }
+  .work-card__body p { margin: 4px 0 0; color: var(--work-red); font-size: 11px; line-height: 1.25; }
+  .work-card__body p.work-card__muted { color: var(--work-muted); }
+  .work-card__body a { margin-top: auto; }
+
+  .work-contact-bar { display: none; }
+
+  body:has(.work-page) .cta { background: var(--work-red); }
+  body:has(.work-page) .cta__inner {
+    width: min(100%, 1112px);
+    min-height: 65px;
+    padding: 0 56px;
+    flex-wrap: nowrap;
+  }
+  body:has(.work-page) .cta__title { font-size: 19px; line-height: 1.15; }
+  body:has(.work-page) .cta__lede { font-size: 11.5px; }
+  body:has(.work-page) .cta__actions { flex-wrap: nowrap; gap: 10px; }
+  body:has(.work-page) .cta__btn,
+  body:has(.work-page) .cta__ghost { min-height: 33px; padding: 8px 16px; font-size: 11px; }
+
+  body:has(.work-page) .footer__inner {
+    width: min(100%, 1112px);
+    min-height: 47px;
+    align-items: center;
+    padding: 0 32px;
+  }
+  body:has(.work-page) .footer__copy,
+  body:has(.work-page) .footer__link { font-size: 12px; }
+
+  @media (max-width: 1050px) and (min-width: 721px) {
+    .work-hero {
+      grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+      gap: 42px;
+    }
+    .work-hero__visual { width: 100%; }
+    .work-hero__title { font-size: 30px; }
+    .work-feature { grid-template-columns: 49.25% minmax(0, 1fr); }
+    .work-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .work-benefit { padding-inline: 14px; gap: 12px; }
+    .work-benefit br { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    body:has(.work-page) { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
+
+    body:has(.work-page) .nav { min-height: 64px; padding: 18px 16px; flex-wrap: wrap; }
+    body:has(.work-page) .nav .nav-brand { font-size: 18px; }
+    body:has(.work-page) .nav__toggle {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+    }
+    body:has(.work-page) .nav__toggle > span:last-child {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    body:has(.work-page) .nav__bars,
+    body:has(.work-page) .nav__bars::before,
+    body:has(.work-page) .nav__bars::after { width: 20px; height: 2px; }
+    body:has(.work-page) .nav__bars::before { top: -6px; }
+    body:has(.work-page) .nav__bars::after { top: 6px; }
+    body:has(.work-page) .nav__menu { width: 100%; margin-top: 18px; }
+
+    .work-wrap { width: 100%; padding-inline: 10px; }
+    .work-hero {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 23px 0 13px;
+    }
+    .work-hero__copy { width: 100%; padding: 0 6px; }
+    .work-hero__copy .work-eyebrow { margin-bottom: 10px; }
+    .work-eyebrow { font-size: 12px; }
+    .work-hero__title { font-size: 32px; line-height: 1.02; letter-spacing: -0.03em; }
+    .work-hero__lede { max-width: 39ch; margin-top: 16px; font-size: 14px; line-height: 1.55; }
+    .work-hero__actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      margin-top: 19px;
+    }
+    .work-button { width: 100%; min-height: 43px; font-size: 13px; }
+    .work-hero__visual {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2.6 / 1;
+      margin-top: 17px;
+    }
+    .work-hero__visual img { object-fit: cover; }
+
+    .work-metrics { min-height: 112px; }
+    .work-metric {
+      display: grid;
+      grid-template-columns: 25px minmax(0, 1fr);
+      align-content: center;
+      align-items: start;
+      justify-content: stretch;
+      gap: 6px;
+      padding: 13px 8px;
+    }
+    .work-metric + .work-metric { border-left: 1px solid var(--work-rule); }
+    .work-metric__icon { width: 24px; height: 24px; }
+    .work-metric__value { font-size: 20px; }
+    .work-metric__label { margin-top: 5px; font-size: 10px; line-height: 1.35; }
+
+    .work-benefits { display: none; }
+    .work-projects { padding-top: 0; padding-bottom: 16px; }
+    .work-feature {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0 8px 18px;
+      border-color: var(--work-rule);
+    }
+    .work-feature__eyebrow--mobile { display: block; padding: 18px 0 12px; font-size: 10.5px; }
+    .work-feature__eyebrow--desktop { display: none; }
+    .work-feature__media { width: 100%; height: auto; aspect-ratio: 16 / 7; }
+    .work-feature__body { display: block; padding: 13px 0 5px; }
+    .work-feature__body h3 { font-size: 20px; line-height: 1.08; }
+    .work-feature__body > p:not(.work-eyebrow) { margin-top: 13px; font-size: 13px; line-height: 1.5; }
+    .work-desktop-only { display: none; }
+    .work-feature__body a { display: inline-block; margin-top: 18px; font-size: 13px; }
+
+    .work-card-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 24px; }
+    .work-card { height: auto; }
+    .work-card > img { height: auto; aspect-ratio: 3.12 / 1; }
+    .work-card__body { min-height: 120px; height: auto; padding: 10px 11px; }
+    .work-card__body h3 { font-size: 16px; }
+    .work-card__body p { font-size: 13px; }
+    .work-card__body a { margin-top: 12px; font-size: 13px; }
+
+    body:has(.work-page) .cta,
+    body:has(.work-page) .footer { display: none; }
+
+    .work-contact-bar {
+      position: fixed;
+      z-index: 950;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      min-height: calc(78px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding-bottom: env(safe-area-inset-bottom);
+      border-top: 1px solid #b91f08;
+      background: var(--work-red);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .work-contact-bar svg {
+      width: 27px;
+      height: 27px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    body:has(.cookie-consent:not([hidden])) .work-contact-bar { display: none; }
+  }
+</style>
