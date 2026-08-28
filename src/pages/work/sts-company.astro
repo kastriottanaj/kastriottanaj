@@ -10,9 +10,15 @@
  * The slug stays sts-company because that is the indexed URL. Only the client
  * name changed to STS Bau.
  *
- * Every figure below is read off a screenshot in /assets/sts-evidence/ — three
- * sources over three windows, which the captions state: Ubersuggest (28 Aug
- * 2026), GTmetrix (27 Aug 2026) and Google Business Profile (Mar – Aug 2026).
+ * Every figure below is read off a screenshot in /assets/sts-evidence/ — four
+ * sources over four windows, which the captions state: Semrush and Ubersuggest
+ * (28 Aug 2026), GTmetrix (27 Aug 2026) and Google Business Profile (Mar – Aug
+ * 2026).
+ *
+ * The headline is Semrush's: 178 monthly visits, 343 keywords. Ubersuggest puts
+ * the same domain at 57 and 217 — the two model organic traffic differently —
+ * so its screenshots stay in the gallery as a second opinion, always labelled.
+ * Never present one tool's figure as the other's.
  *
  * The one exception is `topTen`, which has no export behind it: it is a live
  * Ubersuggest pull of 28 Aug 2026, and the page says so above the list.
@@ -40,13 +46,15 @@ function isoDuration(seconds: number) {
 
 /* ── The numbers, each tied to the screenshot it came from ──────────────── */
 
-/* All four sit in the same Ubersuggest export, so the ribbon states one source
-   and one export date and every cell is checkable against it. */
+/* The two search cells are Semrush, the two local cells Google Business
+   Profile — the ribbon names both above it, and every figure is checkable
+   against a screenshot in the gallery. The diagnostics that used to sit here
+   (backlinks, on-page score) moved down to the chart stats and the strip. */
 const metrics = [
-  { value: "57", delta: "↑14%", spoken: "up 14 percent", label: "Monthly organic visits" },
-  { value: "217", delta: null, spoken: null, label: "Ranking keywords" },
-  { value: "18", delta: "↑800%", spoken: "up 800 percent", label: "Backlinks" },
-  { value: "89", delta: null, spoken: null, label: "On-page score" },
+  { value: "178", delta: "↑105%", spoken: "up 105 percent", label: "Monthly organic visits" },
+  { value: "343", delta: "↑1.2%", spoken: "up 1.2 percent", label: "Ranking keywords" },
+  { value: "992", delta: null, spoken: null, label: "Business Profile views" },
+  { value: "272", delta: null, spoken: null, label: "Direction requests" },
 ];
 
 const values = [
@@ -57,7 +65,7 @@ const values = [
   },
   {
     title: "A reference library, not a brochure",
-    body: "DIN 18014, earthing, equipotential bonding, surge protection, inspection intervals — each explained on a page of its own. 217 keywords rank today, against a handful a year ago.",
+    body: "DIN 18014, earthing, equipotential bonding, surge protection, inspection intervals — each explained on a page of its own. 343 keywords rank today, against a handful two years ago.",
     paths: ['<circle cx="14" cy="14" r="9"/><path d="M21 21l7 7M11 14h6M14 11v6"/>'],
   },
   {
@@ -91,9 +99,9 @@ const steps = [
 ];
 
 const chartStats = [
-  { figure: "+14%", label: "organic traffic month on month" },
+  { figure: "+105%", label: "organic traffic month on month" },
+  { figure: "343", label: "keywords ranking in Germany" },
   { figure: "+800%", label: "backlinks (18 in total)" },
-  { figure: "217", label: "keywords ranking in Germany" },
   { figure: "89", label: "on-page SEO score" },
 ];
 
@@ -138,7 +146,7 @@ const cards = [
   },
 ];
 
-const pageTitle = `STS Bau SEO case study — 2 to 57 monthly organic visits | ${SITE.name}`;
+const pageTitle = `STS Bau SEO case study — 178 monthly organic visits, 343 keywords | ${SITE.name}`;
 
 /* CreativeWork rather than Article, to match the shape the other case studies
    already emit through [slug].astro. */
@@ -197,12 +205,12 @@ const schema = [
 
         <p class="cs-eyebrow">Case study · SEO for industrial &amp; trade businesses</p>
         <h1 class="cs-hero__title">
-          SEO that took STS Bau from <span class="cs-mark">2</span> to 57 monthly organic visits
+          SEO that took STS Bau from a <span class="cs-mark">flat line</span> to 178 monthly organic visits
         </h1>
         <p class="cs-hero__sub">
-          Content-led SEO for a German Blitzschutzbau and Steuerungstechnik specialist — 217 keywords
-          now ranking in Germany, three lightning-protection terms inside Google's top ten, and a
-          reference library that earns the enquiry before a competitor is ever searched for.
+          Content-led SEO for a German Blitzschutzbau and Steuerungstechnik specialist — 343 keywords
+          now ranking in Germany, organic traffic up 105%, and a reference library that earns the
+          enquiry before a competitor is ever searched for.
         </p>
 
         <div class="cs-actions">
@@ -254,7 +262,7 @@ const schema = [
   <section class="cs-ribbon" aria-label="Headline results">
     <div class="wrap">
       <p class="cs-ribbon__top">
-        <span>Verified in Ubersuggest · Germany, German</span>
+        <span>Verified in Semrush and Google Business Profile</span>
         <span><b>sts-steuerungstechnik.de</b> · exported 28 Aug 2026</span>
       </p>
       <ul class="cs-metrics">
@@ -335,15 +343,17 @@ const schema = [
       </div>
 
       <div class="cs-chart">
-        <p class="cs-chart__cap">Monthly organic traffic · Aug 2025 – Jul 2026</p>
-        <p class="cs-chart__big">2 → 57 visits</p>
-        {/* Hand-plotted against the Ubersuggest series in the gallery below:
-            2, 3, 12, 24, 23, 19, 57, 57, 52, 66, 50, 57. */}
+        <p class="cs-chart__cap">Monthly organic traffic · Oct 2024 – Jul 2026</p>
+        <p class="cs-chart__big">0 → 178 visits</p>
+        {/* Hand-plotted against the Semrush trend in the gallery below, on that
+            chart's own axis (0–180). The two endpoints are read off the export;
+            the months between are traced from its curve, so treat them as the
+            shape of the series rather than as figures in their own right. */}
         <svg
           class="cs-chart__svg"
           viewBox="0 0 520 190"
           role="img"
-          aria-label="Organic traffic rising from 2 visits in August 2025 to 24 by November 2025, stepping up to 57 in February 2026 and holding between 50 and 66 through July 2026"
+          aria-label="Organic traffic flat near zero from October 2024 through late 2025, lifting from November 2025, peaking briefly in spring 2026 and climbing steeply to 178 monthly visits by July 2026"
         >
           <defs>
             <linearGradient id="cs-fade-sts" x1="0" y1="0" x2="0" y2="1">
@@ -354,34 +364,33 @@ const schema = [
           <g stroke="#d7d3d3" stroke-width="1">
             <line x1="34" y1="18" x2="510" y2="18" />
             <line x1="34" y1="65" x2="510" y2="65" />
-            <line x1="34" y1="111" x2="510" y2="111" />
+            <line x1="34" y1="112" x2="510" y2="112" />
             <line x1="34" y1="158" x2="510" y2="158" />
           </g>
           <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#605d5d">
-            <text x="8" y="22">75</text>
-            <text x="8" y="69">50</text>
-            <text x="8" y="115">25</text>
-            <text x="8" y="162">0</text>
-            <text x="30" y="180">Aug 25</text>
-            <text x="140" y="180">Nov 25</text>
-            <text x="257" y="180">Feb 26</text>
-            <text x="374" y="180">May 26</text>
+            <text x="6" y="22">180</text>
+            <text x="6" y="69">120</text>
+            <text x="12" y="116">60</text>
+            <text x="18" y="162">0</text>
+            <text x="30" y="180">Oct 24</text>
+            <text x="205" y="180">Jul 25</text>
+            <text x="330" y="180">Feb 26</text>
             <text x="452" y="180">Jul 26</text>
           </g>
           <path
-            d="M40 154.3 L79.1 152.4 L118.2 135.6 L157.3 113.2 L196.4 115.1 L235.5 122.5 L274.5 51.6 L313.6 51.6 L352.7 60.9 L391.8 34.8 L430.9 64.7 L470 51.6 L470 158 L40 158 Z"
+            d="M40 157.2 L60.5 157.2 L81 156.4 L101.4 156.4 L121.9 156.4 L142.4 156.4 L162.9 155.7 L183.3 155.7 L203.8 155.7 L224.3 155.7 L244.8 156.4 L265.2 155.7 L285.7 154.1 L306.2 145.6 L326.7 138.6 L347.1 135.4 L367.6 133.9 L388.1 91.9 L408.6 117.6 L429 125.3 L449.5 119.1 L470 19.6 L470 158 L40 158 Z"
             fill="url(#cs-fade-sts)"
           />
           <polyline
-            points="40,154.3 79.1,152.4 118.2,135.6 157.3,113.2 196.4,115.1 235.5,122.5 274.5,51.6 313.6,51.6 352.7,60.9 391.8,34.8 430.9,64.7 470,51.6"
+            points="40,157.2 60.5,157.2 81,156.4 101.4,156.4 121.9,156.4 142.4,156.4 162.9,155.7 183.3,155.7 203.8,155.7 224.3,155.7 244.8,156.4 265.2,155.7 285.7,154.1 306.2,145.6 326.7,138.6 347.1,135.4 367.6,133.9 388.1,91.9 408.6,117.6 429,125.3 449.5,119.1 470,19.6"
             fill="none"
             stroke="#ec3013"
             stroke-width="2.5"
             stroke-linejoin="round"
             stroke-linecap="round"
           />
-          <circle cx="391.8" cy="34.8" r="4" fill="#fff" stroke="#ec3013" stroke-width="2" />
-          <circle cx="470" cy="51.6" r="5" fill="#fff" stroke="#ec3013" stroke-width="2.5" />
+          <circle cx="388.1" cy="91.9" r="4" fill="#fff" stroke="#ec3013" stroke-width="2" />
+          <circle cx="470" cy="19.6" r="5" fill="#fff" stroke="#ec3013" stroke-width="2.5" />
         </svg>
         <ul class="cs-chart__stats">
           {
@@ -421,7 +430,7 @@ const schema = [
 
       <div class="cs-result">
         <p class="cs-result__label">Ranking keywords</p>
-        <p class="cs-result__value">217</p>
+        <p class="cs-result__value">343</p>
         <p class="cs-result__label">in the German index</p>
         <p class="cs-result__body">
           Three of them inside the top ten, led by <b>blitzableiter pflicht</b> at position 8 —
@@ -436,11 +445,54 @@ const schema = [
     <p class="cs-eyebrow">The evidence</p>
     <h2 class="cs-h2">Every number here, screenshotted from the source</h2>
     <p class="cs-lede">
-      Ubersuggest set to Germany and German, a GTmetrix run, and six months of Google Business
-      Profile — exported 27 and 28 August 2026. Nothing recreated, nothing rounded up.
+      Semrush and Ubersuggest, a GTmetrix run, and six months of Google Business Profile —
+      exported 27 and 28 August 2026. The two SEO tools estimate organic traffic differently, so
+      both are here rather than only the flattering one. Nothing recreated, nothing rounded up.
     </p>
 
     <div class="cs-ev-grid">
+      <figure class="cs-ev cs-ev--4">
+        <img
+          src={evidence.semrushKeywords.src}
+          alt={evidence.semrushKeywords.alt}
+          width={evidence.semrushKeywords.width}
+          height={evidence.semrushKeywords.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>
+          <b>{evidence.semrushKeywords.strong}</b> — {evidence.semrushKeywords.caption}
+        </figcaption>
+      </figure>
+
+      <figure class="cs-ev cs-ev--2">
+        <img
+          src={evidence.semrushOverview.src}
+          alt={evidence.semrushOverview.alt}
+          width={evidence.semrushOverview.width}
+          height={evidence.semrushOverview.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>
+          <b>{evidence.semrushOverview.strong}</b> — {evidence.semrushOverview.caption}
+        </figcaption>
+      </figure>
+
+      <figure class="cs-ev cs-ev--6">
+        <img
+          src={evidence.semrushTrend.src}
+          alt={evidence.semrushTrend.alt}
+          width={evidence.semrushTrend.width}
+          height={evidence.semrushTrend.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>
+          <b>{evidence.semrushTrend.strong}</b> — {evidence.semrushTrend.caption}
+        </figcaption>
+      </figure>
+
       <figure class="cs-ev cs-ev--4">
         <img
           src={evidence.gtmetrix.src}
