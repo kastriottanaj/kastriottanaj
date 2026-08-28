@@ -3,6 +3,8 @@ title: "A local SEO checklist for service businesses"
 description: "The essentials that move the needle for hotels, clinics, and local shops."
 pubDate: 2026-07-28
 tags: ["SEO", "Local SEO"]
+image: "/assets/blog/local-seo-checklist-for-service-businesses.webp"
+imageAlt: "A phone showing a bakery's Google Business Profile, held up in front of the bakery itself"
 ---
 
 Most local SEO advice is a list of eighty things. In practice a small number of them

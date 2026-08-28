@@ -11,6 +11,14 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
+    /**
+     * Card art for /blog/, served from public/assets/blog/. The index leans on
+     * it — the featured card and every note card are half picture — so a post
+     * without one renders its card as text only rather than a broken frame.
+     */
+    image: z.string().optional(),
+    /** Required alongside `image`: the pictures carry meaning, not decoration. */
+    imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
