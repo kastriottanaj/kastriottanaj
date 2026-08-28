@@ -13,6 +13,14 @@ function isCurrent(href: string) {
 <nav class="nav">
   <a class="nav-brand" href="/">{SITE.name}</a>
 
+  <a
+    class="nav__mobile-cta"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Book a call with ${SITE.name} on WhatsApp at ${SITE.phoneDisplay}`}
+  >Book a call</a>
+
   <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
     <span class="nav__bars" aria-hidden="true"></span>
     <span>Menu</span>

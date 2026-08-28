@@ -1,13 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
+import "../../styles/services.css";
 
 const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
-const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).sort(
-  (a, b) => a.data.order - b.data.order
-);
 
 const title = "Services — SEO, Digital Marketing & AI Automation | Kastriot Tanaj";
 const description =
@@ -32,62 +29,212 @@ const itemList = {
     url: `${SITE.url}/services/${service.id}/`,
   })),
 };
+
+const serviceCards = [
+  {
+    title: "SEO",
+    description: "Technical SEO, on-page and content strategies that drive sustainable rankings.",
+    href: "/services/seo/",
+    link: "Explore SEO →",
+    image: "/assets/services/seo-services.webp",
+    icon: "i-search",
+  },
+  {
+    title: "Digital Marketing",
+    description: "Social media, campaigns and brand visibility that turn followers into customers.",
+    href: "/services/digital-marketing/",
+    link: "Explore marketing →",
+    image: "/assets/services/digital-marketing-services.webp",
+    icon: "i-megaphone",
+  },
+  {
+    title: "AI Automation",
+    description: "Custom automations that save time on reporting, follow-up and content workflows.",
+    href: "/services/ai-automation/",
+    link: "Explore automation →",
+    image: "/assets/services/ai-automation-services.webp",
+    icon: "i-bot",
+  },
+  {
+    title: "Web Development",
+    description: "Fast, SEO-ready websites built with modern stacks and conversion-focused design.",
+    href: "/services/web-development/",
+    link: "Explore web development →",
+    image: "/assets/services/web-development-services.webp",
+    icon: "i-code",
+  },
+];
 ---
 
-<Base title={title} description={description} schema={[breadcrumbs, itemList]}>
-  <div class="wrap">
-    <header class="page-head">
-      <span class="kicker">Services</span>
-      <h1 class="page-head__title">What I can help with</h1>
-      <p class="page-head__lede">
-        Four services that overlap more than they compete. Most engagements start with one
-        and grow into another — if you are not sure which you need, say so and I'll tell you
-        honestly.
-      </p>
-    </header>
-
-    <section class="section section--ruled">
-      <h2 class="sr-only">All services</h2>
-      <div class="ruled-grid ruled-grid--services">
-        {
-          services.map((service) => (
-            <div class="service">
-              <svg class="icon" aria-hidden="true"><use href={`#${service.data.icon}`} /></svg>
-              <h3 class="service__title">{service.data.navLabel ?? service.data.title}</h3>
-              <p class="service__desc">{service.data.short}</p>
-              <a class="arrow-link arrow-link--sm service__more" href={`/services/${service.id}/`}>
-                Learn more →
-              </a>
-            </div>
-          ))
-        }
+<Base
+  title={title}
+  description={description}
+  image="/assets/services/kastriot-tanaj-services.webp"
+  schema={[breadcrumbs, itemList]}
+>
+  <div class="services-page">
+    <section class="services-hero" aria-labelledby="services-title">
+      <img
+        class="services-hero__image"
+        src="/assets/services/kastriot-tanaj-services.webp"
+        width="1672"
+        height="941"
+        alt=""
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <div class="services-wrap services-hero__inner">
+        <div class="services-hero__copy">
+          <p class="services-eyebrow">Services</p>
+          <h1 class="services-hero__title" id="services-title">
+            SEO, Marketing, Automation &amp; Websites Built to Grow Your Business
+          </h1>
+          <p class="services-hero__lede">
+            Get sustainable search visibility, stronger campaigns, time-saving<br
+              class="services-break--desktop"
+            /> workflows and a <br class="services-break--mobile" />fast website — with one
+            connected strategy.
+          </p>
+          <div class="services-hero__actions">
+            <a
+              class="services-button services-button--primary"
+              href={SITE.whatsappUrl}
+              target="_blank"
+              rel="noopener"
+            >Book a strategy call</a>
+            <a class="services-button services-button--text" href="#services-list">
+              Explore the services <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
-    {
-      useCases.length > 0 && (
-        <section class="section section--ruled">
-          <h2 class="kicker">By industry</h2>
-          <p class="section__lede">
-            Same services, different first move. These say what I'd look at first in a
-            specific market.
-          </p>
-          <div class="ruled-grid ruled-grid--services">
-            {useCases.map((useCase) => (
-              <div class="service">
-                <svg class="icon" aria-hidden="true"><use href={`#${useCase.data.icon}`} /></svg>
-                <h3 class="service__title">{useCase.data.navLabel ?? useCase.data.title}</h3>
-                <p class="service__desc">{useCase.data.short}</p>
-                <a class="arrow-link arrow-link--sm service__more" href={`/use-cases/${useCase.id}/`}>
-                  Learn more →
-                </a>
-              </div>
-            ))}
+    <section class="services-capabilities" aria-label="Service capabilities">
+      <ul class="services-wrap services-capabilities__list">
+        <li>
+          <svg aria-hidden="true"><use href="#i-search"></use></svg>
+          <span>Search strategy</span>
+        </li>
+        <li>
+          <svg aria-hidden="true"><use href="#i-megaphone"></use></svg>
+          <span>Campaign execution</span>
+        </li>
+        <li>
+          <svg aria-hidden="true"><use href="#i-bot"></use></svg>
+          <span>Custom automations</span>
+        </li>
+        <li>
+          <svg aria-hidden="true"><use href="#i-code"></use></svg>
+          <span>Modern web builds</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="services-benefits" aria-label="How the services help">
+      <ul class="services-wrap services-benefits__list">
+        <li class="services-benefit">
+          <svg class="services-benefit__icon services-benefit__icon--target" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="23" cy="25" r="16"></circle>
+            <circle cx="23" cy="25" r="9"></circle>
+            <circle cx="23" cy="25" r="3"></circle>
+            <path d="m29 19 10-10"></path>
+            <path d="M33 9h6v6"></path>
+            <circle class="services-benefit__accent" cx="39" cy="9" r="2.4"></circle>
+          </svg>
+          <div>
+            <h2>Grow qualified traffic</h2>
+            <p>SEO and campaigns focused on the searches and audiences that matter.</p>
           </div>
-        </section>
-      )
-    }
+        </li>
+        <li class="services-benefit">
+          <svg class="services-benefit__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M20 5h8l1.4 5.3a16 16 0 0 1 4.1 2.4l5.2-1.5 4 6.8-3.9 3.8a16 16 0 0 1 0 4.8l3.9 3.8-4 6.8-5.2-1.5a16 16 0 0 1-4.1 2.4L28 43h-8l-1.4-5.3a16 16 0 0 1-4.1-2.4l-5.2 1.5-4-6.8 3.9-3.8a16 16 0 0 1 0-4.8L5.3 18l4-6.8 5.2 1.5a16 16 0 0 1 4.1-2.4L20 5Z"></path>
+            <circle cx="24" cy="24" r="6"></circle>
+          </svg>
+          <div>
+            <h2>Cut manual work</h2>
+            <p>Automations that remove repetitive reporting, follow-up and content tasks.</p>
+          </div>
+        </li>
+        <li class="services-benefit">
+          <svg class="services-benefit__icon services-benefit__icon--nodes" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="m14 18 19-9M14 18l19 19M33 9v28"></path>
+            <circle cx="10" cy="20" r="5"></circle>
+            <circle cx="36" cy="7" r="5"></circle>
+            <circle cx="36" cy="40" r="5"></circle>
+            <circle class="services-benefit__accent" cx="36" cy="24" r="4"></circle>
+          </svg>
+          <div>
+            <h2>Connect the whole system</h2>
+            <p>Strategy, technology and execution designed to work together.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="services-catalogue services-wrap" id="services-list" aria-labelledby="services-list-title">
+      <p class="services-eyebrow">What I can help with</p>
+      <h2 class="services-catalogue__title" id="services-list-title">Choose where to start</h2>
+
+      <div class="services-card-grid">
+        {
+          serviceCards.map((service) => (
+            <article class="services-card">
+              <img
+                class="services-card__image"
+                src={service.image}
+                width="1536"
+                height="1024"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="services-card__details">
+                <svg class="services-card__icon" aria-hidden="true">
+                  <use href={`#${service.icon}`}></use>
+                </svg>
+                <div class="services-card__body">
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                  <a href={service.href}>{service.link}</a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="services-industry">
+        <p class="services-eyebrow">By industry</p>
+        <article class="services-industry__card">
+          <svg class="services-industry__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M7 43V15l13-7v35M20 43V4l21 8v31M3 43h42"></path>
+            <path d="M11 20h4M11 27h4M11 34h4M25 14h4M34 17h3M25 22h4M34 25h3M25 30h4M34 33h3M25 38h4"></path>
+          </svg>
+          <div class="services-industry__body">
+            <h3>Real estate</h3>
+            <p>Break the portal dependency, rank for searches that carry intent, and get found where buyers now ask.</p>
+          </div>
+          <a href="/use-cases/real-estate/">Explore real estate services →</a>
+        </article>
+      </div>
+    </section>
   </div>
 
-  <CtaBanner />
+  <section class="services-cta">
+    <div class="services-cta__inner">
+      <h2>Ready to grow traffic and cut manual work?</h2>
+      <a href={SITE.whatsappUrl} target="_blank" rel="noopener">Book a strategy call</a>
+    </div>
+  </section>
+
+  <a
+    class="services-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label="Contact Kastriot Tanaj"
+  >Contact</a>
 </Base>
