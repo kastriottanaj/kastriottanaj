@@ -1,21 +1,26 @@
 ---
-title: "STS Company"
-client: "STS Company"
-summary: "A full technical and content overhaul that moved target keywords onto page one."
-description: "A technical and content SEO overhaul that grew STS Company's organic traffic."
-services: ["Technical SEO", "Content strategy", "On-page optimisation"]
-thumbCaption: "STS Company — team photo"
+title: "STS Bau"
+client: "STS Bau — Blitzschutzbau & Steuerungstechnik"
+summary: "A German lightning-protection specialist taken from 2 to 57 monthly organic visits on the back of a 115-article knowledge hub."
+description: "Content-led SEO took STS Bau from 2 to 57 monthly organic visits and 217 ranking keywords, with three lightning-protection terms inside Google's top ten."
+services: ["SEO", "Content strategy", "On-page optimisation"]
+thumbCaption: "STS Bau — lightning protection installation"
+year: 2026
+video:
+  src: "/video/sts-bau.mp4"
+  poster: "/video/sts-bau-poster.jpg"
+  title: "STS Bau case study — SEO for a German lightning-protection specialist"
+  description: "Kastriot Tanaj walks through the STS Bau case study: the content and on-page SEO work that took a Blitzschutzbau and Steuerungstechnik business from almost no organic search presence to 217 ranking keywords in Germany."
+  duration: 123
+  date: "2026-08-28"
 order: 3
 ---
 
-## The brief
+<!-- This entry carries the metadata only: the card on /work/, the meta
+     description, the video sitemap entry and the llms.txt line. The page
+     itself is hand-built at src/pages/work/sts-company.astro, because the
+     evidence gallery, the metric ribbon and the plotted chart are structure
+     rather than prose. Editing the copy means editing that file.
 
-<!-- TODO: the starting position and the commercial goal. -->
-
-## What I did
-
-<!-- TODO: the audit findings and what got shipped. -->
-
-## The outcome
-
-<!-- TODO: real numbers only. -->
+     The slug stays sts-company because /work/sts-company/ is the indexed URL;
+     only the client name changed to STS Bau. -->

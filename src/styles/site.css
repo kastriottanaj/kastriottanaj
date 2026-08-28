@@ -1610,6 +1610,43 @@ textarea.input { min-height: 100px; }
   margin: 6px 0 0;
 }
 
+/* Heading for the one block on a case study that is a live pull rather than a
+   committed screenshot. Its own line says so, sitting tight above the cells. */
+.cs-livecheck__head { margin: 34px 0 12px; }
+
+/* The keywords sitting in Google's top ten, under the evidence gallery. */
+.cs-topten {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--rule);
+  background: var(--color-divider);
+  border: var(--rule) solid var(--color-divider);
+  margin: 0;
+  padding: 0;
+}
+.cs-topten li {
+  background: #fff;
+  padding: 14px 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 14px;
+}
+.cs-topten b {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-accent-700);
+}
+.cs-topten__term { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.cs-topten__vol {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
+  white-space: nowrap;
+}
+
 /* ── Work with me ────────────────────────────────────────────────────────── */
 .cs-cards {
   display: grid;
@@ -1671,6 +1708,7 @@ textarea.input { min-height: 100px; }
   .cs-values { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   .cs-cards { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   .cs-speed { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .cs-topten { grid-template-columns: minmax(0, 1fr); }
 
   /* One column, mockup order — with the two Ubersuggest panels holding a 2-up
      row, which they stay legible at because they are small crops to begin with. */

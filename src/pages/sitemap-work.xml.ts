@@ -1,11 +1,13 @@
 import { getCollection } from "astro:content";
 import { sitemapResponse } from "../lib/sitemap";
-import { EVIDENCE_IMAGES } from "../lib/gerti-evidence";
+import { EVIDENCE_IMAGES as GERTI_IMAGES } from "../lib/gerti-evidence";
+import { EVIDENCE_IMAGES as STS_IMAGES } from "../lib/sts-evidence";
 import { SITE } from "../lib/site";
 
 /** Content images a hand-built case-study page renders, keyed by its slug. */
 const bespokeImages: Record<string, string[]> = {
-  "gerti-foods": EVIDENCE_IMAGES,
+  "gerti-foods": GERTI_IMAGES,
+  "sts-company": STS_IMAGES,
 };
 
 export async function GET() {
