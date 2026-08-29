@@ -32,6 +32,10 @@ kastriottanaj.com {
 		file_server
 	}
 
+	# PDFs have no HTML <head>, so publish their canonical URL as an HTTP header.
+	@cv path /assets/kastriot-tanaj-cv.pdf
+	header @cv Link "<https://kastriottanaj.com/assets/kastriot-tanaj-cv.pdf>; rel=\"canonical\""
+
 	# Fingerprinted assets are immutable — cache them hard.
 	@immutable path /_astro/*
 	header @immutable Cache-Control "public, max-age=31536000, immutable"
