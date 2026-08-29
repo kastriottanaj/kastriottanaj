@@ -37,6 +37,7 @@ const serviceCards = [
     href: "/services/seo/",
     link: "Explore SEO →",
     image: "/assets/services/seo-services.webp",
+    alt: "SEO services",
     icon: "i-search",
   },
   {
@@ -45,6 +46,7 @@ const serviceCards = [
     href: "/services/digital-marketing/",
     link: "Explore marketing →",
     image: "/assets/services/digital-marketing-services.webp",
+    alt: "Digital marketing services",
     icon: "i-megaphone",
   },
   {
@@ -53,6 +55,7 @@ const serviceCards = [
     href: "/services/ai-automation/",
     link: "Explore automation →",
     image: "/assets/services/ai-automation-services.webp",
+    alt: "AI automation services",
     icon: "i-bot",
   },
   {
@@ -61,6 +64,7 @@ const serviceCards = [
     href: "/services/web-development/",
     link: "Explore web development →",
     image: "/assets/services/web-development-services.webp",
+    alt: "Web development services",
     icon: "i-code",
   },
 ];
@@ -79,7 +83,7 @@ const serviceCards = [
         src="/assets/services/kastriot-tanaj-services.webp"
         width="1672"
         height="941"
-        alt=""
+        alt="Kastriot Tanaj services"
         loading="eager"
         decoding="async"
         fetchpriority="high"
@@ -187,7 +191,7 @@ const serviceCards = [
                 src={service.image}
                 width="1536"
                 height="1024"
-                alt=""
+                alt={service.alt}
                 loading="lazy"
                 decoding="async"
               />
