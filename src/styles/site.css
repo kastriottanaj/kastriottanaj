@@ -187,13 +187,11 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .hero__figure { width: 100%; border: var(--rule) solid var(--color-divider); }
 .hero__figure img { width: 100%; height: auto; }
 
-/* The intro clip is shot 9:16, so it is capped rather than stretched to the column. */
+/* The intro clip is shot 16:9, so it fills the hero column at its native ratio. */
 .hero__figure--video {
   position: relative;
   width: 100%;
-  max-width: 320px;
-  margin-inline: auto;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--color-divider);
 }
