@@ -86,8 +86,9 @@
       }
     });
 
-    // Leaving the narrow breakpoint clears the toggled state.
-    window.matchMedia("(min-width: 821px)").addEventListener("change", (e) => {
+    // Leaving the narrow breakpoint clears the toggled state. Keep in step with
+    // the nav collapse media query in site.css.
+    window.matchMedia("(min-width: 1001px)").addEventListener("change", (e) => {
       if (e.matches) setMenu(false);
     });
   }
