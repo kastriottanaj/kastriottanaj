@@ -16,6 +16,8 @@ export function GET() {
         publicationDate: "2026-08-24",
       },
     },
+    { path: "/process/" },
+    { path: "/pricing/" },
     {
       path: "/northbound/",
       images: ["/video/shkoder-poster.jpg"],

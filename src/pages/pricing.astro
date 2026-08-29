@@ -1,0 +1,309 @@
+---
+import Base from "../layouts/Base.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import { SITE } from "../lib/site";
+
+const title = `Pricing & packages | ${SITE.name}`;
+const description =
+  "Three ways to work together — a one-off audit sprint, an ongoing growth partnership, or a single automation build. What each includes, and how the quote is put together.";
+
+const plans = [
+  {
+    title: "SEO Audit & Sprint",
+    best: "Best for an honest read on where you actually stand",
+    desc: "A focused technical, on-page and content audit with an action plan you can use straight away — with me or without me.",
+    price: "Custom — quoted per site",
+    includes: [
+      "Full technical crawl and fix list",
+      "On-page and content review",
+      "Competitor gap analysis",
+      "Prioritised 90-day roadmap",
+      "A walkthrough call on the findings",
+      "The quick wins implemented, not just listed",
+    ],
+    featured: false,
+  },
+  {
+    title: "Growth Partner",
+    best: "Best for teams ready to grow month over month",
+    desc: "An ongoing SEO and digital marketing partnership — strategy, execution and reporting every month, against one metric we agree on up front.",
+    price: "Monthly retainer — custom",
+    includes: [
+      "Everything in the Audit & Sprint",
+      "Monthly technical and content execution",
+      "Ongoing on-page and internal-link work",
+      "Campaign and social support",
+      "A monthly reporting call",
+      "Direct access between calls",
+    ],
+    featured: true,
+  },
+  {
+    title: "Automation Build",
+    best: "Best for teams losing hours to repeat work",
+    desc: "A custom AI or Python automation for reporting, lead handling or content workflows — built around the tools you already use, documented and handed over.",
+    price: "Fixed price per build",
+    includes: [
+      "Scoping session against your stack",
+      "Custom build in Python or AI workflows",
+      "Testing and failure monitoring",
+      "Documentation and team handover",
+      "30 days of post-launch fixes",
+      "Optional ongoing maintenance",
+    ],
+    featured: false,
+  },
+];
+
+const factors = [
+  {
+    icon: "i-code",
+    title: "Size of the site",
+    desc: "A few dozen pages or a few thousand. Crawl depth, template count and technical debt all scale the work.",
+  },
+  {
+    icon: "i-trending",
+    title: "How competitive the market is",
+    desc: "Ranking in a quiet local market and ranking against national brands are not the same amount of work.",
+  },
+  {
+    icon: "i-search",
+    title: "What's already there",
+    desc: "Existing content, a healthy site and clean analytics all shorten the runway — and lower the quote.",
+  },
+  {
+    icon: "i-sliders",
+    title: "The pace you want",
+    desc: "More output per month costs more per month. It does not cost more per unit of work.",
+  },
+  {
+    icon: "i-users",
+    title: "Who implements",
+    desc: "If your team ships the fixes, you're paying for strategy. If I ship them, you're paying for both.",
+  },
+  {
+    icon: "i-bot",
+    title: "How much can be automated",
+    desc: "Work that can be handed to a script once is cheaper over a year than work repeated by hand every month.",
+  },
+];
+
+const quoteSteps = [
+  {
+    num: "01",
+    icon: "i-phone",
+    title: "Book a call",
+    desc: "Twenty minutes on your site, your market and what you're actually trying to fix.",
+  },
+  {
+    num: "02",
+    icon: "i-search",
+    title: "Quick review",
+    desc: "I look at the site, the search data and two or three competitors before quoting anything.",
+  },
+  {
+    num: "03",
+    icon: "i-map",
+    title: "Written proposal",
+    desc: "Scope, deliverables, timeline and price in writing — usually within two business days.",
+  },
+  {
+    num: "04",
+    icon: "i-sliders",
+    title: "Start",
+    desc: "You approve, we book the kickoff, and week one is the audit.",
+  },
+];
+
+const faq = [
+  {
+    q: "Why are there no numbers on this page?",
+    a: "Because a fixed public price is either padded to cover the worst case, or it's a bait number that changes on the first call. A forty-page brochure site in a quiet market and a four-thousand-URL store fighting national competitors are not the same job. Tell me the site and the goal and you get a real number in writing before anything starts.",
+  },
+  {
+    q: "What's the minimum commitment?",
+    a: "Three months for the Growth Partner, because that's the shortest honest window to judge SEO work — a shorter term mostly means paying for setup twice. After that it runs month to month. The audit sprint and automation builds are one-off.",
+  },
+  {
+    q: "How does payment work?",
+    a: "Retainers are invoiced monthly in advance. Builds and audits split 50% up front and 50% on handover.",
+  },
+  {
+    q: "Is ad spend included?",
+    a: "No. Any advertising budget goes straight to the platform rather than through me, and the account stays in your name.",
+  },
+  {
+    q: "What if it isn't working?",
+    a: "You'll know before I do — that's what the monthly report is for. If the work isn't moving the metric we agreed on, we change the plan or you stop. There's no cancellation fee.",
+  },
+  {
+    q: "Can I combine packages?",
+    a: "Most people do. An audit sprint that turns into a retainer is the common path, and an automation build often runs alongside one.",
+  },
+  {
+    q: "Do you work with businesses outside Kosovo?",
+    a: `Yes — most of the work is remote across Europe. I'm based in ${SITE.locality} and calls happen on WhatsApp or Google Meet.`,
+  },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Pricing", item: `${SITE.url}/pricing/` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "Packages",
+    url: `${SITE.url}/pricing/`,
+    itemListElement: plans.map((plan, i) => ({
+      "@type": "Offer",
+      position: i + 1,
+      name: plan.title,
+      description: plan.desc,
+      url: `${SITE.url}/pricing/`,
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        // No public rate card: every engagement is scoped and quoted per site.
+        priceCurrency: "EUR",
+      },
+      itemOffered: {
+        "@type": "Service",
+        name: plan.title,
+        description: plan.desc,
+        areaServed: "Europe",
+        provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+      },
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">Pricing</span>
+    </nav>
+
+    <header class="page-head">
+      <span class="kicker">Pricing</span>
+      <h1 class="page-head__title">Packages and how pricing works</h1>
+      <p class="page-head__lede">
+        Three ways to work together — a one-off audit sprint, an ongoing growth partnership,
+        or a single automation build. Every quote is scoped to your site and your market, so
+        the number in the proposal is the number you pay.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/#contact">Get a quote</a>
+        <a class="btn btn-secondary btn--lg" href="/process/">See the process</a>
+      </div>
+    </header>
+
+    <!-- ── Packages ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled" id="packages">
+      <h2 class="kicker">Packages</h2>
+      <div class="ruled-grid ruled-grid--plans">
+        {
+          plans.map((plan) => (
+            <article class="plan">
+              {plan.featured && <span class="tag badge">MOST POPULAR</span>}
+              <h3 class="plan__title">{plan.title}</h3>
+              <p class="step__num">{plan.best}</p>
+              <p class="plan__desc">{plan.desc}</p>
+              <ul class="includes__list">
+                {plan.includes.map((item) => <li>{item}</li>)}
+              </ul>
+              <p class="plan__price">{plan.price}</p>
+              <a
+                class={`btn plan__cta ${plan.featured ? "btn-primary" : "btn-secondary"}`}
+                href="/#contact"
+              >Get a quote</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── What shapes the quote ────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">What shapes your quote</h2>
+      <p class="section__lede">
+        Six things move the number, and none of them is how big your company looks from the
+        outside.
+      </p>
+      <div class="ruled-grid ruled-grid--wide">
+        {
+          factors.map((factor) => (
+            <div class="service">
+              <svg class="icon" aria-hidden="true"><use href={`#${factor.icon}`} /></svg>
+              <h3 class="service__title">{factor.title}</h3>
+              <p class="service__desc">{factor.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── How the quote works ──────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">How the quote works</h2>
+      <ol class="steps">
+        {
+          quoteSteps.map((step) => (
+            <li class="step">
+              <svg class="icon icon--md" aria-hidden="true"><use href={`#${step.icon}`} /></svg>
+              <p class="step__num">{step.num}</p>
+              <h3 class="step__title">{step.title}</h3>
+              <p class="step__desc">{step.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- ── Training ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">Rather learn it yourself?</h2>
+      <p class="section__lede">
+        The <a href="/bootcamps/">bootcamps</a> teach the same work as a hands-on course — SEO
+        and WordPress — priced separately from the packages above. Good if you'd rather build
+        the skill in-house than outsource it.
+      </p>
+    </section>
+
+    <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">Common questions</h2>
+      <div class="faq">
+        {
+          faq.map((item) => (
+            <details class="faq__item">
+              <summary class="faq__q">{item.q}</summary>
+              <p class="faq__a">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <CtaBanner
+    title="Not sure which package fits?"
+    lede="Tell me the site and the goal, and I'll tell you which one I'd pick — and when none of them is the answer."
+    ghostLabel="Ask a question →"
+  />
+</Base>

@@ -79,6 +79,11 @@ ${list(
   }))
 )}
 
+## Working together
+
+- [Process](${site}/process/): The five phases every engagement runs through — audit, strategy, build, automate, report.
+- [Pricing](${site}/pricing/): The three packages, what each includes, and how a quote is put together.
+
 ## Contact
 
 - [Contact form](${site}/#contact): Enquiries about SEO, digital marketing, AI automation and web development.

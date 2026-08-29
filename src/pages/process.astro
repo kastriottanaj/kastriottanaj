@@ -1,0 +1,315 @@
+---
+import Base from "../layouts/Base.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import { SITE } from "../lib/site";
+
+const title = `Process — how I work | ${SITE.name}`;
+const description =
+  "The five phases every engagement runs through — audit, strategy, build, automate, report — what you get at each one, and how long it takes.";
+
+/** One source for both the overview band and the detailed section below it. */
+const phases = [
+  {
+    num: "01",
+    icon: "i-search",
+    title: "Discover & audit",
+    short: "A full technical, content, and competitor audit — no guesswork, just opportunities.",
+    body: "Nothing gets touched until I know what is actually wrong. I crawl the site, read the search data you already have, and look at the two or three competitors who keep outranking you. What comes back is a list of problems ranked by what they are costing you — not a severity score out of ten that nobody can act on.",
+    deliverables: [
+      "Full technical crawl and fix list",
+      "On-page and content review",
+      "Competitor gap analysis",
+      "Findings ranked by impact, not by tool score",
+    ],
+  },
+  {
+    num: "02",
+    icon: "i-map",
+    title: "Strategy & roadmap",
+    short: "A prioritized plan tied to your goals — traffic, leads, or revenue.",
+    body: "The audit says what is broken. The roadmap says what we do about it, in what order, and what each item is expected to move. Everything ties back to one goal you pick, because a plan that optimises for traffic, leads and revenue at once optimises for none of them. Work that costs a lot and moves little gets cut here, not halfway through the quarter.",
+    deliverables: [
+      "Keyword and topic map",
+      "Prioritised 90-day roadmap",
+      "Agreed success metrics",
+      "Effort and impact estimate per item",
+    ],
+  },
+  {
+    num: "03",
+    icon: "i-sliders",
+    title: "Build & optimize",
+    short: "Site, content, and technical fixes shipped and measured, not left in a slide deck.",
+    body: "This is the part most audits never reach. Technical fixes get implemented, pages get rewritten and restructured, new content gets published, and internal linking gets rebuilt around the topics you want to own. I work inside your site or alongside your developers — whichever ships faster. Every change is logged with a date, so a movement three months later can be traced back to a cause.",
+    deliverables: [
+      "Technical fixes implemented and verified",
+      "On-page and content rewrites",
+      "New pages and content shipped",
+      "A dated change log you keep",
+    ],
+  },
+  {
+    num: "04",
+    icon: "i-bot",
+    title: "Automate & scale",
+    short: "Repetitive work handed off to automations, so growth doesn't mean more headcount.",
+    body: "Once the work is running, the recurring parts get handed to a machine — reporting, lead routing, content briefs, alerts when something breaks. These are custom Python and AI workflows built around the tools you already use, not another subscription to manage. The test is simple: hours back every month, and fewer things that quietly stop working.",
+    deliverables: [
+      "Automation scoped to your stack",
+      "Built, tested and documented",
+      "Handover so your team can run it",
+      "Monitoring for silent failures",
+    ],
+  },
+  {
+    num: "05",
+    icon: "i-phone",
+    title: "Track & report",
+    short: "Clear, honest reporting on what moved and why — no vanity metrics.",
+    body: "Monthly reporting a non-marketer can read: what changed, what it did, what is next, and what did not work. Impressions climbing while leads stay flat is a finding worth leading with, not something to bury on slide fourteen. If a bet did not pay off, you hear it from me first.",
+    deliverables: [
+      "Monthly report in plain language",
+      "Rankings, traffic and lead tracking",
+      "What worked and what didn't",
+      "Next month's priorities",
+    ],
+  },
+];
+
+const timeline = [
+  {
+    icon: "i-search",
+    label: "Weeks 1–2",
+    title: "Audit and roadmap",
+    desc: "From the first call to a plan you could act on without me.",
+  },
+  {
+    icon: "i-sliders",
+    label: "Weeks 3–12",
+    title: "Build and optimize",
+    desc: "Fixes and content ship continuously. The first real movement in search usually lands in this window.",
+  },
+  {
+    icon: "i-trending",
+    label: "Month 3 onward",
+    title: "Compound and automate",
+    desc: "Rankings mature, reporting runs itself, and the roadmap gets rewritten against what actually moved.",
+  },
+];
+
+const fromYou = [
+  {
+    icon: "i-sliders",
+    title: "Access",
+    desc: "Search Console, Analytics and the CMS. Read-only is fine to start with.",
+  },
+  {
+    icon: "i-users",
+    title: "One decision-maker",
+    desc: "One person who can approve copy and say yes to shipping. Approval by committee is what actually kills timelines.",
+  },
+  {
+    icon: "i-phone",
+    title: "An hour a month",
+    desc: "One call to review what moved and agree what's next. Everything else can be async.",
+  },
+  {
+    icon: "i-trending",
+    title: "Honesty about the goal",
+    desc: "Traffic, leads or revenue. Tell me which one you're measured on and I'll optimise for that one.",
+  },
+];
+
+const faq = [
+  {
+    q: "How soon will I see results?",
+    a: "Technical and on-page fixes can show up within weeks. Competitive rankings usually take three to six months of consistent work. I would rather tell you that now than explain it in month four.",
+  },
+  {
+    q: "Do you work with my developers, or replace them?",
+    a: "Either. If you have a dev team, I hand them scoped tickets and verify the result. If you don't, I implement the changes directly.",
+  },
+  {
+    q: "What if I only want the audit?",
+    a: "That's the SEO Audit & Sprint package. You get the findings and the roadmap, and you're free to run it in-house or with another team.",
+  },
+  {
+    q: "Who actually does the work?",
+    a: "I do. You are not being sold to by one person and then handed to someone else.",
+  },
+  {
+    q: "Does this work outside SEO?",
+    a: "The same five phases run for digital marketing, automation and web builds. What changes is what gets audited in phase one and what gets shipped in phase three.",
+  },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Process", item: `${SITE.url}/process/` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How I work with clients",
+    description,
+    url: `${SITE.url}/process/`,
+    step: phases.map((phase, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: phase.title,
+      text: phase.body,
+      url: `${SITE.url}/process/#phase-${phase.num}`,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <span aria-current="page">Process</span>
+    </nav>
+
+    <header class="page-head">
+      <span class="kicker">Process</span>
+      <h1 class="page-head__title">How I work</h1>
+      <p class="page-head__lede">
+        Every engagement runs through the same five phases — audit, strategy, build,
+        automate, report. No black boxes and no sixty-page deck nobody reads: you see what I
+        found, what I'd do about it, and what it moved.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-primary btn--lg" href="/#contact">Book a strategy call</a>
+        <a class="btn btn-secondary btn--lg" href="/pricing/">See packages</a>
+      </div>
+    </header>
+
+    <!-- ── Overview ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">The five phases</h2>
+      <ol class="steps">
+        {
+          phases.map((phase) => (
+            <li class="step">
+              <svg class="icon icon--md" aria-hidden="true"><use href={`#${phase.icon}`} /></svg>
+              <p class="step__num">{phase.num}</p>
+              <h3 class="step__title">{phase.title}</h3>
+              <p class="step__desc">{phase.short}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- ── Phase detail ─────────────────────────────────────────────────── -->
+    <div class="article-grid">
+      <div class="prose">
+        <h2 class="sr-only">What happens in each phase</h2>
+        {
+          phases.map((phase) => (
+            <section id={`phase-${phase.num}`}>
+              <h2>{phase.num} — {phase.title}</h2>
+              <p>{phase.body}</p>
+              <p><strong>What you get:</strong></p>
+              <ul>
+                {phase.deliverables.map((item) => <li>{item}</li>)}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+
+      <aside class="includes">
+        <h2 class="kicker">Every engagement</h2>
+        <ul class="includes__list">
+          <li>One named person doing the work — no account manager in between</li>
+          <li>Findings you keep, whether we continue or not</li>
+          <li>Direct access on WhatsApp or email between calls</li>
+          <li>Plain-language reporting, every month</li>
+          <li>A dated log of every change made to your site</li>
+        </ul>
+      </aside>
+    </div>
+
+    <!-- ── Timeline ─────────────────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">How long it takes</h2>
+      <p class="section__lede">
+        SEO is not paid advertising. Technical fixes can move things in weeks; competitive
+        rankings take months. Anyone promising page one by Friday is selling something else.
+      </p>
+      <div class="ruled-grid ruled-grid--services">
+        {
+          timeline.map((item) => (
+            <div class="service">
+              <svg class="icon" aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <p class="step__num">{item.label}</p>
+              <h3 class="service__title">{item.title}</h3>
+              <p class="service__desc">{item.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── What I need from you ─────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">What I need from you</h2>
+      <p class="section__lede">
+        Short list, and it stays short. The work stalls far more often on access and
+        approvals than on strategy.
+      </p>
+      <div class="ruled-grid ruled-grid--services">
+        {
+          fromYou.map((item) => (
+            <div class="service">
+              <svg class="icon" aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <h3 class="service__title">{item.title}</h3>
+              <p class="service__desc">{item.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+    <section class="section section--ruled">
+      <h2 class="kicker">Common questions</h2>
+      <div class="faq">
+        {
+          faq.map((item) => (
+            <details class="faq__item">
+              <summary class="faq__q">{item.q}</summary>
+              <p class="faq__a">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section section--ruled">
+      <h2 class="kicker">Next</h2>
+      <p class="section__lede">
+        See what the phases cost in <a href="/pricing/">packages and pricing</a>, or look at
+        how this played out on real projects in the <a href="/work/">case studies</a>.
+      </p>
+    </section>
+  </div>
+
+  <CtaBanner />
+</Base>

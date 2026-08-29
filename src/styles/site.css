@@ -77,6 +77,9 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .section--stats { padding: 28px 0; border-top: var(--rule) solid var(--color-divider); }
 .section--benefits { padding: 20px 0 36px; }
 
+/* The "there is a whole page of this" link under a homepage band. */
+.section__more { margin: 24px 0 0; }
+
 /* Section label. Body-size accent fails contrast, so it uses accent-700. */
 .kicker {
   display: block;
@@ -364,6 +367,9 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 }
 .ruled-grid--services { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .ruled-grid--plans { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+/* Wider cells for bands of six: 320px lands on 3 / 2 / 1 columns, and six
+   divides into all three, so the last row is never left part-full. */
+.ruled-grid--wide { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 
 /* ── Services ────────────────────────────────────────────────────────────── */
 .service {
