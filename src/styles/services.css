@@ -9,41 +9,6 @@ body:has(.services-page) {
 
 body:has(.services-page) .whatsapp-fab { display: none; }
 
-body:has(.services-page) .nav {
-  min-height: 50px;
-  padding: 10px max(32px, calc((100vw - 1080px) / 2 + 32px));
-  gap: 26px;
-  border-bottom: 1px solid var(--services-rule);
-  background: var(--services-ground);
-}
-
-body:has(.services-page) .nav .nav-brand {
-  color: var(--services-ink);
-  font-size: 16px;
-  line-height: 1;
-}
-
-body:has(.services-page) .nav__menu { gap: 26px; }
-body:has(.services-page) .nav__links { gap: 24px; }
-
-body:has(.services-page) .nav__links a {
-  color: var(--services-ink);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-body:has(.services-page) .nav__links a[aria-current="page"] {
-  color: var(--services-red);
-}
-
-body:has(.services-page) .nav__menu .btn {
-  min-width: 95px;
-  min-height: 30px;
-  padding: 7px 15px;
-  background: var(--services-red);
-  font-size: 11px;
-}
-
 .services-page {
   overflow: clip;
   color: var(--services-ink);
@@ -450,10 +415,6 @@ body:has(.services-page) .footer__inner {
   padding-inline: 32px;
 }
 
-@media (min-width: 821px) {
-  body:has(.services-page) .nav { height: 50px; }
-}
-
 @media (min-width: 721px) {
   .services-wrap {
     position: relative;
@@ -462,8 +423,6 @@ body:has(.services-page) .footer__inner {
 }
 
 @media (max-width: 940px) and (min-width: 721px) {
-  body:has(.services-page) .nav__links { gap: 16px; }
-  body:has(.services-page) .nav__menu { gap: 18px; }
   .services-card { gap: 11px; }
   .services-card__details { gap: 10px; }
   .services-benefit { padding-inline: 13px; }
@@ -477,63 +436,6 @@ body:has(.services-page) .footer__inner {
   body:has(.services-page) {
     padding-bottom: calc(47px + env(safe-area-inset-bottom));
   }
-
-  body:has(.services-page) .nav {
-    position: sticky;
-    min-height: 50px;
-    padding: 10px 16px 10px 24px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  body:has(.services-page) .nav .nav-brand { font-size: 16px; }
-
-  body:has(.services-page) .nav .nav__mobile-cta {
-    min-width: 79px;
-    min-height: 29px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    padding: 7px 10px;
-    background: var(--services-red);
-    color: #fff;
-    font-family: var(--font-heading);
-    font-size: 10.5px;
-    font-weight: 800;
-    line-height: 1;
-    text-decoration: none;
-  }
-
-  body:has(.services-page) .nav__toggle {
-    width: 22px;
-    height: 22px;
-    display: inline-flex;
-    justify-content: center;
-    padding: 0;
-    border: 0;
-  }
-
-  body:has(.services-page) .nav__toggle > span:last-child {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  body:has(.services-page) .nav__bars,
-  body:has(.services-page) .nav__bars::before,
-  body:has(.services-page) .nav__bars::after {
-    width: 19px;
-    height: 1.5px;
-  }
-
-  body:has(.services-page) .nav__bars::before { top: -6px; }
-  body:has(.services-page) .nav__bars::after { top: 6px; }
-  body:has(.services-page) .nav__menu { margin-top: 10px; }
-  body:has(.services-page) .nav__menu .btn { display: none; }
 
   .services-wrap {
     width: 100%;

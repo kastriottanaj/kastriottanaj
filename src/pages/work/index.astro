@@ -231,25 +231,6 @@ const schema = [
 
   body:has(.work-page) .whatsapp-fab { display: none; }
 
-  body:has(.work-page) .nav {
-    min-height: 44px;
-    padding: 7px max(32px, calc((100vw - 1112px) / 2 + 32px));
-    border-bottom-color: var(--work-rule);
-    border-bottom-width: 1px;
-    background: #f3f2f1;
-  }
-
-  body:has(.work-page) .nav .nav-brand { font-size: 16px; line-height: 1; }
-  body:has(.work-page) .nav__menu { gap: 26px; }
-  body:has(.work-page) .nav__links { gap: 24px; }
-  body:has(.work-page) .nav__links a { font-size: 11px; font-weight: 600; }
-  body:has(.work-page) .nav__menu .btn {
-    min-height: 29px;
-    padding: 7px 16px;
-    font-size: 11px;
-    background: var(--work-red);
-  }
-
   .work-page { color: var(--work-ink); }
   .work-wrap {
     width: min(100%, 1112px);
@@ -492,31 +473,6 @@ const schema = [
 
   @media (max-width: 720px) {
     body:has(.work-page) { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
-
-    body:has(.work-page) .nav { min-height: 64px; padding: 18px 16px; flex-wrap: wrap; }
-    body:has(.work-page) .nav .nav-brand { font-size: 18px; }
-    body:has(.work-page) .nav__toggle {
-      width: 24px;
-      height: 24px;
-      display: inline-flex;
-      justify-content: center;
-      padding: 0;
-      border: 0;
-    }
-    body:has(.work-page) .nav__toggle > span:last-child {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-    body:has(.work-page) .nav__bars,
-    body:has(.work-page) .nav__bars::before,
-    body:has(.work-page) .nav__bars::after { width: 20px; height: 2px; }
-    body:has(.work-page) .nav__bars::before { top: -6px; }
-    body:has(.work-page) .nav__bars::after { top: 6px; }
-    body:has(.work-page) .nav__menu { width: 100%; margin-top: 18px; }
 
     .work-wrap { width: 100%; padding-inline: 10px; }
     .work-hero {
