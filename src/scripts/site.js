@@ -1,9 +1,17 @@
 /* Kastriot Tanaj — site behaviour.
    Mobile nav, homepage scroll-spy, contact and newsletter form enhancement,
-   and cookie consent controls. Everything here is optional — the site is fully
-   usable with this file blocked. */
+   cookie consent controls, and the Meta Pixel conversion events. Everything
+   here is optional — the site is fully usable with this file blocked. */
 (() => {
   "use strict";
+
+  /* ── Meta Pixel events ─────────────────────────────────────────────────── */
+  /* Safe to call unconditionally: with PUBLIC_META_PIXEL_ID unset the component
+     renders nothing and fbq is undefined. Consent is the pixel's own business —
+     until the visitor accepts it sits in the 'revoke' state and sends nothing. */
+  const track = (event, params) => {
+    if (typeof window.fbq === "function") window.fbq("track", event, params);
+  };
 
   /* ── Cookie consent / Google Consent Mode v2 ──────────────────────────── */
   const consentPanel = document.querySelector("[data-cookie-consent]");
@@ -38,6 +46,10 @@
           functionality_storage: value,
           personalization_storage: value,
         });
+      }
+
+      if (typeof window.fbq === "function") {
+        window.fbq("consent", granted ? "grant" : "revoke");
       }
     };
 
@@ -282,6 +294,16 @@
       showStatus("That didn't send.", LEAD_MESSAGES[failure] || LEAD_MESSAGES.server);
     }
   }
+  /* ── Lead conversion ───────────────────────────────────────────────────── */
+  /* Fired on /thanks/ rather than in the fetch callback above: it is the single
+     destination both the JS and the no-JS path reach, and a page load can't be
+     cut short the way a request racing a redirect can. Reloads are skipped so a
+     refresh doesn't count a second lead. */
+  if (location.pathname === "/thanks/") {
+    const entries = performance.getEntriesByType?.("navigation");
+    if (entries?.[0]?.type !== "reload") track("Lead", { content_name: "Contact form" });
+  }
+
   /* ── Newsletter subscribe ──────────────────────────────────────────────── */
   /* The same form can appear more than once on a page (footer of a post, plus
      the block on /newsletter/), so everything here is per-form. */
@@ -373,6 +395,10 @@
           "Check your inbox.",
           "I've sent you a short email — click the link inside and you're on the list."
         );
+
+        // Double opt-in, so this is the request rather than the confirmed
+        // subscriber — the confirm route is a separate page load.
+        track("CompleteRegistration", { content_name: "Newsletter" });
       } catch (error) {
         button.disabled = false;
         button.textContent = label;
@@ -406,4 +432,20 @@
       }
     }
   }
+
+  /* ── Outbound contact taps ─────────────────────────────────────────────── */
+  /* WhatsApp, phone and email all hand the visitor to another app, so the click
+     is the only signal this side ever gets. Delegated from the document because
+     these links appear in the footer, the FAB and inside post bodies. */
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const href = target?.closest("a[href]")?.getAttribute("href") || "";
+
+    let channel = null;
+    if (href.includes("wa.me")) channel = "WhatsApp";
+    else if (href.startsWith("tel:")) channel = "Phone";
+    else if (href.startsWith("mailto:")) channel = "Email";
+
+    if (channel) track("Contact", { content_name: channel });
+  });
 })();

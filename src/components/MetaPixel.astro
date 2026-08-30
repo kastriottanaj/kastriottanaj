@@ -1,0 +1,46 @@
+---
+/** Meta (Facebook) Pixel — audience building, retargeting and conversion measurement.
+ *
+ * Production only — `astro dev` renders nothing, so localhost browsing stays out
+ * of the pixel's data.
+ *
+ * Consent: the pixel is initialised with consent REVOKED unless the visitor has
+ * already accepted, mirroring the Google Consent Mode default in Base.astro.
+ * site.js flips it with fbq('consent', 'grant'|'revoke') the moment they choose.
+ *
+ * No <noscript> fallback image on purpose: it would fire for every no-JS visitor
+ * with no way to honour the banner, and the banner itself needs JS to appear.
+ */
+
+// Baked in the way the GA tag in Base.astro is: the ID is a public identifier,
+// and the production build runs on the server, where a repo constant needs no
+// deploy-time configuration. PUBLIC_META_PIXEL_ID overrides it; setting that to
+// an empty string switches the pixel off.
+const DEFAULT_PIXEL_ID = "1616830733405682";
+const raw = (import.meta.env.PUBLIC_META_PIXEL_ID ?? DEFAULT_PIXEL_ID).trim();
+
+// Pixel IDs are numeric. Anything else is a misconfiguration, and refusing it
+// keeps the raw value out of the inline script below. Dev is excluded outright,
+// so localhost browsing never lands in the real pixel's data.
+const pixelId = import.meta.env.PROD && /^\d{6,20}$/.test(raw) ? raw : null;
+
+/* Wrapped in an IIFE: the gtag block in Base.astro declares its own top-level
+   `consentChoice`, and a second `let` of that name would be a SyntaxError. */
+const snippet = `(function(){
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+var choice=null;
+try{choice=localStorage.getItem('cookie-consent');}catch(_){}
+if(choice!=='accepted')fbq('consent','revoke');
+fbq('init','${pixelId}');
+fbq('track','PageView');
+})();`;
+---
+
+{pixelId && <script is:inline set:html={snippet} />}

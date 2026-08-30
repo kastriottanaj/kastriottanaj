@@ -5,6 +5,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import IconSprite from "../components/IconSprite.astro";
 import CookieConsent from "../components/CookieConsent.astro";
+import MetaPixel from "../components/MetaPixel.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 
 import "../styles/modernist.css";
@@ -56,6 +57,8 @@ const ogImage = new URL(image, SITE.url).href;
       gtag('config', 'G-9Q01WMYX5J');
     </script>
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-9Q01WMYX5J"></script>
+
+    <MetaPixel />
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
