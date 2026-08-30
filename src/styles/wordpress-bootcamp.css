@@ -1,0 +1,797 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   WordPress bootcamp page.
+
+   Same vocabulary as the redesigned service pages (styles/seo.css,
+   styles/web-development.css) — hairline cards, red marks, one black exit
+   band — but this mockup keeps every band on the page's own warm ground and
+   opens on a two-column hero: the copy at the left, the photograph bled off
+   the right edge and running the full height of the band.
+
+   Everything is composed at the site's measure (--measure / --gutter) so the
+   nav, the content and the exit band share one left edge. The mockup's own
+   per-band insets disagree with each other and with the nav — its rules, its
+   hero copy and its cards each start somewhere different — so the type is set
+   by matching its ink and the geometry by the site's own container.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.wpb-page) {
+  --wpb-rule: #e2e0df;
+  --wpb-ink: #201e1d;
+  --wpb-muted: #565554;
+  --wpb-black: #181717;
+}
+
+.wpb-page { color: var(--wpb-ink); }
+
+.wpb-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── Shared type ─────────────────────────────────────────────────────────── */
+
+.wpb-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* The two centred section headings the mockup sets over the cards. */
+.wpb-head { text-align: center; }
+
+.wpb-head__title {
+  max-width: 620px;
+  margin: 7px auto 0;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.028em;
+}
+
+/* ── Buttons and links ───────────────────────────────────────────────────── */
+
+.wpb-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 12px 31px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.wpb-button--primary { background: var(--color-accent); color: #fff; }
+.wpb-button--primary:hover { background: var(--color-accent-600); color: #fff; }
+.wpb-button--primary:active { background: var(--color-accent-700); }
+
+.wpb-button--ghost { border-color: #cfcbc8; color: var(--wpb-ink); }
+.wpb-button--ghost:hover { border-color: var(--wpb-ink); color: var(--wpb-ink); }
+.wpb-button--ghost:active { background: rgba(32, 30, 29, 0.06); }
+
+.wpb-button--lg {
+  min-width: 216px;
+  min-height: 46px;
+  padding: 14px 32px;
+  font-size: 13px;
+}
+
+.wpb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.wpb-link:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+.wpb-link--light { color: #fff; }
+.wpb-link--light:hover { color: #fff; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────
+   The photograph is taken out of flow so the band's height is set by the
+   copy alone, exactly as the mockup draws it: the image fills whatever the
+   type leaves, from 43% of the viewport to the right edge. */
+
+.wpb-hero {
+  position: relative;
+  overflow: clip;
+}
+
+.wpb-hero__inner { padding-block: 46px 37px; }
+
+.wpb-hero__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+}
+
+.wpb-hero__title {
+  max-width: 480px;
+  margin: 12px 0 0;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.wpb-hero__lede {
+  max-width: 430px;
+  margin: 14px 0 0;
+  color: var(--wpb-muted);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.wpb-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.wpb-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 18px 0 0;
+  color: var(--wpb-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* The separator trails its item rather than leading the next one, so a wrapped
+   line on the phone never opens on a stray dot. */
+.wpb-hero__meta span:not(:last-child)::after {
+  margin-left: 12px;
+  content: "·";
+}
+
+/* 46% of the viewport is where the mockup starts the picture, but past about
+   1600px the centred measure's left edge advances faster than that percentage
+   does — so the edge is also held clear of the copy, and the wider of the two
+   wins. */
+.wpb-hero__img {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  left: max(46%, calc(50% - 60px));
+  /* An <img> with width:auto takes its intrinsic width and ignores `right`, so
+     the width is spelled out as the exact complement of the left edge above. */
+  width: min(54%, calc(50% + 60px));
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* ── The four counts ─────────────────────────────────────────────────────
+   Ruled top and bottom, four equal columns divided by hairlines, each
+   column's mark and figures centred in it. */
+
+.wpb-counts__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  /* Longhand, not padding-block — the UA's padding-inline-start on <ul> would
+     otherwise survive and push the first column off the content edge. */
+  padding: 20px 0;
+  border-top: 1px solid var(--wpb-rule);
+  border-bottom: 1px solid var(--wpb-rule);
+  list-style: none;
+}
+
+.wpb-counts__list li {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding-inline: 12px;
+}
+
+/* Sized to the ink the mockup draws, not to the sprite's box — Lucide's art
+   sits inside its 24-unit viewBox, so the box runs a little larger than the
+   drawn mark. The stroke is scaled back to keep the drawn weight. */
+.wpb-counts__list svg {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wpb-counts__text { min-width: 0; }
+
+.wpb-counts__value {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.wpb-counts__label {
+  display: block;
+  color: var(--wpb-muted);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.wpb-counts__list li + li::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 52px;
+  background: var(--wpb-rule);
+  transform: translateY(-50%);
+  content: "";
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────
+   The promises and the phases are drawn as one card: a mark or a numeral at
+   the left, the claim and its sentence beside it. */
+
+.wpb-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 7px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wpb-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 34px;
+  padding: 21px 22px 19px 24px;
+  border: 1px solid var(--wpb-rule);
+}
+
+.wpb-card__icon {
+  width: 58px;
+  height: 58px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wpb-card h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.wpb-card p {
+  margin: 6px 0 0;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.37;
+}
+
+.wpb-promises { padding-top: 20px; }
+
+/* ── The three phases ────────────────────────────────────────────────────── */
+
+.wpb-phases { padding: 20px 0 16px; }
+
+.wpb-phase {
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 26px;
+  padding: 15px 22px 13px;
+}
+
+/* Class alone would lose to `.wpb-card p` above, which sets the body size. */
+.wpb-phase .wpb-phase__num {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Block-level, so the card's height is the mark's own rather than the line
+   box an inline-flex would sit in — the mockup leaves 21px under it, not 26. */
+.wpb-phase .wpb-link {
+  display: flex;
+  width: fit-content;
+  margin-top: 26px;
+}
+
+/* ── Exit band ───────────────────────────────────────────────────────────
+   The one full-bleed band on the page: the ask at the left, the button and
+   the way out of it at the right. */
+
+.wpb-cta {
+  background: var(--wpb-black);
+  color: #fff;
+}
+
+.wpb-cta__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 52px;
+  padding-block: 19px;
+}
+
+.wpb-cta__title {
+  margin: 12px 0 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.028em;
+}
+
+.wpb-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 52px;
+}
+
+/* ── Detail below the fold ───────────────────────────────────────────────
+   The mockup stops at the exit band. Everything from here down is the
+   page's existing curriculum, copy, tiers and FAQ, set in the same
+   vocabulary so the join does not show. */
+
+.wpb-detail {
+  padding-block: 44px;
+  border-top: 1px solid var(--wpb-rule);
+}
+
+.wpb-detail:first-of-type { border-top: 0; }
+
+.wpb-detail__head { max-width: 720px; }
+
+.wpb-detail__title {
+  margin: 10px 0 0;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.028em;
+}
+
+.wpb-detail__lede {
+  max-width: 620px;
+  margin: 10px 0 0;
+  color: var(--wpb-muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ── Modules ─────────────────────────────────────────────────────────────── */
+
+.wpb-phase-group { margin-top: 34px; scroll-margin-top: 90px; }
+
+.wpb-phase-group__title {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0 0 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--wpb-rule);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.wpb-phase-group__title span {
+  color: var(--color-accent);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.wpb-modules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wpb-module {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--wpb-rule);
+}
+
+.wpb-module:last-child { border-bottom: 0; }
+
+.wpb-module__num {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.wpb-module h4 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.wpb-module__summary {
+  margin: 5px 0 0;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+.wpb-module__lessons {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wpb-module__lessons li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.wpb-module__lessons li::before {
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  content: "—";
+}
+
+/* ── Long-form copy ──────────────────────────────────────────────────────── */
+
+.wpb-prose {
+  max-width: 720px;
+  margin-top: 20px;
+}
+
+.wpb-prose h2 {
+  margin: 30px 0 0;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.wpb-prose h2:first-child { margin-top: 0; }
+
+.wpb-prose p {
+  margin: 10px 0 0;
+  color: var(--wpb-muted);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+/* ── Fit ─────────────────────────────────────────────────────────────────── */
+
+.wpb-fit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 44px;
+  margin-top: 24px;
+}
+
+.wpb-fit__title {
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--wpb-rule);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.wpb-fit__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wpb-fit__list li {
+  position: relative;
+  padding: 0 0 10px 26px;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.wpb-fit__list li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 800;
+}
+
+.wpb-fit__list--yes li::before { color: var(--color-accent); content: "✓"; }
+.wpb-fit__list--no li::before { color: #9a9694; content: "✕"; }
+
+/* ── Tiers ───────────────────────────────────────────────────────────────── */
+
+.wpb-tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 400px));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.wpb-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  border: 1px solid var(--wpb-rule);
+}
+
+.wpb-tier__badge {
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  background: var(--color-accent-100);
+  color: var(--color-accent-700);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wpb-tier__name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.wpb-tier__price {
+  margin: 8px 0 0;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.wpb-tier__price span {
+  margin-left: 8px;
+  color: var(--wpb-muted);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.wpb-tier__summary {
+  margin: 10px 0 0;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+.wpb-tier__features {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wpb-tier__features li {
+  position: relative;
+  padding: 0 0 9px 22px;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+.wpb-tier__features li::before {
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 800;
+  content: "✓";
+}
+
+.wpb-tier__cta { margin-top: auto; align-self: stretch; }
+.wpb-tier__features + .wpb-tier__cta { margin-top: 18px; }
+
+.wpb-guarantee {
+  max-width: 720px;
+  margin: 18px 0 0;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+
+.wpb-faq { margin-top: 20px; max-width: 820px; }
+
+.wpb-faq__item { border-bottom: 1px solid var(--wpb-rule); }
+
+.wpb-faq__q {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 0;
+  font-family: var(--font-heading);
+  font-size: 15.5px;
+  font-weight: 800;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+
+.wpb-faq__q::-webkit-details-marker { display: none; }
+
+.wpb-faq__q::after {
+  color: var(--color-accent);
+  font-size: 18px;
+  font-weight: 400;
+  content: "+";
+}
+
+.wpb-faq__item[open] .wpb-faq__q::after { content: "–"; }
+
+.wpb-faq__a {
+  margin: 0;
+  padding: 0 0 16px;
+  color: var(--wpb-muted);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* ── Mobile enrol bar ────────────────────────────────────────────────────
+   Hidden until the phone layout, where the mockup pins it to the bottom of
+   the screen. */
+
+.wpb-sticky-cta { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1120px) {
+  /* The copy tracks the width the photograph leaves rather than a fixed
+     column, so the two never meet as the viewport narrows. */
+  .wpb-hero__title { font-size: 36px; }
+  .wpb-hero__copy,
+  .wpb-hero__title { max-width: min(440px, 40vw); }
+  .wpb-hero__lede { max-width: min(400px, 38vw); }
+  .wpb-card { column-gap: 22px; padding-inline: 18px; }
+  .wpb-phase { column-gap: 20px; }
+}
+
+@media (max-width: 980px) {
+  /* The photograph stops carrying at half the width, so the hero folds: the
+     copy first, the picture full-bleed under it, as the mockup's phone has
+     it. */
+  .wpb-hero { display: flex; flex-direction: column; }
+  .wpb-hero__inner { order: 1; padding-block: 32px 30px; }
+
+  .wpb-hero__copy,
+  .wpb-hero__title,
+  .wpb-hero__lede { max-width: none; }
+
+  .wpb-hero__img {
+    position: static;
+    order: 2;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .wpb-cards { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  /* The mockup's phone keeps all four counts and lets the labels take two
+     lines rather than folding the strip, so only the marks and the type give
+     way as the columns narrow. */
+  .wpb-counts__list li {
+    flex-direction: column;
+    gap: 8px;
+    padding-inline: 8px;
+    text-align: center;
+  }
+
+  .wpb-counts__list svg { width: 32px; height: 32px; }
+  .wpb-counts__value { font-size: 19px; }
+  .wpb-counts__label { font-size: 13px; }
+  .wpb-counts__list li + li::before { height: 76px; }
+
+  .wpb-fit { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .wpb-hero__title { font-size: 32px; letter-spacing: -0.028em; }
+  .wpb-hero__lede { font-size: 15px; }
+
+  /* Both calls run the full width of the phone, stacked. */
+  .wpb-hero__actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .wpb-hero__actions .wpb-button { width: 100%; }
+  .wpb-hero__meta { justify-content: center; text-align: center; }
+
+  .wpb-head__title,
+  .wpb-detail__title,
+  .wpb-cta__title { font-size: 24px; }
+
+  .wpb-cards { grid-template-columns: minmax(0, 1fr); }
+  .wpb-card { column-gap: 20px; }
+
+  .wpb-cta__inner { justify-content: flex-start; }
+  .wpb-cta__actions { align-self: stretch; gap: 16px 32px; }
+
+  .wpb-detail { padding-block: 34px; }
+  .wpb-module { grid-template-columns: 34px minmax(0, 1fr); gap: 4px 12px; }
+  .wpb-module__num { font-size: 17px; }
+
+  /* The bar sits over the page, so the last band needs room to clear it. */
+  .wpb-sticky-cta {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  /* The enrol bar stands in for the floating button. */
+  body:has(.wpb-sticky-cta) .whatsapp-fab { display: none; }
+  body:has(.wpb-sticky-cta) .footer__inner { padding-bottom: 66px; }
+}
+
+@media (max-width: 520px) {
+  .wpb-hero__title { font-size: 29px; }
+  .wpb-counts__list { padding-block: 16px; }
+  .wpb-counts__list li { padding-inline: 5px; }
+  .wpb-counts__list svg { width: 27px; height: 27px; }
+  .wpb-counts__value { font-size: 17px; }
+  .wpb-counts__label { font-size: 12px; }
+  .wpb-counts__list li + li::before { height: 82px; }
+  .wpb-card { grid-template-columns: 46px minmax(0, 1fr); column-gap: 16px; }
+  .wpb-card__icon { width: 46px; height: 46px; }
+  .wpb-phase__num { font-size: 32px; }
+  .wpb-tier__price { font-size: 27px; }
+}

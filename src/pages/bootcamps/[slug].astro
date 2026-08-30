@@ -7,7 +7,14 @@ import NewsletterForm from "../../components/NewsletterForm.astro";
 import { SITE } from "../../lib/site";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const bootcamps = await getCollection("bootcamps", ({ data }) => !data.draft);
+  // Bootcamps with a bespoke page of their own, built from a supplied mockup.
+  // Leaving them in here would emit two routes for one URL.
+  const bespoke = new Set(["wordpress-bootcamp"]);
+
+  const bootcamps = await getCollection(
+    "bootcamps",
+    ({ data, id }) => !data.draft && !bespoke.has(id),
+  );
   return bootcamps.map((bootcamp) => ({
     params: { slug: bootcamp.id },
     props: { bootcamp },

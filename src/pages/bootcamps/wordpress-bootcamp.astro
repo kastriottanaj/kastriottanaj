@@ -1,0 +1,492 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
+import { SITE } from "../../lib/site";
+import "../../styles/wordpress-bootcamp.css";
+
+/* The curriculum, tiers, FAQ and long-form copy still live in
+   src/content/bootcamps/wordpress-bootcamp.md — this page only replaces the
+   layout, so the markdown stays the one place that copy is edited.
+   src/pages/bootcamps/[slug].astro skips this id for the same reason
+   src/pages/services/[slug].astro skips its four redesigned siblings. */
+const bootcamp = await getEntry("bootcamps", "wordpress-bootcamp");
+if (!bootcamp) throw new Error("src/content/bootcamps/wordpress-bootcamp.md is missing");
+const { Content } = await render(bootcamp);
+const {
+  title,
+  description,
+  format,
+  workload,
+  fit,
+  notFit,
+  modules,
+  currency,
+  tiers,
+  guarantee,
+  faq,
+} = bootcamp.data;
+
+const url = `${SITE.url}/bootcamps/wordpress-bootcamp/`;
+const heroImage = "/assets/bootcamps/kastriot-tanaj-wordpress-bootcamp.webp";
+
+const lessonCount = modules.reduce((total, module) => total + module.lessons.length, 0);
+
+/* PT16H → 16. The strip quotes the same number the Course schema does rather
+   than a second one typed by hand. */
+const teachingHours = Number(/^PT(\d+)H$/.exec(workload ?? "")?.[1] ?? 0);
+
+/* A tier is on sale once it has a checkout URL, and not before — the same
+   single fact the shared template hangs enrolment off, so pasting the payment
+   links into the markdown is still what opens the doors. */
+const onSale = tiers.some((tier) => tier.checkout);
+const headline = tiers.find((tier) => tier.featured) ?? tiers[0];
+
+const money = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency,
+  maximumFractionDigits: 0,
+});
+
+const enrolHref = onSale ? "#enrol" : "#waitlist";
+const enrolLabel = onSale ? "See the tiers" : "Join the waitlist";
+
+/* The strip the mockup rules under the hero: what the course is, in four
+   counts, each read off the markdown rather than restated here. */
+const counts = [
+  { icon: "i-book-open", value: String(modules.length), label: "focused modules" },
+  { icon: "i-play-circle", value: String(lessonCount), label: "practical lessons" },
+  { icon: "i-clock", value: String(teachingHours), label: "hours of teaching" },
+  { icon: "i-lock", value: "Lifetime", label: "access" },
+];
+
+const promises = [
+  {
+    icon: "i-window-monitor",
+    title: "Build from scratch",
+    desc: "Plan the structure, connect hosting, install WordPress and create every essential page.",
+  },
+  {
+    icon: "i-shield-check",
+    title: "Launch with confidence",
+    desc: "Handle responsive design, forms, SEO, speed, security and final testing.",
+  },
+  {
+    icon: "i-refresh",
+    title: "Stay independent",
+    desc: "Update, back up and maintain the website without waiting on a developer.",
+  },
+];
+
+/* The mockup draws three numbered phases over a "View modules" link without
+   saying what they contain. Each one names the slice of the ten modules it
+   stands for, so the link lands on those modules further down the page rather
+   than on a stub written to receive the click. */
+const phases = [
+  {
+    id: "phase-plan",
+    title: "Plan & set up",
+    desc: "Strategy, domain, hosting and WordPress.",
+    from: 0,
+    to: 2,
+  },
+  {
+    id: "phase-build",
+    title: "Design & build",
+    desc: "System, pages, content and integrations.",
+    from: 2,
+    to: 7,
+  },
+  {
+    id: "phase-launch",
+    title: "Optimize & launch",
+    desc: "SEO, performance, security and testing.",
+    from: 7,
+    to: modules.length,
+  },
+];
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: title,
+    description,
+    url,
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    teaches: promises.map((promise) => promise.title),
+    hasCourseInstance: [
+      {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        ...(workload ? { courseWorkload: workload } : {}),
+      },
+    ],
+    offers: tiers.map((tier) => ({
+      "@type": "Offer",
+      name: tier.name,
+      price: tier.price,
+      priceCurrency: currency,
+      category: "Paid",
+      availability: tier.checkout
+        ? "https://schema.org/InStock"
+        : "https://schema.org/PreOrder",
+      url: tier.checkout ?? `${url}#enrol`,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Bootcamps", item: `${SITE.url}/bootcamps/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={`Build and Launch a Professional WordPress Website | ${SITE.name}`}
+  description={description}
+  image={heroImage}
+  schema={schema}
+>
+  <div class="wpb-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────
+         The copy at the left on the page ground, the photograph bled off
+         the right edge and running the full height of the band. -->
+    <section class="wpb-hero" aria-labelledby="wpb-title">
+      <div class="wpb-wrap wpb-hero__inner">
+        <div class="wpb-hero__copy">
+          <p class="wpb-eyebrow">WordPress bootcamp</p>
+          <h1 class="wpb-hero__title" id="wpb-title">
+            Build and launch a professional WordPress website—without relying on a
+            developer.
+          </h1>
+          <p class="wpb-hero__lede">
+            A practical, self-paced course for business owners and freelancers who want a
+            complete site, a repeatable workflow, and confidence to maintain it.
+          </p>
+
+          <div class="wpb-hero__actions">
+            <a class="wpb-button wpb-button--primary" href={enrolHref}>{enrolLabel}</a>
+            <a class="wpb-button wpb-button--ghost" href="#curriculum">See the curriculum</a>
+          </div>
+
+          <p class="wpb-hero__meta">
+            <span>{format.split("·")[0].trim()}</span>
+            <span>{modules.length} modules</span>
+            <span>{lessonCount} lessons</span>
+            <span>Lifetime access</span>
+          </p>
+        </div>
+      </div>
+
+      <img
+        class="wpb-hero__img"
+        src={heroImage}
+        width="1672"
+        height="941"
+        alt="A hand on a laptop trackpad editing a WordPress page in the block editor"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </section>
+
+    <!-- ── What the course is, in four counts ───────────────────────────── -->
+    <section class="wpb-counts" aria-label="What the course covers">
+      <div class="wpb-wrap">
+        <ul class="wpb-counts__list">
+          {
+            counts.map((count) => (
+              <li>
+                <svg aria-hidden="true"><use href={`#${count.icon}`} /></svg>
+                <span class="wpb-counts__text">
+                  <span class="wpb-counts__value">{count.value}</span>
+                  <span class="wpb-counts__label">{count.label}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── What you'll learn ────────────────────────────────────────────── -->
+    <section class="wpb-promises" aria-labelledby="wpb-learn-title">
+      <div class="wpb-wrap">
+        <div class="wpb-head">
+          <p class="wpb-eyebrow">What you'll learn</p>
+          <h2 class="wpb-head__title" id="wpb-learn-title">
+            Everything you need to build it right.
+          </h2>
+        </div>
+
+        <ul class="wpb-cards">
+          {
+            promises.map((promise) => (
+              <li class="wpb-card">
+                <svg class="wpb-card__icon" aria-hidden="true">
+                  <use href={`#${promise.icon}`} />
+                </svg>
+                <div>
+                  <h3>{promise.title}</h3>
+                  <p>{promise.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── The curriculum, in three phases ──────────────────────────────── -->
+    <section class="wpb-phases" aria-labelledby="wpb-phases-title">
+      <div class="wpb-wrap">
+        <div class="wpb-head">
+          <p class="wpb-eyebrow">The curriculum</p>
+          <h2 class="wpb-head__title" id="wpb-phases-title">
+            A complete start-to-launch workflow.
+          </h2>
+        </div>
+
+        <ol class="wpb-cards">
+          {
+            phases.map((phase, i) => (
+              <li class="wpb-card wpb-phase">
+                <p class="wpb-phase__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</p>
+                <div>
+                  <h3>{phase.title}</h3>
+                  <p>{phase.desc}</p>
+                  <a class="wpb-link" href={`#${phase.id}`}>
+                    View modules <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── Exit band ────────────────────────────────────────────────────── -->
+    <section class="wpb-cta" aria-labelledby="wpb-cta-title">
+      <div class="wpb-wrap wpb-cta__inner">
+        <div>
+          <p class="wpb-eyebrow">
+            {title} · {headline ? money.format(headline.price) : ""}
+          </p>
+          <h2 class="wpb-cta__title" id="wpb-cta-title">
+            Build a website you understand<br />from the inside out.
+          </h2>
+        </div>
+
+        <div class="wpb-cta__actions">
+          <a class="wpb-button wpb-button--primary wpb-button--lg" href={enrolHref}>
+            {enrolLabel}
+          </a>
+          <a class="wpb-link wpb-link--light" href="#included">
+            See what's included <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Detail below the fold ────────────────────────────────────────
+         The mockup stops at the exit band; from here down is the page's
+         existing curriculum, copy, tiers and FAQ, restyled to sit under it. -->
+    <section class="wpb-detail wpb-wrap" id="curriculum" aria-labelledby="wpb-modules-title">
+      <div class="wpb-detail__head">
+        <p class="wpb-eyebrow">The modules</p>
+        <h2 class="wpb-detail__title" id="wpb-modules-title">
+          {modules.length} modules, {lessonCount} lessons
+        </h2>
+        <p class="wpb-detail__lede">
+          Taught in the order you should do the work, which is not the order it is usually
+          taught in.
+        </p>
+      </div>
+
+      {
+        phases.map((phase, i) => (
+          <div class="wpb-phase-group" id={phase.id}>
+            <h3 class="wpb-phase-group__title">
+              <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              {phase.title}
+            </h3>
+
+            <ol class="wpb-modules" start={phase.from + 1}>
+              {modules.slice(phase.from, phase.to).map((module, j) => (
+                <li class="wpb-module">
+                  <p class="wpb-module__num">{String(phase.from + j + 1).padStart(2, "0")}</p>
+                  <div>
+                    <h4>{module.title}</h4>
+                    <p class="wpb-module__summary">{module.summary}</p>
+                    {module.lessons.length > 0 && (
+                      <ul class="wpb-module__lessons">
+                        {module.lessons.map((lesson) => (
+                          <li>{lesson}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="wpb-detail wpb-wrap" aria-labelledby="wpb-why-title">
+      <div class="wpb-detail__head">
+        <p class="wpb-eyebrow">Why it exists</p>
+        <h2 class="wpb-detail__title" id="wpb-why-title">How the course is taught</h2>
+      </div>
+
+      <div class="wpb-prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      (fit.length > 0 || notFit.length > 0) && (
+        <section class="wpb-detail wpb-wrap" aria-labelledby="wpb-fit-title">
+          <div class="wpb-detail__head">
+            <p class="wpb-eyebrow">Who it's for</p>
+            <h2 class="wpb-detail__title" id="wpb-fit-title">
+              Whether this is the right course
+            </h2>
+          </div>
+
+          <div class="wpb-fit">
+            {fit.length > 0 && (
+              <div>
+                <h3 class="wpb-fit__title">This is for you if</h3>
+                <ul class="wpb-fit__list wpb-fit__list--yes">
+                  {fit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {notFit.length > 0 && (
+              <div>
+                <h3 class="wpb-fit__title">It isn't, if</h3>
+                <ul class="wpb-fit__list wpb-fit__list--no">
+                  {notFit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="wpb-detail wpb-wrap" id="included" aria-labelledby="wpb-enrol-title">
+      <div class="wpb-detail__head">
+        <p class="wpb-eyebrow">{onSale ? "Enrol" : "Pricing"}</p>
+        <h2 class="wpb-detail__title" id="wpb-enrol-title">What's included</h2>
+        <p class="wpb-detail__lede">
+          {
+            onSale
+              ? "One payment, lifetime access — including every future update."
+              : "Enrolment is not open yet. This is what it will open at, so you can decide now whether it is for you."
+          }
+        </p>
+      </div>
+
+      <div class="wpb-tiers" id="enrol">
+        {
+          tiers.map((tier) => (
+            <article class="wpb-tier">
+              {tier.badge && <span class="wpb-tier__badge">{tier.badge}</span>}
+              <h3 class="wpb-tier__name">{tier.name}</h3>
+              <p class="wpb-tier__price">
+                {money.format(tier.price)}
+                {tier.priceNote && <span>{tier.priceNote}</span>}
+              </p>
+              <p class="wpb-tier__summary">{tier.summary}</p>
+
+              {tier.features.length > 0 && (
+                <ul class="wpb-tier__features">
+                  {tier.features.map((feature) => (
+                    <li>{feature}</li>
+                  ))}
+                </ul>
+              )}
+
+              <a
+                class="wpb-button wpb-button--primary wpb-tier__cta"
+                href={tier.checkout ?? "#waitlist"}
+                {...(tier.checkout ? { rel: "nofollow" } : {})}
+              >
+                {tier.checkout ? `Enrol — ${money.format(tier.price)}` : "Join the waitlist"}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+
+      {guarantee && <p class="wpb-guarantee">{guarantee}</p>}
+    </section>
+
+    {
+      faq.length > 0 && (
+        <section class="wpb-detail wpb-wrap" aria-labelledby="wpb-faq-title">
+          <div class="wpb-detail__head">
+            <p class="wpb-eyebrow">Common questions</p>
+            <h2 class="wpb-detail__title" id="wpb-faq-title">Before you join</h2>
+          </div>
+
+          <div class="wpb-faq">
+            {faq.map((item) => (
+              <details class="wpb-faq__item">
+                <summary class="wpb-faq__q">{item.q}</summary>
+                <p class="wpb-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <div class="wpb-wrap">
+      <NewsletterForm
+        source="bootcamp-wordpress-bootcamp"
+        anchor="waitlist"
+        heading={onSale ? "Not ready yet?" : "Tell me when it opens"}
+        lede={
+          onSale
+            ? "Get the same thinking in shorter form — practical notes on SEO, marketing and AI automation, every couple of weeks."
+            : "One email when enrolment opens, and practical SEO notes in the meantime. No countdown timers."
+        }
+        buttonLabel={onSale ? "Subscribe" : "Keep me posted"}
+      />
+    </div>
+  </div>
+
+  <CtaBanner
+    title="Would you rather I just did it?"
+    lede="The bootcamp teaches the workflow. If you want it run on your site instead, that is a different conversation — and a shorter one."
+  />
+
+  <a class="wpb-sticky-cta" href={enrolHref}>{enrolLabel}</a>
+</Base>
