@@ -23,6 +23,10 @@ export const SITE = {
   ogImage: "/assets/ai-seo.webp",
 } as const;
 
+/** Meta Pixel / Conversions API dataset. A public identifier: it ships in the
+    HTML, and the Conversions API posts server events against the same ID. */
+export const META_PIXEL_ID = "1616830733405682";
+
 export const NAV = [
   { href: "/services/", label: "Services" },
   { href: "/bootcamps/", label: "Bootcamps" },

@@ -9,9 +9,25 @@
   /* Safe to call unconditionally: with PUBLIC_META_PIXEL_ID unset the component
      renders nothing and fbq is undefined. Consent is the pixel's own business —
      until the visitor accepts it sits in the 'revoke' state and sends nothing. */
-  const track = (event, params) => {
-    if (typeof window.fbq === "function") window.fbq("track", event, params);
+  const track = (event, params, options) => {
+    if (typeof window.fbq !== "function") return;
+    if (options) window.fbq("track", event, params, options);
+    else window.fbq("track", event, params);
   };
+
+  const consentGranted = () => {
+    try {
+      return localStorage.getItem("cookie-consent") === "accepted";
+    } catch (_) {
+      return false;
+    }
+  };
+
+  /* randomUUID needs a secure context, so keep a fallback for plain http —
+     the server only checks the shape, and Meta only needs it to be unique. */
+  const newEventId = () =>
+    window.crypto?.randomUUID?.() ??
+    `lead-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
   /* ── Cookie consent / Google Consent Mode v2 ──────────────────────────── */
   const consentPanel = document.querySelector("[data-cookie-consent]");
@@ -249,14 +265,27 @@
       button.disabled = true;
       button.textContent = "Sending…";
 
+      /* One id shared by two Leads — this browser's, fired on /thanks/, and the
+         Conversions API's, sent from the server — so Meta counts the pair once
+         instead of twice. The consent flag rides along because a server request
+         carries no trace of what the visitor chose in the banner. */
+      const eventId = newEventId();
+      const body = new FormData(form);
+      body.set("meta_event_id", eventId);
+      body.set("meta_consent", consentGranted() ? "granted" : "denied");
+
       try {
         const response = await fetch(form.action, {
           method: "POST",
           headers: { Accept: "application/json" },
-          body: new FormData(form),
+          body,
         });
 
         if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+        try {
+          sessionStorage.setItem("meta-lead-event", eventId);
+        } catch (_) {}
 
         // Same destination the no-JS path lands on, so conversion tracking has
         // one URL to watch.
@@ -301,7 +330,17 @@
      refresh doesn't count a second lead. */
   if (location.pathname === "/thanks/") {
     const entries = performance.getEntriesByType?.("navigation");
-    if (entries?.[0]?.type !== "reload") track("Lead", { content_name: "Contact form" });
+    if (entries?.[0]?.type !== "reload") {
+      // Absent when someone reaches /thanks/ without submitting anything; the
+      // event still counts, it just has no server twin to be paired with.
+      let eventId = null;
+      try {
+        eventId = sessionStorage.getItem("meta-lead-event");
+        sessionStorage.removeItem("meta-lead-event");
+      } catch (_) {}
+
+      track("Lead", { content_name: "Contact form" }, eventId ? { eventID: eventId } : null);
+    }
   }
 
   /* ── Newsletter subscribe ──────────────────────────────────────────────── */

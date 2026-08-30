@@ -3,6 +3,7 @@ import { saveLead, markEmailed } from "../../lib/db";
 import { sendLeadEmail } from "../../lib/email";
 import { verifyTurnstile } from "../../lib/turnstile";
 import { rateLimit } from "../../lib/rate-limit";
+import { sendLeadEvent } from "../../lib/meta-capi";
 import {
   clientIp,
   respond,
@@ -117,6 +118,27 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const delivered = await sendLeadEmail({ name, email, service, message });
   if (delivered) markEmailed(id);
   else console.error(`[lead] stored as #${id} but not emailed`);
+
+  /* Conversions API. Consent is the browser's to report — site.js posts the
+     banner choice with the form, because a server request carries no trace of
+     it. A no-JS post sends neither field, so it is treated as no consent, which
+     matches the pixel staying silent without JS too.
+
+     Not awaited: the lead is stored and emailed by now, so Meta's round trip
+     has no business delaying the sender's response. */
+  const metaEventId = value("meta_event_id");
+  if (value("meta_consent") === "granted" && /^[\w-]{8,64}$/.test(metaEventId)) {
+    void sendLeadEvent({
+      eventId: metaEventId,
+      email,
+      name,
+      service,
+      sourceUrl: request.headers.get("referer"),
+      ip,
+      userAgent: request.headers.get("user-agent"),
+      cookieHeader: request.headers.get("cookie"),
+    });
+  }
 
   return respond(request, 200, { ok: true }, redirects);
 };

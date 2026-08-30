@@ -1,4 +1,6 @@
 ---
+import { META_PIXEL_ID } from "../lib/site";
+
 /** Meta (Facebook) Pixel — audience building, retargeting and conversion measurement.
  *
  * Production only — `astro dev` renders nothing, so localhost browsing stays out
@@ -16,8 +18,7 @@
 // and the production build runs on the server, where a repo constant needs no
 // deploy-time configuration. PUBLIC_META_PIXEL_ID overrides it; setting that to
 // an empty string switches the pixel off.
-const DEFAULT_PIXEL_ID = "1616830733405682";
-const raw = (import.meta.env.PUBLIC_META_PIXEL_ID ?? DEFAULT_PIXEL_ID).trim();
+const raw = (import.meta.env.PUBLIC_META_PIXEL_ID ?? META_PIXEL_ID).trim();
 
 // Pixel IDs are numeric. Anything else is a misconfiguration, and refusing it
 // keeps the raw value out of the inline script below. Dev is excluded outright,
