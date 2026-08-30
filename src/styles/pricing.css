@@ -1,0 +1,734 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Pricing page.
+
+   Same vocabulary as the process page (styles/process.css) — capability strip,
+   value row, bordered cards, dark exit tile — composed at the site's own
+   measure (--measure / --gutter) so the nav, the content and the red CTA band
+   all share one left edge.
+
+   Two things are page-local. --pricing-rule is the hairline these newer pages
+   use for card borders and band rules, lighter than the site's --color-divider
+   so a page made mostly of boxes doesn't read as a grid of dark lines. And the
+   band rules sit on the .pricing-wrap's padding box rather than on a full-width
+   parent, so each rule runs one gutter past the text and stops short of the
+   viewport edge — the inset the mockup draws.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.pricing-page) {
+  --pricing-rule: #d5d3d1;
+  --pricing-ink: #201e1d;
+  --pricing-muted: #565554;
+  --pricing-dark: #131211;
+}
+
+/* The mobile contact bar below stands in for the floating button. The footer
+   reserves 96px for that button site-wide, so with it gone the reservation is
+   just a hole — the bar's own clearance is handled by body padding instead. */
+body:has(.pricing-page) .whatsapp-fab { display: none; }
+body:has(.pricing-page) .footer__inner { padding-bottom: 24px; }
+
+.pricing-page {
+  overflow: clip;
+  color: var(--pricing-ink);
+}
+
+.pricing-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.pricing-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────
+   Copy left, photograph bleeding off the right edge. The wrap is centred and
+   its first column is half the inner measure, so that column's right edge
+   lands on the viewport's centre line at every width — which is why the
+   absolutely positioned photo can start at a flat 50% and still meet the
+   text column exactly. */
+
+.pricing-hero { position: relative; }
+
+.pricing-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.pricing-hero__copy { padding: 54px 48px 52px 0; }
+
+.pricing-hero__title {
+  max-width: 17ch;
+  margin: 14px 0 0;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.06;
+  letter-spacing: -0.032em;
+}
+
+.pricing-hero__lede {
+  margin: 18px 0 0;
+  color: var(--pricing-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.pricing-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.pricing-hero__image {
+  position: absolute;
+  inset: 0 0 0 50%;
+  width: 50%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.pricing-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.pricing-button--primary { background: var(--color-accent); color: #fff; }
+.pricing-button--primary:hover { background: var(--color-accent-600); color: #fff; }
+.pricing-button--primary:active { background: var(--color-accent-700); }
+
+.pricing-button--outline {
+  border-color: color-mix(in srgb, var(--pricing-ink) 45%, transparent);
+  color: var(--pricing-ink);
+}
+
+.pricing-button--outline:hover {
+  border-color: var(--pricing-ink);
+  background: color-mix(in srgb, var(--pricing-ink) 6%, transparent);
+}
+
+/* ── Capability strip ────────────────────────────────────────────────────
+   Short centred ticks between the cells rather than full-height rules: the
+   row is only one line tall, and a rule that spans it reads as a table. */
+
+.pricing-strip__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-block: 0;
+  border-top: 1px solid var(--pricing-rule);
+  border-bottom: 1px solid var(--pricing-rule);
+  list-style: none;
+}
+
+.pricing-strip__list li {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 15px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pricing-strip__list li + li::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 18px;
+  background: var(--pricing-rule);
+  transform: translateY(-50%);
+  content: "";
+}
+
+.pricing-strip__list svg {
+  width: 19px;
+  height: 19px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Value row ───────────────────────────────────────────────────────────── */
+
+.pricing-values__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-block: 0;
+  padding-block: 0;
+  border-bottom: 1px solid var(--pricing-rule);
+  list-style: none;
+}
+
+.pricing-value {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 14px;
+  padding: 24px 26px;
+}
+
+.pricing-value:first-child { padding-left: 0; }
+.pricing-value:last-child { padding-right: 0; }
+.pricing-value + .pricing-value { border-left: 1px solid var(--pricing-rule); }
+
+.pricing-value__icon {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: var(--pricing-ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pricing-value h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.pricing-value p {
+  margin: 0;
+  color: var(--pricing-muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+/* ── Packages ────────────────────────────────────────────────────────────── */
+
+.pricing-plans { padding: 30px 0 34px; }
+
+.pricing-plans__title {
+  margin: 0 0 20px;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.pricing-plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.pricing-plan {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 22px 20px;
+  border: 1px solid var(--pricing-rule);
+}
+
+/* The one card carrying a badge; the accent edge is what makes it the default
+   answer, so it needs no second highlight behind the type. */
+.pricing-plan--featured { border-color: var(--color-accent); }
+
+.pricing-plan__badge {
+  align-self: flex-start;
+  margin: 0 0 12px;
+  padding: 4px 9px;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.pricing-plan__title {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.pricing-plan__for {
+  max-width: 32ch;
+  margin: 7px 0 0;
+  color: var(--pricing-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.pricing-plan__price {
+  margin: 16px 0 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--pricing-rule);
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.pricing-plan__list {
+  margin: 14px 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.pricing-plan__list li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.pricing-plan__list li + li { margin-top: 10px; }
+
+.pricing-plan__list li::before {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+  content: "→";
+}
+
+.pricing-plan .pricing-button {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* ── Featured work ───────────────────────────────────────────────────────── */
+
+.pricing-work {
+  padding: 26px 0 28px;
+  border-top: 1px solid var(--pricing-rule);
+}
+
+.pricing-work__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 250px) minmax(0, 1fr) auto;
+  gap: 30px;
+  align-items: center;
+}
+
+.pricing-work h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+}
+
+.pricing-work__lede {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--pricing-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pricing-work__shots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pricing-work__shots li { min-width: 0; }
+
+.pricing-work__shots a {
+  display: block;
+  border: 1px solid var(--pricing-rule);
+  background: var(--color-neutral-200);
+}
+
+.pricing-work__shots a:hover { border-color: var(--pricing-ink); }
+
+.pricing-work__shots img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+}
+
+/* ── Detail below the fold ───────────────────────────────────────────────
+   The mockup stops at the CTA band; everything from here down is the page's
+   existing long-form copy, restyled to sit under it. */
+
+.pricing-detail { padding-block: 36px 0; }
+.pricing-detail + .pricing-detail { padding-top: 40px; }
+
+.pricing-detail__head { max-width: 62ch; }
+.pricing-detail__head .pricing-eyebrow { margin-bottom: 12px; }
+
+.pricing-detail__title {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.pricing-detail__lede {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  color: var(--pricing-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+/* Head and photograph share a row; the tiles run full width underneath. */
+.pricing-detail--split .pricing-detail__head {
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 40%);
+  gap: 34px;
+  align-items: center;
+}
+
+.pricing-detail--split .pricing-detail__figure {
+  margin: 0;
+  border: 1px solid var(--pricing-rule);
+}
+
+.pricing-detail--split .pricing-detail__figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.pricing-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pricing-tiles--steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.pricing-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 20px 18px;
+  border: 1px solid var(--pricing-rule);
+  background: #fff;
+}
+
+.pricing-tile svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pricing-tile__num {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.pricing-tile h3 {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.pricing-tile p {
+  margin: 0;
+  color: var(--pricing-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ── Dark bands ──────────────────────────────────────────────────────────
+   The only dark surfaces below the hero, which is what makes them read as
+   the two exits from the long-form copy. */
+
+.pricing-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 42%);
+  overflow: hidden;
+  margin-top: 26px;
+  background: var(--pricing-dark);
+  color: #fff;
+}
+
+.pricing-band__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 28px 30px 26px;
+}
+
+.pricing-band h3 {
+  max-width: 24ch;
+  margin: 4px 0 0;
+  color: #fff;
+  font-size: 21px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.pricing-band p {
+  max-width: 46ch;
+  margin: 0;
+  color: rgb(255 255 255 / 74%);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.pricing-band img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pricing-band :focus-visible { outline-color: #fff; }
+
+.pricing-link {
+  margin-top: 6px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.pricing-link:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+.pricing-band .pricing-link { color: var(--color-accent-400); }
+.pricing-band .pricing-link:hover { color: #fff; }
+
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+
+.pricing-faq {
+  margin: 26px 0 0;
+  border-top: 1px solid var(--pricing-rule);
+}
+
+.pricing-faq__item { border-bottom: 1px solid var(--pricing-rule); }
+
+.pricing-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  list-style: none;
+}
+
+.pricing-faq__q::-webkit-details-marker { display: none; }
+
+.pricing-faq__q::after {
+  color: var(--color-accent);
+  font-size: 20px;
+  line-height: 1;
+  content: "+";
+}
+
+.pricing-faq__item[open] .pricing-faq__q::after { content: "−"; }
+
+.pricing-faq__a {
+  max-width: 68ch;
+  margin: 0;
+  padding: 0 0 18px;
+  color: var(--pricing-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.pricing-next {
+  margin: 0;
+  padding: 30px 0 40px;
+  color: var(--pricing-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.pricing-next a { color: var(--color-accent-700); }
+
+/* ── Mobile contact bar ──────────────────────────────────────────────────── */
+
+.pricing-contact-bar { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .pricing-plans__grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .pricing-tiles--steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* The button drops under the copy so the three shots keep their width. */
+  .pricing-work__grid { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); }
+  .pricing-work__actions { grid-column: 1; }
+}
+
+@media (max-width: 900px) {
+  .pricing-hero__grid { grid-template-columns: minmax(0, 1fr); }
+
+  /* Half the width is no longer enough for the photograph to read, so it goes
+     back into the flow above the copy — where the site's other split heroes
+     put it. */
+  .pricing-hero__copy { padding: 30px 0 34px; }
+
+  .pricing-hero__image {
+    position: static;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 7;
+  }
+
+  .pricing-detail--split .pricing-detail__head { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .pricing-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pricing-band { grid-template-columns: minmax(0, 1fr); }
+  .pricing-band img { height: 170px; }
+}
+
+@media (max-width: 720px) {
+  body:has(.pricing-page) { padding-bottom: calc(52px + env(safe-area-inset-bottom)); }
+
+  .pricing-hero__title { max-width: none; font-size: 30px; }
+  .pricing-hero__lede { margin-top: 14px; font-size: 13.5px; }
+
+  .pricing-hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .pricing-button { min-height: 42px; }
+
+  /* Three abreast leaves each label two words per line — stacked rows keep the
+     icon beside its text instead. */
+  .pricing-strip__list { grid-template-columns: minmax(0, 1fr); }
+
+  .pricing-strip__list li {
+    justify-content: flex-start;
+    padding: 12px 0;
+    font-size: 12.5px;
+  }
+
+  .pricing-strip__list li + li { border-top: 1px solid var(--pricing-rule); }
+  .pricing-strip__list li + li::before { content: none; }
+
+  .pricing-values__list { grid-template-columns: minmax(0, 1fr); }
+
+  .pricing-value {
+    padding: 14px 0;
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 14px;
+  }
+
+  .pricing-value:first-child { padding-top: 18px; }
+  .pricing-value:last-child { padding-bottom: 18px; }
+
+  .pricing-value + .pricing-value {
+    border-left: 0;
+    border-top: 1px solid var(--pricing-rule);
+  }
+
+  .pricing-value__icon { width: 26px; height: 26px; }
+  .pricing-value h3 { font-size: 14.5px; }
+  .pricing-value p { font-size: 12.5px; }
+
+  .pricing-tiles,
+  .pricing-tiles--steps { grid-template-columns: minmax(0, 1fr); }
+
+  .pricing-plans { padding: 26px 0 28px; }
+  .pricing-plans__title { font-size: 21px; }
+  .pricing-plans__grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+
+  .pricing-work__grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .pricing-work__actions { grid-column: auto; }
+  .pricing-work__actions .pricing-button { width: 100%; }
+  .pricing-work__shots { gap: 10px; }
+
+  .pricing-detail__title { font-size: 21px; }
+  .pricing-band__body { padding: 22px 20px 20px; }
+  .pricing-band h3 { font-size: 18px; }
+  .pricing-faq__q { font-size: 14.5px; }
+
+  .pricing-contact-bar {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: calc(52px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .pricing-contact-bar svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The bar sits inside <main> while the consent panel is a sibling of it, so
+     this has to reach up to the body rather than across. */
+  body:has(.cookie-consent:not([hidden])) .pricing-contact-bar { display: none; }
+}
+
+@media print {
+  .pricing-hero__image,
+  .pricing-contact-bar { display: none; }
+  .pricing-band { background: none; color: var(--pricing-ink); }
+  .pricing-band h3 { color: var(--pricing-ink); }
+}

@@ -2,56 +2,105 @@
 import Base from "../layouts/Base.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import { SITE } from "../lib/site";
+import "../styles/pricing.css";
 
-const title = `Pricing & packages | ${SITE.name}`;
+const title = `SEO and automation packages & pricing | ${SITE.name}`;
 const description =
-  "Three ways to work together — a one-off audit sprint, an ongoing growth partnership, or a single automation build. What each includes, and how the quote is put together.";
+  "Choose a focused SEO audit, an ongoing growth partnership, or a custom automation build — each scoped to your site, market and goals, and quoted in writing within two business days.";
+
+const heroImage = "/assets/pricing/seo-automation-packages.webp";
+
+const strip = [
+  { icon: "i-file-text", label: "Custom-scoped proposals" },
+  { icon: "i-clock", label: "Proposal in 2 business days" },
+  { icon: "i-cog", label: "SEO + automation expertise" },
+];
+
+const values = [
+  {
+    icon: "i-crosshair",
+    title: "Clear scope",
+    desc: "Know what gets done, when, and why.",
+  },
+  {
+    icon: "i-rocket",
+    title: "Work that ships",
+    desc: "Strategy and implementation in one engagement.",
+  },
+  {
+    icon: "i-puzzle",
+    title: "Flexible fit",
+    desc: "One-off, monthly, or fixed-price support.",
+  },
+];
 
 const plans = [
   {
     title: "SEO Audit & Sprint",
-    best: "Best for an honest read on where you actually stand",
-    desc: "A focused technical, on-page and content audit with an action plan you can use straight away — with me or without me.",
-    price: "Custom — quoted per site",
+    for: "For clarity and a prioritised 90-day roadmap",
+    price: "Custom quote",
     includes: [
-      "Full technical crawl and fix list",
-      "On-page and content review",
-      "Competitor gap analysis",
+      "Full technical and content audit",
       "Prioritised 90-day roadmap",
-      "A walkthrough call on the findings",
-      "The quick wins implemented, not just listed",
+      "On-page and competitor analysis",
     ],
+    cta: "Explore the audit",
+    desc: "A focused technical, on-page and content audit with an action plan you can use straight away — with me or without me.",
     featured: false,
   },
   {
     title: "Growth Partner",
-    best: "Best for teams ready to grow month over month",
-    desc: "An ongoing SEO and digital marketing partnership — strategy, execution and reporting every month, against one metric we agree on up front.",
-    price: "Monthly retainer — custom",
+    for: "For month-over-month SEO and marketing execution",
+    price: "Monthly retainer",
     includes: [
-      "Everything in the Audit & Sprint",
-      "Monthly technical and content execution",
-      "Ongoing on-page and internal-link work",
-      "Campaign and social support",
-      "A monthly reporting call",
-      "Direct access between calls",
+      "Everything in the audit & sprint",
+      "Monthly execution and reporting",
+      "Ongoing on-page and off-page work",
     ],
+    cta: "Build a growth plan",
+    desc: "An ongoing SEO and digital marketing partnership — strategy, execution and reporting every month, against one metric we agree on up front.",
     featured: true,
   },
   {
     title: "Automation Build",
-    best: "Best for teams losing hours to repeat work",
-    desc: "A custom AI or Python automation for reporting, lead handling or content workflows — built around the tools you already use, documented and handed over.",
+    for: "For eliminating repetitive work with practical AI and Python systems",
     price: "Fixed price per build",
     includes: [
-      "Scoping session against your stack",
-      "Custom build in Python or AI workflows",
-      "Testing and failure monitoring",
-      "Documentation and team handover",
-      "30 days of post-launch fixes",
-      "Optional ongoing maintenance",
+      "Custom AI or Python automation",
+      "Integrates with your existing tools",
+      "Documentation and handover",
     ],
+    cta: "Scope an automation",
+    desc: "A custom AI or Python automation for reporting, lead handling or content workflows — built around the tools you already use, documented and handed over.",
     featured: false,
+  },
+];
+
+/** The three case studies with numbers attached, in the order /work/ ranks them. */
+const featuredWork = [
+  {
+    href: "/work/gerti-foods/",
+    src: "/assets/work/gerti-card.png",
+    width: 319,
+    height: 86,
+    alt: "Gerti Foods ajvar and bread",
+    label: "Gerti Foods — 0 to 1,800 monthly impressions",
+  },
+  {
+    href: "/work/sts-company/",
+    src: "/assets/work/sts-card.png",
+    width: 343,
+    height: 86,
+    alt: "An STS Bau installer working on lightning protection",
+    label: "STS Bau — 1 to 178 monthly organic visits",
+  },
+  {
+    href: "/use-cases/real-estate/",
+    src: "/assets/work/as-real-estate-card.png",
+    width: 344,
+    height: 113,
+    alt: "An office tower in Prishtina marked up as an AS Real Estate listing",
+    label: "AS Real Estate — 11 to 46 pages indexed",
   },
 ];
 
@@ -192,118 +241,285 @@ const schema = [
 ];
 ---
 
-<Base title={title} description={description} schema={schema}>
-  <div class="wrap">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">Pricing</span>
-    </nav>
-
-    <header class="page-head">
-      <span class="kicker">Pricing</span>
-      <h1 class="page-head__title">Packages and how pricing works</h1>
-      <p class="page-head__lede">
-        Three ways to work together — a one-off audit sprint, an ongoing growth partnership,
-        or a single automation build. Every quote is scoped to your site and your market, so
-        the number in the proposal is the number you pay.
-      </p>
-      <div class="hero__actions">
-        <a class="btn btn-primary btn--lg" href="/#contact">Get a quote</a>
-        <a class="btn btn-secondary btn--lg" href="/process/">See the process</a>
+<Base title={title} description={description} image={heroImage} schema={schema}>
+  <div class="pricing-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="pricing-hero" aria-labelledby="pricing-title">
+      <div class="pricing-wrap pricing-hero__grid">
+        <div class="pricing-hero__copy">
+          <p class="pricing-eyebrow">Pricing</p>
+          <h1 class="pricing-hero__title" id="pricing-title">
+            SEO and Automation Packages Built for Measurable Growth
+          </h1>
+          <p class="pricing-hero__lede">
+            Choose a focused SEO audit, ongoing growth partnership, or custom automation
+            build—each scoped to your site, market, and goals.
+          </p>
+          <div class="pricing-hero__actions">
+            <a class="pricing-button pricing-button--primary" href="/#contact">Get a custom quote</a>
+            <a class="pricing-button pricing-button--outline" href="/process/">See how it works</a>
+          </div>
+        </div>
       </div>
-    </header>
 
-    <!-- ── Packages ─────────────────────────────────────────────────────── -->
-    <section class="section section--ruled" id="packages">
-      <h2 class="kicker">Packages</h2>
-      <div class="ruled-grid ruled-grid--plans">
+      <img
+        class="pricing-hero__image"
+        src={heroImage}
+        width="1536"
+        height="1024"
+        alt="An SEO performance dashboard open on a laptop beside a notebook"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </section>
+
+    <!-- ── Capability strip ─────────────────────────────────────────────── -->
+    <section class="pricing-strip" aria-label="How quoting works">
+      <ul class="pricing-wrap pricing-strip__list">
         {
-          plans.map((plan) => (
-            <article class="plan">
-              {plan.featured && <span class="tag badge">MOST POPULAR</span>}
-              <h3 class="plan__title">{plan.title}</h3>
-              <p class="step__num">{plan.best}</p>
-              <p class="plan__desc">{plan.desc}</p>
-              <ul class="includes__list">
-                {plan.includes.map((item) => <li>{item}</li>)}
-              </ul>
-              <p class="plan__price">{plan.price}</p>
-              <a
-                class={`btn plan__cta ${plan.featured ? "btn-primary" : "btn-secondary"}`}
-                href="/#contact"
-              >Get a quote</a>
-            </article>
+          strip.map((item) => (
+            <li>
+              <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <span>{item.label}</span>
+            </li>
           ))
         }
+      </ul>
+    </section>
+
+    <!-- ── What every package gives you ─────────────────────────────────── -->
+    <section class="pricing-values" aria-label="What every package gives you">
+      <ul class="pricing-wrap pricing-values__list">
+        {
+          values.map((value) => (
+            <li class="pricing-value">
+              <svg class="pricing-value__icon" aria-hidden="true">
+                <use href={`#${value.icon}`} />
+              </svg>
+              <div>
+                <h3>{value.title}</h3>
+                <p>{value.desc}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Packages ─────────────────────────────────────────────────────── -->
+    <section class="pricing-plans" id="packages" aria-labelledby="plans-title">
+      <div class="pricing-wrap">
+        <h2 class="pricing-plans__title" id="plans-title">Choose the right way to work together</h2>
+
+        <div class="pricing-plans__grid">
+          {
+            plans.map((plan) => (
+              <article class={`pricing-plan${plan.featured ? " pricing-plan--featured" : ""}`}>
+                {plan.featured && <p class="pricing-plan__badge">Most popular</p>}
+                <h3 class="pricing-plan__title">{plan.title}</h3>
+                <p class="pricing-plan__for">{plan.for}</p>
+                <p class="pricing-plan__price">{plan.price}</p>
+                <ul class="pricing-plan__list">
+                  {plan.includes.map((item) => <li>{item}</li>)}
+                </ul>
+                <a
+                  class={`pricing-button ${plan.featured ? "pricing-button--primary" : "pricing-button--outline"}`}
+                  href="/#contact"
+                >{plan.cta}</a>
+              </article>
+            ))
+          }
+        </div>
       </div>
     </section>
 
-    <!-- ── What shapes the quote ────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">What shapes your quote</h2>
-      <p class="section__lede">
-        Six things move the number, and none of them is how big your company looks from the
-        outside.
-      </p>
-      <div class="ruled-grid ruled-grid--wide">
+    <!-- ── Featured work ────────────────────────────────────────────────── -->
+    <section class="pricing-work" aria-labelledby="work-title">
+      <div class="pricing-wrap pricing-work__grid">
+        <div>
+          <h2 id="work-title">Featured work</h2>
+          <p class="pricing-work__lede">
+            SEO, content, analytics, and automation systems built for real businesses.
+          </p>
+        </div>
+
+        <ul class="pricing-work__shots">
+          {
+            featuredWork.map((item) => (
+              <li>
+                <a href={item.href} aria-label={item.label}>
+                  <img
+                    src={item.src}
+                    width={item.width}
+                    height={item.height}
+                    alt={item.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="pricing-work__actions">
+          <a class="pricing-button pricing-button--outline" href="/work/">View the work</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── What shapes your quote ───────────────────────────────────────── -->
+    <section class="pricing-detail pricing-detail--split pricing-wrap" aria-labelledby="factors-title">
+      <div class="pricing-detail__head">
+        <div>
+          <p class="pricing-eyebrow">What shapes your quote</p>
+          <h2 class="pricing-detail__title" id="factors-title">Six things move the number</h2>
+          <p class="pricing-detail__lede">
+            None of them is how big your company looks from the outside. Every quote is built
+            from the site in front of me, the market it competes in, and the pace you want to
+            work at.
+          </p>
+        </div>
+
+        <figure class="pricing-detail__figure">
+          <img
+            src="/assets/pricing/what-shapes-your-quote.webp"
+            width="1536"
+            height="1024"
+            alt="A gym owner reviewing her site's search performance on a laptop"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
+
+      <ul class="pricing-tiles">
         {
           factors.map((factor) => (
-            <div class="service">
-              <svg class="icon" aria-hidden="true"><use href={`#${factor.icon}`} /></svg>
-              <h3 class="service__title">{factor.title}</h3>
-              <p class="service__desc">{factor.desc}</p>
-            </div>
+            <li class="pricing-tile">
+              <svg aria-hidden="true"><use href={`#${factor.icon}`} /></svg>
+              <h3>{factor.title}</h3>
+              <p>{factor.desc}</p>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </section>
 
     <!-- ── How the quote works ──────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">How the quote works</h2>
-      <ol class="steps">
+    <section class="pricing-detail pricing-wrap" aria-labelledby="quote-title">
+      <div class="pricing-detail__head">
+        <p class="pricing-eyebrow">How the quote works</p>
+        <h2 class="pricing-detail__title" id="quote-title">From first call to a number in writing</h2>
+        <p class="pricing-detail__lede">
+          Four steps, and nothing starts until you've approved the scope and the price.
+        </p>
+      </div>
+
+      <ol class="pricing-tiles pricing-tiles--steps">
         {
           quoteSteps.map((step) => (
-            <li class="step">
-              <svg class="icon icon--md" aria-hidden="true"><use href={`#${step.icon}`} /></svg>
-              <p class="step__num">{step.num}</p>
-              <h3 class="step__title">{step.title}</h3>
-              <p class="step__desc">{step.desc}</p>
+            <li class="pricing-tile">
+              <svg aria-hidden="true"><use href={`#${step.icon}`} /></svg>
+              <p class="pricing-tile__num">{step.num}</p>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
             </li>
           ))
         }
       </ol>
+
+      <div class="pricing-band">
+        <div class="pricing-band__body">
+          <p class="pricing-eyebrow">In writing</p>
+          <h3>Scope, timeline and price before anything starts</h3>
+          <p>
+            Every engagement is quoted against your site, your market and the one goal you
+            pick. It comes back in writing, usually within two business days — and the number
+            in the proposal is the number you pay.
+          </p>
+          <a class="pricing-link" href="/#contact">Get a custom quote →</a>
+        </div>
+
+        <img
+          src="/assets/pricing/custom-seo-proposal.webp"
+          width="1536"
+          height="1024"
+          alt="A business owner reading through a written SEO proposal at a desk"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     </section>
 
     <!-- ── Training ─────────────────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">Rather learn it yourself?</h2>
-      <p class="section__lede">
-        The <a href="/bootcamps/">bootcamps</a> teach the same work as a hands-on course — SEO
-        and WordPress — priced separately from the packages above. Good if you'd rather build
-        the skill in-house than outsource it.
-      </p>
+    <section class="pricing-detail pricing-detail--split pricing-wrap" aria-labelledby="training-title">
+      <div class="pricing-detail__head">
+        <div>
+          <p class="pricing-eyebrow">Rather learn it yourself?</p>
+          <h2 class="pricing-detail__title" id="training-title">The same work, taught as a course</h2>
+          <p class="pricing-detail__lede">
+            The bootcamps cover the same SEO and WordPress work as a hands-on course, priced
+            separately from the packages above. Good if you'd rather build the skill in-house
+            than outsource it.
+          </p>
+          <p><a class="pricing-link" href="/bootcamps/">See the bootcamps →</a></p>
+        </div>
+
+        <figure class="pricing-detail__figure">
+          <img
+            src="/assets/pricing/seo-training-bootcamps.webp"
+            width="1536"
+            height="1024"
+            alt="A student following an SEO bootcamp lesson on a laptop"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
     </section>
 
     <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">Common questions</h2>
-      <div class="faq">
+    <section class="pricing-detail pricing-wrap" aria-labelledby="faq-title">
+      <div class="pricing-detail__head">
+        <p class="pricing-eyebrow">Common questions</p>
+        <h2 class="pricing-detail__title" id="faq-title">Before you ask for a quote</h2>
+      </div>
+
+      <div class="pricing-faq">
         {
           faq.map((item) => (
-            <details class="faq__item">
-              <summary class="faq__q">{item.q}</summary>
-              <p class="faq__a">{item.a}</p>
+            <details class="pricing-faq__item">
+              <summary class="pricing-faq__q">{item.q}</summary>
+              <p class="pricing-faq__a">{item.a}</p>
             </details>
           ))
         }
       </div>
+
+      <p class="pricing-next">
+        See how the work runs in <a href="/process/">the process</a>, or look at what it moved
+        on real projects in the <a href="/work/">case studies</a>.
+      </p>
     </section>
   </div>
 
   <CtaBanner
+    icon="i-message"
     title="Not sure which package fits?"
-    lede="Tell me the site and the goal, and I'll tell you which one I'd pick — and when none of them is the answer."
-    ghostLabel="Ask a question →"
+    lede="Tell me the goal and I'll recommend the right starting point."
+    ghostLabel={null}
   />
+
+  <a
+    class="pricing-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >
+    <svg aria-hidden="true"><use href="#i-message" /></svg>
+    <span>Contact</span>
+  </a>
 </Base>

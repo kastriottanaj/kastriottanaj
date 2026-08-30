@@ -485,6 +485,18 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .cta :focus-visible { outline-color: var(--color-bg); }
 .cta ::selection { background: color-mix(in srgb, var(--color-bg) 35%, transparent); }
 
+/* The copy travels as one block so an optional mark stays beside it rather
+   than beside the whole band. */
+.cta__copy { display: flex; align-items: center; gap: 18px; }
+.cta__icon {
+  width: 34px; height: 34px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .cta__title { font-size: 22px; margin: 0 0 4px; }
 .cta__lede { font-size: 14px; margin: 0; opacity: 0.9; }
 .cta__actions { display: flex; gap: 12px; flex-wrap: wrap; }

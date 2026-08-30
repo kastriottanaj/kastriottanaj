@@ -4,26 +4,39 @@ import { SITE } from "../lib/site";
 interface Props {
   title?: string;
   lede?: string;
-  /** The second, outlined button. Pages that want a different ask override it. */
-  ghostLabel?: string;
+  /** The second, outlined button. Pages that want a different ask override it;
+      pass null to close the band on a single button. */
+  ghostLabel?: string | null;
+  /** Sprite id (see IconSprite.astro) for a mark to the left of the copy. */
+  icon?: string;
 }
 
 const {
   title = "Ready to grow traffic and cut manual work?",
   lede = "Let's talk about your goals and the bottlenecks slowing your team down.",
   ghostLabel = "Start a project →",
+  icon,
 } = Astro.props;
 ---
 
 <section class="cta">
   <div class="cta__inner">
-    <div>
-      <h2 class="cta__title">{title}</h2>
-      <p class="cta__lede">{lede}</p>
+    <div class="cta__copy">
+      {icon && <svg class="cta__icon" aria-hidden="true"><use href={`#${icon}`} /></svg>}
+      <div>
+        <h2 class="cta__title">{title}</h2>
+        <p class="cta__lede">{lede}</p>
+      </div>
     </div>
     <div class="cta__actions">
       <a class="btn cta__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">Book a strategy call</a>
-      <a class="btn btn-ghost cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">{ghostLabel}</a>
+      {
+        ghostLabel && (
+          <a class="btn btn-ghost cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+            {ghostLabel}
+          </a>
+        )
+      }
     </div>
   </div>
 </section>
