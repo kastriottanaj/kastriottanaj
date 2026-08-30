@@ -5,6 +5,8 @@ summary: "Local search and Google Business Profile work aimed at more direct boo
 description: "Google Business Profile and local search optimisation for a landmark Amsterdam hotel."
 services: ["Local SEO", "Google Business Profile"]
 thumbCaption: "Faralda Crane Hotel — building photo"
+image: "/assets/work/faralda-crane-hotel.webp"
+imageAlt: "Faralda Crane Hotel logo over the Amsterdam crane hotel"
 order: 2
 ---
 

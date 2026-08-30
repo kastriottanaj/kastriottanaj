@@ -5,6 +5,8 @@ summary: "A German lightning-protection specialist taken from a flat line to 178
 description: "Content-led SEO took STS Bau to 178 monthly organic visits and 343 ranking keywords in Germany — organic traffic up 105% — plus 992 Business Profile views in six months."
 services: ["SEO", "Content strategy", "On-page optimisation"]
 thumbCaption: "STS Bau — lightning protection installation"
+image: "/assets/work/sts-bau-logo.webp"
+imageAlt: "STS Bau Blitzschutzbau logo"
 year: 2026
 video:
   src: "/video/sts-bau.mp4"

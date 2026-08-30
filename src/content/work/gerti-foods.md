@@ -5,6 +5,8 @@ summary: "SEO that took a Kosovo food producer from zero organic traffic to 1,80
 description: "On-page and technical SEO took Gerti Foods from zero organic traffic to 1,800 monthly Google impressions and average position 7.7 in 90 days."
 services: ["SEO", "On-page optimisation", "Content strategy"]
 thumbCaption: "Gerti Foods — product photo"
+image: "/assets/work/gerti-foods-logo.webp"
+imageAlt: "Gerti Foods logo"
 year: 2026
 video:
   src: "/video/gerti-foods.mp4"

@@ -158,7 +158,18 @@ const website = {
         {
           cases.map((entry) => (
             <article class="case">
-              <figure class="thumb"><figcaption>{entry.data.thumbCaption ?? entry.data.client}</figcaption></figure>
+              <figure class="thumb">
+                {entry.data.image ? (
+                  <img
+                    src={entry.data.image}
+                    alt={entry.data.imageAlt ?? `${entry.data.client} logo`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <figcaption>{entry.data.thumbCaption ?? entry.data.client}</figcaption>
+                )}
+              </figure>
               <div class="case__body">
                 <h3 class="case__title">{entry.data.title}</h3>
                 <p class="case__desc">{entry.data.summary}</p>

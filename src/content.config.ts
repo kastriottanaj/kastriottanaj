@@ -34,9 +34,12 @@ const work = defineCollection({
     description: z.string(),
     services: z.array(z.string()).default([]),
     year: z.number().optional(),
-    /** Placeholder caption used until a real screenshot is dropped in. */
+    /** Placeholder caption used until a real image is dropped in. */
     thumbCaption: z.string().optional(),
+    /** Card art shown on the homepage Featured results section. */
     image: z.string().optional(),
+    /** Meaningful alternative text for the card art. */
+    imageAlt: z.string().optional(),
     /**
      * A recorded walkthrough of the case study. When present it stands in for
      * the placeholder thumb, and the page earns a VideoObject and a sitemap
