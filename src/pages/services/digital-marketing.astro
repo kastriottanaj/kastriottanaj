@@ -1,0 +1,301 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import "../../styles/digital-marketing.css";
+
+/* The long-form copy, the "what's included" list and the FAQ still live in
+   src/content/services/digital-marketing.md — this page only replaces the
+   layout, so the markdown stays the one place that copy is edited.
+   src/pages/services/[slug].astro skips this id for the same reason it skips
+   seo. */
+const service = await getEntry("services", "digital-marketing");
+if (!service) throw new Error("src/content/services/digital-marketing.md is missing");
+const { Content } = await render(service);
+const { title, description, includes, faq } = service.data;
+
+const url = `${SITE.url}/services/digital-marketing/`;
+const heroImage = "/assets/services/kastriot-tanaj-digital-marketing-services.webp";
+
+/* The band under the hero — three plain statements rather than the SEO page's
+   numbers, because nothing here is a metric off a single project. */
+const assurances = [
+  "Strategy built around your goals",
+  "Campaigns measured by enquiries",
+  "Clear reporting, no vanity metrics",
+];
+
+const pillars = [
+  {
+    icon: "i-crosshair",
+    title: "Choose the right channels",
+    desc: "Focus your budget where your audience actually spends time.",
+  },
+  {
+    icon: "i-trending",
+    title: "Turn clicks into enquiries",
+    desc: "Campaigns and content built to drive actions that matter.",
+  },
+  {
+    icon: "i-bars-up",
+    title: "Know what is working",
+    desc: "Straightforward reports that show what drives enquiries.",
+  },
+];
+
+/* The mockup draws three "Explore" cards without saying where they go. Each
+   one points at the page that actually carries that part of the work rather
+   than at a stub that would have to be written to receive the click. */
+const offers = [
+  {
+    icon: "i-share-nodes",
+    title: "Channel strategy",
+    desc: "Choose the platforms that fit your time, audience and goals.",
+    href: "/process/",
+  },
+  {
+    icon: "i-square-pen",
+    title: "Campaign planning",
+    desc: "Plan and launch campaigns across social and search.",
+    href: "/work/",
+  },
+  {
+    icon: "i-route",
+    title: "Conversion paths",
+    desc: "Build simple paths that turn attention into enquiries.",
+    href: "/services/web-development/",
+  },
+];
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: title,
+    areaServed: "Europe",
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE.url}/services/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={`Digital Marketing That Turns Attention Into Customers | ${SITE.name}`}
+  description={description}
+  image={heroImage}
+  schema={schema}
+>
+  <div class="dm-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="dm-hero" aria-labelledby="dm-title">
+      <div class="dm-wrap dm-hero__inner">
+        <div class="dm-hero__copy">
+          <p class="dm-eyebrow">Digital marketing</p>
+          <h1 class="dm-hero__title" id="dm-title">
+            Digital marketing that <br />turns attention into <br />customers
+          </h1>
+          <p class="dm-hero__lede">
+            Clear strategy, focused campaigns, and conversion paths for businesses
+            ready to turn scattered marketing into measurable enquiries.
+          </p>
+          <div class="dm-hero__actions">
+            <a class="dm-button dm-button--primary" href="/contact/">Book a strategy call</a>
+            <a class="dm-link" href="/work/">
+              See digital marketing work <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <figure class="dm-hero__figure">
+          <img
+            src={heroImage}
+            width="1672"
+            height="941"
+            alt="A laptop showing campaign performance charts beside a phone and a notebook of hand-drawn campaign plans"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── Assurance strip ──────────────────────────────────────────────── -->
+    <section class="dm-assure" aria-label="How the work is run">
+      <div class="dm-wrap">
+        <ul class="dm-assure__list">
+          {assurances.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Three pillars ────────────────────────────────────────────────── -->
+    <section class="dm-pillars" aria-label="What the work does">
+      <div class="dm-wrap">
+        <ul class="dm-pillars__grid">
+          {
+            pillars.map((pillar) => (
+              <li class="dm-pillar">
+                <svg aria-hidden="true"><use href={`#${pillar.icon}`} /></svg>
+                <div>
+                  <h2>{pillar.title}</h2>
+                  <p>{pillar.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Featured work ────────────────────────────────────────────────── -->
+    <section class="dm-featured-wrap" aria-labelledby="featured-title">
+      <div class="dm-wrap">
+        <article class="dm-featured">
+          <div class="dm-featured__copy">
+            <p class="dm-eyebrow">Featured work</p>
+            <h2 class="dm-featured__title" id="featured-title">
+              Marketing work built around outcomes
+            </h2>
+            <p class="dm-featured__desc">
+              A selection of recent projects where strategy, content, and campaigns
+              work together.
+            </p>
+          </div>
+
+          <figure class="dm-featured__figure">
+            <img
+              src="/assets/work/gerti-products.webp"
+              width="1536"
+              height="1024"
+              alt="Two jars of Gerti Foods preserves on a wooden board beside a bowl of ajvar"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+
+          <div class="dm-featured__meta">
+            <h3>Gerti Foods</h3>
+            <p>A clearer path from visibility to enquiry.</p>
+            <a class="dm-link" href="/work/gerti-foods/">
+              View the work <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── Focused services ─────────────────────────────────────────────── -->
+    <section class="dm-offers" aria-labelledby="offers-title">
+      <div class="dm-wrap">
+        <p class="dm-eyebrow" id="offers-title">Focused services</p>
+
+        <ul class="dm-offers__grid">
+          {
+            offers.map((offer) => (
+              <li class="dm-offer">
+                <svg aria-hidden="true"><use href={`#${offer.icon}`} /></svg>
+                <div>
+                  <h2>{offer.title}</h2>
+                  <p>{offer.desc}</p>
+                  <a class="dm-link" href={offer.href}>
+                    Explore <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Detail below the fold ────────────────────────────────────────
+         The mockup stops at the CTA band; from here down is the page's
+         existing long-form copy, restyled to sit under it. -->
+    <section class="dm-detail dm-wrap" aria-labelledby="approach-title">
+      <div class="dm-detail__head">
+        <p class="dm-eyebrow">The approach</p>
+        <h2 class="dm-detail__title" id="approach-title">How the work actually runs</h2>
+      </div>
+
+      <div class="dm-prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      includes.length > 0 && (
+        <section class="dm-detail dm-wrap" aria-labelledby="included-title">
+          <div class="dm-detail__head">
+            <p class="dm-eyebrow">What's included</p>
+            <h2 class="dm-detail__title" id="included-title">Every engagement carries these</h2>
+          </div>
+
+          <ul class="dm-includes">
+            {includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <section class="dm-detail dm-wrap" aria-labelledby="faq-title">
+          <div class="dm-detail__head">
+            <p class="dm-eyebrow">Common questions</p>
+            <h2 class="dm-detail__title" id="faq-title">Before you book the call</h2>
+          </div>
+
+          <div class="dm-faq">
+            {faq.map((item) => (
+              <details class="dm-faq__item">
+                <summary class="dm-faq__q">{item.q}</summary>
+                <p class="dm-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+
+          <p class="dm-next">
+            See what it costs in <a href="/pricing/">packages and pricing</a>, how the phases
+            run in <a href="/process/">the process</a>, or what it moved on real projects in
+            the <a href="/work/">case studies</a>.
+          </p>
+        </section>
+      )
+    }
+  </div>
+
+  <CtaBanner title="Ready to turn attention into customers?" lede="" />
+
+  <a
+    class="dm-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >Contact</a>
+</Base>

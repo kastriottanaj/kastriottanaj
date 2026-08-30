@@ -1,0 +1,602 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Digital marketing service page.
+
+   Same vocabulary as the SEO page (styles/seo.css) — hairline cards, red
+   eyebrows, one red exit band — but the mockup's hero is a split rather than a
+   photo ground: type on the page's own light ground at the left, the
+   photograph running off the right edge of the viewport.
+
+   Everything is composed at the site's measure (--measure / --gutter) so the
+   nav, the content and the red CTA band share one left edge. --dm-rule is the
+   same lighter hairline seo.css uses, so a page made mostly of boxes doesn't
+   read as a grid of dark lines.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.dm-page) {
+  --dm-rule: #e2e0df;
+  --dm-ink: #201e1d;
+  --dm-muted: #565554;
+}
+
+/* The mobile contact bar below stands in for the floating button. */
+body:has(.dm-page) .whatsapp-fab { display: none; }
+body:has(.dm-page) .footer__inner { padding-bottom: 24px; }
+
+.dm-page {
+  /* The hero photograph runs past the right edge; clip rather than scroll. */
+  overflow: clip;
+  color: var(--dm-ink);
+
+  /* Distance from the wrap's content edge out to the viewport edge — what the
+     hero figure has to give back to bleed. */
+  --dm-bleed: calc(var(--gutter) + max(0px, (100vw - var(--measure)) / 2));
+}
+
+.dm-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.dm-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Buttons and links ───────────────────────────────────────────────────── */
+
+.dm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.dm-button--primary { background: var(--color-accent); color: #fff; }
+.dm-button--primary:hover { background: var(--color-accent-600); color: #fff; }
+.dm-button--primary:active { background: var(--color-accent-700); }
+
+.dm-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.dm-link:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────
+   Two columns: the type sits on the page ground at the site's left edge, the
+   photograph fills its column top to bottom and carries on past the right
+   edge of the viewport. The band takes its height from the type, so the
+   figure stretches to match rather than setting a height of its own. */
+
+.dm-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 44px;
+}
+
+.dm-hero__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 470px;
+  padding-block: 42px;
+}
+
+.dm-hero__title {
+  margin: 14px 0 0;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.032em;
+}
+
+.dm-hero__lede {
+  margin: 14px 0 0;
+  color: var(--dm-muted);
+  font-size: 14px;
+  line-height: 1.57;
+}
+
+.dm-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 25px;
+  margin-top: 22px;
+}
+
+.dm-hero__figure {
+  margin: 0;
+  /* Give back the gutter and the space beside the measure, so the photograph
+     ends on the viewport edge the way the mockup draws it. */
+  margin-right: calc(-1 * var(--dm-bleed));
+}
+
+.dm-hero__figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* ── Assurance strip ─────────────────────────────────────────────────────
+   Three plain statements, ruled off from the hero above and the pillars
+   below — the band the mockup puts under the fold instead of a stat row. */
+
+.dm-assure__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  /* Longhand, not padding-block — the UA's padding-inline-start on <ul> would
+     otherwise survive and push every column off the content edge. */
+  padding: 8px 0;
+  border-block: 1px solid var(--dm-rule);
+  list-style: none;
+}
+
+.dm-assure__list li {
+  position: relative;
+  min-width: 0;
+  padding: 2px 16px;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.dm-assure__list li + li::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 22px;
+  background: var(--dm-rule);
+  transform: translateY(-50%);
+  content: "";
+}
+
+/* ── Three pillars ───────────────────────────────────────────────────────
+   Three across the mockup draws with no card — the columns and the rules
+   above are separation enough. Stacked, they gain an edge (see the 720px
+   block below). */
+
+.dm-pillars { padding: 30px 0 34px; }
+
+.dm-pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dm-pillar {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  column-gap: 20px;
+}
+
+.dm-pillar > svg {
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dm-pillar h2 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.dm-pillar p {
+  margin: 7px 0 0;
+  color: var(--dm-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* ── Featured work ───────────────────────────────────────────────────────
+   One bordered band: the claim at the left, the photograph in the middle, the
+   project it belongs to at the right. */
+
+.dm-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 0.64fr) minmax(0, 1fr) minmax(0, 0.59fr);
+  align-items: center;
+  gap: 26px;
+  padding: 20px;
+  border: 1px solid var(--dm-rule);
+  background: #fff;
+}
+
+.dm-featured__title {
+  margin: 12px 0 0;
+  font-size: 21px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.dm-featured__desc {
+  margin: 10px 0 0;
+  color: var(--dm-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.dm-featured__figure { margin: 0; }
+
+.dm-featured__figure img {
+  display: block;
+  width: 100%;
+  /* height:auto is load-bearing — the width/height attributes on the tag are
+     presentational hints, and a fixed height would win over the ratio below. */
+  height: auto;
+  /* The mockup crops the product shot to a letterbox this wide. */
+  aspect-ratio: 3.1 / 1;
+  object-fit: cover;
+  object-position: 50% 52%;
+}
+
+.dm-featured__meta h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.dm-featured__meta p {
+  margin: 8px 0 0;
+  color: var(--dm-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.dm-featured__meta .dm-link { margin-top: 14px; }
+
+/* ── Focused services ────────────────────────────────────────────────────── */
+
+.dm-offers { padding: 32px 0 30px; }
+
+.dm-offers__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dm-offer {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--dm-rule);
+  background: #fff;
+}
+
+.dm-offer > svg {
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dm-offer h2 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.dm-offer p {
+  margin: 8px 0 0;
+  color: var(--dm-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.dm-offer .dm-link { margin-top: 12px; }
+
+/* ── Detail below the fold ───────────────────────────────────────────────
+   The mockup stops at the CTA band; everything from here down is the page's
+   existing long-form copy, restyled to sit under it. */
+
+.dm-detail { padding-block: 36px 0; }
+.dm-detail + .dm-detail { padding-top: 40px; }
+
+.dm-detail__head { max-width: 62ch; }
+.dm-detail__head .dm-eyebrow { margin-bottom: 12px; }
+
+.dm-detail__title {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.dm-prose {
+  max-width: 68ch;
+  margin-top: 22px;
+}
+
+.dm-prose h2 {
+  margin: 30px 0 0;
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.dm-prose h2:first-child { margin-top: 0; }
+
+.dm-prose p {
+  margin: 10px 0 0;
+  color: var(--dm-muted);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.dm-includes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0 40px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dm-includes li {
+  position: relative;
+  padding: 14px 0 14px 26px;
+  border-bottom: 1px solid var(--dm-rule);
+  color: var(--dm-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.dm-includes li::before {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+  content: "✓";
+}
+
+.dm-faq {
+  margin: 26px 0 0;
+  border-top: 1px solid var(--dm-rule);
+}
+
+.dm-faq__item { border-bottom: 1px solid var(--dm-rule); }
+
+.dm-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  list-style: none;
+}
+
+.dm-faq__q::-webkit-details-marker { display: none; }
+
+.dm-faq__q::after {
+  color: var(--color-accent);
+  font-size: 20px;
+  line-height: 1;
+  content: "+";
+}
+
+.dm-faq__item[open] .dm-faq__q::after { content: "−"; }
+
+.dm-faq__a {
+  max-width: 68ch;
+  margin: 0;
+  padding: 0 0 18px;
+  color: var(--dm-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.dm-next {
+  margin: 0;
+  padding: 30px 0 40px;
+  color: var(--dm-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.dm-next a { color: var(--color-accent-700); }
+
+/* ── Red exit band ───────────────────────────────────────────────────────
+   The mockup's band is one line of type, one white button and the ghost link,
+   so only the shared component's lede is closed off and the row is pulled in
+   to the mockup's height. */
+
+body:has(.dm-page) .cta__inner { padding-block: 20px; }
+body:has(.dm-page) .cta__title { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+body:has(.dm-page) .cta__lede { display: none; }
+
+body:has(.dm-page) .cta__btn {
+  min-height: 36px;
+  min-width: 160px;
+  padding: 10px 22px;
+  font-size: 13px;
+}
+
+/* ── Mobile contact bar ──────────────────────────────────────────────────── */
+
+.dm-contact-bar { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .dm-hero__inner { gap: 30px; }
+  .dm-hero__title { font-size: 31px; }
+  .dm-pillars__grid { gap: 22px; }
+
+  /* Three across leaves the middle column too narrow for the photograph to
+     read, so the project it belongs to moves under the claim beside it. */
+  .dm-featured {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .dm-featured__figure { grid-column: 1 / -1; order: 3; }
+  .dm-featured__figure img { aspect-ratio: 16 / 6; }
+}
+
+@media (max-width: 860px) {
+  .dm-assure__list { grid-template-columns: minmax(0, 1fr); }
+  .dm-assure__list li { padding-block: 9px; }
+  .dm-assure__list li + li { border-top: 1px solid var(--dm-rule); }
+  .dm-assure__list li + li::before { content: none; }
+
+  .dm-pillars__grid,
+  .dm-offers__grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  body:has(.dm-page) { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+
+  /* Stacked, the photograph sits under the two calls to action and keeps the
+     bleed on both edges rather than only the right. */
+  .dm-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .dm-hero__copy {
+    max-width: none;
+    padding-block: 34px 26px;
+  }
+
+  .dm-hero__title {
+    font-size: 30px;
+    line-height: 1.08;
+  }
+
+  .dm-hero__title br { display: none; }
+
+  .dm-hero__lede { font-size: 14.5px; line-height: 1.6; }
+
+  .dm-hero__actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 22px;
+  }
+
+  .dm-hero__actions .dm-button { width: 100%; }
+  .dm-button { min-height: 44px; }
+
+  .dm-hero__figure {
+    margin-inline: calc(-1 * var(--dm-bleed));
+    padding-bottom: 26px;
+  }
+
+  .dm-hero__figure img { aspect-ratio: 16 / 9; }
+
+  .dm-pillars { padding: 26px 0 28px; }
+  .dm-pillars__grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+
+  /* Stacked, the mockup puts each pillar in a card — without the columns
+     beside it the icon and type need an edge of their own. */
+  .dm-pillar {
+    padding: 16px 16px 18px;
+    border: 1px solid var(--dm-rule);
+    background: #fff;
+  }
+
+  .dm-featured {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    padding: 20px 18px 22px;
+  }
+
+  .dm-featured__figure { order: 0; }
+  .dm-featured__figure img { aspect-ratio: 16 / 9; }
+  .dm-featured__title { font-size: 22px; }
+
+  .dm-offers { padding: 28px 0; }
+  .dm-offers__grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+
+  .dm-detail { padding-top: 30px; }
+  .dm-detail + .dm-detail { padding-top: 32px; }
+  .dm-detail__title { font-size: 21px; }
+  .dm-includes { gap: 0; }
+  .dm-faq__q { font-size: 14.5px; }
+
+  body:has(.dm-page) .cta__inner { padding-block: 22px; }
+  body:has(.dm-page) .cta__btn { width: 100%; }
+
+  .dm-contact-bar {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  /* The bar sits inside <main> while the consent panel is a sibling of it, so
+     this has to reach up to the body rather than across. */
+  body:has(.cookie-consent:not([hidden])) .dm-contact-bar { display: none; }
+}
+
+@media print {
+  .dm-contact-bar { display: none; }
+  .dm-hero__figure { margin-right: 0; }
+}
