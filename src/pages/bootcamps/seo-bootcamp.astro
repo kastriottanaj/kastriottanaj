@@ -1,0 +1,500 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
+import { SITE } from "../../lib/site";
+import "../../styles/seo-bootcamp.css";
+
+/* The curriculum, tiers, FAQ and long-form copy still live in
+   src/content/bootcamps/seo-bootcamp.md — this page only replaces the layout,
+   so the markdown stays the one place that copy is edited.
+   src/pages/bootcamps/[slug].astro skips this id, exactly as it already skips
+   wordpress-bootcamp, so one URL is not emitted by two routes. */
+const bootcamp = await getEntry("bootcamps", "seo-bootcamp");
+if (!bootcamp) throw new Error("src/content/bootcamps/seo-bootcamp.md is missing");
+const { Content } = await render(bootcamp);
+const {
+  title,
+  description,
+  workload,
+  outcomes,
+  fit,
+  notFit,
+  modules,
+  currency,
+  tiers,
+  guarantee,
+  faq,
+} = bootcamp.data;
+
+const url = `${SITE.url}/bootcamps/seo-bootcamp/`;
+const heroImage = "/assets/bootcamps/kastriot-tanaj-seo-bootcamp.webp";
+
+const lessonCount = modules.reduce((total, module) => total + module.lessons.length, 0);
+
+/* PT14H → 14. The strip quotes the same number the Course schema does rather
+   than a second one typed by hand. */
+const teachingHours = Number(/^PT(\d+)H$/.exec(workload ?? "")?.[1] ?? 0);
+
+/* A tier is on sale once it has a checkout URL, and not before — the same
+   single fact the shared template hangs enrolment off, so pasting the payment
+   links into the markdown is still what opens the doors. */
+const onSale = tiers.some((tier) => tier.checkout);
+
+const money = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency,
+  maximumFractionDigits: 0,
+});
+
+const enrolHref = onSale ? "#enrol" : "#waitlist";
+const enrolLabel = onSale ? "See the tiers" : "Join the waitlist";
+
+/* The strip the mockup rules under the hero. The mockup drew a live cohort
+   here — "10 live sessions", "90 minutes each" — but the course this page
+   sells is the self-paced one described in the markdown, so the two counts
+   are read off the markdown and the two claims are kept as drawn. */
+const counts = [
+  { icon: "i-calendar", label: `${modules.length} modules` },
+  { icon: "i-clock", label: `${teachingHours} hours` },
+  { icon: "i-users", label: "Real client workflow" },
+  { icon: "i-check-square", label: "Hands-on assignments" },
+];
+
+const promises = [
+  {
+    icon: "i-layers",
+    title: "A repeatable workflow",
+    desc: "Know what to do first, next, and why.",
+  },
+  {
+    icon: "i-wrench",
+    title: "Practical client skills",
+    desc: "Audit, prioritize, execute, and report.",
+  },
+  {
+    icon: "i-search",
+    title: "Built for modern search",
+    desc: "Cover technical SEO, content, authority, and AI search.",
+  },
+];
+
+/* The mockup draws three "Explore modules" cards without saying which modules
+   they stand for. Each one points at the module its own title opens with, so
+   the link lands inside the curriculum further down rather than on a stub
+   written to receive the click. The list itself stays in one unbroken 01–10
+   run, because the order is the thing the course is teaching. */
+const themes = [
+  {
+    module: 1,
+    title: "Strategy & Site Audit",
+    desc: "Define goals, understand the market, and audit sites like a pro.",
+  },
+  {
+    module: 3,
+    title: "Keywords, Content & Authority",
+    desc: "Find opportunities, create content that ranks, and build authority.",
+  },
+  {
+    module: 5,
+    title: "Technical SEO, AI Search & Reporting",
+    desc: "Fix technical issues, optimize for AI search, and report what matters.",
+  },
+];
+
+const steps = [
+  { icon: "i-clipboard-list", title: "Plan", desc: "Set goals, map priority opportunities." },
+  { icon: "i-search", title: "Audit", desc: "Analyze the site, content, and technical health." },
+  { icon: "i-rocket", title: "Execute", desc: "Implement changes and create content." },
+  { icon: "i-bar-chart", title: "Measure", desc: "Track results and report clear impact." },
+];
+
+const moduleId = (i: number) => `module-${String(i + 1).padStart(2, "0")}`;
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: title,
+    description,
+    url,
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+    teaches: outcomes,
+    hasCourseInstance: [
+      {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        ...(workload ? { courseWorkload: workload } : {}),
+      },
+    ],
+    offers: tiers.map((tier) => ({
+      "@type": "Offer",
+      name: tier.name,
+      price: tier.price,
+      priceCurrency: currency,
+      category: "Paid",
+      availability: tier.checkout
+        ? "https://schema.org/InStock"
+        : "https://schema.org/PreOrder",
+      url: tier.checkout ?? `${url}#enrol`,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Bootcamps", item: `${SITE.url}/bootcamps/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={`SEO Bootcamp for Marketers Who Want Real Client Results | ${SITE.name}`}
+  description={description}
+  image={heroImage}
+  schema={schema}
+>
+  <div class="sb-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────
+         The copy at the left on the page ground, the screen bled off the
+         right edge and running the full height of the band. -->
+    <section class="sb-hero" aria-labelledby="sb-title">
+      <div class="sb-wrap sb-hero__inner">
+        <div class="sb-hero__copy">
+          <p class="sb-eyebrow">SEO bootcamp</p>
+          <h1 class="sb-hero__title" id="sb-title">
+            The SEO Bootcamp for Marketers Who Want Real Client Results
+          </h1>
+          <p class="sb-hero__lede">
+            Follow the exact workflow used on real client sites—from strategy and keyword
+            research to technical SEO, content, AI search, and reporting.
+          </p>
+
+          <div class="sb-hero__actions">
+            <a class="sb-button sb-button--primary" href={enrolHref}>{enrolLabel}</a>
+            <a class="sb-button sb-button--ghost" href="#curriculum">View curriculum</a>
+          </div>
+
+          <p class="sb-hero__meta">
+            <span>{modules.length} modules</span>
+            <span>{teachingHours} hours</span>
+            <span>Lifetime access</span>
+          </p>
+        </div>
+      </div>
+
+      <img
+        class="sb-hero__img"
+        src={heroImage}
+        width="1672"
+        height="941"
+        alt="A search performance dashboard open on a laptop, clicks and impressions trending up"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </section>
+
+    <!-- ── What the course is, in four counts ───────────────────────────── -->
+    <section class="sb-counts" aria-label="What the course covers">
+      <div class="sb-wrap">
+        <ul class="sb-counts__list">
+          {
+            counts.map((count) => (
+              <li>
+                <svg aria-hidden="true"><use href={`#${count.icon}`} /></svg>
+                <span class="sb-counts__label">{count.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── What you'll learn ────────────────────────────────────────────── -->
+    <section class="sb-promises" aria-labelledby="sb-learn-title">
+      <div class="sb-wrap">
+        <h2 class="sb-head" id="sb-learn-title">Learn SEO by doing the work</h2>
+
+        <ul class="sb-cards">
+          {
+            promises.map((promise) => (
+              <li class="sb-card">
+                <svg class="sb-card__icon" aria-hidden="true">
+                  <use href={`#${promise.icon}`} />
+                </svg>
+                <div>
+                  <h3>{promise.title}</h3>
+                  <p>{promise.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── The curriculum, in three themes ──────────────────────────────── -->
+    <section class="sb-themes" aria-labelledby="sb-themes-title">
+      <div class="sb-wrap">
+        <h2 class="sb-head sb-head--sm" id="sb-themes-title">What you'll master</h2>
+
+        <ul class="sb-cards sb-cards--theme">
+          {
+            themes.map((theme) => (
+              <li class="sb-card sb-theme">
+                <h3>{theme.title}</h3>
+                <p>{theme.desc}</p>
+                <a class="sb-link" href={`#${moduleId(theme.module - 1)}`}>
+                  Explore modules <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── The workflow, end to end ─────────────────────────────────────── -->
+    <section class="sb-flow" aria-labelledby="sb-flow-title">
+      <div class="sb-wrap">
+        <h2 class="sb-flow__title" id="sb-flow-title">
+          From strategy to reporting—one repeatable workflow
+        </h2>
+
+        <ol class="sb-flow__list">
+          {
+            steps.map((step, i) => (
+              <li class="sb-step">
+                <p class="sb-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</p>
+                <svg class="sb-step__icon" aria-hidden="true">
+                  <use href={`#${step.icon}`} />
+                </svg>
+                <div class="sb-step__body">
+                  <h3>{step.title}</h3>
+                  <p>{step.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── Exit band ────────────────────────────────────────────────────── -->
+    <section class="sb-cta" aria-labelledby="sb-cta-title">
+      <div class="sb-wrap sb-cta__inner">
+        <h2 class="sb-cta__title" id="sb-cta-title">Ready to learn SEO through real work?</h2>
+        <a class="sb-button sb-button--light" href={enrolHref}>{enrolLabel}</a>
+      </div>
+    </section>
+
+    <!-- ── Detail below the fold ────────────────────────────────────────
+         The mockup stops at the exit band; from here down is the page's
+         existing curriculum, copy, tiers and FAQ, restyled to sit under it. -->
+    <section class="sb-detail sb-wrap" id="curriculum" aria-labelledby="sb-modules-title">
+      <div class="sb-detail__head">
+        <p class="sb-eyebrow">The modules</p>
+        <h2 class="sb-detail__title" id="sb-modules-title">
+          {modules.length} modules, {lessonCount} lessons
+        </h2>
+        <p class="sb-detail__lede">
+          Taught in the order you should do the work, which is not the order it is usually
+          taught in.
+        </p>
+      </div>
+
+      <ol class="sb-modules">
+        {
+          modules.map((module, i) => (
+            <li class="sb-module" id={moduleId(i)}>
+              <p class="sb-module__num">{String(i + 1).padStart(2, "0")}</p>
+              <div>
+                <h3>{module.title}</h3>
+                <p class="sb-module__summary">{module.summary}</p>
+                {module.lessons.length > 0 && (
+                  <ul class="sb-module__lessons">
+                    {module.lessons.map((lesson) => (
+                      <li>{lesson}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {
+      outcomes.length > 0 && (
+        <section class="sb-detail sb-wrap" aria-labelledby="sb-outcomes-title">
+          <div class="sb-detail__head">
+            <p class="sb-eyebrow">What you walk away with</p>
+            <h2 class="sb-detail__title" id="sb-outcomes-title">
+              What you'll be able to do
+            </h2>
+          </div>
+
+          <ul class="sb-outcomes">
+            {outcomes.map((outcome) => (
+              <li>{outcome}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="sb-detail sb-wrap" aria-labelledby="sb-why-title">
+      <div class="sb-detail__head">
+        <p class="sb-eyebrow">Why it exists</p>
+        <h2 class="sb-detail__title" id="sb-why-title">How the course is taught</h2>
+      </div>
+
+      <div class="sb-prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      (fit.length > 0 || notFit.length > 0) && (
+        <section class="sb-detail sb-wrap" aria-labelledby="sb-fit-title">
+          <div class="sb-detail__head">
+            <p class="sb-eyebrow">Who it's for</p>
+            <h2 class="sb-detail__title" id="sb-fit-title">
+              Whether this is the right course
+            </h2>
+          </div>
+
+          <div class="sb-fit">
+            {fit.length > 0 && (
+              <div>
+                <h3 class="sb-fit__title">This is for you if</h3>
+                <ul class="sb-fit__list sb-fit__list--yes">
+                  {fit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {notFit.length > 0 && (
+              <div>
+                <h3 class="sb-fit__title">It isn't, if</h3>
+                <ul class="sb-fit__list sb-fit__list--no">
+                  {notFit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="sb-detail sb-wrap" id="included" aria-labelledby="sb-enrol-title">
+      <div class="sb-detail__head">
+        <p class="sb-eyebrow">{onSale ? "Enrol" : "Pricing"}</p>
+        <h2 class="sb-detail__title" id="sb-enrol-title">What's included</h2>
+        <p class="sb-detail__lede">
+          {
+            onSale
+              ? "One payment, lifetime access — including every future update."
+              : "Enrolment is not open yet. This is what it will open at, so you can decide now whether it is for you."
+          }
+        </p>
+      </div>
+
+      <div class="sb-tiers" id="enrol">
+        {
+          tiers.map((tier) => (
+            <article class="sb-tier">
+              {tier.badge && <span class="sb-tier__badge">{tier.badge}</span>}
+              <h3 class="sb-tier__name">{tier.name}</h3>
+              <p class="sb-tier__price">
+                {money.format(tier.price)}
+                {tier.priceNote && <span>{tier.priceNote}</span>}
+              </p>
+              <p class="sb-tier__summary">{tier.summary}</p>
+
+              {tier.features.length > 0 && (
+                <ul class="sb-tier__features">
+                  {tier.features.map((feature) => (
+                    <li>{feature}</li>
+                  ))}
+                </ul>
+              )}
+
+              <a
+                class="sb-button sb-button--primary sb-tier__cta"
+                href={tier.checkout ?? "#waitlist"}
+                {...(tier.checkout ? { rel: "nofollow" } : {})}
+              >
+                {tier.checkout ? `Enrol — ${money.format(tier.price)}` : "Join the waitlist"}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+
+      {guarantee && <p class="sb-guarantee">{guarantee}</p>}
+    </section>
+
+    {
+      faq.length > 0 && (
+        <section class="sb-detail sb-wrap" aria-labelledby="sb-faq-title">
+          <div class="sb-detail__head">
+            <p class="sb-eyebrow">Common questions</p>
+            <h2 class="sb-detail__title" id="sb-faq-title">Before you join</h2>
+          </div>
+
+          <div class="sb-faq">
+            {faq.map((item) => (
+              <details class="sb-faq__item">
+                <summary class="sb-faq__q">{item.q}</summary>
+                <p class="sb-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <div class="sb-wrap">
+      <NewsletterForm
+        source="bootcamp-seo-bootcamp"
+        anchor="waitlist"
+        heading={onSale ? "Not ready yet?" : "Tell me when it opens"}
+        lede={
+          onSale
+            ? "Get the same thinking in shorter form — practical notes on SEO, marketing and AI automation, every couple of weeks."
+            : "One email when enrolment opens, and practical SEO notes in the meantime. No countdown timers."
+        }
+        buttonLabel={onSale ? "Subscribe" : "Keep me posted"}
+      />
+    </div>
+  </div>
+
+  <CtaBanner
+    title="Would you rather I just ran it?"
+    lede="The bootcamp teaches the workflow. If you want it run on your site instead, that is a different conversation — and a shorter one."
+  />
+
+  <a class="sb-sticky-cta" href={enrolHref}>{enrolLabel}</a>
+</Base>

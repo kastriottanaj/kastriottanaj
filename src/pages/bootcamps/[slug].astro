@@ -9,7 +9,7 @@ import { SITE } from "../../lib/site";
 export const getStaticPaths: GetStaticPaths = async () => {
   // Bootcamps with a bespoke page of their own, built from a supplied mockup.
   // Leaving them in here would emit two routes for one URL.
-  const bespoke = new Set(["wordpress-bootcamp"]);
+  const bespoke = new Set(["wordpress-bootcamp", "seo-bootcamp"]);
 
   const bootcamps = await getCollection(
     "bootcamps",
