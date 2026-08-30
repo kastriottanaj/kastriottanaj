@@ -1,0 +1,843 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Process page.
+
+   Same vocabulary as the services page (styles/services.css) — dark photo
+   hero, capability strip, value row, bordered cards — but composed at the
+   site's own measure (--measure / --gutter) so the nav, the content and the
+   red CTA band all share one left edge.
+
+   Colour, type and spacing come from the tokens in modernist.css / site.css.
+   The one page-local token is --process-rule: the hairline these newer pages
+   use for card borders and band rules, lighter than the site's --color-divider
+   so a page made mostly of boxes doesn't read as a grid of dark lines.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.process-page) {
+  --process-rule: #d5d3d1;
+  --process-ink: #201e1d;
+  --process-muted: #565554;
+  --process-dark: #131211;
+}
+
+/* The mobile contact bar below stands in for the floating button. */
+body:has(.process-page) .whatsapp-fab { display: none; }
+
+.process-page {
+  overflow: clip;
+  color: var(--process-ink);
+}
+
+.process-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.process-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────
+   The photograph is already almost black, so it carries the type without a
+   scrim doing the heavy lifting; the gradient only clears the left third. */
+
+.process-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--process-dark);
+  color: #fff;
+}
+
+.process-hero__image {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 70% 38%;
+}
+
+.process-hero::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    var(--process-dark) 0%,
+    rgb(19 18 17 / 94%) 26%,
+    rgb(19 18 17 / 70%) 44%,
+    rgb(19 18 17 / 24%) 64%,
+    rgb(19 18 17 / 0%) 88%
+  );
+}
+
+.process-hero__inner { padding-block: 56px 44px; }
+
+.process-hero__title {
+  max-width: 540px;
+  margin: 14px 0 0;
+  color: #fff;
+  font-size: 42px;
+  line-height: 1.07;
+  letter-spacing: -0.032em;
+}
+
+.process-hero__lede {
+  max-width: 52ch;
+  margin: 18px 0 0;
+  color: rgb(255 255 255 / 82%);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.process-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.process-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.process-button--primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.process-button--primary:hover { background: var(--color-accent-600); color: #fff; }
+.process-button--primary:active { background: var(--color-accent-700); }
+
+.process-button--ghost {
+  border-color: rgb(255 255 255 / 26%);
+  background: rgb(0 0 0 / 45%);
+  color: #fff;
+}
+
+.process-button--ghost:hover { border-color: rgb(255 255 255 / 55%); background: rgb(0 0 0 / 65%); }
+
+.process-hero :focus-visible { outline-color: #fff; }
+
+/* Red pips separate the claims, so the list needs no punctuation. */
+.process-trust {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 24px 0 0;
+  padding: 0;
+  color: rgb(255 255 255 / 88%);
+  font-size: 12.5px;
+  line-height: 1.4;
+  list-style: none;
+}
+
+.process-trust li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.process-trust li + li::before {
+  width: 4px;
+  height: 4px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-accent);
+  content: "";
+}
+
+/* ── Capability strip ────────────────────────────────────────────────────── */
+
+.process-strip {
+  border-bottom: 1px solid var(--process-rule);
+  background: rgb(255 255 255 / 45%);
+}
+
+.process-strip__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-block: 0;
+  padding-block: 0;
+  list-style: none;
+}
+
+.process-strip__list li {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.process-strip__list li + li { border-left: 1px solid var(--process-rule); }
+
+.process-strip__list svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Value row ───────────────────────────────────────────────────────────── */
+
+.process-values {
+  border-bottom: 1px solid var(--process-rule);
+}
+
+.process-values__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px 40px;
+  margin-block: 0;
+  padding-block: 30px 34px;
+  list-style: none;
+}
+
+/* Icon and title ride one line; the sentence drops to the icon's own edge. */
+.process-value {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 12px;
+}
+
+.process-value__icon {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.process-value h3 {
+  max-width: 20ch;
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.process-value p {
+  grid-column: 1 / -1;
+  max-width: 34ch;
+  margin: 0;
+  color: var(--process-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Five phases ─────────────────────────────────────────────────────────── */
+
+.process-phases {
+  border-bottom: 1px solid var(--process-rule);
+  padding: 34px 0 38px;
+}
+
+.process-phases__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 44px;
+  align-items: start;
+}
+
+.process-phases__title {
+  max-width: 18ch;
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+/* One dashed rule runs the width of the row; each numbered disc carries the
+   page ground, so it punches a hole in the line rather than sitting on it. */
+.process-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-timeline::before {
+  position: absolute;
+  top: 13px;
+  right: 0;
+  left: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--process-ink) 32%, transparent);
+  content: "";
+}
+
+.process-phase { min-width: 0; }
+
+.process-phase__num {
+  position: relative;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.process-phase h3 {
+  margin: 16px 0 6px;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.process-phase__desc {
+  margin: 0;
+  color: var(--process-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.process-gets {
+  padding: 22px 20px 24px;
+  border: 1px solid var(--process-rule);
+  background: #fff;
+}
+
+.process-gets h3 {
+  margin: 0 0 16px;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.process-gets ul {
+  display: grid;
+  gap: 13px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-gets li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 11px;
+  align-items: start;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.process-gets svg {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Service cards + case study ──────────────────────────────────────────
+   Three equal cards and one double-wide tile; the tile is the only dark
+   surface below the hero, which is what makes it read as the exit. */
+
+.process-offer {
+  border-bottom: 1px solid var(--process-rule);
+  padding: 30px 0 34px;
+}
+
+.process-offer__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) 1.95fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.process-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 18px 18px;
+  border: 1px solid var(--process-rule);
+  background: #fff;
+}
+
+.process-card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-card__head svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: var(--process-ink);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.process-card h3 {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.process-card p {
+  margin: 0;
+  color: var(--process-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.process-link {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 12px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.process-link:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+.process-case {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 42%);
+  overflow: hidden;
+  background: var(--process-dark);
+  color: #fff;
+}
+
+.process-case__body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px 16px 14px;
+}
+
+.process-case h3 {
+  max-width: 24ch;
+  margin: 2px 0 0;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+}
+
+.process-case__desc {
+  max-width: 40ch;
+  margin: 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.process-case img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.process-case .process-link { color: var(--color-accent-400); }
+.process-case .process-link:hover { color: #fff; }
+.process-case :focus-visible { outline-color: #fff; }
+
+/* ── Detail below the fold ───────────────────────────────────────────────
+   The mockup stops at the CTA band; everything from here down is the page's
+   existing long-form copy, restyled to sit under it. */
+
+.process-detail { padding-block: 36px 0; }
+
+.process-detail__head { max-width: 62ch; }
+
+.process-detail__head .process-eyebrow { margin-bottom: 12px; }
+
+.process-detail__title {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.process-detail__lede {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  color: var(--process-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.process-detail + .process-detail { padding-top: 40px; }
+
+.process-steps {
+  display: grid;
+  gap: 0;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-step {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 560px) minmax(0, 320px);
+  gap: 12px 40px;
+  padding: 24px 0;
+  border-top: 1px solid var(--process-rule);
+}
+
+.process-step:last-child { border-bottom: 1px solid var(--process-rule); }
+
+.process-step__num {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.process-step h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.process-step__body p {
+  margin: 0;
+  color: var(--process-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.process-step__gets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-step__gets li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--process-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.process-step__gets li + li { margin-top: 8px; }
+
+.process-step__gets li::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+  content: "✓";
+}
+
+.process-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 20px 18px;
+  border: 1px solid var(--process-rule);
+  background: #fff;
+}
+
+.process-tile svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.process-tile__label {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.process-tile h3 {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.process-tile__desc {
+  margin: 0;
+  color: var(--process-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.process-faq {
+  margin: 26px 0 0;
+  border-top: 1px solid var(--process-rule);
+}
+
+.process-faq__item { border-bottom: 1px solid var(--process-rule); }
+
+.process-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  list-style: none;
+}
+
+.process-faq__q::-webkit-details-marker { display: none; }
+
+.process-faq__q::after {
+  color: var(--color-accent);
+  font-size: 20px;
+  line-height: 1;
+  content: "+";
+}
+
+.process-faq__item[open] .process-faq__q::after { content: "−"; }
+
+.process-faq__a {
+  max-width: 68ch;
+  margin: 0;
+  padding: 0 0 18px;
+  color: var(--process-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.process-next {
+  margin: 0;
+  padding: 30px 0 40px;
+  color: var(--process-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.process-next a { color: var(--color-accent-700); }
+
+/* ── Mobile contact bar ──────────────────────────────────────────────────── */
+
+.process-contact-bar { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .process-offer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .process-case { grid-column: 1 / -1; }
+  .process-step { grid-template-columns: 44px minmax(0, 1fr); }
+  .process-step__gets { grid-column: 2; }
+}
+
+@media (max-width: 900px) {
+  .process-phases__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+
+  /* Five abreast stops working long before the copy does — the row becomes a
+     column, and the dashed rule turns with it. */
+  .process-timeline { grid-template-columns: minmax(0, 1fr); gap: 0; }
+
+  .process-timeline::before {
+    top: 0;
+    right: auto;
+    bottom: 0;
+    left: 13px;
+    border-top: 0;
+    border-left: 1px dashed color-mix(in srgb, var(--process-ink) 32%, transparent);
+  }
+
+  .process-phase {
+    display: grid;
+    grid-template-columns: 27px minmax(0, 1fr);
+    gap: 4px 16px;
+    padding-bottom: 22px;
+  }
+
+  .process-phase:last-child { padding-bottom: 0; }
+  .process-phase__num { grid-column: 1; }
+  .process-phase h3 { grid-column: 2; margin: 4px 0 6px; }
+  .process-phase__desc { grid-column: 2; }
+}
+
+@media (max-width: 720px) {
+  body:has(.process-page) { padding-bottom: calc(52px + env(safe-area-inset-bottom)); }
+
+  .process-hero__inner { padding-block: 34px 30px; }
+
+  /* Portrait leaves no clear left third, so the scrim goes vertical and the
+     photograph stays as texture behind the type. */
+  .process-hero::after {
+    background: linear-gradient(
+      180deg,
+      rgb(19 18 17 / 94%) 0%,
+      rgb(19 18 17 / 90%) 60%,
+      rgb(19 18 17 / 82%) 100%
+    );
+  }
+
+  .process-hero__image { object-position: 76% center; }
+
+  .process-hero__title { max-width: 17ch; font-size: 28px; }
+  .process-hero__lede { font-size: 13.5px; margin-top: 14px; }
+
+  .process-hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .process-button { min-height: 42px; }
+  .process-trust { margin-top: 18px; font-size: 12px; }
+
+  .process-strip__list li {
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 8px;
+    font-size: 11px;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .process-strip__list svg { width: 18px; height: 18px; }
+
+  .process-values__list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding-block: 16px 18px;
+  }
+
+  /* Borderless columns need side-by-side neighbours to read as a set; stacked,
+     each value gets a box of its own instead. */
+  .process-value {
+    grid-template-columns: 26px minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 4px;
+    padding: 13px 14px;
+    border: 1px solid var(--process-rule);
+    background: rgb(255 255 255 / 45%);
+  }
+
+  .process-value__icon { width: 24px; height: 24px; }
+  .process-value h3 { max-width: none; font-size: 13.5px; }
+
+  .process-value p {
+    grid-column: 2;
+    max-width: none;
+    font-size: 12px;
+  }
+
+  /* The dashed rule tracks the discs, which are 27px wide. */
+  .process-timeline::before { left: 13px; }
+
+  .process-phases { padding: 26px 0 28px; }
+  .process-phases__title { font-size: 22px; }
+
+  .process-offer__grid { grid-template-columns: minmax(0, 1fr); }
+  .process-case { grid-template-columns: minmax(0, 1fr); }
+  .process-case img { height: 150px; }
+
+  .process-detail__title { font-size: 22px; }
+  .process-step { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .process-step__num { font-size: 13px; }
+  .process-step__gets { grid-column: 1; margin-top: 6px; }
+  .process-faq__q { font-size: 14.5px; }
+
+  .process-contact-bar {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(52px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .cookie-consent:not([hidden]) ~ .process-contact-bar { display: none; }
+}
+
+@media print {
+  .process-hero__image,
+  .process-contact-bar { display: none; }
+  .process-hero, .process-case { background: none; color: var(--process-ink); }
+  .process-hero__title, .process-case h3 { color: var(--process-ink); }
+}

@@ -2,18 +2,22 @@
 import Base from "../layouts/Base.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import { SITE } from "../lib/site";
+import "../styles/process.css";
 
 const title = `Process — how I work | ${SITE.name}`;
 const description =
   "The five phases every engagement runs through — audit, strategy, build, automate, report — what you get at each one, and how long it takes.";
 
-/** One source for both the overview band and the detailed section below it. */
+const heroImage = "/assets/process/process-kastriot-tanaj.webp";
+
+/** One source for the timeline band and the detailed section below it. */
 const phases = [
   {
     num: "01",
     icon: "i-search",
     title: "Discover & audit",
-    short: "A full technical, content, and competitor audit — no guesswork, just opportunities.",
+    short:
+      "Full technical crawl, content review and competitor analysis to find what's holding growth back.",
     body: "Nothing gets touched until I know what is actually wrong. I crawl the site, read the search data you already have, and look at the two or three competitors who keep outranking you. What comes back is a list of problems ranked by what they are costing you — not a severity score out of ten that nobody can act on.",
     deliverables: [
       "Full technical crawl and fix list",
@@ -26,7 +30,8 @@ const phases = [
     num: "02",
     icon: "i-map",
     title: "Strategy & roadmap",
-    short: "A prioritized plan tied to your goals — traffic, leads, or revenue.",
+    short:
+      "A prioritised plan with quick wins and bigger bets tied to traffic, leads and revenue.",
     body: "The audit says what is broken. The roadmap says what we do about it, in what order, and what each item is expected to move. Everything ties back to one goal you pick, because a plan that optimises for traffic, leads and revenue at once optimises for none of them. Work that costs a lot and moves little gets cut here, not halfway through the quarter.",
     deliverables: [
       "Keyword and topic map",
@@ -38,8 +43,9 @@ const phases = [
   {
     num: "03",
     icon: "i-sliders",
-    title: "Build & optimize",
-    short: "Site, content, and technical fixes shipped and measured, not left in a slide deck.",
+    title: "Build & optimise",
+    short:
+      "Technical fixes, content and internal linking to strengthen visibility and relevance.",
     body: "This is the part most audits never reach. Technical fixes get implemented, pages get rewritten and restructured, new content gets published, and internal linking gets rebuilt around the topics you want to own. I work inside your site or alongside your developers — whichever ships faster. Every change is logged with a date, so a movement three months later can be traced back to a cause.",
     deliverables: [
       "Technical fixes implemented and verified",
@@ -52,7 +58,7 @@ const phases = [
     num: "04",
     icon: "i-bot",
     title: "Automate & scale",
-    short: "Repetitive work handed off to automations, so growth doesn't mean more headcount.",
+    short: "Workflows, alerts and processes that save time and remove manual work.",
     body: "Once the work is running, the recurring parts get handed to a machine — reporting, lead routing, content briefs, alerts when something breaks. These are custom Python and AI workflows built around the tools you already use, not another subscription to manage. The test is simple: hours back every month, and fewer things that quietly stop working.",
     deliverables: [
       "Automation scoped to your stack",
@@ -65,7 +71,7 @@ const phases = [
     num: "05",
     icon: "i-phone",
     title: "Track & report",
-    short: "Clear, honest reporting on what moved and why — no vanity metrics.",
+    short: "Clear monthly reporting showing what changed, what it did, and what's next.",
     body: "Monthly reporting a non-marketer can read: what changed, what it did, what is next, and what did not work. Impressions climbing while leads stay flat is a finding worth leading with, not something to bury on slide fourteen. If a bet did not pay off, you hear it from me first.",
     deliverables: [
       "Monthly report in plain language",
@@ -73,6 +79,58 @@ const phases = [
       "What worked and what didn't",
       "Next month's priorities",
     ],
+  },
+];
+
+const strip = [
+  { icon: "i-target", label: "5 focused phases" },
+  { icon: "i-wrench", label: "Hands-on implementation" },
+  { icon: "i-bar-chart", label: "Plain-language reporting" },
+];
+
+const values = [
+  {
+    icon: "i-search",
+    title: "See what is blocking growth",
+    desc: "A technical, content and competitor audit ranked by impact.",
+  },
+  {
+    icon: "i-map",
+    title: "Know exactly what happens next",
+    desc: "A prioritised roadmap tied to traffic, leads and revenue.",
+  },
+  {
+    icon: "i-rocket",
+    title: "Get work shipped, not just advised",
+    desc: "SEO fixes, content and automations implemented and measured.",
+  },
+];
+
+const youGet = [
+  "Priorities ranked by impact",
+  "Changes logged",
+  "Monthly report",
+  "Next actions",
+];
+
+const offers = [
+  {
+    icon: "i-search",
+    title: "SEO",
+    desc: "Technical fixes, content and internal linking that build visibility and qualified organic traffic.",
+    href: "/services/seo/",
+  },
+  {
+    icon: "i-megaphone",
+    title: "Digital marketing",
+    desc: "Campaigns and content that attract the right audience and turn interest into leads.",
+    href: "/services/digital-marketing/",
+  },
+  {
+    icon: "i-bot",
+    title: "AI automation",
+    desc: "Automations that remove manual work, speed up follow-up and keep things moving.",
+    href: "/services/ai-automation/",
   },
 ];
 
@@ -86,7 +144,7 @@ const timeline = [
   {
     icon: "i-sliders",
     label: "Weeks 3–12",
-    title: "Build and optimize",
+    title: "Build and optimise",
     desc: "Fixes and content ship continuously. The first real movement in search usually lands in this window.",
   },
   {
@@ -178,133 +236,247 @@ const schema = [
 ];
 ---
 
-<Base title={title} description={description} schema={schema}>
-  <div class="wrap">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a> <span aria-hidden="true">/</span>
-      <span aria-current="page">Process</span>
-    </nav>
-
-    <header class="page-head">
-      <span class="kicker">Process</span>
-      <h1 class="page-head__title">How I work</h1>
-      <p class="page-head__lede">
-        Every engagement runs through the same five phases — audit, strategy, build,
-        automate, report. No black boxes and no sixty-page deck nobody reads: you see what I
-        found, what I'd do about it, and what it moved.
-      </p>
-      <div class="hero__actions">
-        <a class="btn btn-primary btn--lg" href="/#contact">Book a strategy call</a>
-        <a class="btn btn-secondary btn--lg" href="/pricing/">See packages</a>
+<Base title={title} description={description} image={heroImage} schema={schema}>
+  <div class="process-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="process-hero" aria-labelledby="process-title">
+      <img
+        class="process-hero__image"
+        src={heroImage}
+        width="1774"
+        height="887"
+        alt="A laptop showing an SEO dashboard and an automation workflow"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <div class="process-wrap process-hero__inner">
+        <p class="process-eyebrow">A clear, hands-on process</p>
+        <h1 class="process-hero__title" id="process-title">
+          SEO &amp; Automation That Grows Traffic and Cuts Manual Work
+        </h1>
+        <p class="process-hero__lede">
+          For businesses that need more qualified leads and leaner operations — from audit
+          to implementation and clear monthly reporting.
+        </p>
+        <div class="process-hero__actions">
+          <a
+            class="process-button process-button--primary"
+            href={SITE.whatsappUrl}
+            target="_blank"
+            rel="noopener"
+          >Book a strategy call</a>
+          <a class="process-button process-button--ghost" href="/pricing/">See packages</a>
+        </div>
+        <ul class="process-trust">
+          <li>No black box</li>
+          <li>No vague retainers</li>
+          <li>Work you can track</li>
+        </ul>
       </div>
-    </header>
+    </section>
 
-    <!-- ── Overview ─────────────────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">The five phases</h2>
-      <ol class="steps">
+    <!-- ── Capability strip ─────────────────────────────────────────────── -->
+    <section class="process-strip" aria-label="How the engagement runs">
+      <ul class="process-wrap process-strip__list">
+        {
+          strip.map((item) => (
+            <li>
+              <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <span>{item.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── What the process gives you ───────────────────────────────────── -->
+    <section class="process-values" aria-label="What the process gives you">
+      <ul class="process-wrap process-values__list">
+        {
+          values.map((value) => (
+            <li class="process-value">
+              <svg class="process-value__icon" aria-hidden="true">
+                <use href={`#${value.icon}`} />
+              </svg>
+              <h3>{value.title}</h3>
+              <p>{value.desc}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── The five phases ──────────────────────────────────────────────── -->
+    <section class="process-phases" aria-labelledby="phases-title">
+      <div class="process-wrap process-phases__grid">
+        <div>
+          <h2 class="process-phases__title" id="phases-title">
+            Five phases. One accountable process.
+          </h2>
+          <ol class="process-timeline">
+            {
+              phases.map((phase) => (
+                <li class="process-phase">
+                  <p class="process-phase__num">{phase.num}</p>
+                  <h3>{phase.title}</h3>
+                  <p class="process-phase__desc">{phase.short}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="process-gets">
+          <h3>What you get</h3>
+          <ul>
+            {
+              youGet.map((item) => (
+                <li>
+                  <svg aria-hidden="true"><use href="#i-check-circle" /></svg>
+                  <span>{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Where the phases get applied ─────────────────────────────────── -->
+    <section class="process-offer" aria-label="Where the process gets applied">
+      <div class="process-wrap process-offer__grid">
+        {
+          offers.map((offer) => (
+            <article class="process-card">
+              <div class="process-card__head">
+                <svg aria-hidden="true"><use href={`#${offer.icon}`} /></svg>
+                <h3>{offer.title}</h3>
+              </div>
+              <p>{offer.desc}</p>
+              <a class="process-link" href={offer.href}>Explore service →</a>
+            </article>
+          ))
+        }
+
+        <article class="process-case">
+          <div class="process-case__body">
+            <p class="process-eyebrow">Case study</p>
+            <h3>From buried visibility to rankings you can point at</h3>
+            <p class="process-case__desc">
+              Real projects run through the same five phases — the fixes, the content, and
+              the numbers that actually moved.
+            </p>
+            <a class="process-link" href="/work/">View case studies →</a>
+          </div>
+          <img
+            src="/assets/process/process-of-work-seo.webp"
+            width="1672"
+            height="941"
+            alt="A laptop and tablet showing search performance and automation dashboards"
+            loading="lazy"
+            decoding="async"
+          />
+        </article>
+      </div>
+    </section>
+
+    <!-- ── Phase detail ─────────────────────────────────────────────────── -->
+    <section class="process-detail process-wrap" aria-labelledby="detail-title">
+      <div class="process-detail__head">
+        <p class="process-eyebrow">Inside each phase</p>
+        <h2 class="process-detail__title" id="detail-title">What actually happens, step by step</h2>
+        <p class="process-detail__lede">
+          No black boxes and no sixty-page deck nobody reads: you see what I found, what I'd
+          do about it, and what it moved.
+        </p>
+      </div>
+
+      <ol class="process-steps">
         {
           phases.map((phase) => (
-            <li class="step">
-              <svg class="icon icon--md" aria-hidden="true"><use href={`#${phase.icon}`} /></svg>
-              <p class="step__num">{phase.num}</p>
-              <h3 class="step__title">{phase.title}</h3>
-              <p class="step__desc">{phase.short}</p>
+            <li class="process-step" id={`phase-${phase.num}`}>
+              <p class="process-step__num">{phase.num}</p>
+              <div class="process-step__body">
+                <h3>{phase.title}</h3>
+                <p>{phase.body}</p>
+              </div>
+              <ul class="process-step__gets">
+                {phase.deliverables.map((item) => <li>{item}</li>)}
+              </ul>
             </li>
           ))
         }
       </ol>
     </section>
 
-    <!-- ── Phase detail ─────────────────────────────────────────────────── -->
-    <div class="article-grid">
-      <div class="prose">
-        <h2 class="sr-only">What happens in each phase</h2>
-        {
-          phases.map((phase) => (
-            <section id={`phase-${phase.num}`}>
-              <h2>{phase.num} — {phase.title}</h2>
-              <p>{phase.body}</p>
-              <p><strong>What you get:</strong></p>
-              <ul>
-                {phase.deliverables.map((item) => <li>{item}</li>)}
-              </ul>
-            </section>
-          ))
-        }
+    <!-- ── How long it takes ────────────────────────────────────────────── -->
+    <section class="process-detail process-wrap" aria-labelledby="timing-title">
+      <div class="process-detail__head">
+        <p class="process-eyebrow">How long it takes</p>
+        <h2 class="process-detail__title" id="timing-title">A realistic timeline</h2>
+        <p class="process-detail__lede">
+          SEO is not paid advertising. Technical fixes can move things in weeks; competitive
+          rankings take months. Anyone promising page one by Friday is selling something else.
+        </p>
       </div>
 
-      <aside class="includes">
-        <h2 class="kicker">Every engagement</h2>
-        <ul class="includes__list">
-          <li>One named person doing the work — no account manager in between</li>
-          <li>Findings you keep, whether we continue or not</li>
-          <li>Direct access on WhatsApp or email between calls</li>
-          <li>Plain-language reporting, every month</li>
-          <li>A dated log of every change made to your site</li>
-        </ul>
-      </aside>
-    </div>
-
-    <!-- ── Timeline ─────────────────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">How long it takes</h2>
-      <p class="section__lede">
-        SEO is not paid advertising. Technical fixes can move things in weeks; competitive
-        rankings take months. Anyone promising page one by Friday is selling something else.
-      </p>
-      <div class="ruled-grid ruled-grid--services">
+      <ul class="process-tiles">
         {
           timeline.map((item) => (
-            <div class="service">
-              <svg class="icon" aria-hidden="true"><use href={`#${item.icon}`} /></svg>
-              <p class="step__num">{item.label}</p>
-              <h3 class="service__title">{item.title}</h3>
-              <p class="service__desc">{item.desc}</p>
-            </div>
+            <li class="process-tile">
+              <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <p class="process-tile__label">{item.label}</p>
+              <h3>{item.title}</h3>
+              <p class="process-tile__desc">{item.desc}</p>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </section>
 
     <!-- ── What I need from you ─────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">What I need from you</h2>
-      <p class="section__lede">
-        Short list, and it stays short. The work stalls far more often on access and
-        approvals than on strategy.
-      </p>
-      <div class="ruled-grid ruled-grid--services">
+    <section class="process-detail process-wrap" aria-labelledby="from-you-title">
+      <div class="process-detail__head">
+        <p class="process-eyebrow">What I need from you</p>
+        <h2 class="process-detail__title" id="from-you-title">Short list, and it stays short</h2>
+        <p class="process-detail__lede">
+          The work stalls far more often on access and approvals than on strategy.
+        </p>
+      </div>
+
+      <ul class="process-tiles">
         {
           fromYou.map((item) => (
-            <div class="service">
-              <svg class="icon" aria-hidden="true"><use href={`#${item.icon}`} /></svg>
-              <h3 class="service__title">{item.title}</h3>
-              <p class="service__desc">{item.desc}</p>
-            </div>
+            <li class="process-tile">
+              <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <h3>{item.title}</h3>
+              <p class="process-tile__desc">{item.desc}</p>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </section>
 
     <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
-    <section class="section section--ruled">
-      <h2 class="kicker">Common questions</h2>
-      <div class="faq">
+    <section class="process-detail process-wrap" aria-labelledby="faq-title">
+      <div class="process-detail__head">
+        <p class="process-eyebrow">Common questions</p>
+        <h2 class="process-detail__title" id="faq-title">Before you book the call</h2>
+      </div>
+
+      <div class="process-faq">
         {
           faq.map((item) => (
-            <details class="faq__item">
-              <summary class="faq__q">{item.q}</summary>
-              <p class="faq__a">{item.a}</p>
+            <details class="process-faq__item">
+              <summary class="process-faq__q">{item.q}</summary>
+              <p class="process-faq__a">{item.a}</p>
             </details>
           ))
         }
       </div>
-    </section>
 
-    <section class="section section--ruled">
-      <h2 class="kicker">Next</h2>
-      <p class="section__lede">
+      <p class="process-next">
         See what the phases cost in <a href="/pricing/">packages and pricing</a>, or look at
         how this played out on real projects in the <a href="/work/">case studies</a>.
       </p>
@@ -312,4 +484,12 @@ const schema = [
   </div>
 
   <CtaBanner />
+
+  <a
+    class="process-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >Contact</a>
 </Base>
