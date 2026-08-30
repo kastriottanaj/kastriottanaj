@@ -1,6 +1,13 @@
 ---
 import { SERVICE_OPTIONS } from "../lib/site";
 
+interface Props {
+  /** Contact-page treatment matching the supplied project-brief design. */
+  projectBrief?: boolean;
+}
+
+const { projectBrief = false } = Astro.props;
+
 // Optional: set PUBLIC_TURNSTILE_SITE_KEY (and TURNSTILE_SECRET_KEY on the server)
 // to switch on Cloudflare Turnstile. Absent, the form still works — the honeypot
 // and the server-side rate limit carry spam duty on their own.
@@ -10,7 +17,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 {/* No `novalidate` in the markup: without JS the browser validates natively and
     posts for real. The enhancement script adds `novalidate` on init so it can
     show the nicer inline messages instead. */}
-<form class="form" id="contact-form" method="POST" action="/api/lead">
+<form class:list={["form", { "form--project-brief": projectBrief }]} id="contact-form" method="POST" action="/api/lead">
   <div class="form__row">
     <div class="field">
       <label for="name">Name</label>
@@ -18,7 +25,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       <p class="field__error" data-error-for="name" hidden></p>
     </div>
     <div class="field">
-      <label for="email">Email</label>
+      <label for="email">{projectBrief ? "Work email" : "Email"}</label>
       <input class="input" type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required maxlength="200" />
       <p class="field__error" data-error-for="email" hidden></p>
     </div>
@@ -26,14 +33,25 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
   <div class="field">
     <label for="service">What do you need help with?</label>
-    <select class="input input--select" id="service" name="service">
+    <select class="input input--select" id="service" name="service" required={projectBrief}>
+      {projectBrief && <option value="" selected disabled>Select an option</option>}
       {SERVICE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
     </select>
   </div>
 
   <div class="field">
-    <label for="message">Message</label>
-    <textarea class="input" id="message" name="message" rows="4" placeholder="Tell me more about your goals or challenges..." required maxlength="5000"></textarea>
+    <label for="message">{projectBrief ? "Project goals" : "Message"}</label>
+    <textarea
+      class="input"
+      id="message"
+      name="message"
+      rows="4"
+      placeholder={projectBrief
+        ? "Tell me about your goals, timeline, and any specific challenges."
+        : "Tell me more about your goals or challenges..."}
+      required
+      maxlength="5000"
+    ></textarea>
     <p class="field__error" data-error-for="message" hidden></p>
   </div>
 
@@ -45,7 +63,9 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
   {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="light" />}
 
-  <button class="btn btn-primary btn--lg form__submit" type="submit">Send message</button>
+  <button class="btn btn-primary btn--lg form__submit" type="submit">
+    {projectBrief ? "Send project details" : "Send message"}
+  </button>
 </form>
 
 <div class="form-status" id="form-status" role="status" aria-live="polite" hidden>
