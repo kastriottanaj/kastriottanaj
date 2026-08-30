@@ -1,0 +1,347 @@
+---
+import Base from "../layouts/Base.astro";
+import ContactForm from "../components/ContactForm.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import { SITE } from "../lib/site";
+import "../styles/contact.css";
+
+const title = `Contact — start an SEO or automation project | ${SITE.name}`;
+const description =
+  "Tell me about your site, your market and the one thing you want to move. WhatsApp, email or the form — you get a written reply within two business days.";
+
+/** The direct routes, in the order most people actually use them. */
+const channels = [
+  {
+    icon: "i-message",
+    label: "WhatsApp",
+    value: SITE.phoneDisplay,
+    href: SITE.whatsappUrl,
+    external: true,
+    note: "Fastest — usually same day",
+  },
+  {
+    icon: "i-users",
+    label: "LinkedIn",
+    value: "/in/seo-kastriot-tanaj",
+    href: SITE.linkedin,
+    external: true,
+    note: "Good for a quick question",
+  },
+  {
+    icon: "i-pin",
+    label: "Based in",
+    value: SITE.locality,
+    href: null,
+    external: false,
+    note: "Working remotely across Europe",
+  },
+];
+
+const steps = [
+  {
+    num: "01",
+    icon: "i-message",
+    title: "You send the details",
+    desc: "The site, the market, and the one result you want to move. Two or three sentences is enough to start.",
+  },
+  {
+    num: "02",
+    icon: "i-search",
+    title: "I look before I answer",
+    desc: "A quick pass over the site, the search data and a couple of competitors — so the reply is about your situation, not a template.",
+  },
+  {
+    num: "03",
+    icon: "i-phone",
+    title: "Twenty minutes on a call",
+    desc: "WhatsApp or Google Meet, whichever suits you. If it isn't a fit, I'll say so on that call rather than send a proposal anyway.",
+  },
+  {
+    num: "04",
+    icon: "i-file-text",
+    title: "Scope and price in writing",
+    desc: "Deliverables, timeline and a number — usually within two business days of the call, and nothing starts until you approve it.",
+  },
+];
+
+const brief = [
+  {
+    icon: "i-code",
+    title: "Your website",
+    desc: "The URL is the single most useful thing you can send. Everything else I can work out from it.",
+  },
+  {
+    icon: "i-target",
+    title: "What you want to move",
+    desc: "More qualified leads, rankings in a specific market, hours back every month — one goal, not five.",
+  },
+  {
+    icon: "i-clock",
+    title: "Timeline and constraints",
+    desc: "A launch date, a season you sell into, or a budget ceiling. Constraints shape the plan; they don't kill it.",
+  },
+  {
+    icon: "i-wrench",
+    title: "What you've already tried",
+    desc: "Past agencies, tools you pay for, work half-finished. It saves us both from repeating something that didn't work.",
+  },
+];
+
+const faq = [
+  {
+    q: "How quickly will you reply?",
+    a: "Within two business days, and usually the same day on WhatsApp. If you haven't heard back after that, the message went missing — send it again on LinkedIn and I'll pick it up there.",
+  },
+  {
+    q: "What happens on the first call?",
+    a: "Twenty minutes on your site, your market and what you're actually trying to fix. No slides. If the honest answer is that you don't need me — or need something I don't do — you'll hear that instead of a proposal.",
+  },
+  {
+    q: "Do you work with businesses outside Kosovo?",
+    a: `Yes — most of the work is remote across Europe. I'm based in ${SITE.locality} and calls happen on WhatsApp or Google Meet.`,
+  },
+  {
+    q: "Is the first conversation free?",
+    a: "Yes. The call and the written proposal that follows cost nothing and carry no obligation. You only pay once you've approved a scope.",
+  },
+  {
+    q: "I'm not sure what I need yet. Should I still write?",
+    a: "Yes. \"Not sure yet\" is an option in the form for a reason — a lot of engagements start with a site that's underperforming and no clear diagnosis. Working out which of SEO, content or automation is the bottleneck is part of the job.",
+  },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Contact", item: `${SITE.url}/contact/` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    url: `${SITE.url}/contact/`,
+    name: "Contact",
+    description,
+    mainEntity: {
+      "@type": "Person",
+      name: SITE.name,
+      url: `${SITE.url}/`,
+      jobTitle: SITE.jobTitle,
+      telephone: SITE.phone,
+      sameAs: [SITE.linkedin],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: SITE.locality,
+        addressCountry: SITE.country,
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        telephone: SITE.phone,
+        areaServed: "Europe",
+        availableLanguage: ["English", "Albanian"],
+      },
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema}>
+  <div class="contact-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────
+         The form sits in the hero rather than below three screens of copy:
+         most people who open this page arrived intending to write. The id
+         stays `contact` so every /#contact link on the site still lands on
+         the form, here and on the homepage. -->
+    <section class="contact-hero" id="contact" aria-labelledby="contact-title">
+      <div class="contact-wrap contact-hero__grid">
+        <div class="contact-hero__copy">
+          <p class="contact-eyebrow">Contact</p>
+          <h1 class="contact-hero__title" id="contact-title">
+            Tell me what you're trying to grow
+          </h1>
+          <p class="contact-hero__lede">
+            SEO, digital marketing, AI automation or a site that needs rebuilding — send the
+            details and you'll get a written reply within two business days. No pitch deck, no
+            call centre.
+          </p>
+
+          <ul class="contact-hero__points">
+            <li>A reply within two business days</li>
+            <li>A free 20-minute call before anything is quoted</li>
+            <li>Scope and price in writing before work starts</li>
+          </ul>
+
+          <div class="contact-hero__actions">
+            <a
+              class="contact-button contact-button--primary"
+              href={SITE.whatsappUrl}
+              target="_blank"
+              rel="noopener"
+              aria-label={`Message ${SITE.name} on WhatsApp at ${SITE.phoneDisplay}`}
+            >Message on WhatsApp</a>
+            <a class="contact-button contact-button--outline" href="/pricing/">See the packages</a>
+          </div>
+        </div>
+
+        <div class="contact-hero__form">
+          <h2 class="contact-hero__form-title">Send a message</h2>
+          <p class="contact-hero__form-note">
+            Fields marked required are the only ones I actually need.
+          </p>
+          <ContactForm />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Direct channels ──────────────────────────────────────────────── -->
+    <section class="contact-channels" aria-label="Other ways to reach me">
+      <ul class="contact-wrap contact-channels__list">
+        {
+          channels.map((channel) => (
+            <li class="contact-channel">
+              <svg class="contact-channel__icon" aria-hidden="true">
+                <use href={`#${channel.icon}`} />
+              </svg>
+              <div>
+                <p class="contact-channel__label">{channel.label}</p>
+                {
+                  channel.href ? (
+                    <a
+                      class="contact-channel__value"
+                      href={channel.href}
+                      target={channel.external ? "_blank" : undefined}
+                      rel={channel.external ? "noopener" : undefined}
+                    >{channel.value}</a>
+                  ) : (
+                    <p class="contact-channel__value">{channel.value}</p>
+                  )
+                }
+                <p class="contact-channel__note">{channel.note}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── What happens after you write ─────────────────────────────────── -->
+    <section class="contact-detail contact-wrap" aria-labelledby="steps-title">
+      <div class="contact-detail__head">
+        <p class="contact-eyebrow">What happens next</p>
+        <h2 class="contact-detail__title" id="steps-title">From your message to a number in writing</h2>
+        <p class="contact-detail__lede">
+          Four steps, and you can stop after any of them. Nothing is invoiced until you've
+          approved a scope and a price.
+        </p>
+      </div>
+
+      <ol class="contact-tiles contact-tiles--steps">
+        {
+          steps.map((step) => (
+            <li class="contact-tile">
+              <svg aria-hidden="true"><use href={`#${step.icon}`} /></svg>
+              <p class="contact-tile__num">{step.num}</p>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- ── What to put in the message ───────────────────────────────────── -->
+    <section class="contact-detail contact-wrap" aria-labelledby="brief-title">
+      <div class="contact-detail__head">
+        <p class="contact-eyebrow">Write a better first message</p>
+        <h2 class="contact-detail__title" id="brief-title">Four things that get you a sharper answer</h2>
+        <p class="contact-detail__lede">
+          None of these are required — a one-line message is fine. They just move the first
+          reply from general advice to something specific to your site.
+        </p>
+      </div>
+
+      <ul class="contact-tiles">
+        {
+          brief.map((item) => (
+            <li class="contact-tile">
+              <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="contact-band">
+        <div class="contact-band__body">
+          <p class="contact-eyebrow">Prefer to talk first?</p>
+          <h3>Twenty minutes, no proposal attached</h3>
+          <p>
+            If writing it out is the hard part, skip it. A short call on WhatsApp covers the
+            same ground faster, and you'll know by the end of it whether this is worth taking
+            further.
+          </p>
+          <a
+            class="contact-link"
+            href={SITE.whatsappUrl}
+            target="_blank"
+            rel="noopener"
+          >Book a call on WhatsApp →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+    <section class="contact-detail contact-wrap" aria-labelledby="faq-title">
+      <div class="contact-detail__head">
+        <p class="contact-eyebrow">Common questions</p>
+        <h2 class="contact-detail__title" id="faq-title">Before you write</h2>
+      </div>
+
+      <div class="contact-faq">
+        {
+          faq.map((item) => (
+            <details class="contact-faq__item">
+              <summary class="contact-faq__q">{item.q}</summary>
+              <p class="contact-faq__a">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <p class="contact-next">
+        Still deciding? Look at <a href="/work/">what the work moved on real projects</a>, how
+        an engagement <a href="/process/">actually runs</a>, or what
+        the <a href="/pricing/">packages</a> cover.
+      </p>
+    </section>
+  </div>
+
+  {/* Default copy on purpose: the dark band above already offers the call in
+      these words, and the two sitting a screen apart read as a repeat. */}
+  <CtaBanner icon="i-message" ghostLabel={null} />
+
+  <a
+    class="contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >
+    <svg aria-hidden="true"><use href="#i-message" /></svg>
+    <span>WhatsApp</span>
+  </a>
+</Base>

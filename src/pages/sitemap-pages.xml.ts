@@ -18,6 +18,7 @@ export function GET() {
     },
     { path: "/process/" },
     { path: "/pricing/" },
+    { path: "/contact/" },
     {
       path: "/northbound/",
       images: ["/video/shkoder-poster.jpg"],

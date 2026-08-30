@@ -31,7 +31,7 @@ export const NAV = [
   { href: "/pricing/", label: "Pricing" },
   { href: "/blog/", label: "Blog" },
   { href: "/newsletter/", label: "Newsletter" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/contact/", label: "Contact" },
 ] as const;
 
 /** Options in the contact form's service select — also the server's allowlist. */

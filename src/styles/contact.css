@@ -1,0 +1,525 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Contact page.
+
+   Same vocabulary as the pricing and process pages (styles/pricing.css,
+   styles/process.css) — capability strip, bordered tiles, dark exit band,
+   accordion FAQ — composed at the site's own measure (--measure / --gutter)
+   so the nav, the content and the red CTA band share one left edge.
+
+   The one structural difference: there is no hero photograph. This page has
+   no asset of its own, and a stock image behind a form buys nothing, so the
+   right half of the hero is the form itself — the thing people came for.
+   The form parts (.form, .input, .field, .form-status) all come from
+   site.css; only the card around them is page-local.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.contact-page) {
+  --contact-rule: #d5d3d1;
+  --contact-ink: #201e1d;
+  --contact-muted: #565554;
+  --contact-dark: #131211;
+}
+
+/* The mobile contact bar below stands in for the floating button. The footer
+   reserves 96px for that button site-wide, so with it gone the reservation is
+   just a hole — the bar's own clearance is handled by body padding instead. */
+body:has(.contact-page) .whatsapp-fab { display: none; }
+body:has(.contact-page) .footer__inner { padding-bottom: 24px; }
+
+.contact-page {
+  overflow: clip;
+  color: var(--contact-ink);
+}
+
+.contact-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.contact-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.contact-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.contact-button--primary { background: var(--color-accent); color: #fff; }
+.contact-button--primary:hover { background: var(--color-accent-600); color: #fff; }
+.contact-button--primary:active { background: var(--color-accent-700); }
+
+.contact-button--outline {
+  border-color: color-mix(in srgb, var(--contact-ink) 45%, transparent);
+  color: var(--contact-ink);
+}
+
+.contact-button--outline:hover {
+  border-color: var(--contact-ink);
+  background: color-mix(in srgb, var(--contact-ink) 6%, transparent);
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────
+   Copy left, form card right. The card is slightly the narrower column: the
+   form's own fields cap at 520px in site.css, so a wider column would only
+   add empty gutter inside the border. */
+
+.contact-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 46%);
+  gap: 44px;
+  align-items: start;
+  padding-block: 54px 52px;
+}
+
+.contact-hero__title {
+  max-width: 16ch;
+  margin: 14px 0 0;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.06;
+  letter-spacing: -0.032em;
+}
+
+.contact-hero__lede {
+  max-width: 46ch;
+  margin: 18px 0 0;
+  color: var(--contact-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Three promises, set as a checked list rather than prose — they are the
+   answer to "what happens if I send this", which is the hesitation on every
+   contact page. */
+.contact-hero__points {
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-hero__points li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.contact-hero__points li + li { margin-top: 10px; }
+
+.contact-hero__points li::before {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+  content: "→";
+}
+
+.contact-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.contact-hero__form {
+  padding: 24px 24px 26px;
+  border: 1px solid var(--contact-rule);
+  background: #fff;
+}
+
+.contact-hero__form-title {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.contact-hero__form-note {
+  margin: 7px 0 20px;
+  color: var(--contact-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Inside the card the form fills the column — the 520px cap in site.css is
+   there to stop a full-width form on the homepage, and the card already does
+   that job here. */
+.contact-hero__form .form { max-width: none; }
+.contact-hero__form .form__submit { align-self: stretch; }
+.contact-hero__form .form-status { max-width: none; margin-top: 16px; }
+
+/* ── Direct channels ─────────────────────────────────────────────────────── */
+
+.contact-channels__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-block: 0;
+  padding-block: 0;
+  border-top: 1px solid var(--contact-rule);
+  border-bottom: 1px solid var(--contact-rule);
+  list-style: none;
+}
+
+.contact-channel {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 14px;
+  padding: 24px 26px;
+}
+
+.contact-channel:first-child { padding-left: 0; }
+.contact-channel:last-child { padding-right: 0; }
+.contact-channel + .contact-channel { border-left: 1px solid var(--contact-rule); }
+
+.contact-channel__icon {
+  width: 30px;
+  height: 30px;
+  margin-top: 2px;
+  fill: none;
+  stroke: var(--contact-ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-channel__label {
+  margin: 0 0 4px;
+  color: var(--contact-muted);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.contact-channel__value {
+  display: block;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  color: var(--contact-ink);
+  text-decoration: none;
+}
+
+a.contact-channel__value:hover { color: var(--color-accent-700); text-decoration: underline; }
+
+.contact-channel__note {
+  margin: 5px 0 0;
+  color: var(--contact-muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+/* ── Detail sections ─────────────────────────────────────────────────────── */
+
+.contact-detail { padding: 34px 0 0; }
+
+.contact-detail__head { max-width: 62ch; }
+
+.contact-detail__title {
+  margin: 12px 0 0;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.contact-detail__lede {
+  margin: 14px 0 0;
+  color: var(--contact-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.contact-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-tiles--steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.contact-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 20px 18px;
+  border: 1px solid var(--contact-rule);
+  background: #fff;
+}
+
+.contact-tile svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-tile__num {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.contact-tile h3 {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.contact-tile p {
+  margin: 0;
+  color: var(--contact-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ── Dark band ───────────────────────────────────────────────────────────
+   The only dark surface on the page, which is what makes it read as the exit
+   for anyone who would rather talk than type. No photograph beside it, so it
+   runs at the copy's own measure rather than as a two-column tile. */
+
+.contact-band {
+  margin-top: 26px;
+  background: var(--contact-dark);
+  color: #fff;
+}
+
+.contact-band__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 28px 30px 26px;
+}
+
+.contact-band h3 {
+  max-width: 34ch;
+  margin: 4px 0 0;
+  color: #fff;
+  font-size: 21px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.contact-band p {
+  max-width: 62ch;
+  margin: 0;
+  color: rgb(255 255 255 / 74%);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.contact-band :focus-visible { outline-color: #fff; }
+
+.contact-link {
+  margin-top: 6px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.contact-link:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+.contact-band .contact-link { color: var(--color-accent-400); }
+.contact-band .contact-link:hover { color: #fff; }
+
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+
+.contact-faq {
+  margin: 26px 0 0;
+  border-top: 1px solid var(--contact-rule);
+}
+
+.contact-faq__item { border-bottom: 1px solid var(--contact-rule); }
+
+.contact-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  list-style: none;
+}
+
+.contact-faq__q::-webkit-details-marker { display: none; }
+
+.contact-faq__q::after {
+  color: var(--color-accent);
+  font-size: 20px;
+  line-height: 1;
+  content: "+";
+}
+
+.contact-faq__item[open] .contact-faq__q::after { content: "−"; }
+
+.contact-faq__a {
+  max-width: 68ch;
+  margin: 0;
+  padding: 0 0 18px;
+  color: var(--contact-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.contact-next {
+  margin: 0;
+  padding: 30px 0 40px;
+  color: var(--contact-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.contact-next a { color: var(--color-accent-700); }
+
+/* ── Mobile contact bar ──────────────────────────────────────────────────── */
+
+.contact-bar { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .contact-tiles--steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  /* Below this the form column is narrower than its own fields, so the hero
+     goes back to one column with the copy leading — the order it reads in. */
+  .contact-hero__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    padding-block: 34px 38px;
+  }
+
+  .contact-hero__form { max-width: 560px; }
+}
+
+@media (max-width: 720px) {
+  body:has(.contact-page) { padding-bottom: calc(52px + env(safe-area-inset-bottom)); }
+
+  .contact-hero__title { max-width: none; font-size: 30px; }
+  .contact-hero__lede { margin-top: 14px; font-size: 13.5px; }
+
+  .contact-hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .contact-button { min-height: 42px; }
+
+  .contact-hero__form { padding: 20px 18px 22px; }
+
+  /* The name/email pair stops fitting side by side inside the card. */
+  .contact-hero__form .form__row { grid-template-columns: minmax(0, 1fr); }
+
+  .contact-channels__list { grid-template-columns: minmax(0, 1fr); }
+
+  .contact-channel {
+    padding: 14px 0;
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 14px;
+  }
+
+  .contact-channel:first-child { padding-top: 18px; }
+  .contact-channel:last-child { padding-bottom: 18px; }
+
+  .contact-channel + .contact-channel {
+    border-left: 0;
+    border-top: 1px solid var(--contact-rule);
+  }
+
+  .contact-channel__icon { width: 26px; height: 26px; }
+  .contact-channel__value { font-size: 15px; }
+
+  .contact-tiles,
+  .contact-tiles--steps { grid-template-columns: minmax(0, 1fr); }
+
+  .contact-detail__title { font-size: 21px; }
+  .contact-band__body { padding: 22px 20px 20px; }
+  .contact-band h3 { font-size: 18px; }
+  .contact-faq__q { font-size: 14.5px; }
+
+  .contact-bar {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: calc(52px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .contact-bar svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The bar sits inside <main> while the consent panel is a sibling of it, so
+     this has to reach up to the body rather than across. */
+  body:has(.cookie-consent:not([hidden])) .contact-bar { display: none; }
+}
+
+@media print {
+  .contact-bar { display: none; }
+  .contact-band { background: none; color: var(--contact-ink); }
+  .contact-band h3 { color: var(--contact-ink); }
+  .contact-band p { color: var(--contact-muted); }
+}

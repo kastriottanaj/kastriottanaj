@@ -86,7 +86,7 @@ ${list(
 
 ## Contact
 
-- [Contact form](${site}/#contact): Enquiries about SEO, digital marketing, AI automation and web development.
+- [Contact](${site}/contact/): Enquiries about SEO, digital marketing, AI automation and web development.
 - [LinkedIn](${SITE.linkedin})
 `;
 

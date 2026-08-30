@@ -211,6 +211,16 @@
       status.hidden = false;
     };
 
+    const LEAD_MESSAGES = {
+      name: "Please tell me your name.",
+      email: "That email doesn't look right.",
+      message: "A sentence or two is plenty — the message came through empty.",
+      captcha: "The spam check didn't pass. Reload the page and try once more.",
+      too_large: "That message is longer than the form takes. Trim it a little and resend.",
+      rate_limited: "That's a few tries in a row. Give it ten minutes and try again.",
+      server: "Something broke on my side. Try again in a minute.",
+    };
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearErrors();
@@ -263,6 +273,14 @@
         slot.textContent = "";
       }
     });
+
+    /* A no-JS post that failed comes back as ?error=… on whichever page holds
+       the form — the homepage or /contact/. Say why, rather than returning the
+       visitor to an untouched form with no explanation. */
+    const failure = new URLSearchParams(location.search).get("error");
+    if (failure) {
+      showStatus("That didn't send.", LEAD_MESSAGES[failure] || LEAD_MESSAGES.server);
+    }
   }
   /* ── Newsletter subscribe ──────────────────────────────────────────────── */
   /* The same form can appear more than once on a page (footer of a post, plus
