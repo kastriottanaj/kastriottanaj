@@ -1,0 +1,300 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import "../../styles/ai-automation.css";
+
+/* The long-form copy, the "what's included" list and the FAQ still live in
+   src/content/services/ai-automation.md — this page only replaces the layout,
+   so the markdown stays the one place that copy is edited.
+   src/pages/services/[slug].astro skips this id for the same reason it skips
+   seo and digital-marketing. */
+const service = await getEntry("services", "ai-automation");
+if (!service) throw new Error("src/content/services/ai-automation.md is missing");
+const { Content } = await render(service);
+const { title, description, includes, faq } = service.data;
+
+const url = `${SITE.url}/services/ai-automation/`;
+const heroImage = "/assets/services/kastriot-tanaj-ai-automation-services.webp";
+
+/* The strip under the hero — the three things the mockup promises before the
+   page starts explaining itself. */
+const trust = [
+  { icon: "i-code", label: "Custom-built in Python" },
+  { icon: "i-puzzle", label: "Works with your current tools" },
+  { icon: "i-bell", label: "Monitoring after launch" },
+];
+
+const pillars = [
+  {
+    icon: "i-clock",
+    title: "Save meaningful time",
+    desc: "Remove repeated manual steps from reporting, lead handling and content work.",
+  },
+  {
+    icon: "i-user-check",
+    title: "Keep human control",
+    desc: "Add review and approval points wherever your team needs them.",
+  },
+  {
+    icon: "i-shield-check",
+    title: "Build for reliability",
+    desc: "Use validation, monitoring and alerts so failures are visible—not silent.",
+  },
+];
+
+/* The mockup draws four "Explore" cards without saying where they go. Each one
+   points at the page that actually carries that part of the work rather than
+   at a stub that would have to be written to receive the click. */
+const offers = [
+  { icon: "i-bar-chart", title: "Reporting pipelines", href: "/work/" },
+  { icon: "i-users", title: "Lead handling & CRM sync", href: "/services/digital-marketing/" },
+  { icon: "i-file-text", title: "Content operations", href: "/services/seo/" },
+  { icon: "i-bell", title: "Workflow monitoring", href: "/process/" },
+];
+
+/* Numbered by the stylesheet's counter, so the order lives in the list. */
+const steps = [
+  {
+    title: "Audit the workflow",
+    desc: "We map the current process, pain points and success criteria.",
+  },
+  {
+    title: "Build and validate",
+    desc: "We build the workflow in Python, add checks and test end-to-end.",
+  },
+  {
+    title: "Launch and monitor",
+    desc: "We go live, monitor performance and iterate as needed.",
+  },
+];
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: title,
+    areaServed: "Europe",
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE.url}/services/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={`AI Automation That Gives Your Team Hours Back | ${SITE.name}`}
+  description={description}
+  image={heroImage}
+  schema={schema}
+>
+  <div class="aa-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="aa-hero" aria-labelledby="aa-title">
+      <div class="aa-wrap aa-hero__inner">
+        <div class="aa-hero__copy">
+          <p class="aa-eyebrow">AI automation</p>
+          <h1 class="aa-hero__title" id="aa-title">
+            AI automation that <br />gives your team hours <br />back every week
+          </h1>
+          <p class="aa-hero__lede">
+            Custom AI and Python workflows for faster reporting, lead handling and
+            content operations—built around the tools your team already uses.
+          </p>
+          <div class="aa-hero__actions">
+            <a class="aa-button aa-button--primary" href="/contact/">Book a strategy call</a>
+            <a class="aa-button aa-button--ghost" href="#what-i-automate">
+              See what can be automated
+            </a>
+          </div>
+        </div>
+
+        <figure class="aa-hero__figure">
+          <img
+            src={heroImage}
+            width="1536"
+            height="1024"
+            alt="A person typing at a laptop showing a monthly reporting pipeline: its steps branch into validation and delivery, with a list of recent runs alongside"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── Trust strip ──────────────────────────────────────────────────── -->
+    <section class="aa-trust" aria-label="How the work is built">
+      <div class="aa-wrap">
+        <ul class="aa-trust__list">
+          {
+            trust.map((item) => (
+              <li>
+                <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+                <span>{item.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Three pillars ────────────────────────────────────────────────── -->
+    <section class="aa-pillars" aria-labelledby="pillars-title">
+      <div class="aa-wrap">
+        <h2 class="aa-section-title" id="pillars-title">
+          Turn repetitive work into reliable workflows
+        </h2>
+
+        <ul class="aa-pillars__grid">
+          {
+            pillars.map((pillar) => (
+              <li class="aa-pillar">
+                <svg aria-hidden="true"><use href={`#${pillar.icon}`} /></svg>
+                <div>
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── What I automate ──────────────────────────────────────────────── -->
+    <section class="aa-offers" id="what-i-automate" aria-labelledby="offers-title">
+      <div class="aa-wrap">
+        <p class="aa-eyebrow">What I automate</p>
+        <h2 class="aa-section-title" id="offers-title">
+          Practical automation for everyday operations
+        </h2>
+
+        <ul class="aa-offers__grid">
+          {
+            offers.map((offer) => (
+              <li class="aa-offer">
+                <div class="aa-offer__head">
+                  <svg aria-hidden="true"><use href={`#${offer.icon}`} /></svg>
+                  <h3>{offer.title}</h3>
+                </div>
+                <a class="aa-link" href={offer.href}>
+                  Explore <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── From bottleneck to working system ────────────────────────────── -->
+    <section class="aa-flow" aria-labelledby="flow-title">
+      <div class="aa-wrap">
+        <h2 class="aa-section-title" id="flow-title">From bottleneck to working system</h2>
+
+        <ol class="aa-flow__grid">
+          {
+            steps.map((step) => (
+              <li class="aa-step">
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── Detail below the fold ────────────────────────────────────────
+         The mockup stops at the CTA band; from here down is the page's
+         existing long-form copy, restyled to sit under it. -->
+    <section class="aa-detail aa-wrap" aria-labelledby="approach-title">
+      <div class="aa-detail__head">
+        <p class="aa-eyebrow">The approach</p>
+        <h2 class="aa-detail__title" id="approach-title">How the work actually runs</h2>
+      </div>
+
+      <div class="aa-prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      includes.length > 0 && (
+        <section class="aa-detail aa-wrap" aria-labelledby="included-title">
+          <div class="aa-detail__head">
+            <p class="aa-eyebrow">What's included</p>
+            <h2 class="aa-detail__title" id="included-title">Every engagement carries these</h2>
+          </div>
+
+          <ul class="aa-includes">
+            {includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <section class="aa-detail aa-wrap" aria-labelledby="faq-title">
+          <div class="aa-detail__head">
+            <p class="aa-eyebrow">Common questions</p>
+            <h2 class="aa-detail__title" id="faq-title">Before you book the call</h2>
+          </div>
+
+          <div class="aa-faq">
+            {faq.map((item) => (
+              <details class="aa-faq__item">
+                <summary class="aa-faq__q">{item.q}</summary>
+                <p class="aa-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+
+          <p class="aa-next">
+            See what it costs in <a href="/pricing/">packages and pricing</a>, how the phases
+            run in <a href="/process/">the process</a>, or what it moved on real projects in
+            the <a href="/work/">case studies</a>.
+          </p>
+        </section>
+      )
+    }
+  </div>
+
+  <CtaBanner
+    title="Ready to cut the manual work?"
+    lede="Let's find the workflows where automation will make the biggest difference."
+  />
+
+  <a
+    class="aa-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >Contact</a>
+</Base>
