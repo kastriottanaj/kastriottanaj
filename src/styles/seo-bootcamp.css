@@ -618,9 +618,15 @@ body:has(.sb-page) {
 
 /* ── Tiers ───────────────────────────────────────────────────────────────── */
 
+/* All three tiers on one line, on the same three-column grid as the cards
+   above. The track count has to come from the *minimum*, not a 400px cap:
+   auto-fit counts repetitions against a definite maximum, so `minmax(280px,
+   400px)` only ever fitted two of them in the 1136px measure and dropped the
+   Accelerator onto a second row. `min(100%, …)` keeps the floor from
+   overflowing once the columns fold on a phone. */
 .sb-tiers {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 400px));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 18px;
   margin-top: 24px;
 }
@@ -698,8 +704,13 @@ body:has(.sb-page) {
   content: "✓";
 }
 
+/* Side by side the three tiers are stretched to one height, so the calls have
+   to sit on one baseline: `margin-top: auto` takes the slack. The 18px clear
+   of the feature list is spelled as that list's own bottom margin — as a
+   `margin-top` on the button it would beat the auto and leave the calls
+   ragged, which is what the tiers did while they wrapped onto two rows. */
 .sb-tier__cta { margin-top: auto; align-self: stretch; }
-.sb-tier__features + .sb-tier__cta { margin-top: 18px; }
+.sb-tier__features { margin-bottom: 18px; }
 
 .sb-guarantee {
   max-width: 720px;
