@@ -6,7 +6,13 @@ import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const services = await getCollection("services");
+  /* Services that own a hand-built page under src/pages/services/ and so must
+     not also be generated here — two routes emitting the same URL collide.
+     Declared inside: Astro hoists getStaticPaths into its own scope, so it
+     cannot see module-level consts. */
+  const bespoke = new Set(["seo"]);
+
+  const services = await getCollection("services", ({ id }) => !bespoke.has(id));
   return services.map((service) => ({
     params: { slug: service.id },
     props: { service },

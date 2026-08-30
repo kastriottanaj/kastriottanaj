@@ -1,0 +1,341 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import "../../styles/seo.css";
+
+/* The long-form copy, the "what's included" list and the FAQ still live in
+   src/content/services/seo.md — this page only replaces the layout, so the
+   markdown stays the one place that copy is edited. src/pages/services/
+   [slug].astro skips this id for the same reason work/gerti-foods does. */
+const service = await getEntry("services", "seo");
+if (!service) throw new Error("src/content/services/seo.md is missing");
+const { Content } = await render(service);
+const { title, description, includes, faq } = service.data;
+
+const url = `${SITE.url}/services/seo/`;
+const heroImage = "/assets/services/kastriot-tanaj-seo-services.webp";
+
+/* Gerti Foods, Search Console, first 90 days — the same numbers the case
+   study page reports, so the strip and the chart cannot drift from it. */
+const proof = [
+  { icon: "i-bars-up", value: "1.8K", label: "monthly impressions" },
+  { icon: "i-search", value: "5", label: "page-one keywords" },
+  { icon: "i-clock", value: "90 days ·", label: "no ad spend" },
+  { icon: "i-shield-check", value: null, label: "Verified in Search Console" },
+];
+
+const pillars = [
+  {
+    icon: "i-wrench",
+    title: "Fix what blocks growth",
+    desc: "Resolve crawl, indexing and performance issues first.",
+  },
+  {
+    icon: "i-target-arrow",
+    title: "Target buyer intent",
+    desc: "Build pages around searches with real commercial value.",
+  },
+  {
+    icon: "i-chart-up",
+    title: "Measure enquiries",
+    desc: "Track traffic, rankings and leads without vanity reporting.",
+  },
+];
+
+/* The mockup draws three "Explore" cards without saying where they go. Each
+   one points at the page that actually carries that part of the work rather
+   than at a stub that would have to be written to receive the click. */
+const offers = [
+  {
+    icon: "i-search",
+    title: "Technical SEO audit",
+    desc: "Crawlability, indexation and Core Web Vitals issues resolved.",
+    href: "/process/",
+  },
+  {
+    icon: "i-file-text",
+    title: "On-page optimisation",
+    desc: "Titles, headings and internal linking built for rankings.",
+    href: "/work/",
+  },
+  {
+    icon: "i-pencil",
+    title: "Content strategy",
+    desc: "Search demand-led content that earns traffic and enquiries.",
+    href: "/blog/",
+  },
+];
+
+/* Impressions per day over the first 90 days, plotted 0–2000 across a 500×154
+   viewBox. x runs 39.6 → 478.3; y = 127.05 − value × 0.0605. */
+const chart = {
+  gridlines: [
+    { y: 6.05, label: "2K" },
+    { y: 36.3, label: "1.5K" },
+    { y: 66.55, label: "1K" },
+    { y: 96.8, label: "500" },
+    { y: 127.05, label: "0" },
+  ],
+  points: [
+    [39.6, 125.9], [61.5, 122.6], [83.5, 121.5], [105.4, 119.9],
+    [127.3, 118.3], [149.3, 114.9], [171.2, 109.4], [193.1, 98.4],
+    [215.1, 91.3], [237.0, 83.1], [258.9, 76.5], [280.9, 74.2],
+    [302.8, 68.7], [324.7, 63.2], [346.7, 57.2], [368.6, 48.4],
+    [390.5, 39.0], [412.5, 27.5], [434.4, 19.2], [456.3, 14.2],
+    [478.3, 9.9],
+  ],
+};
+
+const chartPath = chart.points.map(([x, y]) => `${x},${y}`).join(" ");
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: title,
+    areaServed: "Europe",
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE.url}/services/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={`SEO That Turns Search Traffic Into Qualified Enquiries | ${SITE.name}`}
+  description={description}
+  image={heroImage}
+  schema={schema}
+>
+  <div class="seo-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="seo-hero" aria-labelledby="seo-title">
+      <img
+        class="seo-hero__image"
+        src={heroImage}
+        width="1821"
+        height="864"
+        alt="Hands typing on a laptop showing a Search Console performance chart climbing"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+
+      <div class="seo-wrap seo-hero__inner">
+        <p class="seo-eyebrow">SEO Services</p>
+        <h1 class="seo-hero__title" id="seo-title">
+          SEO That Turns Search <br />Traffic Into Qualified Enquiries
+        </h1>
+        <p class="seo-hero__lede">
+          Technical SEO, on-page optimisation and content strategy for businesses
+          across Europe ready to grow profitable organic traffic.
+        </p>
+        <div class="seo-hero__actions">
+          <a class="seo-button seo-button--primary" href="/contact/">Book a strategy call</a>
+          <a class="seo-button seo-button--outline" href="/work/gerti-foods/">View SEO case study</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Proof strip ──────────────────────────────────────────────────── -->
+    <section class="seo-proof" aria-label="Results from the Gerti Foods project">
+      <ul class="seo-wrap seo-proof__list">
+        {
+          proof.map((item) => (
+            <li>
+              <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+              <p>
+                {item.value && <strong>{item.value}</strong>}
+                <span>{item.label}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Three pillars ────────────────────────────────────────────────── -->
+    <section class="seo-pillars" aria-labelledby="pillars-title">
+      <div class="seo-wrap">
+        <h2 class="seo-pillars__title" id="pillars-title">Build visibility that leads to business</h2>
+
+        <ul class="seo-pillars__grid">
+          {
+            pillars.map((pillar) => (
+              <li class="seo-pillar">
+                <svg aria-hidden="true"><use href={`#${pillar.icon}`} /></svg>
+                <h3>{pillar.title}</h3>
+                <p>{pillar.desc}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Case study ───────────────────────────────────────────────────── -->
+    <section class="seo-case-wrap" aria-labelledby="case-title">
+      <div class="seo-wrap">
+        <article class="seo-case">
+          <div class="seo-case__copy">
+            <p class="seo-eyebrow">Gerti Foods case study</p>
+            <h2 class="seo-case__title" id="case-title">0 → 1,800 monthly <br />Google impressions</h2>
+            <p class="seo-case__desc">
+              Five commercial keywords reached an average position of 7.7 in 90 days.
+            </p>
+            <a class="seo-button seo-button--primary" href="/work/gerti-foods/">See the proof</a>
+          </div>
+
+          <figure class="seo-case__chart">
+            <svg
+              viewBox="0 0 500 154"
+              role="img"
+              aria-labelledby="chart-title chart-desc"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <title id="chart-title">Monthly Google impressions over the first 90 days</title>
+              <desc id="chart-desc">
+                A line climbing from close to zero impressions on day 0 to roughly 1,900 by
+                day 90, rising steadily from day 20 onwards.
+              </desc>
+
+              {
+                chart.gridlines.map((line) => (
+                  <>
+                    <line class="seo-chart__grid" x1="37" x2="497" y1={line.y} y2={line.y} />
+                    <text class="seo-chart__label" x="30" y={line.y} text-anchor="end">
+                      {line.label}
+                    </text>
+                  </>
+                ))
+              }
+
+              <polyline class="seo-chart__line" points={chartPath} />
+
+              {
+                chart.points.map(([x, y]) => <circle class="seo-chart__dot" cx={x} cy={y} r="3.2" />)
+              }
+
+              <text class="seo-chart__label" x="37" y="150.5" text-anchor="start">Day 0</text>
+              <text class="seo-chart__label" x="194" y="150.5" text-anchor="middle">Day 30</text>
+              <text class="seo-chart__label" x="335" y="150.5" text-anchor="middle">Day 60</text>
+              <text class="seo-chart__label" x="497" y="150.5" text-anchor="end">Day 90</text>
+            </svg>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── What the work covers ─────────────────────────────────────────── -->
+    <section class="seo-offers" aria-label="What the work covers">
+      <ul class="seo-wrap seo-offers__grid">
+        {
+          offers.map((offer) => (
+            <li class="seo-offer">
+              <svg aria-hidden="true"><use href={`#${offer.icon}`} /></svg>
+              <div>
+                <h2>{offer.title}</h2>
+                <p>{offer.desc}</p>
+                <a class="seo-link" href={offer.href}>
+                  Explore <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Detail below the fold ────────────────────────────────────────
+         The mockup stops at the CTA band; from here down is the page's
+         existing long-form copy, restyled to sit under it. -->
+    <section class="seo-detail seo-wrap" aria-labelledby="approach-title">
+      <div class="seo-detail__head">
+        <p class="seo-eyebrow">The approach</p>
+        <h2 class="seo-detail__title" id="approach-title">How the work actually runs</h2>
+      </div>
+
+      <div class="seo-prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      includes.length > 0 && (
+        <section class="seo-detail seo-wrap" aria-labelledby="included-title">
+          <div class="seo-detail__head">
+            <p class="seo-eyebrow">What's included</p>
+            <h2 class="seo-detail__title" id="included-title">Every engagement carries these</h2>
+          </div>
+
+          <ul class="seo-includes">
+            {includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <section class="seo-detail seo-wrap" aria-labelledby="faq-title">
+          <div class="seo-detail__head">
+            <p class="seo-eyebrow">Common questions</p>
+            <h2 class="seo-detail__title" id="faq-title">Before you book the call</h2>
+          </div>
+
+          <div class="seo-faq">
+            {faq.map((item) => (
+              <details class="seo-faq__item">
+                <summary class="seo-faq__q">{item.q}</summary>
+                <p class="seo-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+
+          <p class="seo-next">
+            See what it costs in <a href="/pricing/">packages and pricing</a>, how the phases
+            run in <a href="/process/">the process</a>, or what it moved on real projects in
+            the <a href="/work/">case studies</a>.
+          </p>
+        </section>
+      )
+    }
+  </div>
+
+  <CtaBanner title="Ready to turn search demand into enquiries?" lede="" ghostLabel={null} />
+
+  <a
+    class="seo-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >
+    <svg aria-hidden="true"><use href="#i-phone" /></svg>
+    <span>Contact {SITE.name.split(" ")[0]}</span>
+  </a>
+</Base>

@@ -1,0 +1,679 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SEO service page.
+
+   Same vocabulary as the process and pricing pages (styles/process.css,
+   styles/pricing.css) — photo hero, proof strip, bordered cards, dark tile —
+   composed at the site's own measure (--measure / --gutter) so the nav, the
+   content and the red CTA band all share one left edge. The mockup draws each
+   band at its own inset; the site has one, and that is the one used here.
+
+   --seo-rule is the hairline these newer pages use for card borders and band
+   rules, lighter than the site's --color-divider so a page made mostly of
+   boxes doesn't read as a grid of dark lines.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.seo-page) {
+  --seo-rule: #e2e0df;
+  --seo-ink: #201e1d;
+  --seo-muted: #565554;
+  --seo-dark: #14171a;
+}
+
+/* The mobile contact bar below stands in for the floating button. */
+body:has(.seo-page) .whatsapp-fab { display: none; }
+body:has(.seo-page) .footer__inner { padding-bottom: 24px; }
+
+.seo-page {
+  overflow: clip;
+  color: var(--seo-ink);
+}
+
+.seo-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.seo-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.seo-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.seo-button--primary { background: var(--color-accent); color: #fff; }
+.seo-button--primary:hover { background: var(--color-accent-600); color: #fff; }
+.seo-button--primary:active { background: var(--color-accent-700); }
+
+.seo-button--outline {
+  border-color: rgb(255 255 255 / 82%);
+  color: #fff;
+}
+
+.seo-button--outline:hover { background: rgb(255 255 255 / 12%); color: #fff; }
+.seo-button--outline:active { background: rgb(255 255 255 / 20%); }
+
+/* ── Hero ────────────────────────────────────────────────────────────────
+   The photograph is already almost black on its left half, so it can sit at
+   the band's right edge with the ground carrying the rest; the gradient only
+   has to clear the column the type occupies. */
+
+.seo-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--seo-dark);
+  color: #fff;
+}
+
+.seo-hero__image {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 62% 42%;
+}
+
+.seo-hero::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    var(--seo-dark) 0%,
+    rgb(20 23 26 / 92%) 24%,
+    rgb(20 23 26 / 62%) 42%,
+    rgb(20 23 26 / 16%) 62%,
+    rgb(20 23 26 / 0%) 82%
+  );
+}
+
+.seo-hero__inner { padding-block: 43px; }
+
+.seo-hero__title {
+  margin: 14px 0 0;
+  color: #fff;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.seo-hero__lede {
+  max-width: 500px;
+  margin: 10px 0 0;
+  color: rgb(255 255 255 / 88%);
+  font-size: 14px;
+  line-height: 1.57;
+}
+
+.seo-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+/* ── Proof strip ─────────────────────────────────────────────────────────
+   Four numbers off the Gerti Foods project, on a ground a shade lighter than
+   the page so the band reads as evidence rather than as another section. */
+
+.seo-proof {
+  background: #fafaf9;
+  border-bottom: 1px solid var(--seo-rule);
+}
+
+.seo-proof__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-block: 0;
+  list-style: none;
+}
+
+.seo-proof__list li {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 16px;
+}
+
+.seo-proof__list li:first-child { padding-left: 0; }
+
+.seo-proof__list li + li::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 32px;
+  background: var(--seo-rule);
+  transform: translateY(-50%);
+  content: "";
+}
+
+.seo-proof__list svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.seo-proof__list p {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 5px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.seo-proof__list strong {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* ── Three pillars ───────────────────────────────────────────────────────── */
+
+.seo-pillars { padding: 26px 0 26px; }
+
+.seo-pillars__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  text-align: center;
+}
+
+.seo-pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-pillar {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px 13px;
+  border: 1px solid var(--seo-rule);
+  background: #fff;
+  text-align: center;
+}
+
+.seo-pillar svg {
+  width: 31px;
+  height: 31px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.seo-pillar h3 {
+  margin: 9px 0 0;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.seo-pillar p {
+  max-width: 30ch;
+  margin: 5px 0 0;
+  color: var(--seo-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* ── Case study tile ─────────────────────────────────────────────────────
+   The only dark surface below the hero, which is what makes the number on it
+   read as the page's evidence. */
+
+.seo-case-wrap { padding-bottom: 19px; }
+
+.seo-case {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 34px;
+  padding: 19px 40px 13px;
+  background: var(--seo-dark);
+  color: #fff;
+}
+
+.seo-case__title {
+  margin: 7px 0 0;
+  color: #fff;
+  font-size: 26px;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.seo-case__desc {
+  max-width: 34ch;
+  margin: 4px 0 0;
+  color: rgb(255 255 255 / 78%);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.seo-case .seo-button {
+  min-height: 28px;
+  margin-top: 11px;
+  padding: 8px 18px;
+  font-size: 12.5px;
+}
+
+.seo-case :focus-visible { outline-color: #fff; }
+
+.seo-case__chart { margin: 0; }
+.seo-case__chart svg { width: 100%; height: auto; overflow: visible; }
+
+.seo-chart__grid {
+  stroke: rgb(255 255 255 / 11%);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.seo-chart__line {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.seo-chart__dot { fill: var(--color-accent); }
+
+.seo-chart__label {
+  fill: rgb(255 255 255 / 72%);
+  font-family: var(--font-body);
+  font-size: 10px;
+  dominant-baseline: middle;
+}
+
+/* ── What the work covers ────────────────────────────────────────────────── */
+
+.seo-offers { padding-bottom: 30px; }
+
+.seo-offers__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-block: 0;
+  list-style: none;
+}
+
+.seo-offer {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 14px 18px 10px;
+  border: 1px solid var(--seo-rule);
+  background: #fff;
+}
+
+.seo-offer > svg {
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.seo-offer h2 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.seo-offer p {
+  margin: 4px 0 0;
+  color: var(--seo-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.seo-link {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.seo-link:hover { color: var(--color-accent-600); text-decoration: underline; }
+
+/* ── Detail below the fold ───────────────────────────────────────────────
+   The mockup stops at the CTA band; everything from here down is the page's
+   existing long-form copy, restyled to sit under it. */
+
+.seo-detail { padding-block: 36px 0; }
+.seo-detail + .seo-detail { padding-top: 40px; }
+
+.seo-detail__head { max-width: 62ch; }
+.seo-detail__head .seo-eyebrow { margin-bottom: 12px; }
+
+.seo-detail__title {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.16;
+  letter-spacing: -0.028em;
+}
+
+.seo-prose {
+  max-width: 68ch;
+  margin-top: 22px;
+}
+
+.seo-prose h2 {
+  margin: 30px 0 0;
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.seo-prose h2:first-child { margin-top: 0; }
+
+.seo-prose p {
+  margin: 10px 0 0;
+  color: var(--seo-muted);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.seo-includes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0 40px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-includes li {
+  position: relative;
+  padding: 14px 0 14px 26px;
+  border-bottom: 1px solid var(--seo-rule);
+  color: var(--seo-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.seo-includes li::before {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+  content: "✓";
+}
+
+.seo-faq {
+  margin: 26px 0 0;
+  border-top: 1px solid var(--seo-rule);
+}
+
+.seo-faq__item { border-bottom: 1px solid var(--seo-rule); }
+
+.seo-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  list-style: none;
+}
+
+.seo-faq__q::-webkit-details-marker { display: none; }
+
+.seo-faq__q::after {
+  color: var(--color-accent);
+  font-size: 20px;
+  line-height: 1;
+  content: "+";
+}
+
+.seo-faq__item[open] .seo-faq__q::after { content: "−"; }
+
+.seo-faq__a {
+  max-width: 68ch;
+  margin: 0;
+  padding: 0 0 18px;
+  color: var(--seo-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.seo-next {
+  margin: 0;
+  padding: 30px 0 40px;
+  color: var(--seo-muted);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.seo-next a { color: var(--color-accent-700); }
+
+/* ── Red exit band ───────────────────────────────────────────────────────
+   The mockup's band is a single line of type against one white button, so the
+   shared component's lede and second button are closed off in the markup and
+   the remaining row is pulled in to the mockup's height. */
+
+body:has(.seo-page) .cta__inner { padding-block: 14px; }
+body:has(.seo-page) .cta__title { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+body:has(.seo-page) .cta__lede { display: none; }
+
+body:has(.seo-page) .cta__btn {
+  min-height: 36px;
+  min-width: 160px;
+  padding: 10px 22px;
+  font-size: 13px;
+}
+
+/* ── Mobile contact bar ──────────────────────────────────────────────────── */
+
+.seo-contact-bar { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .seo-hero__title { font-size: 28px; }
+  .seo-case { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .seo-case__title br { display: none; }
+  .seo-case__desc { max-width: none; }
+}
+
+/* Four abreast, the longest label starts wrapping before the cells do — the
+   grid folds to 2x2 at the width that happens rather than at the phone. */
+@media (max-width: 980px) {
+  .seo-proof__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .seo-proof__list li:nth-child(3) { padding-left: 0; }
+  .seo-proof__list li:nth-child(odd)::before { content: none; }
+
+  .seo-proof__list li:nth-child(n + 3) {
+    border-top: 1px solid var(--seo-rule);
+  }
+}
+
+@media (max-width: 860px) {
+  .seo-pillars__grid,
+  .seo-offers__grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  body:has(.seo-page) { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+
+  /* Half the frame is no longer enough for the laptop to read beside the type,
+     so the photograph drops back to a ground the copy sits on top of. */
+  .seo-hero__image { object-position: 74% 46%; }
+
+  .seo-hero::after {
+    background: linear-gradient(
+      92deg,
+      var(--seo-dark) 0%,
+      rgb(20 23 26 / 90%) 30%,
+      rgb(20 23 26 / 68%) 60%,
+      rgb(20 23 26 / 40%) 100%
+    );
+  }
+
+  .seo-hero__inner { padding-block: 40px 36px; }
+
+  .seo-hero__title {
+    font-size: 29px;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .seo-hero__title br { display: none; }
+
+  .seo-hero__lede {
+    max-width: none;
+    margin-top: 16px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  .seo-hero__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .seo-button { min-height: 44px; }
+
+  /* Two abreast, the value leads its own line — the label alone is what has to
+     wrap, not the number away from it. */
+  .seo-proof__list li { padding: 16px 12px; align-items: flex-start; }
+  .seo-proof__list li:first-child,
+  .seo-proof__list li:nth-child(3) { padding-left: 0; }
+  .seo-proof__list svg { margin-top: 2px; width: 18px; height: 18px; }
+  .seo-proof__list p { display: block; font-size: 13.5px; }
+  .seo-proof__list strong { display: block; font-size: 17px; }
+
+  .seo-pillars { padding: 28px 0 24px; }
+  .seo-pillars__title { font-size: 24px; }
+  .seo-pillars__grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+
+  /* Stacked, the cards are wide enough that centred type reads as a caption —
+     they go back to the left edge the rest of the page uses. */
+  .seo-pillar {
+    align-items: flex-start;
+    padding: 18px 16px 20px;
+    text-align: left;
+  }
+
+  .seo-pillar h3 { margin-top: 14px; font-size: 15.5px; }
+  .seo-pillar p { max-width: none; }
+
+  .seo-case { padding: 22px 18px 24px; gap: 20px; }
+  .seo-case__title { font-size: 24px; }
+
+  /* The chart's type is in viewBox units, so it shrinks with the card. Stepping
+     it up here holds the labels at ~10px once the tile is one column wide. */
+  .seo-chart__label { font-size: 14px; }
+  .seo-chart__line { stroke-width: 3.4; }
+  .seo-chart__dot { r: 4.2; }
+
+  .seo-offers__grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+
+  .seo-detail { padding-top: 30px; }
+  .seo-detail + .seo-detail { padding-top: 32px; }
+  .seo-detail__title { font-size: 21px; }
+  .seo-includes { gap: 0; }
+  .seo-faq__q { font-size: 14.5px; }
+
+  body:has(.seo-page) .cta__inner { padding-block: 22px; }
+  body:has(.seo-page) .cta__btn { width: 100%; }
+
+  .seo-contact-bar {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .seo-contact-bar svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The bar sits inside <main> while the consent panel is a sibling of it, so
+     this has to reach up to the body rather than across. */
+  body:has(.cookie-consent:not([hidden])) .seo-contact-bar { display: none; }
+}
+
+@media print {
+  .seo-hero__image,
+  .seo-contact-bar { display: none; }
+  .seo-case { background: none; color: var(--seo-ink); }
+  .seo-case__title { color: var(--seo-ink); }
+}
