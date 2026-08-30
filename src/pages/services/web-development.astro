@@ -1,0 +1,324 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import "../../styles/web-development.css";
+
+/* The long-form copy, the "what's included" list and the FAQ still live in
+   src/content/services/web-development.md — this page only replaces the
+   layout, so the markdown stays the one place that copy is edited.
+   src/pages/services/[slug].astro skips this id for the same reason it skips
+   seo, digital-marketing and ai-automation. */
+const service = await getEntry("services", "web-development");
+if (!service) throw new Error("src/content/services/web-development.md is missing");
+const { Content } = await render(service);
+const { title, description, includes, faq } = service.data;
+
+const url = `${SITE.url}/services/web-development/`;
+const heroImage = "/assets/services/kastriot-tanaj-web-development-services.webp";
+
+/* The strip the mockup rules under the hero: four properties of the build,
+   each on its own mark. */
+const assurances = [
+  { icon: "i-search-trend", label: "SEO-ready by default" },
+  { icon: "i-gauge", label: "Core Web Vitals built in" },
+  { icon: "i-code", label: "Clean HTML" },
+  { icon: "i-user", label: "You own the site" },
+];
+
+const pillars = [
+  {
+    icon: "i-bars-arrow-up",
+    title: "Built to rank",
+    desc: "Technical SEO and structured data handled from day one.",
+  },
+  {
+    icon: "i-funnel",
+    title: "Made to convert",
+    desc: "Clear journeys and lead capture designed around action.",
+  },
+  {
+    icon: "i-zap",
+    title: "Fast by default",
+    desc: "Lean builds engineered for excellent Core Web Vitals.",
+  },
+];
+
+/* The mockup draws three "Explore service" cards without saying where they go.
+   Each points at the page that already carries that part of the work rather
+   than at a stub that would have to be written to receive the click. */
+const offers = [
+  {
+    icon: "i-window-check",
+    title: "Custom websites",
+    desc: "Unique, scalable websites built for your business and goals.",
+    href: "/work/",
+  },
+  {
+    icon: "i-wordpress",
+    solid: true,
+    title: "WordPress development",
+    desc: "Flexible, secure WordPress sites that are easy to manage.",
+    href: "/bootcamps/wordpress-bootcamp/",
+  },
+  {
+    icon: "i-window-layout",
+    title: "Landing pages",
+    desc: "High-converting landing pages that drive enquiries and leads.",
+    href: "/services/digital-marketing/",
+  },
+];
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: title,
+    areaServed: "Europe",
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE.url}/services/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={`SEO-Ready Web Development That Turns Visitors Into Leads | ${SITE.name}`}
+  description={description}
+  image={heroImage}
+  schema={schema}
+>
+  <div class="wd-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────
+         One dark band running the full width of the viewport: the type on
+         the black at the left, the photograph bled off the right edge and
+         faded back into the ground under the copy. -->
+    <section class="wd-hero" aria-labelledby="wd-title">
+      <img
+        class="wd-hero__img"
+        src={heroImage}
+        width="1672"
+        height="941"
+        alt="Hands typing code into an editor on a laptop in a darkened room"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+
+      <div class="wd-wrap wd-hero__inner">
+        <p class="wd-eyebrow">Web development</p>
+        <h1 class="wd-hero__title" id="wd-title">
+          SEO-Ready Web Development <br />That Turns Visitors Into Leads
+        </h1>
+        <p class="wd-hero__lede">
+          Fast, conversion-focused websites for growing businesses—built to rank,
+          load quickly, and generate enquiries.
+        </p>
+        <div class="wd-hero__actions">
+          <a class="wd-button wd-button--primary" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+            Book a strategy call
+          </a>
+          <a class="wd-button wd-button--ghost" href="/work/">View recent work</a>
+        </div>
+        <p class="wd-hero__note">Clean code. Clear ownership. No platform lock-in.</p>
+      </div>
+    </section>
+
+    <!-- ── Assurance strip ──────────────────────────────────────────────── -->
+    <section class="wd-assure" aria-label="How the build is put together">
+      <div class="wd-wrap">
+        <ul class="wd-assure__list">
+          {
+            assurances.map((item) => (
+              <li>
+                <svg aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+                <span>{item.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Three pillars ────────────────────────────────────────────────── -->
+    <section class="wd-pillars" aria-labelledby="perform-title">
+      <div class="wd-wrap">
+        <h2 class="wd-section-title" id="perform-title">A website built to perform</h2>
+
+        <ul class="wd-pillars__grid">
+          {
+            pillars.map((pillar) => (
+              <li class="wd-card">
+                <svg class="wd-card__icon" aria-hidden="true"><use href={`#${pillar.icon}`} /></svg>
+                <div>
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Focused services ─────────────────────────────────────────────── -->
+    <section class="wd-offers" aria-labelledby="offers-title">
+      <div class="wd-wrap">
+        <h2 class="wd-section-title" id="offers-title">Web development services</h2>
+
+        <ul class="wd-offers__grid">
+          {
+            offers.map((offer) => (
+              <li class="wd-card">
+                <svg
+                  class:list={["wd-card__icon", offer.solid && "wd-card__icon--solid"]}
+                  aria-hidden="true"
+                >
+                  <use href={`#${offer.icon}`} />
+                </svg>
+                <div>
+                  <h3>{offer.title}</h3>
+                  <p>{offer.desc}</p>
+                  <a class="wd-link" href={offer.href}>
+                    Explore service <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Featured work ────────────────────────────────────────────────
+         The mockup shows the build itself rather than a photograph of the
+         client, so the right column is a browser frame around the site's
+         own hero. It carries no information the copy beside it does not,
+         so it is hidden from assistive tech. -->
+    <section class="wd-featured" aria-labelledby="featured-title">
+      <div class="wd-wrap wd-featured__inner">
+        <div class="wd-featured__copy">
+          <h2 class="wd-section-title" id="featured-title">Featured work</h2>
+          <h3 class="wd-featured__client">Gerti Foods</h3>
+          <p class="wd-featured__desc">81-page multilingual website build</p>
+          <a class="wd-link" href="/work/gerti-foods/">
+            View case study <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="wd-browser" aria-hidden="true">
+          <div class="wd-browser__bar">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="wd-browser__nav">
+            <span class="wd-browser__brand">Gerti Foods</span>
+            <span class="wd-browser__links">
+              <span>About</span><span>Products</span><span>Quality</span>
+              <span>News</span><span>Contact</span>
+            </span>
+          </div>
+          <div class="wd-browser__hero">
+            <p>Quality Food<br />for Everyday Life</p>
+            <img
+              src="/assets/work/gerti-foods-website-hero.webp"
+              width="1672"
+              height="941"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Detail below the fold ────────────────────────────────────────
+         The mockup stops at the CTA band; from here down is the page's
+         existing long-form copy, restyled to sit under it. -->
+    <section class="wd-detail wd-wrap" aria-labelledby="approach-title">
+      <div class="wd-detail__head">
+        <p class="wd-eyebrow">The approach</p>
+        <h2 class="wd-detail__title" id="approach-title">How the work actually runs</h2>
+      </div>
+
+      <div class="wd-prose">
+        <Content />
+      </div>
+    </section>
+
+    {
+      includes.length > 0 && (
+        <section class="wd-detail wd-wrap" aria-labelledby="included-title">
+          <div class="wd-detail__head">
+            <p class="wd-eyebrow">What's included</p>
+            <h2 class="wd-detail__title" id="included-title">Every build carries these</h2>
+          </div>
+
+          <ul class="wd-includes">
+            {includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <section class="wd-detail wd-wrap" aria-labelledby="faq-title">
+          <div class="wd-detail__head">
+            <p class="wd-eyebrow">Common questions</p>
+            <h2 class="wd-detail__title" id="faq-title">Before you book the call</h2>
+          </div>
+
+          <div class="wd-faq">
+            {faq.map((item) => (
+              <details class="wd-faq__item">
+                <summary class="wd-faq__q">{item.q}</summary>
+                <p class="wd-faq__a">{item.a}</p>
+              </details>
+            ))}
+          </div>
+
+          <p class="wd-next">
+            See what it costs in <a href="/pricing/">packages and pricing</a>, how the phases
+            run in <a href="/process/">the process</a>, or what it moved on real projects in
+            the <a href="/work/">case studies</a>.
+          </p>
+        </section>
+      )
+    }
+  </div>
+
+  <CtaBanner title="Ready for a faster website that brings in more leads?" lede="" />
+
+  <a
+    class="wd-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >Contact</a>
+</Base>
