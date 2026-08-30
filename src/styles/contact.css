@@ -12,28 +12,6 @@ body:has(.contact-page) {
 body:has(.contact-page) .whatsapp-fab { display: none; }
 body:has(.contact-page) .footer__inner { padding-bottom: 24px; }
 
-/* The mockup uses the compact six-link navigation only on this page. */
-body:has(.contact-page) .nav {
-  min-height: 60px;
-  padding-inline: 30px;
-  padding-block: 10px;
-  border-bottom: 0;
-  background: #fff;
-}
-
-body:has(.contact-page) .nav__links li:nth-child(2),
-body:has(.contact-page) .nav__links li:nth-child(7) { display: none; }
-
-body:has(.contact-page) .nav__links { gap: 28px; }
-body:has(.contact-page) .nav__links a { font-size: 12px; font-weight: 500; }
-body:has(.contact-page) .nav__menu { gap: 28px; }
-
-body:has(.contact-page) .nav .btn-primary {
-  min-height: 32px;
-  padding: 8px 12px;
-  font-size: 12px;
-}
-
 .contact-page {
   overflow: clip;
   background: var(--contact-paper);
@@ -462,32 +440,6 @@ body:has(.contact-page) .cta__btn:hover { background: #f1f1f1; color: var(--cont
 .contact-bar { display: none; }
 
 /* ── Responsive ───────────────────────────────────────────────────────── */
-
-@media (max-width: 1000px) {
-  body:has(.contact-page) .nav {
-    min-height: 64px;
-    padding-block: 10px;
-  }
-
-  body:has(.contact-page) .nav__toggle {
-    width: 36px;
-    height: 36px;
-    justify-content: center;
-    padding: 8px;
-    border: 0;
-  }
-
-  body:has(.contact-page) .nav__toggle > span:last-child { display: none; }
-  body:has(.contact-page) .nav__bars,
-  body:has(.contact-page) .nav__bars::before,
-  body:has(.contact-page) .nav__bars::after { width: 20px; height: 2px; }
-  body:has(.contact-page) .nav__bars::before { top: -6px; }
-  body:has(.contact-page) .nav__bars::after { top: 6px; }
-
-  body:has(.contact-page) .nav__menu { gap: 0; }
-  body:has(.contact-page) .nav__links { gap: 0; }
-  body:has(.contact-page) .nav__links a { font-size: 13px; }
-}
 
 @media (max-width: 900px) {
   body:has(.contact-page) {
