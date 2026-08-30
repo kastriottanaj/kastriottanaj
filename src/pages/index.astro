@@ -81,7 +81,12 @@ const website = {
 };
 ---
 
-<Base title={SITE.title} description={SITE.description} schema={[person, business, website]}>
+<Base
+  title={SITE.title}
+  description={SITE.description}
+  schema={[person, business, website]}
+  preloadImage="/video/kastriot-tanaj-poster.jpg"
+>
   <div class="wrap" id="top">
     <!-- ── Hero ─────────────────────────────────────────────────────────── -->
     <section class="hero">
@@ -102,15 +107,18 @@ const website = {
         </p>
       </div>
       <div class="hero__figure hero__figure--video">
+        {/* The src is attached by the script below rather than by the parser:
+            below 900px this figure sits above the h1, so its poster is what LCP
+            measures, and a 3 MB autoplaying clip starved that poster of
+            bandwidth on mobile. See the comment on the loader. */}
         <video
           class="hero__video"
-          src="/video/kastriot-tanaj.mp4"
+          data-src="/video/kastriot-tanaj.mp4"
           poster="/video/kastriot-tanaj-poster.jpg"
-          autoplay
           muted
           loop
           playsinline
-          preload="metadata"
+          preload="none"
           aria-label="Kastriot Tanaj introducing his work"
         ></video>
         <button class="hero__sound" type="button" data-hero-sound aria-pressed="false">
@@ -336,13 +344,33 @@ const website = {
     // Some browsers only honour autoplay once the muted flag is set in JS too.
     heroVideo.muted = true;
     const play = () => heroVideo.play().catch(() => {});
-    play();
+
+    /* The clip is 3 MB against a throttled mobile connection, and it used to
+       download alongside the CSS, the fonts and its own poster — which is the
+       element LCP measures. Holding the src back until `load` lets the poster
+       paint first and leaves the clip the whole connection afterwards. */
+    const start = () => {
+      const src = heroVideo.dataset.src;
+      if (!src || heroVideo.hasAttribute("src")) return;
+      heroVideo.src = src;
+      play();
+    };
+
+    // prefers-reduced-motion hides the video and paints the poster through CSS,
+    // so there is nothing worth downloading.
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (document.readyState === "complete") start();
+      else window.addEventListener("load", start, { once: true });
+    }
+
     document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) play();
+      if (!document.hidden && heroVideo.hasAttribute("src")) play();
     });
 
     const soundLabel = soundBtn?.querySelector("span");
     soundBtn?.addEventListener("click", () => {
+      // The button can be reached before `load` fires on a slow connection.
+      start();
       heroVideo.muted = !heroVideo.muted;
       soundBtn.setAttribute("aria-pressed", String(!heroVideo.muted));
       if (soundLabel) soundLabel.textContent = heroVideo.muted ? "Sound on" : "Sound off";

@@ -44,6 +44,17 @@ kastriottanaj.com {
 	@html path *.html /
 	header @html Cache-Control "public, max-age=0, must-revalidate"
 
+	# Everything under public/ ships with a stable, hand-written name, so it
+	# can't be immutable the way /_astro/* is — but without a header at all,
+	# every repeat visitor re-downloaded the 3 MB hero clip (Lighthouse:
+	# "use efficient cache lifetimes", 3,182 KiB).
+	#
+	# Consequence of the 30 days: swapping a video or image *in place* now
+	# leaves returning visitors on the old file until it expires. Give the
+	# replacement a new filename, or the reference a ?v= suffix.
+	@public path /video/* /assets/* /favicon.ico
+	header @public Cache-Control "public, max-age=2592000"
+
 	header {
 		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 		X-Content-Type-Options "nosniff"

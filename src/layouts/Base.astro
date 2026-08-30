@@ -20,9 +20,21 @@ interface Props {
   noindex?: boolean;
   /** JSON-LD objects, serialised into the head. */
   schema?: Record<string, unknown>[];
+  /**
+   * Root-relative image to preload at high priority. Only for an LCP element
+   * the parser finds late — a <video> poster, or a CSS background.
+   */
+  preloadImage?: string;
 }
 
-const { title, description, image = SITE.ogImage, noindex = false, schema = [] } = Astro.props;
+const {
+  title,
+  description,
+  image = SITE.ogImage,
+  noindex = false,
+  schema = [],
+  preloadImage,
+} = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(image, SITE.url).href;
@@ -62,6 +74,12 @@ const ogImage = new URL(image, SITE.url).href;
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {
+      preloadImage && (
+        <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+      )
+    }
 
     <title>{title}</title>
     <meta name="description" content={description} />

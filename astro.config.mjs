@@ -22,7 +22,11 @@ export default defineConfig({
       provider: fontProviders.google(),
       weights: [400, 600, 800],
       styles: ["normal"],
-      subsets: ["latin", "latin-ext"],
+      // latin only: `preload` preloads every subset, and the latin-ext file was
+      // 32 KB of render-blocking bandwidth for glyphs no page uses. Albanian's
+      // ë and ç live in latin (U+00C0-00FF); the arrows and box-drawing
+      // characters in the copy fall outside both subsets either way.
+      subsets: ["latin"],
       fallbacks: ["system-ui", "sans-serif"],
     },
   ],
