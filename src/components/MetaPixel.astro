@@ -6,9 +6,14 @@ import { META_PIXEL_ID } from "../lib/site";
  * Production only — `astro dev` renders nothing, so localhost browsing stays out
  * of the pixel's data.
  *
- * Consent: the pixel is initialised with consent REVOKED unless the visitor has
- * already accepted, mirroring the Google Consent Mode default in Base.astro.
- * site.js flips it with fbq('consent', 'grant'|'revoke') the moment they choose.
+ * Consent: fbevents.js is not fetched at all until the visitor accepts. Only
+ * the queueing stub is inlined, so fbq() stays callable from the first byte and
+ * anything tracked before a choice waits in memory rather than reaching Meta.
+ * site.js calls __loadMetaPixel() on accept, which flushes the queue.
+ *
+ * It used to load on every page and then call fbq('consent','revoke'), which
+ * sent 105 KiB to every visitor including the ones who never answered the
+ * banner — the bulk of Lighthouse's "reduce unused JavaScript".
  *
  * No <noscript> fallback image on purpose: it would fire for every no-JS visitor
  * with no way to honour the banner, and the banner itself needs JS to appear.
@@ -27,20 +32,30 @@ const pixelId = import.meta.env.PROD && /^\d{6,20}$/.test(raw) ? raw : null;
 
 /* Wrapped in an IIFE: the gtag block in Base.astro declares its own top-level
    `consentChoice`, and a second `let` of that name would be a SyntaxError. */
+/* Meta's own snippet defines the stub and injects the <script> in one breath.
+   These are split so the stub is always present and the network request is
+   deferred: init and PageView queue up, and __loadMetaPixel() — called here for
+   someone who already accepted, or by site.js the moment they do — fetches
+   fbevents.js, which replays the queue on arrival. Never accepting means the
+   queue is simply discarded at unload. */
 const snippet = `(function(){
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window,document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-var choice=null;
-try{choice=localStorage.getItem('cookie-consent');}catch(_){}
-if(choice!=='accepted')fbq('consent','revoke');
+var f=window,b=document,n;
+if(f.fbq)return;
+n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+f.__loadMetaPixel=function(){
+if(f.__metaPixelRequested)return;
+f.__metaPixelRequested=!0;
+var t=b.createElement('script');t.async=!0;
+t.src='https://connect.facebook.net/en_US/fbevents.js';
+var s=b.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(t,s);
+};
 fbq('init','${pixelId}');
 fbq('track','PageView');
+var choice=null;
+try{choice=localStorage.getItem('cookie-consent');}catch(_){}
+if(choice==='accepted')f.__loadMetaPixel();
 })();`;
 ---
 

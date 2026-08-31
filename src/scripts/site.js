@@ -8,7 +8,8 @@
   /* ── Meta Pixel events ─────────────────────────────────────────────────── */
   /* Safe to call unconditionally: with PUBLIC_META_PIXEL_ID unset the component
      renders nothing and fbq is undefined. Consent is the pixel's own business —
-     until the visitor accepts it sits in the 'revoke' state and sends nothing. */
+     before the visitor accepts, fbevents.js has not been fetched, so these land
+     in the stub's queue and go nowhere unless they later accept. */
   const track = (event, params, options) => {
     if (typeof window.fbq !== "function") return;
     if (options) window.fbq("track", event, params, options);
@@ -64,6 +65,14 @@
         });
       }
 
+      /* Accepting is what fetches fbevents.js in the first place — until then
+         only the queueing stub exists (MetaPixel.astro). The loader guards
+         itself, so re-accepting from the settings link costs nothing. */
+      if (granted) window.__loadMetaPixel?.();
+
+      /* Still worth sending: 'revoke' matters to a visitor who accepted, got
+         the pixel loaded, and has now changed their mind. Before any load it
+         just queues, and a queue that never flushes harms nothing. */
       if (typeof window.fbq === "function") {
         window.fbq("consent", granted ? "grant" : "revoke");
       }
