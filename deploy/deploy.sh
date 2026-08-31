@@ -70,4 +70,29 @@ else
   rollback
 fi
 
+log "Caddy config"
+# This only reports; it never installs. The deploy user's sudoers rule is three
+# exact systemctl commands for this service (setup-server.sh), and widening it
+# to rewrite /etc/caddy would let anyone who reaches CI re-point the site.
+#
+# Reporting is the part that was missing: deploy/Caddyfile is installed by
+# setup-server.sh at provisioning and by nothing afterwards, so an edit to it
+# rides along in the checkout and quietly never takes effect. That silently
+# dropped two changes before it was noticed on 2026-08-31.
+CADDY_LIVE="/etc/caddy/Caddyfile"
+CADDY_REPO="${APP_ROOT}/deploy/Caddyfile"
+if [[ ! -r "$CADDY_LIVE" ]]; then
+  echo "  note: ${CADDY_LIVE} not readable — skipping drift check"
+elif diff -q "$CADDY_LIVE" "$CADDY_REPO" >/dev/null; then
+  echo "  matches deploy/Caddyfile"
+else
+  echo "!! ${CADDY_LIVE} DIFFERS from deploy/Caddyfile — the repo version is NOT live."
+  diff "$CADDY_LIVE" "$CADDY_REPO" | sed 's/^/     /'
+  echo
+  echo "   Install it as root:"
+  echo "     cp -a ${CADDY_LIVE} ${CADDY_LIVE}.bak.\$(date +%Y%m%d-%H%M%S)"
+  echo "     install -m 644 ${CADDY_REPO} ${CADDY_LIVE}"
+  echo "     caddy validate --config ${CADDY_LIVE} --adapter caddyfile && systemctl reload caddy"
+fi
+
 log "Deployed $(git rev-parse --short HEAD)"
