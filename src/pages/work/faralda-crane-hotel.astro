@@ -1,0 +1,325 @@
+---
+/**
+ * Faralda Crane Hotel — hand-built case study.
+ *
+ * Built from the design mockup at ~/Desktop/faralda-crane-hotel-design-mockup.png.
+ * The mockup draws a 1024px browser frame standing for a ~1480px viewport
+ * (scale ≈ 0.692, solved from the card grid's share of the frame and confirmed
+ * by the button label measuring the house 14px). Every size below is that
+ * mockup's ink converted at that scale, then composed on --measure/--gutter so
+ * the nav, the bands and the CTA share one left edge — the mockup itself draws
+ * three different insets and none of them is the real one.
+ *
+ * [slug].astro deliberately skips this entry (see the `bespoke` set there), or
+ * two routes would emit the same URL.
+ *
+ * The mockup has no evidence band. Kastriot's call on 2026-08-31 was to add one
+ * in the shared .cs-ev house style rather than invent a second visual language,
+ * and to leave the drawn card copy exactly as drawn — the hard numbers do their
+ * work in the evidence band, each tied to the screenshot it was read off.
+ * Every figure there comes from /assets/faralda-evidence/. Do not round,
+ * restate or refresh a number without changing the screenshot beside it.
+ */
+import { getEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import { EVIDENCE as evidence } from "../../lib/faralda-evidence";
+import "../../styles/faralda-crane-hotel.css";
+
+const entry = await getEntry("work", "faralda-crane-hotel");
+if (!entry) throw new Error("src/content/work/faralda-crane-hotel.md is missing.");
+
+const { title, client, description } = entry.data;
+const url = `${SITE.url}/work/faralda-crane-hotel/`;
+const hero = "/assets/work/faralda-crane-hotel-amsterdam.webp";
+
+/* ── The bands, in the order the mockup draws them ──────────────────────── */
+
+const facts = [
+  { icon: "i-pin", label: "Local SEO", short: "Local SEO" },
+  { icon: "i-store", label: "Google Business Profile", short: "GBP" },
+  { icon: "i-bed", label: "Hospitality", short: "Hospitality" },
+  { icon: "i-building", label: "Amsterdam", short: "Amsterdam" },
+];
+
+const outcomes = [
+  {
+    icon: "i-chart-arrow-up",
+    accent: true,
+    title: "Stronger local visibility",
+    body: "Improved relevance for high-intent searches in Amsterdam.",
+  },
+  {
+    icon: "i-store",
+    accent: false,
+    title: "Better Business Profile performance",
+    body: "Clearer information, stronger signals and more customer actions.",
+  },
+  {
+    icon: "i-search",
+    accent: false,
+    title: "More discovery, more bookings",
+    body: "Increased visibility where travellers search and decide.",
+  },
+];
+
+const results = [
+  {
+    icon: "i-target-arrow",
+    title: "Improved local relevance",
+    body: "Optimised core signals and location relevance to better match how people search in Amsterdam.",
+  },
+  {
+    icon: "i-star",
+    title: "Clearer profile signals",
+    body: "Refreshed categories, services, photos and FAQs for stronger trust and more actions.",
+  },
+  {
+    icon: "i-trending",
+    title: "Stronger visibility",
+    body: "Greater visibility for branded and local searches that drive high-intent traffic.",
+  },
+];
+
+/* All three live on the SEO service page — there is no separate GBP or content
+   page to point at, and the gerti-foods precedent is the nearest real page over
+   a link that lands nowhere. */
+const services = [
+  {
+    icon: "i-pin",
+    title: "Local SEO",
+    body: "Local keyword strategy, on-page optimisation and location relevance.",
+    href: "/services/seo/",
+  },
+  {
+    icon: "i-store",
+    title: "Google Business Profile",
+    body: "Profile optimisation, content, Q&A and review strategy.",
+    href: "/services/seo/",
+  },
+  {
+    icon: "i-pencil-line",
+    title: "SEO Content & On-page SEO",
+    body: "Content improvements and on-page optimisation for better visibility.",
+    href: "/services/seo/",
+  },
+];
+
+const shots = [
+  { shot: evidence.semrushKeywords, span: "cs-ev--6" },
+  { shot: evidence.topKeywords, span: "cs-ev--3" },
+  { shot: evidence.domainOverview, span: "cs-ev--3" },
+  { shot: evidence.aiVisibility, span: "cs-ev--3" },
+  { shot: evidence.gbpInteractions, span: "cs-ev--3" },
+  { shot: evidence.gbpDirections, span: "cs-ev--3" },
+  { shot: evidence.gbpBookings, span: "cs-ev--3" },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: title,
+    description,
+    url,
+    about: { "@type": "Organization", name: client },
+    author: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Work", item: `${SITE.url}/work/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={`${title} — case study | ${SITE.name}`}
+  description={description}
+  image={hero}
+  schema={schema}
+  preloadImage={hero}
+>
+  <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+  <section class="fc-hero" data-sticky-after>
+    <img
+      class="fc-hero__img"
+      src={hero}
+      alt="The Faralda Crane Hotel at dusk on the NDSM wharf, its crane lit above the IJ with the Amsterdam skyline behind"
+      width="1485"
+      height="966"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <div class="fc-hero__scrim" aria-hidden="true"></div>
+
+    <div class="wrap fc-hero__inner">
+      <nav class="breadcrumb fc-crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span aria-hidden="true">/</span>
+        <a href="/work/">Work</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">{title}</span>
+      </nav>
+
+      <p class="fc-kicker">Case study</p>
+      <h1 class="fc-hero__title">
+        How Local SEO Helped Faralda Crane Hotel Get Found in Amsterdam
+      </h1>
+      <p class="fc-hero__lede">
+        Google Business Profile optimisation and local search work for a landmark
+        Amsterdam hotel.
+      </p>
+
+      <div class="fc-hero__actions">
+        <a class="btn btn-primary fc-btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+          Book a strategy call
+        </a>
+        <a class="btn fc-btn fc-btn--ghost" href="/services/seo/">Explore SEO services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Fact ribbon ───────────────────────────────────────────────────── -->
+  <section class="fc-ribbon" aria-label="Engagement at a glance">
+    <ul class="wrap fc-ribbon__list">
+      {
+        facts.map((fact) => (
+          <li class="fc-ribbon__item">
+            <svg class="fc-ribbon__icon" aria-hidden="true"><use href={`#${fact.icon}`} /></svg>
+            {/* The mockup abbreviates only this one label on the narrow
+                two-up grid; the full name stays for assistive tech. */}
+            <span class="fc-ribbon__full">{fact.label}</span>
+            <span class="fc-ribbon__short" aria-hidden="true">{fact.short}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ── Outcomes strip ────────────────────────────────────────────────── -->
+  <section class="fc-outcomes" aria-label="Outcomes">
+    <ul class="wrap fc-outcomes__grid">
+      {
+        outcomes.map((item) => (
+          <li class="fc-outcome">
+            <svg
+              class:list={["fc-outcome__icon", item.accent && "fc-outcome__icon--accent"]}
+              aria-hidden="true"
+            >
+              <use href={`#${item.icon}`} />
+            </svg>
+            <div>
+              <h2 class="fc-outcome__title">{item.title}</h2>
+              <p class="fc-outcome__body">{item.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ── The results ───────────────────────────────────────────────────── -->
+  <section class="fc-band" aria-labelledby="fc-results-title">
+    <div class="wrap">
+      <p class="fc-band__kicker">The results</p>
+      <h2 class="fc-band__title" id="fc-results-title">What changed and the impact</h2>
+
+      <ul class="fc-cards">
+        {
+          results.map((card) => (
+            <li class="fc-card">
+              <span class="fc-card__badge" aria-hidden="true">
+                <svg class="fc-card__icon"><use href={`#${card.icon}`} /></svg>
+              </span>
+              <div>
+                <h3 class="fc-card__title">{card.title}</h3>
+                <p class="fc-card__body">{card.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── The evidence ──────────────────────────────────────────────────── -->
+  <section class="fc-band fc-band--evidence" id="evidence" aria-labelledby="fc-evidence-title">
+    <div class="wrap">
+      <p class="fc-band__kicker">The evidence</p>
+      <h2 class="fc-band__title" id="fc-evidence-title">Every number, straight from the source</h2>
+      <p class="fc-band__lede">
+        Semrush for rankings, traffic and AI-search visibility; Google Business Profile
+        for what people did once they found the hotel, over January to April 2025.
+        Two tools, two windows, both labelled — nothing recreated, nothing rounded up.
+      </p>
+
+      <div class="cs-ev-grid">
+        {
+          shots.map(({ shot, span }) => (
+            <figure class:list={["cs-ev", span]}>
+              <img
+                src={shot.src}
+                alt={shot.alt}
+                width={shot.width}
+                height={shot.height}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                <b>{shot.strong}</b> — {shot.caption}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services used ─────────────────────────────────────────────────── -->
+  <section class="fc-band" aria-labelledby="fc-services-title">
+    <div class="wrap">
+      <p class="fc-band__kicker">Services used</p>
+      <h2 class="fc-band__title" id="fc-services-title">The services behind the results</h2>
+
+      <ul class="fc-cards fc-cards--services">
+        {
+          services.map((card) => (
+            <li class="fc-card fc-card--service">
+              <svg class="fc-card__mark" aria-hidden="true"><use href={`#${card.icon}`} /></svg>
+              <div>
+                <h3 class="fc-card__title">{card.title}</h3>
+                <p class="fc-card__body">{card.body}</p>
+                <a class="fc-card__link" href={card.href}>Learn more <span aria-hidden="true">→</span></a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBanner
+    title="Want results like this?"
+    lede="Let's build a local SEO strategy that gets you found by more of the right people."
+    ghostLabel="See how I work →"
+    ghostHref="/process/"
+  />
+
+  <!-- Mobile only. Hidden until the hero scrolls away — see site.js. Without
+       JS it never appears and the floating WhatsApp button stays instead. -->
+  <div class="fc-sticky" data-sticky-cta data-visible="false">
+    <a
+      class="btn btn-primary fc-sticky__btn"
+      href={SITE.whatsappUrl}
+      target="_blank"
+      rel="noopener"
+    >
+      <svg class="fc-sticky__icon" aria-hidden="true"><use href="#i-phone" /></svg>
+      Book a call
+    </a>
+  </div>
+</Base>

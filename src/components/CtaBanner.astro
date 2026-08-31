@@ -7,6 +7,9 @@ interface Props {
   /** The second, outlined button. Pages that want a different ask override it;
       pass null to close the band on a single button. */
   ghostLabel?: string | null;
+  /** Where that second button goes. Defaults to WhatsApp like the first — set
+      it when the ghost label promises a page rather than a conversation. */
+  ghostHref?: string;
   /** Sprite id (see IconSprite.astro) for a mark to the left of the copy. */
   icon?: string;
 }
@@ -15,8 +18,13 @@ const {
   title = "Ready to grow traffic and cut manual work?",
   lede = "Let's talk about your goals and the bottlenecks slowing your team down.",
   ghostLabel = "Start a project →",
+  ghostHref,
   icon,
 } = Astro.props;
+
+/* An on-site ghost link opens in place; only the WhatsApp default needs the
+   new tab and the noopener that comes with it. */
+const ghostIsExternal = !ghostHref;
 ---
 
 <section class="cta">
@@ -32,7 +40,12 @@ const {
       <a class="btn cta__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">Book a strategy call</a>
       {
         ghostLabel && (
-          <a class="btn btn-ghost cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+          <a
+            class="btn btn-ghost cta__ghost"
+            href={ghostHref ?? SITE.whatsappUrl}
+            target={ghostIsExternal ? "_blank" : undefined}
+            rel={ghostIsExternal ? "noopener" : undefined}
+          >
             {ghostLabel}
           </a>
         )

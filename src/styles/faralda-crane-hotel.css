@@ -1,0 +1,400 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Faralda Crane Hotel case study.
+
+   Same vocabulary as the redesigned service pages — hairline cards, red marks,
+   full-bleed bands — over a photographic hero, which is new here: the mockup
+   opens on the crane at dusk with the copy sitting on a scrim rather than on a
+   flat colour.
+
+   The mockup is drawn at 0.692 of life size: its 1024px frame stands for a
+   ~1480px viewport, which is how the card grid measures 1136px — the site's own
+   --measure less its gutters. Two independent checks agree: the content inset
+   solves to the same viewport, and the drawn button label measures the house
+   14px. Its nav, its ribbon and its cards each start at a different inset
+   (24px, 82px and 115px), so the geometry is composed on --measure / --gutter
+   and every type size is set by matching rendered ink against the mockup's ink.
+
+   The evidence band deliberately borrows .cs-ev-grid / .cs-ev from site.css —
+   the same gallery the Gerti Foods and STS Bau case studies use, including its
+   responsive rules — rather than inventing a second way to show a screenshot.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.fc-hero) {
+  --fc-rule: #e6e4e3;
+  --fc-ink: #201e1d;
+  --fc-muted: #565554;
+  --fc-band: #fff;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+
+.fc-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 477px;
+  display: flex;
+  align-items: flex-start;
+  /* Every gap below is the mockup's ink-to-ink distance converted at 0.6919,
+     less the half-leading each line box adds — which is why these are not the
+     round numbers the drawing suggests. */
+  padding-block: 32px 46px;
+  background: #0a0d11;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* The LCP element, so it is a real <img> with fetchpriority rather than a CSS
+   background the parser finds late. The crop keeps the crane and the lit cabin
+   on the right where the mockup puts them; the copy sits over the water. */
+.fc-hero__img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 80%;
+}
+
+/* Dark on the left so the copy holds contrast, clearing to the photograph by
+   the time it reaches the crane. */
+.fc-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 11, 15, 0.95) 0%,
+      rgba(8, 11, 15, 0.92) 26%,
+      rgba(8, 11, 15, 0.62) 48%,
+      rgba(8, 11, 15, 0.22) 70%,
+      rgba(8, 11, 15, 0.12) 100%
+    ),
+    linear-gradient(180deg, rgba(8, 11, 15, 0.42) 0%, rgba(8, 11, 15, 0.12) 45%, rgba(8, 11, 15, 0.5) 100%);
+}
+
+.fc-hero__inner { width: 100%; }
+
+/* Scoped past .breadcrumb, which is a single class in site.css and would
+   otherwise keep its dark ink and 28px top padding over the photograph. */
+.fc-hero .fc-crumb {
+  padding: 0;
+  margin: 0 0 35px;
+  color: color-mix(in srgb, #fff 72%, transparent);
+  font-size: 13px;
+}
+.fc-hero .fc-crumb a { color: inherit; text-decoration: none; }
+.fc-hero .fc-crumb a:hover { color: #fff; text-decoration: underline; }
+.fc-hero .fc-crumb [aria-current="page"] { color: #fff; font-weight: 600; }
+
+.fc-kicker {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 21px;
+}
+
+.fc-hero__title {
+  font-size: 45px;
+  line-height: 1.11;
+  letter-spacing: -0.02em;
+  /* Archivo sets wider per character than the face the mockup was drawn in, so
+     the three-line break needs the cap rather than the drawn width. */
+  max-width: 610px;
+  margin: 0 0 17px;
+}
+
+.fc-hero__lede {
+  font-size: 15px;
+  line-height: 1.75;
+  color: color-mix(in srgb, #fff 88%, transparent);
+  max-width: 400px;
+  margin: 0 0 32px;
+}
+
+.fc-hero__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.fc-btn {
+  min-height: 53px;
+  padding-inline: 39px;
+  border-radius: 0;
+  font-size: 14px;
+}
+.fc-hero .fc-btn--ghost {
+  color: #fff;
+  border-color: color-mix(in srgb, #fff 55%, transparent);
+  background: color-mix(in srgb, #0a0d11 35%, transparent);
+}
+.fc-hero .fc-btn--ghost:hover { background: color-mix(in srgb, #fff 16%, transparent); border-color: #fff; }
+.fc-hero .fc-btn--ghost:active { background: color-mix(in srgb, #fff 26%, transparent); }
+
+/* ── Fact ribbon ─────────────────────────────────────────────────────────── */
+
+.fc-ribbon {
+  background: #f8f8f8;
+  border-bottom: var(--rule) solid var(--fc-rule);
+}
+.fc-ribbon__list {
+  list-style: none;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(24px, 6.6vw, 98px);
+  min-height: 56px;
+}
+.fc-ribbon__item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13.5px;
+  color: var(--fc-ink);
+}
+.fc-ribbon__icon {
+  width: 22px; height: 22px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  /* The sprite is drawn on a 24-unit box at stroke 2; the mark reads at 22px
+     here, so the weight is scaled back to keep the drawn hairline. */
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fc-ribbon__short { display: none; }
+
+/* ── Outcomes strip ──────────────────────────────────────────────────────── */
+
+.fc-outcomes { background: var(--fc-band); padding-block: 37px; }
+.fc-outcomes__grid {
+  list-style: none;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+.fc-outcome { display: flex; align-items: flex-start; gap: 30px; }
+.fc-outcome__icon {
+  width: 40px; height: 40px;
+  flex: none;
+  margin-top: 2px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--fc-ink);
+}
+.fc-outcome__icon--accent { color: var(--color-accent); }
+.fc-outcome__title {
+  font-size: 16px;
+  line-height: 1.25;
+  margin: 0 0 5px;
+}
+.fc-outcome__body {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--fc-muted);
+  margin: 0;
+  max-width: 230px;
+}
+
+/* ── Ruled bands: the results, the evidence, the services ────────────────── */
+
+.fc-band {
+  background: var(--fc-band);
+  border-top: var(--rule) solid var(--fc-rule);
+  padding-block: 34px 33px;
+}
+.fc-band__kicker {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-align: center;
+  margin: 0 0 5px;
+}
+.fc-band__title {
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-align: center;
+  margin: 0 0 23px;
+}
+.fc-band__lede {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--fc-muted);
+  text-align: center;
+  max-width: 62ch;
+  margin: 0 auto;
+}
+
+.fc-cards {
+  list-style: none;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.fc-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  min-height: 156px;
+  padding: 26px;
+  background: var(--fc-band);
+  border: var(--rule) solid var(--fc-rule);
+}
+.fc-card__badge {
+  width: 69px; height: 69px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f2f1f1;
+}
+.fc-card__icon {
+  width: 26px; height: 26px;
+  fill: none;
+  stroke: var(--fc-ink);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fc-card__title {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0 0 6px;
+}
+.fc-card__body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--fc-muted);
+  margin: 0;
+}
+
+/* The services cards drop the badge — the mark sits bare against the card. */
+.fc-cards--services .fc-card { min-height: 140px; padding: 20px 18px; }
+.fc-card--service { gap: 20px; }
+.fc-card__mark {
+  width: 33px; height: 33px;
+  flex: none;
+  margin-top: 2px;
+  fill: none;
+  stroke: var(--fc-ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fc-card__link {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 13px;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.fc-card__link:hover { text-decoration: underline; }
+
+/* The evidence band runs wider than a card row, so it breathes more. */
+.fc-band--evidence { padding-block: 46px 48px; }
+.fc-band--evidence .fc-band__title { margin-bottom: 14px; }
+
+/* ── Mobile sticky action bar ────────────────────────────────────────────── */
+
+.fc-sticky { display: none; }
+
+/* ── Narrow ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .fc-hero__title { font-size: 38px; max-width: 520px; }
+  .fc-outcomes__grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .fc-outcome {
+    padding-block: 22px;
+    border-top: var(--rule) solid var(--fc-rule);
+  }
+  .fc-outcome:first-child { border-top: 0; padding-top: 0; }
+  .fc-outcome__body { max-width: none; }
+  .fc-cards { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .fc-hero { min-height: 0; }
+  .fc-hero__inner { padding-block: 26px 30px; }
+  .fc-crumb { font-size: 12px; margin-bottom: 30px; }
+  .fc-kicker { font-size: 12px; margin-bottom: 22px; }
+  .fc-hero__title { font-size: 33px; line-height: 1.1; max-width: none; margin-bottom: 22px; }
+  .fc-hero__lede { font-size: 15px; line-height: 1.6; max-width: none; margin-bottom: 26px; }
+
+  /* Stacked and full-width: two 52px bars beat two half-width ones on a thumb. */
+  .fc-hero__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .fc-hero__actions .btn { width: 100%; }
+
+  /* Two up, and "Google Business Profile" becomes GBP — as the mockup draws it. */
+  .fc-ribbon__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 14px;
+    justify-content: stretch;
+    padding-block: 18px;
+  }
+  .fc-ribbon__full { display: none; }
+  .fc-ribbon__short { display: inline; }
+
+  .fc-band { padding-block: 32px; }
+  .fc-band--evidence { padding-block: 36px; }
+  .fc-band__title { font-size: 21px; }
+  .fc-cards { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .fc-card, .fc-cards--services .fc-card { min-height: 0; }
+
+  .fc-sticky {
+    position: fixed;
+    z-index: 950;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-bg) 97%, transparent);
+    border-top: var(--rule) solid var(--fc-rule);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .fc-sticky[data-visible="false"] {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .fc-sticky__btn {
+    flex: 1;
+    min-height: 50px;
+    gap: 10px;
+    font-size: 15.5px;
+    border-radius: 0;
+  }
+  .fc-sticky__icon {
+    width: 20px; height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The two would otherwise stack in the same corner. */
+  body:has(.fc-sticky[data-visible="true"]) .whatsapp-fab { display: none; }
+  /* The footer already reserves 96px for the floating button; the bar needs more. */
+  body:has(.fc-sticky) .footer__inner {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-sticky { transition: none; }
+}

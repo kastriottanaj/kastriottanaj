@@ -10,16 +10,8 @@ imageAlt: "Faralda Crane Hotel logo over the Amsterdam crane hotel"
 order: 2
 ---
 
-## The brief
-
-<!-- TODO: the hotel's position, and why direct bookings mattered against OTA
-     channels. -->
-
-## What I did
-
-<!-- TODO: profile optimisation, local listings, review handling, on-site local
-     signals. -->
-
-## The outcome
-
-<!-- TODO: real numbers only. -->
+<!-- This entry carries the metadata only: the card on /work/, the meta
+     description, the image sitemap entry and the llms.txt line. The page
+     itself is hand-built at src/pages/work/faralda-crane-hotel.astro, because
+     the evidence gallery, the fact ribbon and the outcome cards are structure
+     rather than prose. Editing the copy means editing that file. -->
