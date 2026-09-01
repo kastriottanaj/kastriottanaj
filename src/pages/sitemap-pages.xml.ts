@@ -16,6 +16,7 @@ export function GET() {
         publicationDate: "2026-08-24",
       },
     },
+    { path: "/about/" },
     { path: "/process/" },
     { path: "/pricing/" },
     { path: "/contact/" },

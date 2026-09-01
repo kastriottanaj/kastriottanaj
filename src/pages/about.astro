@@ -1,0 +1,79 @@
+---
+import Base from "../layouts/Base.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import { SITE } from "../lib/site";
+
+// Placeholder layout on purpose: shared site.css classes only, no page-specific
+// stylesheet yet. The copy and structure are here so the page exists and is
+// linked; the design comes later.
+
+const title = `About — ${SITE.jobTitle} | ${SITE.name}`;
+const description =
+  "Who I am and how I work: an SEO specialist and AI automation builder helping businesses across Europe grow visibility and cut repetitive marketing work.";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "About", item: `${SITE.url}/about/` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: `About ${SITE.name}`,
+    description,
+    url: `${SITE.url}/about/`,
+    // The full Person object lives on the homepage; this points at it.
+    mainEntity: { "@id": `${SITE.url}/#person` },
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema}>
+  <div class="wrap">
+    <section class="page-head">
+      <span class="kicker">About</span>
+      <h1 class="page-head__title">Hi, I'm {SITE.name}.</h1>
+      <p class="page-head__lede">
+        {SITE.jobTitle}, based in {SITE.based}. I help businesses grow visibility, win
+        better leads, and hand the repetitive parts of marketing to a machine.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="prose">
+        <p>
+          Most of my work sits in two places: getting a site found by the people already
+          looking for it, and removing the manual work that piles up once it is. That means
+          technical SEO, content and internal linking on one side, and custom Python and AI
+          workflows on the other — reporting, lead routing, briefs, alerts.
+        </p>
+        <p>
+          I work hands-on rather than advisory. The changes get implemented and logged, and
+          the monthly report says what moved, what didn't, and what happens next — in
+          language a non-marketer can read.
+        </p>
+
+        <h2>What I do</h2>
+        <ul>
+          <li><a href="/services/seo/">SEO</a> — technical fixes, content and internal linking.</li>
+          <li><a href="/services/digital-marketing/">Digital marketing</a> — campaigns that turn interest into leads.</li>
+          <li><a href="/services/ai-automation/">AI automation</a> — workflows that remove manual work.</li>
+          <li><a href="/services/web-development/">Web development</a> — fast sites built to rank.</li>
+        </ul>
+
+        <h2>Where to go next</h2>
+        <ul>
+          <li><a href="/work/">Case studies</a> — real projects and what actually moved.</li>
+          <li><a href="/process/">Process</a> — the five phases every engagement runs through.</li>
+          <li><a href="/contact/">Contact</a> — or reach me on <a href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <CtaBanner />
+</Base>
