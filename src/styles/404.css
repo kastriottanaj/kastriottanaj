@@ -1,0 +1,384 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   /404/ — built from the desktop+mobile mockup (404-design.png).
+
+   The drawing is a ~1313px viewport at scale 0.879 (1155px of frame), pinned
+   two ways: the card grid measures 999 drawn px, which is exactly 1136 (the
+   measure minus gutters) at that scale, and the grid's two asymmetric insets
+   (84 and 94 real px) average to 89 — what a centred 1200px measure predicts
+   at 1313. Its own bands start at three different insets, so everything here
+   composes on --measure / --gutter instead, which is what makes the nav, the
+   hero copy, the cards and the exit band share one left edge.
+
+   Type is set by matching rendered ink to drawn ink word by word: Archivo and
+   the drawn face agree on width to within 2%, so every size below comes from
+   the ratio of a word's drawn width to the same word's width in Archivo, and
+   the vertical rhythm from drawn baselines (Archivo: cap 0.745em, ascent
+   0.85em).
+
+   This file is bundled BEFORE modernist.css and site.css, so a bare
+   single-class rule loses every tie. Page classes are prefixed nf- and the
+   handful of real overrides are scoped under .nf-page.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* The page carries its own contact bar on mobile — one corner, one thing. */
+body:has(.nf-page) .whatsapp-fab { display: none; }
+
+.nf-page {
+  --nf-ink-soft: var(--color-neutral-700);
+  --nf-rule: color-mix(in srgb, var(--color-text) 22%, transparent);
+  --nf-card-line: color-mix(in srgb, var(--color-text) 12%, transparent);
+}
+
+/* One inner rail for every band. Not .wrap: its `padding: 0 var(--gutter)`
+   shorthand would zero any padding-block set on the same element. */
+.nf-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────
+   Taller and wider than the site's .btn--lg: the drawing sets both hero
+   buttons on a 52px box with a 16px label and 36px of side padding. */
+.nf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 15px 36px;
+  border: var(--rule) solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: var(--font-heading-weight);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nf-btn--primary {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+.nf-btn--primary:hover { background: var(--color-accent-600); color: var(--color-bg); }
+.nf-btn--primary:active { background: var(--color-accent-700); }
+
+.nf-btn--ghost {
+  background: var(--color-bg);
+  border-color: var(--color-divider);
+  color: var(--color-text);
+}
+.nf-btn--ghost:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.nf-btn--ghost:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
+
+/* ── Hero ──────────────────────────────────────────────────────────────────
+   Copy left, illustration right, both centred on the band. The art's own
+   whitespace was trimmed when its matte was removed, so the image box is the
+   ink and the column can be sized off the drawing directly. */
+.nf-hero { border-bottom: var(--rule) solid var(--nf-rule); }
+
+.nf-hero__inner {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding: 48px var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  align-items: center;
+  gap: 65px;
+}
+
+.nf-kicker {
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.nf-hero__title {
+  /* 56px drawn at 1313, 40px on the drawn phone — one line through both.
+     The em cap holds the drawn break at every size: "That page took" is
+     7.06em of Archivo, and " a" would need 7.86em. */
+  margin: 21px 0 0;
+  max-width: 7.5em;
+  font-family: var(--font-heading);
+  font-size: clamp(33px, 1.9vw + 31px, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.nf-hero__lede {
+  margin: 16px 0 0;
+  max-width: 20em;
+  color: var(--nf-ink-soft);
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.nf-hero__actions {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+
+.nf-hero__media { min-width: 0; }
+
+.nf-hero__art {
+  display: block;
+  width: 100%;
+  max-width: 570px;
+  height: auto;
+}
+
+/* ── Where would you like to go? ───────────────────────────────────────── */
+.nf-routes { padding: 24px 0; }
+
+.nf-routes__title {
+  margin: 0 0 15px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.nf-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nf-card { display: flex; }
+
+.nf-card__link {
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 26px;
+  padding: 24px;
+  border: var(--rule) solid var(--nf-card-line);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.nf-card__link:hover {
+  background: color-mix(in srgb, var(--color-text) 3%, transparent);
+  border-color: color-mix(in srgb, var(--color-text) 30%, transparent);
+}
+
+.nf-card__icon {
+  display: block;
+  width: 65px;
+  height: 65px;
+}
+
+.nf-card__copy { display: block; min-width: 0; }
+
+.nf-card__title {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.nf-card__text {
+  display: block;
+  margin-top: 12px;
+  /* The drawing wraps all three bodies well inside the card. This cap plus
+     plain `wrap` — body sets `pretty`, which rebreaks them — reproduces the
+     drawn lines to within one word. */
+  max-width: 188px;
+  color: var(--nf-ink-soft);
+  font-size: 16.5px;
+  line-height: 1.65;
+  text-wrap: wrap;
+}
+
+.nf-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.nf-card__link:hover .nf-card__cta { text-decoration: underline; }
+
+.nf-card__arrow {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Only the stacked cards get the trailing chevron — on the desktop grid the
+   whole card is already one obvious target. */
+.nf-card__chevron { display: none; }
+
+/* ── Exit band ─────────────────────────────────────────────────────────── */
+.nf-exit {
+  background: #131313;
+  color: var(--color-bg);
+}
+.nf-exit :focus-visible { outline-color: var(--color-bg); }
+
+.nf-exit__inner {
+  padding-block: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.nf-exit__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.nf-exit__lede {
+  margin: 11px 0 0;
+  color: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.nf-exit__btn { min-width: 208px; min-height: 55px; }
+
+/* ── Mobile contact bar ────────────────────────────────────────────────── */
+.nf-dock { display: none; }
+
+/* ── Narrower windows ──────────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .nf-hero__inner { gap: 44px; }
+  .nf-hero__art { max-width: none; }
+}
+
+/* Below the drawn desktop the page becomes the drawn phone: the art drops
+   under the copy and each card turns into one wide row. Three columns need
+   327px a card (mark + gap + the drawn 188px measure + padding), so they go
+   at 1000 rather than compressing into a two-up with an orphan. */
+@media (max-width: 1000px) {
+  .nf-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
+    padding-block: 44px;
+  }
+  .nf-hero__lede { font-size: 18px; }
+  .nf-hero__art { max-width: 560px; }
+
+  .nf-cards { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+
+  /* Stacked, the card reads as one row: mark, copy, chevron. */
+  .nf-card__link {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+  }
+  .nf-card__icon { width: 56px; height: 56px; }
+  .nf-card__title { font-size: 16px; }
+  .nf-card__text {
+    /* The stacked card is wide enough for the drawn two-line body. */
+    max-width: none;
+    margin-top: 6px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .nf-card__cta { margin-top: 10px; font-size: 15px; }
+  .nf-card__arrow { width: 17px; height: 17px; }
+  .nf-card__chevron {
+    display: block;
+    width: 18px;
+    height: 18px;
+    color: var(--color-accent);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@media (max-width: 700px) {
+  .nf-hero__inner { padding-block: 32px 38px; gap: 28px; }
+  .nf-hero__title { margin-top: 14px; }
+  .nf-hero__lede { margin-top: 12px; line-height: 1.56; }
+  .nf-hero__actions {
+    margin-top: 24px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .nf-btn { min-height: 46px; padding-inline: 20px; font-size: 15px; }
+
+  .nf-routes { padding: 22px 0; }
+  .nf-routes__title { margin-bottom: 13px; font-size: 23px; }
+
+  .nf-exit__inner { padding-block: 26px; align-items: flex-start; }
+  .nf-exit__title { font-size: 20px; }
+  .nf-exit__lede { font-size: 16px; }
+  .nf-exit__btn { min-width: 0; min-height: 48px; width: 100%; }
+
+  /* Room for the docked bar, so the footer's last row stays reachable. */
+  .footer__inner { padding-bottom: 112px; }
+
+  /* The drawing ends the phone on a ruled strip carrying one red action. */
+  .nf-dock {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    padding: 13px 14px calc(13px + env(safe-area-inset-bottom));
+    background: var(--color-bg);
+    border-top: var(--rule) solid var(--nf-rule);
+  }
+  .nf-dock__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .nf-dock__btn:hover { background: var(--color-accent-600); color: #fff; }
+
+  /* The banner owns the bottom of the screen until it is answered. It sits
+     outside <main>, so this needs :has() rather than a sibling combinator. */
+  body:has(.cookie-consent:not([hidden])) .nf-dock { display: none; }
+}
+
+@media print {
+  .nf-dock { display: none; }
+}

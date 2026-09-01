@@ -1,26 +1,130 @@
 ---
 import Base from "../layouts/Base.astro";
 import { SITE } from "../lib/site";
+import "../styles/404.css";
+
+const illustration = "/assets/404/page-not-found-illustration.webp";
+
+/* The three routes out of a dead end, in the order the drawing puts them. */
+const routes = [
+  {
+    href: "/services/",
+    icon: "/assets/404/explore-services-icon.webp",
+    title: "Explore services",
+    body: "SEO, web development, digital marketing and AI automation.",
+    cta: "View services",
+  },
+  {
+    href: "/work/",
+    icon: "/assets/404/selected-work-icon.webp",
+    title: "See selected work",
+    body: "Browse recent websites, campaigns and digital projects.",
+    cta: "View work",
+  },
+  {
+    href: "/blog/",
+    icon: "/assets/404/read-the-blog-icon.webp",
+    title: "Read practical insights",
+    body: "Actionable articles about SEO, websites and growth.",
+    cta: "Visit the blog",
+  },
+];
 ---
 
 <Base
   title={`Page not found | ${SITE.name}`}
-  description="That page doesn't exist. Try the services, the case studies, or the writing."
+  description="That page doesn't exist. Pick up the trail again from the services, the case studies or the writing."
   noindex
 >
-  <div class="wrap">
-    <section class="page-head page-head--center">
-      <span class="kicker">404</span>
-      <h1 class="page-head__title">That page isn't here.</h1>
-      <p class="page-head__lede">
-        The link may be old, or the page may have moved. Everything worth reading is one of
-        these:
-      </p>
-      <div class="hero__actions">
-        <a class="btn btn-primary btn--lg" href="/">Homepage</a>
-        <a class="btn btn-secondary btn--lg" href="/services/">Services</a>
-        <a class="btn btn-secondary btn--lg" href="/blog/">Blog</a>
+  <div class="nf-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="nf-hero" aria-labelledby="nf-title">
+      <div class="nf-hero__inner">
+        <div class="nf-hero__copy">
+          <p class="nf-kicker">404 — Page not found</p>
+          <h1 class="nf-hero__title" id="nf-title">That page took a wrong turn.</h1>
+          <p class="nf-hero__lede">
+            The link may be outdated, or the page may have moved. Choose a path below and
+            you'll be back on track.
+          </p>
+          <div class="nf-hero__actions">
+            <a class="nf-btn nf-btn--primary" href="/">Go to homepage</a>
+            <a class="nf-btn nf-btn--ghost" href="/work/">View my work</a>
+          </div>
+        </div>
+
+        <div class="nf-hero__media">
+          <img
+            class="nf-hero__art"
+            src={illustration}
+            width="1200"
+            height="848"
+            alt="Two tilted browser windows — one showing 404, one a sad face — with a red path looping past them to an arrow"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
       </div>
     </section>
+
+    <!-- ── Where to go instead ──────────────────────────────────────────── -->
+    <section class="nf-routes" aria-labelledby="nf-routes-title">
+      <div class="nf-wrap">
+        <h2 class="nf-routes__title" id="nf-routes-title">Where would you like to go?</h2>
+        <ul class="nf-cards">
+          {
+            routes.map((route) => (
+              <li class="nf-card">
+                {/* The whole card is the target; the inner label stays visible
+                    because the drawing shows it, and the chevron is the mobile
+                    affordance for the rest of the box being tappable. */}
+                <a class="nf-card__link" href={route.href}>
+                  <img
+                    class="nf-card__icon"
+                    src={route.icon}
+                    width="192"
+                    height="192"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="nf-card__copy">
+                    <span class="nf-card__title">{route.title}</span>
+                    <span class="nf-card__text">{route.body}</span>
+                    <span class="nf-card__cta">
+                      {route.cta}
+                      <svg class="nf-card__arrow" aria-hidden="true">
+                        <use href="#i-arrow-right" />
+                      </svg>
+                    </span>
+                  </span>
+                  <svg class="nf-card__chevron" aria-hidden="true">
+                    <use href="#i-arrow-right" />
+                  </svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── Exit band ────────────────────────────────────────────────────── -->
+    <section class="nf-exit">
+      <div class="nf-wrap nf-exit__inner">
+        <div class="nf-exit__copy">
+          <h2 class="nf-exit__title">Still not finding what you need?</h2>
+          <p class="nf-exit__lede">
+            Tell me what you were looking for and I'll point you in the right direction.
+          </p>
+        </div>
+        <a class="nf-btn nf-btn--primary nf-exit__btn" href="/contact/">Contact me</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="nf-dock">
+    <a class="nf-dock__btn" href="/contact/">Contact</a>
   </div>
 </Base>
