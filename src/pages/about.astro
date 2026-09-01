@@ -2,14 +2,54 @@
 import Base from "../layouts/Base.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import { SITE } from "../lib/site";
-
-// Placeholder layout on purpose: shared site.css classes only, no page-specific
-// stylesheet yet. The copy and structure are here so the page exists and is
-// linked; the design comes later.
+import "../styles/about.css";
 
 const title = `About — ${SITE.jobTitle} | ${SITE.name}`;
 const description =
-  "Who I am and how I work: an SEO specialist and AI automation builder helping businesses across Europe grow visibility and cut repetitive marketing work.";
+  "Kastriot Tanaj — SEO specialist and AI automation builder in Pristina, Kosovo, working remotely worldwide. Search visibility, better leads, and less repetitive marketing work.";
+
+const heroImage = "/assets/about/kastriot-about-hero.webp";
+const portrait = "/assets/about/contact-kastriot-tanaj.webp";
+
+/** The capability strip under the hero. */
+const strip = [
+  "4+ years in SEO",
+  "Hands-on implementation",
+  "SEO · Automation · Web",
+  "Remote worldwide",
+];
+
+const workOn = [
+  {
+    title: "Getting businesses found",
+    body: "Technical SEO, content and internal linking that connect websites with people already searching.",
+  },
+  {
+    title: "Removing repetitive work",
+    body: "Custom Python and AI workflows for reporting, lead routing, briefs and alerts.",
+  },
+];
+
+const steps = [
+  { num: "01", title: "Diagnose", body: "Find the visibility gaps and manual bottlenecks." },
+  { num: "02", title: "Build", body: "Implement the SEO fixes, systems and workflows." },
+  { num: "03", title: "Improve", body: "Track what moved, what didn't and what happens next." },
+];
+
+/* Every figure here is the one its own case study publishes — the STS pair is
+   the site's "0 → 178", not a rounder number that reads better. */
+const results = [
+  { from: "0", to: "1,800", label: "monthly impressions", client: "Gerti Foods" },
+  { from: "0", to: "178", label: "monthly organic visits", client: "STS Bau" },
+  { from: "11", to: "46", label: "pages indexed", client: "AS Real Estate" },
+];
+
+const whatIDo = [
+  { label: "SEO", href: "/services/seo/", desc: "Technical fixes, content and internal linking." },
+  { label: "Digital marketing", href: "/services/digital-marketing/", desc: "Campaigns that turn interest into leads." },
+  { label: "AI automation", href: "/services/ai-automation/", desc: "Workflows that remove manual work." },
+  { label: "Web development", href: "/services/web-development/", desc: "Fast websites built to rank." },
+];
 
 const schema = [
   {
@@ -32,48 +72,152 @@ const schema = [
 ];
 ---
 
-<Base title={title} description={description} schema={schema}>
-  <div class="wrap">
-    <section class="page-head">
-      <span class="kicker">About</span>
-      <h1 class="page-head__title">Hi, I'm {SITE.name}.</h1>
-      <p class="page-head__lede">
-        {SITE.jobTitle}, based in {SITE.based}. I help businesses grow visibility, win
-        better leads, and hand the repetitive parts of marketing to a machine.
-      </p>
-    </section>
+<Base title={title} description={description} image={heroImage} schema={schema}>
+  <div class="ab-page">
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="ab-hero" aria-labelledby="ab-title">
+      <div class="ab-hero__inner">
+        <div class="ab-hero__copy">
+          <p class="ab-kicker">About</p>
+          <h1 class="ab-hero__title" id="ab-title">
+            I'm Kastriot Tanaj — an SEO Specialist &amp; AI Automation Builder
+          </h1>
+          <p class="ab-hero__lede">
+            Based in Pristina, Kosovo and working remotely worldwide, I help businesses
+            grow search visibility, win better leads and automate repetitive marketing work.
+          </p>
+          <div class="ab-hero__actions">
+            <a
+              class="ab-btn ab-btn--primary"
+              href={SITE.whatsappUrl}
+              target="_blank"
+              rel="noopener"
+            >Book a strategy call</a>
+            <a class="ab-btn ab-btn--ghost" href="/work/">See my work</a>
+          </div>
+          <p class="ab-hero__meta">
+            <svg class="ab-hero__pin" aria-hidden="true"><use href="#i-pin" /></svg>
+            <span>Based in Pristina · Working worldwide</span>
+          </p>
+        </div>
 
-    <section class="section">
-      <div class="prose">
-        <p>
-          Most of my work sits in two places: getting a site found by the people already
-          looking for it, and removing the manual work that piles up once it is. That means
-          technical SEO, content and internal linking on one side, and custom Python and AI
-          workflows on the other — reporting, lead routing, briefs, alerts.
-        </p>
-        <p>
-          I work hands-on rather than advisory. The changes get implemented and logged, and
-          the monthly report says what moved, what didn't, and what happens next — in
-          language a non-marketer can read.
-        </p>
-
-        <h2>What I do</h2>
-        <ul>
-          <li><a href="/services/seo/">SEO</a> — technical fixes, content and internal linking.</li>
-          <li><a href="/services/digital-marketing/">Digital marketing</a> — campaigns that turn interest into leads.</li>
-          <li><a href="/services/ai-automation/">AI automation</a> — workflows that remove manual work.</li>
-          <li><a href="/services/web-development/">Web development</a> — fast sites built to rank.</li>
-        </ul>
-
-        <h2>Where to go next</h2>
-        <ul>
-          <li><a href="/work/">Case studies</a> — real projects and what actually moved.</li>
-          <li><a href="/process/">Process</a> — the five phases every engagement runs through.</li>
-          <li><a href="/contact/">Contact</a> — or reach me on <a href={SITE.linkedin} target="_blank" rel="noopener">LinkedIn</a>.</li>
-        </ul>
+        <div class="ab-hero__media">
+          <img
+            class="ab-hero__photo"
+            src={heroImage}
+            width="1600"
+            height="996"
+            alt="Kastriot Tanaj at a desk, working on an SEO dashboard"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+          <!-- The original headshot, uncropped: a square source in a square box,
+               so `cover` scales it without cutting anything off. -->
+          <div class="ab-portrait">
+            <img
+              class="ab-portrait__img"
+              src={portrait}
+              width="288"
+              height="288"
+              alt={`${SITE.name}, ${SITE.jobTitle}`}
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- ── Capability strip ─────────────────────────────────────────────── -->
+    <section class="ab-strip" aria-label="At a glance">
+      <ul class="ab-strip__list">
+        {strip.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <!-- ── What I work on / How I work ──────────────────────────────────── -->
+    <div class="ab-wrap">
+      <section class="ab-grid" aria-label="What I work on and how I work">
+        <div class="ab-cell">
+          <h2 class="ab-h2">What I work on</h2>
+          <div class="ab-pair">
+            {
+              workOn.map((item) => (
+                <div>
+                  <h3 class="ab-h3">{item.title}</h3>
+                  <p class="ab-body">{item.body}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="ab-cell">
+          <h2 class="ab-h2">How I work</h2>
+          <p class="ab-body ab-cell__lede">I work hands-on rather than advisory.</p>
+          <ol class="ab-steps">
+            {
+              steps.map((step) => (
+                <li>
+                  <p class="ab-steps__num">{step.num}</p>
+                  <h3 class="ab-h3">{step.title}</h3>
+                  <p class="ab-body">{step.body}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </section>
+
+      <!-- ── Selected results / What I do ───────────────────────────────── -->
+      <section class="ab-grid ab-grid--ruled" aria-label="Selected results and services">
+        <div class="ab-cell">
+          <h2 class="ab-h2">Selected results</h2>
+          <ul class="ab-results">
+            {
+              results.map((r) => (
+                <li>
+                  <p class="ab-results__figure">
+                    {r.from} <span aria-hidden="true">→</span>
+                    <span class="ab-sr-only">to</span> {r.to}
+                  </p>
+                  <p class="ab-results__label">{r.label}</p>
+                  <p class="ab-results__client">{r.client}</p>
+                </li>
+              ))
+            }
+          </ul>
+          <a class="ab-link" href="/work/">View all case studies <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="ab-cell">
+          <h2 class="ab-h2">What I do</h2>
+          <ul class="ab-do">
+            {
+              whatIDo.map((item) => (
+                <li>
+                  <a href={item.href}>{item.label}</a>
+                  <span>{item.desc}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+    </div>
   </div>
 
   <CtaBanner />
+
+  <a
+    class="ab-contact-bar"
+    href={SITE.whatsappUrl}
+    target="_blank"
+    rel="noopener"
+    aria-label={`Contact ${SITE.name} on WhatsApp`}
+  >
+    <svg aria-hidden="true"><use href="#i-phone" /></svg>
+    <span>Contact</span>
+  </a>
 </Base>

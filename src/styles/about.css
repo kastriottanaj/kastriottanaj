@@ -1,0 +1,440 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   /about/ — built from the desktop+mobile mockup (about-page-mockup.png).
+
+   The drawing is a ~1234px viewport at scale 0.887 (1095px of frame), pinned
+   three ways: the nav logo's ink height (16/18), the nav button box (31/34.8)
+   and the CTA band height (94/106.3) — all inside 0.8%. Its own insets
+   disagree with each other by up to 17px, so everything here composes on
+   --measure / --gutter instead, which is what makes the nav, the hero copy,
+   the grid and the CTA band share one left edge.
+
+   This file is bundled BEFORE modernist.css and site.css, so a bare
+   single-class rule loses every tie. Page classes are prefixed ab- and the
+   handful of real overrides are scoped under .ab-page.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* The page carries its own contact bar on mobile — one corner, one thing. */
+body:has(.ab-page) .whatsapp-fab { display: none; }
+
+.ab-page {
+  --ab-photo: 402px;          /* hero photo height, 357 drawn px ÷ 0.887 */
+  --ab-portrait: 190px;
+  --ab-ink-soft: var(--color-neutral-700);
+}
+
+.ab-sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* One inner rail for every band. Not .wrap: its `padding: 0 var(--gutter)`
+   shorthand would zero any padding-block set on the same element. */
+.ab-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────────
+   The copy sits on the measure; the photo bleeds off the right edge, so the
+   grid is padded to the measure on the left only. */
+
+.ab-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 500px) minmax(0, 1fr);
+  align-items: center;
+  gap: 32px;
+  padding-left: max(var(--gutter), (100% - var(--measure)) / 2 + var(--gutter));
+}
+
+.ab-hero__copy { padding: 28px 0 32px; }
+
+.ab-kicker {
+  margin: 0 0 8px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ab-hero__title {
+  /* 39–40px drawn; clamped so the three-line break survives a narrower window. */
+  margin: 0;
+  max-width: 470px;
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 3.4vw, 40px);
+  font-weight: 800;
+  line-height: 1.13;
+  letter-spacing: -0.02em;
+}
+
+.ab-hero__lede {
+  margin: 11px 0 0;
+  max-width: 430px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ab-ink-soft);
+}
+
+.ab-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.ab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 11px 22px;
+  border: var(--rule) solid transparent;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.ab-page .ab-btn--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+.ab-page .ab-btn--primary:hover { background: var(--color-accent-600); border-color: var(--color-accent-600); color: #fff; }
+
+.ab-page .ab-btn--ghost {
+  background: var(--color-bg);
+  border-color: color-mix(in srgb, var(--color-text) 22%, transparent);
+  color: var(--color-text);
+}
+.ab-page .ab-btn--ghost:hover { border-color: var(--color-text); color: var(--color-text); }
+
+.ab-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: var(--ab-ink-soft);
+}
+.ab-hero__pin {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ab-hero__media { position: relative; align-self: stretch; }
+
+.ab-hero__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: var(--ab-photo);
+  object-fit: cover;
+  /* The desk and the screen are the subject; the drawing crops off the ceiling. */
+  object-position: 50% 42%;
+}
+
+/* ── Portrait ──────────────────────────────────────────────────────────────
+   A square source in a square box, so `cover` scales without cropping. The
+   gradient is the container's own ground, as drawn. */
+
+.ab-portrait {
+  position: absolute;
+  right: 27px;
+  bottom: 25px;
+  width: var(--ab-portrait);
+  height: var(--ab-portrait);
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fe5f47 0%, #f5bcb0 100%);
+  border: 4px solid #fdfcfb;
+  box-shadow: 0 10px 28px rgba(32, 30, 29, 0.28);
+}
+
+.ab-portrait__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;   /* keeps the face on the circle's optical centre */
+}
+
+/* ── Capability strip ──────────────────────────────────────────────────────
+   Four equal columns, hairlines between — the middle one lands on the same
+   x as the content grid's rule below it, which is how the drawing reads. */
+
+.ab-strip {
+  background: #f2eeec;
+  border-block: var(--rule) solid color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.ab-strip__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: var(--measure);
+  margin: 0 auto;   /* not margin-inline: the ul's default block margin stays */
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+
+.ab-strip__list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 71px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text);
+}
+.ab-strip__list li + li {
+  border-left: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+}
+
+/* ── Two-column content ────────────────────────────────────────────────── */
+
+.ab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 28px 0 38px;
+}
+
+.ab-grid--ruled { border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 16%, transparent); }
+
+.ab-cell + .ab-cell {
+  padding-left: 34px;
+  border-left: var(--rule) solid color-mix(in srgb, var(--color-text) 16%, transparent);
+}
+.ab-cell:first-child { padding-right: 42px; }
+
+.ab-h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.ab-h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.ab-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.57;
+  color: var(--ab-ink-soft);
+}
+
+.ab-pair {
+  margin-top: 21px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.ab-cell__lede { margin-bottom: 15px; }
+
+.ab-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;   /* wide enough that "happens next." stays on the drawn second line */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ab-steps__num {
+  margin: 0 0 6px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* ── Selected results ──────────────────────────────────────────────────── */
+
+.ab-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.ab-results li + li {
+  padding-left: 22px;
+  border-left: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+}
+.ab-results__figure {
+  margin: 0 0 3px;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.ab-results__label { margin: 0; font-size: 14px; line-height: 1.4; }
+.ab-results__client { margin: 4px 0 0; font-size: 13px; color: var(--ab-ink-soft); }
+
+.ab-page .ab-link {
+  display: inline-block;
+  color: var(--color-accent);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ab-page .ab-link:hover { color: var(--color-accent-600); }
+
+/* ── What I do ─────────────────────────────────────────────────────────── */
+
+.ab-do { margin: 0; padding: 0; list-style: none; }
+.ab-do li {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: 32px;
+  align-items: baseline;
+  padding: 5px 0;
+}
+.ab-do li + li { border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent); }
+.ab-page .ab-do a {
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ab-page .ab-do a:hover { color: var(--color-accent-600); }
+.ab-do span { font-size: 14px; line-height: 1.5; color: var(--ab-ink-soft); }
+
+/* ── Mobile contact bar ────────────────────────────────────────────────── */
+
+.ab-contact-bar { display: none; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────
+   The drawing's phone puts the copy above a full-bleed photo, with the
+   portrait straddling the photo's bottom edge and the strip folded to 2×2. */
+
+@media (max-width: 1000px) {
+  .ab-page { --ab-portrait: 110px; }
+
+  .ab-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-inline: var(--gutter);
+  }
+  .ab-hero__title, .ab-hero__lede { max-width: none; }
+  .ab-hero__copy { padding: 24px 0 26px; }
+
+  /* Full-bleed out of the padded grid, the way the phone frame draws it.
+     Negative gutters rather than 100vw: vw units count the classic scrollbar
+     and would push a desktop window at this width into horizontal scroll. */
+  .ab-hero__media { margin-inline: calc(var(--gutter) * -1); }
+  .ab-hero__photo { height: clamp(200px, 60vw, 300px); }
+
+  .ab-portrait {
+    right: auto;
+    left: 50%;
+    bottom: calc(var(--ab-portrait) * -0.31);   /* ~31% of the circle hangs below */
+    transform: translateX(-50%);
+    border-width: 3px;
+  }
+
+  /* The circle's overhang is margin below the hero, not overlap on the strip. */
+  .ab-hero { padding-bottom: calc(var(--ab-portrait) * 0.31 + 18px); }
+
+  .ab-strip__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ab-strip__list li { min-height: 58px; }
+  /* The 2×2 fold needs its rules re-drawn: a left edge on the odd columns and
+     a top edge on the second row, instead of one rule per sibling. */
+  .ab-strip__list li + li { border-left: 0; }
+  .ab-strip__list li:nth-child(2n) {
+    border-left: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
+  .ab-strip__list li:nth-child(n + 3) {
+    border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
+
+  .ab-grid { grid-template-columns: minmax(0, 1fr); padding: 28px 0; }
+  .ab-cell { padding-right: 0; }
+  .ab-cell + .ab-cell {
+    margin-top: 28px;
+    padding-top: 28px;
+    padding-left: 0;
+    border-left: 0;
+    border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 16%, transparent);
+  }
+}
+
+@media (max-width: 700px) {
+  .ab-pair { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .ab-steps { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .ab-results { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .ab-results li + li {
+    padding-left: 0;
+    padding-top: 18px;
+    border-left: 0;
+    border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
+  .ab-do li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+
+  /* Room for the fixed bar, so the footer's last row stays reachable. */
+  .footer__inner { padding-bottom: 96px; }
+
+  .ab-contact-bar {
+    position: fixed;
+    z-index: 30;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    left: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 53px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(32, 30, 29, 0.22);
+  }
+  .ab-contact-bar svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .cookie-consent:not([hidden]) ~ .ab-contact-bar { display: none; }
+}
+
+@media print {
+  .ab-contact-bar { display: none; }
+}
