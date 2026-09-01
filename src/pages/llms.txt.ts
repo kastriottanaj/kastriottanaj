@@ -29,55 +29,96 @@ export async function GET(context: APIContext) {
 
 ${SITE.jobTitle}, based in ${SITE.based}.
 
+## Start here
+
+${list([
+  { url: "/", name: "Home", note: SITE.tagline },
+  {
+    url: "/about/",
+    name: "About",
+    note: "Who I am, what I work on, how I work, and the results behind it.",
+  },
+])}
+
 ## Services
 
-${list(
-  services.map((s) => ({
+${list([
+  {
+    url: "/services/",
+    name: "All services",
+    note: "SEO, digital marketing, AI automation and web development for businesses across Europe.",
+  },
+  ...services.map((s) => ({
     url: `/services/${s.id}/`,
     name: s.data.title,
     note: s.data.short,
-  }))
-)}
+  })),
+])}
 
 ## Use cases
 
-${list(
-  useCases.map((u) => ({
+${list([
+  {
+    url: "/use-cases/",
+    name: "All use cases",
+    note: "How the SEO, web and automation work applies to a specific industry — what breaks in that market, and what I'd do about it.",
+  },
+  ...useCases.map((u) => ({
     url: `/use-cases/${u.id}/`,
     name: u.data.title,
     note: u.data.short,
-  }))
-)}
+  })),
+])}
 
 ## Bootcamps
 
-${list(
-  bootcamps.map((b) => ({
+${list([
+  {
+    url: "/bootcamps/",
+    name: "All bootcamps",
+    note: "Self-paced SEO and WordPress bootcamps built from live client work, with lifetime access.",
+  },
+  ...bootcamps.map((b) => ({
     url: `/bootcamps/${b.id}/`,
     name: b.data.title,
     note: b.data.short,
-  }))
-)}
+  })),
+])}
 
 ## Case studies
 
-${list(
-  cases.map((c) => ({
+${list([
+  {
+    url: "/work/",
+    name: "Selected work",
+    note: "Case studies for businesses that want more search visibility, qualified leads, and less manual work.",
+  },
+  ...cases.map((c) => ({
     url: `/work/${c.id}/`,
     name: c.data.title,
     note: c.data.summary,
-  }))
-)}
+  })),
+])}
 
 ## Writing
 
-${list(
-  posts.map((p) => ({
+${list([
+  {
+    url: "/blog/",
+    name: "Blog",
+    note: "Field-tested ideas for business owners and marketers who want more search visibility and less manual work.",
+  },
+  {
+    url: "/newsletter/",
+    name: "Newsletter",
+    note: "Short, practical emails on SEO, digital marketing and AI automation — no fixed schedule, one-click unsubscribe.",
+  },
+  ...posts.map((p) => ({
     url: `/blog/${p.id}/`,
     name: p.data.title,
     note: p.data.description,
-  }))
-)}
+  })),
+])}
 
 ## Working together
 
@@ -88,6 +129,10 @@ ${list(
 
 - [Contact](${site}/contact/): Enquiries about SEO, digital marketing, AI automation and web development.
 - [LinkedIn](${SITE.linkedin})
+
+## Optional
+
+- [Northbound Albania](${site}/northbound/): A standalone landing page for a separate travel brand hosted on this domain — private, tailor-made journeys through Shkodër and Northern Albania. Not part of the SEO and automation practice above.
 `;
 
   return new Response(body, {
