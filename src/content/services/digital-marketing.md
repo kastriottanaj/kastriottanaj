@@ -1,7 +1,7 @@
 ---
 title: "Digital Marketing"
 navLabel: "Digital Marketing"
-description: "Campaigns, social media and brand visibility that turn attention into customers — planned, executed and measured properly."
+description: "Turn attention into customers with focused digital marketing, social media and measurable campaigns built around your goals. Book a strategy call."
 short: "Social media, campaigns, and brand visibility that turn followers into customers."
 icon: "i-megaphone"
 order: 2

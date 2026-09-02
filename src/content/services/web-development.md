@@ -1,7 +1,7 @@
 ---
 title: "Web Development"
 navLabel: "Web Development"
-description: "Fast, SEO-ready websites built on modern stacks — clean, conversion-focused, and quick enough to rank."
+description: "Get a fast, SEO-ready website built to rank, meet Core Web Vitals and turn visitors into leads—with no platform lock-in. Book a strategy call."
 short: "Fast, SEO-ready websites built with modern stacks and clean, conversion-focused design."
 icon: "i-code"
 order: 4

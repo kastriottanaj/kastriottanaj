@@ -12,8 +12,13 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 // "Read the latest post" buttons point at it. Everything after it is a note.
 const [featured, ...notes] = posts;
 
-const title = `Blog — SEO, marketing & automation | ${SITE.name}`;
+const title = `SEO, Digital Marketing & AI Automation Blog — ${SITE.name}`;
 const description =
+  "Discover field-tested SEO, digital marketing and AI automation advice to grow search visibility and reduce manual work. Read the latest insights.";
+
+/* The line under the H1. Written for someone already on the page, so it says
+   less than the meta description, which has to sell the click. */
+const lede =
   "Field-tested ideas for business owners and marketers who want more search visibility and less manual work.";
 
 const heroImage = "/assets/blog/kastriot-tanaj-blog.webp";
@@ -64,7 +69,7 @@ const featuredTag = featured?.data.tags.at(-1);
           <h1 class="blog-hero__title" id="blog-title">
             Practical SEO, Marketing &amp; Automation Advice That Moves the Needle
           </h1>
-          <p class="blog-hero__lede">{description}</p>
+          <p class="blog-hero__lede">{lede}</p>
           <div class="blog-hero__actions">
             <a class="blog-button" href={`/blog/${featured.id}/`}>Read the latest post</a>
             <a class="blog-hero__link" href="#latest-notes">Browse all topics →</a>

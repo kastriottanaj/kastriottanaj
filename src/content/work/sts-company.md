@@ -2,7 +2,7 @@
 title: "STS Bau"
 client: "STS Bau — Blitzschutzbau & Steuerungstechnik"
 summary: "A German lightning-protection specialist taken from a flat line to 178 monthly organic visits on the back of a 115-article knowledge hub."
-description: "Content-led SEO took STS Bau to 178 monthly organic visits and 343 ranking keywords in Germany — organic traffic up 105% — plus 992 Business Profile views in six months."
+description: "See how content-led SEO grew a German trade specialist from near-zero traffic to 178 monthly visits and 343 ranking keywords. Book a strategy call."
 services: ["SEO", "Content strategy", "On-page optimisation"]
 thumbCaption: "STS Bau — lightning protection installation"
 image: "/assets/work/sts-bau-logo.webp"

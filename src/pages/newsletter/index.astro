@@ -11,9 +11,9 @@ const issues = (await getCollection("newsletter", ({ data }) => !data.draft)).so
 );
 const sampleHref = issues.length ? `/newsletter/archive/${issues[0].id}/` : null;
 
-const title = `Newsletter — tips on SEO, marketing & AI automation | ${SITE.name}`;
+const title = `SEO, Marketing & AI Automation Newsletter — ${SITE.name}`;
 const description =
-  "Short, practical emails on SEO, digital marketing and AI automation. No fixed schedule, no filler — and one-click unsubscribe on every issue.";
+  "Get short, practical SEO, marketing and AI automation tips drawn from real client work—free, actionable and sent without filler. Subscribe today.";
 
 const schema = [
   {

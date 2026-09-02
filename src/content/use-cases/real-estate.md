@@ -1,7 +1,7 @@
 ---
 title: "SEO & Automation for Real Estate"
 navLabel: "Real estate"
-description: "Search and local SEO for an estate agency — AS Real Estate went from 11 indexed pages to 46, an average Google position of 6.8, and 345 impressions inside Google's AI answers."
+description: "See how local SEO helped a Kosovo estate agency reach page one, grow indexed pages from 11 to 46 and generate direct calls. Book a strategy call."
 short: "Break the portal dependency, rank for the searches that carry intent, and get found where buyers now ask."
 icon: "i-map"
 audience: "Estate agencies, brokers and property developers"

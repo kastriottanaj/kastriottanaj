@@ -8,9 +8,9 @@ const bootcamps = (await getCollection("bootcamps", ({ data }) => !data.draft)).
   (a, b) => a.data.order - b.data.order,
 );
 
-const title = `Bootcamps — learn SEO and WordPress | ${SITE.name}`;
+const title = "SEO & WordPress Bootcamps for Practical Client Work";
 const description =
-  "Self-paced SEO and WordPress bootcamps built from live client work — the same decisions, templates and workflows, at your own pace with lifetime access.";
+  "Build practical SEO and WordPress skills with self-paced, 10-module bootcamps, real client workflows and lifetime access. Explore the courses.";
 
 /** The cheapest tier is the one worth putting on a card — it sets the floor. */
 const fromPrice = (bootcamp: (typeof bootcamps)[number]) => {

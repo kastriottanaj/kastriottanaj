@@ -1,7 +1,7 @@
 ---
 title: "SEO Services"
 navLabel: "SEO"
-description: "Technical SEO, on-page optimisation, and content strategy that build rankings which hold — for businesses across Europe."
+description: "Grow sustainable rankings with technical SEO, on-page optimisation and content strategy for businesses across Europe. Book a strategy call."
 short: "Technical SEO, on-page, and content strategy that drive sustainable rankings."
 icon: "i-search"
 order: 1

@@ -3,8 +3,13 @@ import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 
-const title = `Selected work | ${SITE.name}`;
+const title = "SEO & Automation Case Studies With Measurable Results";
 const description =
+  "Explore SEO and automation case studies with results including 1,800 monthly impressions and 178 organic visits. See what drove the growth.";
+
+/* The line under the H1. Written for someone already on the page, so it says
+   less than the meta description, which has to sell the click. */
+const lede =
   "Case studies for businesses that want more search visibility, qualified leads, and less manual work.";
 
 const schema = [
@@ -28,7 +33,7 @@ const schema = [
           <h1 class="work-hero__title" id="work-title">
             SEO and automation<br />that deliver measurable<br />growth
           </h1>
-          <p class="work-hero__lede">{description}</p>
+          <p class="work-hero__lede">{lede}</p>
           <div class="work-hero__actions">
             <a class="work-button work-button--primary" href="#case-studies">Explore case studies</a>
             <a

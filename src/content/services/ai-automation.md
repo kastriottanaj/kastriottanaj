@@ -1,7 +1,7 @@
 ---
 title: "AI Automation for Businesses"
 navLabel: "AI Automation"
-description: "Custom AI and Python automations that take reporting, lead handling and content operations off your team's plate."
+description: "Save hours with custom AI and Python automation for reporting, lead handling and content workflows, built around your tools. Book a strategy call."
 short: "Custom automations that save time on reporting, follow-up, and content workflows."
 icon: "i-bot"
 order: 3

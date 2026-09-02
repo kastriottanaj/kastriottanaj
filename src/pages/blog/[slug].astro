@@ -20,7 +20,8 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, pubDate, updatedDate, tags } = post.data;
+const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags } =
+  post.data;
 
 const url = `${SITE.url}/blog/${post.id}/`;
 
@@ -56,7 +57,11 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 });
 ---
 
-<Base title={`${title} | ${SITE.name}`} description={description} schema={schema}>
+<Base
+  title={metaTitle ?? `${title} | ${SITE.name}`}
+  description={metaDescription ?? description}
+  schema={schema}
+>
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Home</a> <span aria-hidden="true">/</span>

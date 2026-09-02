@@ -1,6 +1,8 @@
 ---
 title: "Why SEO changed with AI Overviews"
 description: "What changes when Google answers questions directly — and what still matters for visibility."
+metaTitle: "SEO and AI Overviews: What Changed and What Still Works"
+metaDescription: "Learn how Google AI Overviews changed SEO, which queries still drive valuable clicks, and how to earn citations in AI answers. Read what matters now."
 pubDate: 2026-06-18
 tags: ["SEO", "AI search"]
 image: "/assets/blog/why-seo-changed-with-ai-overviews.webp"

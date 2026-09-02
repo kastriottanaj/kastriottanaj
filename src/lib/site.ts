@@ -3,9 +3,9 @@
 export const SITE = {
   url: "https://kastriottanaj.com",
   name: "Kastriot Tanaj",
-  title: "Kastriot Tanaj — SEO, Digital Marketing & AI Automation",
+  title: "SEO & AI Automation for Businesses — Kastriot Tanaj",
   description:
-    "I help businesses across Europe grow visibility, win better leads, and automate repetitive marketing work — SEO, digital marketing, and AI automation.",
+    "Grow traffic, win better leads, and save time with SEO, digital marketing, and AI automation across Europe. Book a strategy call.",
   tagline: "SEO and AI automation that bring more traffic and less busywork.",
   jobTitle: "SEO Specialist & AI Automation Builder",
   locality: "Pristina",

@@ -2,7 +2,7 @@
 title: "Faralda Crane Hotel, Amsterdam"
 client: "Faralda Crane Hotel"
 summary: "Local search and Google Business Profile work aimed at more direct bookings."
-description: "Google Business Profile and local search optimisation for a landmark Amsterdam hotel."
+description: "See how local SEO and Google Business Profile optimisation strengthened visibility for a landmark Amsterdam hotel. Book a strategy call."
 services: ["Local SEO", "Google Business Profile"]
 thumbCaption: "Faralda Crane Hotel — building photo"
 image: "/assets/work/faralda-crane-hotel.webp"

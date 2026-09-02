@@ -8,6 +8,13 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    /**
+     * SERP copy, for posts whose on-page title and lede read differently from
+     * what should sell the click. `title` and `description` stay the H1, the
+     * card copy and the RSS summary; these two override the meta tags alone.
+     */
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),

@@ -1,6 +1,8 @@
 ---
 title: "Automating client reporting with Python"
 description: "How a few scripts replaced hours of manual reporting work every week."
+metaTitle: "Automating Client Reporting With Python: A Practical Guide"
+metaDescription: "See how a three-stage Python reporting pipeline replaced two days of manual work—and the mistake that made it faster. Read the full workflow."
 pubDate: 2026-07-09
 tags: ["Automation", "Python", "Reporting"]
 image: "/assets/blog/automating-client-reporting-with-python.webp"

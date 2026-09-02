@@ -1,7 +1,7 @@
 ---
 title: "WordPress Bootcamp"
 navLabel: "WordPress Bootcamp"
-description: "Build a professional WordPress website from scratch — from domains and hosting to design, content, SEO, security and launch — without depending on a developer for every change."
+description: "Build and launch a professional WordPress website with 10 self-paced modules covering design, SEO, security and maintenance. Join the waitlist."
 short: "Build and launch a complete WordPress website from scratch, with a clean structure you can maintain yourself."
 headline: "Build a professional WordPress website from scratch — and know how every part works."
 icon: "i-code"
