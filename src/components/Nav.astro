@@ -1,5 +1,5 @@
 ---
-import { NAV, SITE, SOCIALS } from "../lib/site";
+import { NAV, SITE } from "../lib/site";
 
 const { pathname } = Astro.url;
 
@@ -33,22 +33,6 @@ function isCurrent(href: string) {
           <li>
             <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
               {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    <ul class="nav__socials">
-      {
-        SOCIALS.map((social) => (
-          <li>
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noopener"
-              aria-label={`${SITE.name} on ${social.label}`}
-            >
-              <svg class="icon icon-brand" aria-hidden="true"><use href={social.icon} /></svg>
             </a>
           </li>
         ))

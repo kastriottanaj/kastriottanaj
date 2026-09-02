@@ -12,13 +12,22 @@ const year = new Date().getFullYear();
     <div class="footer__links">
       <a class="footer__link" href="/newsletter/">Newsletter</a>
       <button class="footer__link footer__button" type="button" data-cookie-settings>Cookie settings</button>
-      {
-        SOCIALS.map((social) => (
-          <a class="footer__link" href={social.href} target="_blank" rel="noopener">
-            {social.label}
-          </a>
-        ))
-      }
+      <ul class="footer__socials">
+        {
+          SOCIALS.map((social) => (
+            <li>
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener"
+                aria-label={`${SITE.name} on ${social.label}`}
+              >
+                <svg class="icon icon-brand" aria-hidden="true"><use href={social.icon} /></svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </footer>
