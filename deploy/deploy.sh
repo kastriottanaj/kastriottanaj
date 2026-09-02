@@ -26,10 +26,9 @@ log() { printf "\n\033[1m==> %s\033[0m\n" "$*"; }
 # from here) and not the protocol version; it is GitHub throttling anonymous
 # git traffic from this IP. Retrying gets through within a few attempts.
 #
-# This makes the deploy survive it, but the real fix is an authenticated remote
-# (an SSH deploy key), which does not go through anonymous throttling at all.
-# Until origin is `git@github.com:...`, this retry is what stands between a
-# push and a red Deploy job.
+# origin is `git@github.com:...` now, and an authenticated fetch is not
+# throttled that way, so this should never fire for that reason again. It stays
+# as a backstop for the ordinary network blip.
 retry() {
   local -i attempt=1 max=5
   until "$@"; do

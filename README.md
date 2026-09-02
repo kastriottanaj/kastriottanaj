@@ -301,8 +301,10 @@ systemctl status caddy             # web server
 
 ### When the Deploy job goes red but the site is fine
 
-GitHub intermittently answers the **anonymous** `git-upload-pack` POST from this box with
-`401`, and `deploy.sh`'s fetch then dies with `could not read Username for
+*Resolved — kept because the symptom is confusing and the wrong diagnosis is tempting.*
+
+GitHub intermittently answered the **anonymous** `git-upload-pack` POST from this box with
+`401`, and `deploy.sh`'s fetch then died with `could not read Username for
 'https://github.com'`. It is not this repo and not the protocol version — a public repo
 clones the same way from that IP, and `git ls-remote` never reproduces it because it only
 does the `GET /info/refs`, which answers 200 anonymously. It is GitHub throttling
@@ -311,36 +313,28 @@ anonymous git traffic from the address.
 Nothing is at risk when it happens: the fetch is the first step, before `git reset
 --hard`, so a failed deploy leaves the running site exactly as it was — just not updated.
 
-`deploy.sh` retries the fetch five times, which gets through. To finish a deploy by hand:
+`deploy.sh` also retries the fetch five times. To finish a deploy by hand:
 
 ```sh
 ssh deploy@<ip> 'cd /var/www/kastriottanaj/current && ./deploy/deploy.sh'
 ```
 
-**The real fix is still open:** give the box an authenticated remote, which does not go
-through anonymous throttling at all. As the `deploy` user on the server:
+**Fixed at the cause on 2026-09-02:** the box now fetches over SSH with its own
+read-only deploy key, and authenticated traffic is not throttled this way — six
+consecutive fetches passed where anonymous was a coin flip. `setup-server.sh` sets this
+up, so a fresh box gets it too. The retry stays as a backstop for ordinary network blips.
+
+The one manual step is registering the key, because only a repo admin can. `setup-server.sh`
+generates it, prints it, and leaves `origin` on HTTPS until it is registered:
 
 ```sh
-ssh-keygen -t ed25519 -N '' -C 'deploy@kastriottanaj-web (github read-only)' \
-  -f ~/.ssh/github-deploy
-printf 'Host github.com\n  IdentityFile ~/.ssh/github-deploy\n  IdentitiesOnly yes\n' \
-  >> ~/.ssh/config
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-cat ~/.ssh/github-deploy.pub          # register this next
+gh repo deploy-key add <the printed key> --title 'kastriottanaj-web'   # run locally
+ssh root@<ip> 'bash -s' < deploy/setup-server.sh                        # re-run; flips origin
 ```
 
-Then add that public key to the repo as a **read-only** deploy key and point the checkout
-at SSH:
-
-```sh
-gh repo deploy-key add <the .pub file> --title 'kastriottanaj-web'   # run locally
-ssh deploy@<ip> 'cd /var/www/kastriottanaj/current &&
-  git remote set-url origin git@github.com:kastriottanaj/kastriottanaj.git &&
-  git fetch --prune origin'
-```
-
-`setup-server.sh` still clones over HTTPS, which is fine for a one-time provision; the
-switch above is what makes every deploy after it authenticated.
+Keep it **read-only** — the deploy only ever reads. Verify with `gh repo deploy-key list`.
+The clone in `setup-server.sh` still runs over HTTPS on purpose: it happens before any key
+exists on the box.
 
 ## Two things that will bite you
 

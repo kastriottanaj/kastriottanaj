@@ -11,6 +11,9 @@ DOMAIN="kastriottanaj.com"
 APP_USER="deploy"
 APP_ROOT="/var/www/kastriottanaj"
 REPO="https://github.com/kastriottanaj/kastriottanaj.git"
+# What origin is switched to once the box's deploy key is registered — see
+# "GitHub deploy key" below for why the fetch must be authenticated.
+SSH_REPO="git@github.com:kastriottanaj/kastriottanaj.git"
 NODE_MAJOR=24
 
 log() { printf "\n\033[1m==> %s\033[0m\n" "$*"; }
@@ -114,6 +117,52 @@ if [[ ! -d "$APP_ROOT/current/.git" ]]; then
   sudo -u "$APP_USER" git clone "$REPO" "$APP_ROOT/current"
 else
   echo "  already cloned"
+fi
+
+log "GitHub deploy key"
+# Every deploy fetches, and GitHub throttles ANONYMOUS git traffic from this
+# address: on 2026-09-02 the anonymous `git-upload-pack` POST came back 401
+# about half the time and failed the deploy. An authenticated fetch is not
+# throttled that way, so the box gets its own read-only deploy key.
+#
+# The clone above still runs over HTTPS on purpose — it happens before any key
+# exists. Everything after it goes over SSH.
+KEY="$APP_ROOT/.ssh/github-deploy"
+sudo -u "$APP_USER" mkdir -p "$APP_ROOT/.ssh"
+sudo -u "$APP_USER" chmod 700 "$APP_ROOT/.ssh"
+if [[ ! -f "$KEY" ]]; then
+  sudo -u "$APP_USER" ssh-keygen -t ed25519 -N "" \
+    -C "${APP_USER}@$(hostname) (github read-only)" -f "$KEY" >/dev/null
+  echo "  generated ${KEY}"
+else
+  echo "  key already present"
+fi
+if ! sudo -u "$APP_USER" grep -q "github-deploy" "$APP_ROOT/.ssh/config" 2>/dev/null; then
+  # IdentitiesOnly so this key is the only one offered to GitHub.
+  printf '\nHost github.com\n  IdentityFile %s\n  IdentitiesOnly yes\n' "$KEY" \
+    | sudo -u "$APP_USER" tee -a "$APP_ROOT/.ssh/config" >/dev/null
+  sudo -u "$APP_USER" chmod 600 "$APP_ROOT/.ssh/config"
+fi
+# The deploy runs non-interactively, so the host key must already be trusted.
+if ! sudo -u "$APP_USER" ssh-keygen -F github.com >/dev/null 2>&1; then
+  ssh-keyscan -t rsa,ecdsa,ed25519 github.com 2>/dev/null \
+    | sudo -u "$APP_USER" tee -a "$APP_ROOT/.ssh/known_hosts" >/dev/null
+fi
+
+if sudo -u "$APP_USER" ssh -o BatchMode=yes -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+  sudo -u "$APP_USER" git -C "$APP_ROOT/current" remote set-url origin "$SSH_REPO"
+  echo "  origin -> ${SSH_REPO}"
+else
+  echo
+  echo "  !! This key is not registered on the repo yet, so origin stays on HTTPS"
+  echo "     and deploys will hit the anonymous-throttling 401 described above."
+  echo
+  echo "     Register it as a READ-ONLY deploy key, then re-run this script:"
+  echo
+  sed 's/^/       /' "${KEY}.pub"
+  echo
+  echo "       gh repo deploy-key add <that key> --title '$(hostname)'   # run locally"
+  echo
 fi
 
 log "Deploy user sudo rights"
