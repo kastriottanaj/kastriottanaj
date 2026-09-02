@@ -5,7 +5,7 @@ import Base from "../layouts/Base.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import ContactForm from "../components/ContactForm.astro";
 import NewsletterForm from "../components/NewsletterForm.astro";
-import { SITE } from "../lib/site";
+import { SITE, SOCIAL_URLS } from "../lib/site";
 
 const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -26,7 +26,7 @@ const person = {
   jobTitle: SITE.jobTitle,
   telephone: SITE.phone,
   description: "SEO specialist and AI automation builder working with businesses across Europe.",
-  sameAs: [SITE.linkedin],
+  sameAs: SOCIAL_URLS,
   address: {
     "@type": "PostalAddress",
     addressLocality: SITE.locality,

@@ -329,6 +329,59 @@ body:has(.ab-page) .whatsapp-fab { display: none; }
 .ab-page .ab-do a:hover { color: var(--color-accent-600); }
 .ab-do span { font-size: 14px; line-height: 1.5; color: var(--ab-ink-soft); }
 
+/* ── Follow along ──────────────────────────────────────────────────────────
+   The same ruled band as the two grids above it, with the channels four-across
+   on the results row's rules. Icon rules are scoped under .ab-page: site.css
+   loads after this file, so a bare .ab-follow__icon would lose to .icon. */
+
+.ab-follow {
+  padding: 28px 0 38px;
+  border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 16%, transparent);
+}
+.ab-follow__head { max-width: 560px; margin-bottom: 22px; }
+.ab-follow__head .ab-h2 { margin-bottom: 8px; }
+
+.ab-follow__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ab-follow__list li + li {
+  padding-left: 22px;
+  border-left: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+}
+.ab-page .ab-follow__list a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 11px;
+  align-items: center;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.ab-page .ab-follow__icon {
+  grid-row: span 2;
+  width: 26px;
+  height: 26px;
+  color: var(--color-accent);
+}
+.ab-follow__label {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.ab-follow__handle {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ab-ink-soft);
+  overflow-wrap: anywhere;   /* "@kastriot.tanajj" in a quarter-width column */
+}
+.ab-page .ab-follow__list a:hover .ab-follow__label,
+.ab-page .ab-follow__list a:hover .ab-follow__icon { color: var(--color-accent-600); }
+
 /* ── Mobile contact bar ────────────────────────────────────────────────── */
 
 .ab-contact-bar { display: none; }
@@ -377,6 +430,20 @@ body:has(.ab-page) .whatsapp-fab { display: none; }
     border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
   }
 
+  .ab-follow { padding: 28px 0; }
+  .ab-follow__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+  /* The 2×2 fold needs its rules re-drawn, the way the strip does: a left edge
+     on the even column and a top edge on the second row, not one per sibling. */
+  .ab-follow__list li + li { padding-left: 0; border-left: 0; }
+  .ab-follow__list li:nth-child(2n) {
+    padding-left: 22px;
+    border-left: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
+  .ab-follow__list li:nth-child(n + 3) {
+    padding-top: 18px;
+    border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
+
   .ab-grid { grid-template-columns: minmax(0, 1fr); padding: 28px 0; }
   .ab-cell { padding-right: 0; }
   .ab-cell + .ab-cell {
@@ -399,6 +466,15 @@ body:has(.ab-page) .whatsapp-fab { display: none; }
     border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
   }
   .ab-do li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+
+  .ab-follow__list { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .ab-follow__list li:nth-child(2n) { padding-left: 0; border-left: 0; }
+  .ab-follow__list li + li {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: 0;
+    border-top: var(--rule) solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
 
   /* Room for the fixed bar, so the footer's last row stays reachable. */
   .footer__inner { padding-bottom: 96px; }

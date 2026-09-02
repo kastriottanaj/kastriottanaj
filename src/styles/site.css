@@ -49,6 +49,10 @@ body { -webkit-font-smoothing: antialiased; text-wrap: pretty; }
 .icon--sm { width: 15px; height: 15px; }
 .icon--md { width: 18px; height: 18px; }
 
+/* Social marks are brand glyphs, not line icons: they are drawn as filled
+   shapes, so they take the ink from `fill` and must not be stroked. */
+.icon-brand { fill: currentColor; stroke: none; }
+
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -132,6 +136,22 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .nav__links { display: flex; align-items: center; gap: 24px; list-style: none; margin: 0; padding: 0; }
 .nav__links a { font-weight: 600; }
 .nav__links a[aria-current="true"] { color: var(--color-accent); }
+
+/* The channels, as marks rather than eight more words in an already-full bar. */
+.nav__socials {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav__socials a {
+  display: flex;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.nav__socials a:hover { color: var(--color-accent); }
+.nav__socials .icon { width: 18px; height: 18px; }
 
 .nav__toggle {
   display: none;
@@ -687,7 +707,7 @@ textarea.input { min-height: 100px; }
   margin: 0;
 }
 .footer__link:hover { color: var(--color-accent-700); }
-.footer__links { display: flex; align-items: center; gap: 18px; }
+.footer__links { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; }
 .footer__button {
   appearance: none;
   border: 0;
@@ -1818,10 +1838,11 @@ textarea.input { min-height: 100px; }
   .contact { grid-template-columns: minmax(0, 1fr); gap: 32px; }
 }
 
-/* Eight links, a brand and a CTA stop fitting on one row at about 940px, and
-   a wrapped bar is 33px taller than a whole one. Collapse at 1000px so the bar
-   goes straight from full to toggle without a ragged size in between. */
-@media (max-width: 1000px) {
+/* Eight links, four social marks, a brand and a CTA stop fitting on one row at
+   about 1075px, and a wrapped bar is 33px taller than a whole one. Collapse at
+   1140px so the bar goes straight from full to toggle without a ragged size in
+   between. (Before the social row it was 940px / 1000px.) */
+@media (max-width: 1140px) {
   /* The bar collapses to a toggle rather than wrapping into ragged rows. */
   .nav { flex-wrap: wrap; }
   .nav__toggle { display: inline-flex; }
@@ -1841,7 +1862,13 @@ textarea.input { min-height: 100px; }
     padding: 13px 0;
     border-bottom: var(--rule) solid var(--color-divider);
   }
-  .nav__menu .btn { align-self: flex-start; margin: 16px 0; }
+  /* The marks stay a horizontal row — a stack of four icons reads as a mistake. */
+  .nav__socials {
+    gap: 20px;
+    padding: 16px 0 2px;
+  }
+  .nav__socials .icon { width: 21px; height: 21px; }
+  .nav__menu .btn { align-self: flex-start; margin: 12px 0 16px; }
 }
 
 @media (max-width: 520px) {

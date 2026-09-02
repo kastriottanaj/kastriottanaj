@@ -23,6 +23,40 @@ export const SITE = {
   ogImage: "/assets/ai-seo.webp",
 } as const;
 
+/** Social profiles, in the order they're shown everywhere. The nav, the footer,
+    /about/ and every schema.org `sameAs` read this one list, so a new channel
+    is added here and nowhere else. `icon` is a sprite id from IconSprite. */
+export const SOCIALS = [
+  {
+    label: "LinkedIn",
+    handle: "/in/seo-kastriot-tanaj",
+    href: SITE.linkedin,
+    icon: "#i-linkedin",
+  },
+  {
+    label: "YouTube",
+    handle: "@Kastriot-Tanaj",
+    href: "https://www.youtube.com/@Kastriot-Tanaj",
+    icon: "#i-youtube",
+  },
+  {
+    label: "Instagram",
+    handle: "@kastriot.tanajj",
+    href: "https://www.instagram.com/kastriot.tanajj/",
+    icon: "#i-instagram",
+  },
+  {
+    label: "Facebook",
+    // A numeric profile URL rather than a vanity one — there is no handle to show.
+    handle: "Kastriot Tanaj",
+    href: "https://www.facebook.com/profile.php?id=61593745180902",
+    icon: "#i-facebook",
+  },
+] as const;
+
+/** The profile URLs alone — what schema.org's `sameAs` wants. */
+export const SOCIAL_URLS = SOCIALS.map((s) => s.href);
+
 /** Meta Pixel / Conversions API dataset. A public identifier: it ships in the
     HTML, and the Conversions API posts server events against the same ID. */
 export const META_PIXEL_ID = "1616830733405682";

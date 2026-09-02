@@ -1,6 +1,6 @@
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
-import { SITE } from "../lib/site";
+import { SITE, SOCIALS } from "../lib/site";
 
 /** A plain-text map of the site for language models — see llmstxt.org. */
 export async function GET(context: APIContext) {
@@ -128,7 +128,7 @@ ${list([
 ## Contact
 
 - [Contact](${site}/contact/): Enquiries about SEO, digital marketing, AI automation and web development.
-- [LinkedIn](${SITE.linkedin})
+${SOCIALS.map((social) => `- [${social.label}](${social.href})`).join("\n")}
 
 ## Optional
 

@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import CtaBanner from "../components/CtaBanner.astro";
-import { SITE } from "../lib/site";
+import { SITE, SOCIALS, SOCIAL_URLS } from "../lib/site";
 import "../styles/about.css";
 
 const title = `About — ${SITE.jobTitle} | ${SITE.name}`;
@@ -66,8 +66,9 @@ const schema = [
     name: `About ${SITE.name}`,
     description,
     url: `${SITE.url}/about/`,
-    // The full Person object lives on the homepage; this points at it.
-    mainEntity: { "@id": `${SITE.url}/#person` },
+    // The full Person object lives on the homepage; this points at it, and
+    // repeats the profile URLs so this page stands on its own as an entity home.
+    mainEntity: { "@id": `${SITE.url}/#person`, sameAs: SOCIAL_URLS },
   },
 ];
 ---
@@ -204,6 +205,32 @@ const schema = [
             }
           </ul>
         </div>
+      </section>
+
+      <!-- ── Follow along ───────────────────────────────────────────────── -->
+      <section class="ab-follow" aria-labelledby="ab-follow-title">
+        <div class="ab-follow__head">
+          <h2 class="ab-h2" id="ab-follow-title">Follow along</h2>
+          <p class="ab-body">
+            I post what I'm building and learning — SEO teardowns, automation
+            walkthroughs and the occasional behind-the-scenes.
+          </p>
+        </div>
+        <ul class="ab-follow__list">
+          {
+            SOCIALS.map((social) => (
+              <li>
+                <a href={social.href} target="_blank" rel="noopener">
+                  <svg class="icon icon-brand ab-follow__icon" aria-hidden="true">
+                    <use href={social.icon} />
+                  </svg>
+                  <span class="ab-follow__label">{social.label}</span>
+                  <span class="ab-follow__handle">{social.handle}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </section>
     </div>
   </div>

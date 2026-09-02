@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import ContactForm from "../components/ContactForm.astro";
 import CtaBanner from "../components/CtaBanner.astro";
-import { SITE } from "../lib/site";
+import { SITE, SOCIAL_URLS } from "../lib/site";
 import "../styles/contact.css";
 
 const title = `Contact — start an SEO or automation project | ${SITE.name}`;
@@ -60,7 +60,7 @@ const schema = [
       url: `${SITE.url}/`,
       jobTitle: SITE.jobTitle,
       telephone: SITE.phone,
-      sameAs: [SITE.linkedin],
+      sameAs: SOCIAL_URLS,
       address: {
         "@type": "PostalAddress",
         addressLocality: SITE.locality,
