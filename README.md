@@ -299,6 +299,49 @@ journalctl -u kastriottanaj -f     # API logs
 systemctl status caddy             # web server
 ```
 
+### When the Deploy job goes red but the site is fine
+
+GitHub intermittently answers the **anonymous** `git-upload-pack` POST from this box with
+`401`, and `deploy.sh`'s fetch then dies with `could not read Username for
+'https://github.com'`. It is not this repo and not the protocol version — a public repo
+clones the same way from that IP, and `git ls-remote` never reproduces it because it only
+does the `GET /info/refs`, which answers 200 anonymously. It is GitHub throttling
+anonymous git traffic from the address.
+
+Nothing is at risk when it happens: the fetch is the first step, before `git reset
+--hard`, so a failed deploy leaves the running site exactly as it was — just not updated.
+
+`deploy.sh` retries the fetch five times, which gets through. To finish a deploy by hand:
+
+```sh
+ssh deploy@<ip> 'cd /var/www/kastriottanaj/current && ./deploy/deploy.sh'
+```
+
+**The real fix is still open:** give the box an authenticated remote, which does not go
+through anonymous throttling at all. As the `deploy` user on the server:
+
+```sh
+ssh-keygen -t ed25519 -N '' -C 'deploy@kastriottanaj-web (github read-only)' \
+  -f ~/.ssh/github-deploy
+printf 'Host github.com\n  IdentityFile ~/.ssh/github-deploy\n  IdentitiesOnly yes\n' \
+  >> ~/.ssh/config
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+cat ~/.ssh/github-deploy.pub          # register this next
+```
+
+Then add that public key to the repo as a **read-only** deploy key and point the checkout
+at SSH:
+
+```sh
+gh repo deploy-key add <the .pub file> --title 'kastriottanaj-web'   # run locally
+ssh deploy@<ip> 'cd /var/www/kastriottanaj/current &&
+  git remote set-url origin git@github.com:kastriottanaj/kastriottanaj.git &&
+  git fetch --prune origin'
+```
+
+`setup-server.sh` still clones over HTTPS, which is fine for a one-time provision; the
+switch above is what makes every deploy after it authenticated.
+
 ## Two things that will bite you
 
 **`security.allowedDomains` in `astro.config.mjs` is load-bearing.** Astro rejects

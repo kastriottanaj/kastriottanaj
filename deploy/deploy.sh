@@ -16,6 +16,33 @@ SERVICE="kastriottanaj"
 
 log() { printf "\n\033[1m==> %s\033[0m\n" "$*"; }
 
+# Retry a network step. Every caller is idempotent, so a transient failure
+# should cost a pause, not the whole deploy.
+#
+# The fetch earned this on 2026-09-02: GitHub intermittently answers the
+# anonymous `git-upload-pack` POST from this box with 401 — about half the time
+# — and `git fetch` then dies with "could not read Username for
+# 'https://github.com'". It is not this repo (a public repo clones the same way
+# from here) and not the protocol version; it is GitHub throttling anonymous
+# git traffic from this IP. Retrying gets through within a few attempts.
+#
+# This makes the deploy survive it, but the real fix is an authenticated remote
+# (an SSH deploy key), which does not go through anonymous throttling at all.
+# Until origin is `git@github.com:...`, this retry is what stands between a
+# push and a red Deploy job.
+retry() {
+  local -i attempt=1 max=5
+  until "$@"; do
+    if (( attempt >= max )); then
+      echo "!! '$*' failed ${max}x — giving up"
+      return 1
+    fi
+    echo "  attempt ${attempt}/${max} failed — retrying in $(( attempt * 5 ))s"
+    sleep $(( attempt * 5 ))
+    (( attempt++ ))
+  done
+}
+
 rollback() {
   echo "!! deployment failed — rolling back to ${PREVIOUS:0:8}"
   git reset --hard "$PREVIOUS"
@@ -29,7 +56,7 @@ rollback() {
 cd "$APP_ROOT"
 
 log "Fetching ${BRANCH}"
-git fetch --prune origin
+retry git fetch --prune origin
 PREVIOUS="$(git rev-parse HEAD)"
 git reset --hard "origin/${BRANCH}"
 echo "  ${PREVIOUS:0:8} -> $(git rev-parse --short HEAD)"
