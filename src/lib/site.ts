@@ -6,7 +6,7 @@ export const SITE = {
   title: "SEO & AI Automation for Businesses — Kastriot Tanaj",
   description:
     "Grow traffic, win better leads, and save time with SEO, digital marketing, and AI automation across Europe. Book a strategy call.",
-  tagline: "SEO and AI automation that bring more traffic and less busywork.",
+  tagline: "SEO and AI automation for more traffic, better leads, and less manual work.",
   jobTitle: "SEO Specialist & AI Automation Builder",
   locality: "Pristina",
   country: "XK",
@@ -61,8 +61,21 @@ export const SOCIAL_URLS = SOCIALS.map((s) => s.href);
     HTML, and the Conversions API posts server events against the same ID. */
 export const META_PIXEL_ID = "1616830733405682";
 
+/** The Skool community, announced on the homepage before it opens. Until there
+    is a Skool URL to send people to, both CTAs point at the on-site waitlist —
+    swap `waitlistHref` for the Skool link on launch and the strip, the band and
+    the nav all follow. */
+export const COMMUNITY = {
+  /** Kept short: it is set in caps and has to survive a phone-width strip. */
+  shortName: "SEO Community",
+  strip: "Opening soon · SEO automation community on Skool",
+  stripCta: "Join the waitlist",
+  waitlistHref: "/#waitlist",
+} as const;
+
 export const NAV = [
   { href: "/services/", label: "Services" },
+  { href: "/#community", label: "Community" },
   { href: "/bootcamps/", label: "Bootcamps" },
   { href: "/work/", label: "Work" },
   { href: "/process/", label: "Process" },

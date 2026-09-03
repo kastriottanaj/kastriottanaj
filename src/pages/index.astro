@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 
 import Base from "../layouts/Base.astro";
+import AnnouncementBar from "../components/AnnouncementBar.astro";
+import CommunityBand from "../components/CommunityBand.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import ContactForm from "../components/ContactForm.astro";
 import NewsletterForm from "../components/NewsletterForm.astro";
@@ -87,6 +89,8 @@ const website = {
   schema={[person, business, website]}
   preloadImage="/video/kastriot-tanaj-poster.jpg"
 >
+  <AnnouncementBar />
+
   <div class="wrap" id="top">
     <!-- ── Hero ─────────────────────────────────────────────────────────── -->
     <section class="hero">
@@ -94,8 +98,8 @@ const website = {
         <span class="kicker">SEO · Digital Marketing · AI Automation</span>
         <h1 class="hero__title">{SITE.tagline}</h1>
         <p class="hero__lede">
-          I help businesses across Europe grow visibility, win better leads, and automate
-          repetitive marketing work — without adding more manual tasks.
+          I help businesses across Europe grow in Google and AI search, then automate the
+          repetitive marketing work that slows their teams down.
         </p>
         <div class="hero__actions">
           <a class="btn btn-primary btn--lg" href="/#contact">Book a strategy call</a>
@@ -131,7 +135,7 @@ const website = {
     <section class="section section--stats" aria-label="By the numbers">
       <ul class="stats">
         <li><p class="stat__value">4.5+</p><p class="stat__label">Years in SEO &amp; marketing</p></li>
-        <li><p class="stat__value">10+</p><p class="stat__label">Businesses helped rank &amp; grow</p></li>
+        <li><p class="stat__value">10+</p><p class="stat__label">Businesses helped</p></li>
         <li><p class="stat__value">36</p><p class="stat__label">Certifications earned</p></li>
         <li><p class="stat__value">5</p><p class="stat__label">Industries served</p></li>
       </ul>
@@ -142,22 +146,37 @@ const website = {
       <h2 class="sr-only">What working together gets you</h2>
       <div class="benefits">
         <div class="benefit">
-          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-trending" /></svg></span>
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-chart-up" /></svg></span>
           <h3 class="benefit__title">Rank higher</h3>
-          <p class="benefit__desc">Technical SEO, on-page fixes, and content strategy built for Google and AI search.</p>
+          <p class="benefit__desc">Technical SEO and content built for Google and AI search.</p>
         </div>
         <div class="benefit">
           <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-users" /></svg></span>
-          <h3 class="benefit__title">Turn traffic into leads</h3>
-          <p class="benefit__desc">Digital marketing systems that improve visibility, conversion paths, and follow-up.</p>
+          <h3 class="benefit__title">Win better leads</h3>
+          <p class="benefit__desc">Clear journeys that turn visibility into enquiries.</p>
         </div>
         <div class="benefit">
-          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-bot" /></svg></span>
-          <h3 class="benefit__title">Automate the busywork</h3>
-          <p class="benefit__desc">Custom AI and Python workflows for reporting, lead handling, and content operations.</p>
+          <span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-cog" /></svg></span>
+          <h3 class="benefit__title">Automate SEO busywork</h3>
+          <p class="benefit__desc">Practical workflows for reporting, research and content operations.</p>
         </div>
       </div>
     </section>
+
+  </div>
+
+  <CommunityBand />
+
+  <div class="wrap">
+    <NewsletterForm
+      source="community-waitlist"
+      anchor="waitlist"
+      compact
+      heading="Join the community waitlist"
+      lede="Leave your email and you will be first through the door when the Skool community opens — plus the founding-member terms."
+      buttonLabel="Join the waitlist"
+      note="You'll get one email asking you to confirm. After that it is only community news — the opening date, the founding-member terms, and nothing else. One-click unsubscribe."
+    />
 
     <!-- ── Featured results ─────────────────────────────────────────────── -->
     <section class="section section--ruled" id="work">

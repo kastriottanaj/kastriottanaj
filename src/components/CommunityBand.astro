@@ -1,0 +1,39 @@
+---
+import { COMMUNITY } from "../lib/site";
+
+/* The band is full-bleed dark, so the padding sits on the <section> and never on
+   the .wrap child — .wrap's `padding: 0 var(--gutter)` shorthand would zero any
+   padding-block set on it. */
+---
+
+<section class="community" id="community">
+  <div class="wrap community__inner">
+    <div class="community__copy">
+      <span class="kicker community__kicker">Opening soon · Built on Skool</span>
+      <h2 class="community__title">
+        Learn SEO, WordPress and AI automation—with SEO at the center.
+      </h2>
+      <p class="community__lede">
+        A practical community for marketers, freelancers and business owners who want
+        useful digital skills, real workflows and direct support.
+      </p>
+      <ul class="community__tags">
+        <li>SEO systems</li>
+        <li>WordPress builds</li>
+        <li>AI workflows for SEO</li>
+      </ul>
+      <a class="btn community__cta" href={COMMUNITY.waitlistHref}>{COMMUNITY.stripCta}</a>
+    </div>
+
+    <figure class="community__figure">
+      <img
+        src="/assets/community/seo-skool-community-preview.png"
+        alt="The Kastriot Tanaj Community on Skool: a classroom of SEO, WordPress and automation modules beside the latest member discussions."
+        width="580"
+        height="276"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  </div>
+</section>

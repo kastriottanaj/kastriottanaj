@@ -78,8 +78,8 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 
 .section { padding: 32px 0; }
 .section--ruled { border-top: var(--rule) solid var(--color-divider); }
-.section--stats { padding: 28px 0; border-top: var(--rule) solid var(--color-divider); }
-.section--benefits { padding: 20px 0 36px; }
+.section--stats { padding: 10px 0; border-top: var(--rule) solid var(--color-divider); }
+.section--benefits { padding: 18px 0 16px; border-top: var(--rule) solid var(--color-divider); }
 
 /* The "there is a whole page of this" link under a homepage band. */
 .section__more { margin: 24px 0 0; }
@@ -163,9 +163,32 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .nav__bars::before { top: -5px; }
 .nav__bars::after { top: 5px; }
 
+/* ── Announcement strip ──────────────────────────────────────────────────── */
+/* Sits under the nav, not inside it: the nav is sticky and the strip is not, so
+   it scrolls away once the visitor is past the top of the page. */
+.promo {
+  display: block;
+  padding: 7px var(--gutter);
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+}
+.promo:hover { background: var(--color-accent-600); color: var(--color-bg); }
+.promo:hover .promo__cta { text-decoration-thickness: 2px; }
+.promo__arrow { padding: 0 4px; }
+.promo__cta { text-decoration: underline; text-underline-offset: 3px; }
+.promo__short { display: none; }
+
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero {
-  padding: 48px 0 32px;
+  padding: 35px 0 32px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 48px;
@@ -173,7 +196,9 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 }
 .hero .kicker { margin-bottom: 12px; }
 .hero__title {
-  font-size: clamp(32px, 4vw, 44px);
+  /* 3.35vw lands on 34px at 1024, which is what holds the three drawn lines —
+     4vw broke the same sentence over four. */
+  font-size: clamp(30px, 3.35vw, 40px);
   line-height: 1.12;
   letter-spacing: -0.015em;
   margin: 0;
@@ -183,9 +208,13 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
   line-height: 1.6;
   max-width: 48ch;
   color: color-mix(in srgb, var(--color-text) 75%, transparent);
-  margin: 20px 0 0;
+  margin: 8px 0 0;
 }
 .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+/* Scoped to the homepage hero: /thanks/ reuses .hero__actions and .hero__meta
+   under .page-head, where the roomier margins still belong. */
+.hero .hero__actions { margin-top: 14px; }
+.hero .hero__meta { margin-top: 14px; }
 .hero__meta {
   display: flex;
   align-items: center;
@@ -240,24 +269,28 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 /* ── Stats ───────────────────────────────────────────────────────────────── */
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   list-style: none;
   margin: 0;
   padding: 0;
 }
+/* Ruled between rather than spaced apart, so the four read as one band. */
+.stats li + li {
+  border-left: var(--rule) solid var(--color-divider);
+  padding-left: 40px;
+}
 .stat__value {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: clamp(28px, 3vw, 38px);
+  font-size: clamp(20px, 2.15vw, 26px);
   line-height: 1.1;
-  color: var(--color-accent);
+  color: var(--color-text);
   margin: 0;
 }
 .stat__label {
-  font-size: 13px;
+  font-size: 11.5px;
   color: color-mix(in srgb, var(--color-text) 65%, transparent);
-  margin: 6px 0 0;
+  margin: 3px 0 0;
 }
 
 /* ── Benefits ────────────────────────────────────────────────────────────── */
@@ -266,21 +299,77 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 32px;
 }
-.benefit { display: flex; flex-direction: column; gap: 10px; }
-.benefit__icon {
-  width: 44px; height: 44px;
-  border: var(--rule) solid var(--color-divider);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.benefit__title { font-size: 16px; margin: 0; }
+/* Mark beside the copy rather than stacked above it, and drawn bare — the
+   bordered plate the icons used to sit in is gone. */
+.benefit { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 26px; }
+.benefit__icon { grid-row: span 2; }
+/* Sized to the drawn ink, with the stroke scaled back so the weight holds. */
+.benefit__icon .icon { width: 32px; height: 32px; stroke-width: 1.6; }
+.benefit__title { font-size: 15px; margin: 0; }
 .benefit__desc {
-  font-size: 13.5px;
+  font-size: 12.5px;
   line-height: 1.55;
   color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  /* In em so the drawn two-line break holds at every step of the grid. */
+  max-width: 15.5em;
+  text-wrap: wrap;
+  margin: 4px 0 0;
+}
+
+/* ── Community band ──────────────────────────────────────────────────────── */
+/* Full-bleed and darker than --color-neutral-900 on purpose: the Skool capture
+   it frames is near-black, and a lighter ground would read as a box drawn round
+   the screenshot rather than as one band. Padding lives on the <section> — the
+   .wrap child's `padding: 0 var(--gutter)` shorthand zeroes any padding-block. */
+.community {
+  background: color-mix(in srgb, var(--color-text) 55%, #000);
+  color: var(--color-bg);
+  padding: 16px 0;
+}
+.community__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.55fr);
+  gap: 32px;
+  align-items: center;
+}
+/* The kicker's usual accent-700 disappears against this ground. */
+.community__kicker { color: var(--color-accent-500); margin: 0 0 8px; }
+.community__title {
+  font-size: clamp(21px, 2.35vw, 26px);
+  line-height: 1.12;
+  /* Capped in em, not px, so the drawn three-line break survives the clamp. */
+  max-width: 13.1em;
+  /* body sets text-wrap: pretty, which rebreaks the line being matched. */
+  text-wrap: wrap;
   margin: 0;
 }
+.community__lede {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  max-width: 30em;
+  text-wrap: wrap;
+  margin: 6px 0 0;
+}
+.community__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+.community__tags li {
+  border: var(--rule) solid var(--color-accent);
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.community__cta { background: var(--color-bg); color: var(--color-text); margin-top: 16px; }
+.community__cta:hover { background: #fff; color: var(--color-text); }
+.community__figure { margin: 0; }
+.community__figure img { width: 100%; height: auto; }
 
 /* ── Featured results ────────────────────────────────────────────────────── */
 .cases {
@@ -1773,6 +1862,24 @@ textarea.input { min-height: 100px; }
   .cs-ev-stack { grid-column: span 2; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+@media (max-width: 760px) {
+  /* The full strip wraps to two lines below about 760px; the phone gets the
+     short label instead, which is what the mockup draws. */
+  .promo { padding: 9px var(--gutter); }
+  .promo__full { display: none; }
+  .promo__short { display: inline; }
+
+  /* Still four across, as the phone frame draws them — the labels take two
+     lines at this width, which is what the drawing shows too. */
+  .stats li + li { padding-left: 12px; }
+}
+
+/* Below this the four columns stop holding a word per line. */
+@media (max-width: 380px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+  .stats li:nth-child(odd) { border-left: 0; padding-left: 0; }
+}
+
 @media (max-width: 720px) {
   .cs-section { padding-block: 44px; }
   .cs-hero { padding-bottom: 32px; }
@@ -1848,11 +1955,16 @@ textarea.input { min-height: 100px; }
   }
   .hero__figure { order: -1; }
   .contact { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+
+  .community { padding: 28px 0; }
+  .community__inner { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .community__title { max-width: none; }
 }
 
-/* Eight links, a brand and a CTA stop fitting on one row at about 940px, and
-   a wrapped bar is 33px taller than a whole one. Collapse at 1000px so the bar
-   goes straight from full to toggle without a ragged size in between. */
+/* Nine links, a brand and a CTA need 996px of bar, so the row survives down to
+   about 1000px once the gutters are paid for. Collapsing there keeps the full
+   bar at 1024 — where the mockup draws it — and the bar goes straight from full
+   to toggle without a ragged wrapped size in between. */
 @media (max-width: 1000px) {
   /* The bar collapses to a toggle rather than wrapping into ragged rows. */
   .nav { flex-wrap: wrap; }

@@ -9,6 +9,9 @@ interface Props {
   /** Strips the intro copy down for use inside another section. */
   compact?: boolean;
   buttonLabel?: string;
+  /** The small print under the form. The default describes the newsletter; the
+      community waitlist is the same double opt-in but not the same promise. */
+  note?: string;
 }
 
 const {
@@ -18,6 +21,7 @@ const {
   lede = "Short, practical notes on SEO, marketing and AI automation — the things that worked, and the ones that only looked like they did.",
   compact = false,
   buttonLabel = "Subscribe",
+  note = "You'll get one email asking you to confirm — nothing arrives until you click it. Unsubscribe from any issue in one click.",
 } = Astro.props;
 
 // Same optional Turnstile switch as the contact form: unset means the honeypot
@@ -65,10 +69,7 @@ const uid = `nl-${source.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
     <button class="btn btn-primary newsletter__submit" type="submit">{buttonLabel}</button>
   </form>
 
-  <p class="newsletter__note">
-    You'll get one email asking you to confirm — nothing arrives until you click it.
-    Unsubscribe from any issue in one click.
-  </p>
+  <p class="newsletter__note">{note}</p>
 
   <div class="newsletter__status" role="status" aria-live="polite" hidden data-newsletter-status>
     <p class="newsletter__status-title"></p>

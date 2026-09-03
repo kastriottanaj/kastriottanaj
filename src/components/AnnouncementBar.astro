@@ -1,0 +1,17 @@
+---
+import { COMMUNITY } from "../lib/site";
+
+/** The strip under the nav announcing the Skool community. The whole bar is one
+    link so the thumb target is the full width rather than the two words at the
+    end. Two labels ship: the phone gets the short one, because the full strip
+    wraps to two lines under about 700px. */
+---
+
+<a class="promo" href={COMMUNITY.waitlistHref}>
+  <span class="promo__full">
+    {COMMUNITY.strip}
+    <span class="promo__arrow" aria-hidden="true">→</span>
+    <span class="promo__cta">{COMMUNITY.stripCta}</span>
+  </span>
+  <span class="promo__short">{COMMUNITY.shortName} · Opening soon</span>
+</a>
