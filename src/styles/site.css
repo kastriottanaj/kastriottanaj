@@ -830,6 +830,16 @@ textarea.input { min-height: 100px; }
   letter-spacing: -0.02em;
   margin: 10px 0 16px;
 }
+/*
+ * Post headlines run far longer than the one- or two-word page titles the base
+ * size was set for — this one is 126 characters — so at 52px they eat the whole
+ * screen before the reader reaches a word of the post. Blog only: the other ten
+ * pages using .page-head__title are short and want the larger size.
+ */
+.page-head__title--post {
+  font-size: clamp(28px, 4.2vw, 42px);
+}
+
 .page-head__lede {
   font-size: 17px;
   line-height: 1.6;
