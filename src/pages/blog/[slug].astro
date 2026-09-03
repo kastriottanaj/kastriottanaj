@@ -20,6 +20,8 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+// `image` goes to the layout as og:image. Without it a shared post fell back to
+// the site-wide default, so every post previewed as the same generic card.
 const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags, image } =
   post.data;
 
@@ -60,8 +62,6 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 <Base
   title={metaTitle ?? `${title} | ${SITE.name}`}
   description={metaDescription ?? description}
-  {/* Without this a shared post fell back to the site-wide og:image, so every
-      link to any post previewed as the same generic card. */}
   image={image}
   schema={schema}
 >
