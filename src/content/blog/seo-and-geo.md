@@ -1,8 +1,8 @@
 ---
 title: "AEO/GEO/ AI SEO is just basically base SEO. (You may see some grammar mistakes, because this is not an AI generated blog)."
 description: "SEO and GEO have the basic principles, if you perform good in basics then you will do also good in the GEO part, but they are the same thing."
-metaTitle: "AEO, GEO and AI SEO Are Just SEO: What Actually Changed"
-metaDescription: "AEO, GEO and AI SEO are mostly SEO with new labels. See which on-page basics still rank, and the few new tactics worth adding for AI search."
+metaTitle: "AEO, GEO and AI SEO: Why the Fundamentals Still Matter"
+metaDescription: "Discover why AEO, GEO and AI SEO still depend on solid SEO basics—from search intent and natural keywords to structure and speed. Read the full guide."
 pubDate: 2026-09-03
 tags: ["SEO", "AI search"]
 draft: false
