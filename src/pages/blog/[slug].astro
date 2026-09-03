@@ -20,7 +20,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags } =
+const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags, image } =
   post.data;
 
 const url = `${SITE.url}/blog/${post.id}/`;
@@ -60,6 +60,9 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 <Base
   title={metaTitle ?? `${title} | ${SITE.name}`}
   description={metaDescription ?? description}
+  {/* Without this a shared post fell back to the site-wide og:image, so every
+      link to any post previewed as the same generic card. */}
+  image={image}
   schema={schema}
 >
   <div class="wrap">

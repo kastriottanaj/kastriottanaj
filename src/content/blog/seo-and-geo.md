@@ -5,6 +5,8 @@ metaTitle: "AEO, GEO and AI SEO: Why the Fundamentals Still Matter"
 metaDescription: "Discover why AEO, GEO and AI SEO still depend on solid SEO basics—from search intent and natural keywords to structure and speed. Read the full guide."
 pubDate: 2026-09-03
 tags: ["SEO", "AI search"]
+image: "/assets/blog/seo-and-geo.webp"
+imageAlt: "SEO and GEO"
 draft: false
 ---
 
