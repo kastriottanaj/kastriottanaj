@@ -88,6 +88,7 @@ const website = {
   description={SITE.description}
   schema={[person, business, website]}
   preloadImage="/video/kastriot-tanaj-poster.jpg"
+  preloadImageMedia="(min-width: 900px)"
 >
   <AnnouncementBar />
 
@@ -111,10 +112,11 @@ const website = {
         </p>
       </div>
       <div class="hero__figure hero__figure--video">
-        {/* The src is attached by the script below rather than by the parser:
-            below 900px this figure sits above the h1, so its poster is what LCP
-            measures, and a 3 MB autoplaying clip starved that poster of
-            bandwidth on mobile. See the comment on the loader. */}
+        {/* The src is attached by the script below rather than by the parser —
+            a 3 MB autoplaying clip has no business racing the first paint on a
+            phone. Above 900px this figure sits beside the h1 and its poster is
+            what LCP measures, which is why that poster alone is preloaded, and
+            only at those widths. See the comment on the loader. */}
         <video
           class="hero__video"
           data-src="/video/kastriot-tanaj.mp4"
@@ -365,9 +367,10 @@ const website = {
     const play = () => heroVideo.play().catch(() => {});
 
     /* The clip is 3 MB against a throttled mobile connection, and it used to
-       download alongside the CSS, the fonts and its own poster — which is the
-       element LCP measures. Holding the src back until `load` lets the poster
-       paint first and leaves the clip the whole connection afterwards. */
+       download alongside the CSS, the fonts and its own poster. Holding the src
+       back until `load` lets whatever LCP measures paint first — the poster on
+       a wide screen, the h1 on a phone, where the figure now sits below the
+       copy — and leaves the clip the whole connection afterwards. */
     const start = () => {
       const src = heroVideo.dataset.src;
       if (!src || heroVideo.hasAttribute("src")) return;
