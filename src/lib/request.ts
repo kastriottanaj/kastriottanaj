@@ -51,17 +51,27 @@ export async function limitedFormData(request: Request): Promise<FormData> {
 
 /**
  * Behind Caddy the socket address is always 127.0.0.1, so the real visitor has
- * to come from a proxy header.
+ * to come from a proxy header. Exactly one header is trusted, and only because
+ * of what Caddy does to it.
  *
- * CF-Connecting-IP first: with Cloudflare proxying, it is a single address that
- * Cloudflare overwrites on every request, whereas X-Forwarded-For is a
- * client-appendable list. Both are only trustworthy because the origin firewall
- * restricts 80/443 to Cloudflare's ranges — see deploy/cloudflare-lockdown.sh.
+ * X-Forwarded-For is safe here because Caddy **ignores the client's value** for
+ * every X-Forwarded-* header unless `trusted_proxies` is configured, and it is
+ * not (deploy/Caddyfile). What reaches Node is Caddy's own, written from the
+ * TCP peer — one entry, not a list an attacker can prepend to.
+ *
+ * CF-Connecting-IP is deliberately NOT read. It carries no such guarantee: it
+ * is not an X-Forwarded-* header, so Caddy passes it through untouched, and
+ * kastriottanaj.com resolves straight to this box — the nameservers are
+ * Hostinger's, there is no Cloudflare in front. Trusting it let anyone choose
+ * their own identity for the per-IP rate limit, and choose the IP stored with
+ * every lead, every subscriber, and every opt-in record sent to MailerLite.
+ *
+ * Putting Cloudflare back in front means reversing this: read CF-Connecting-IP
+ * again, restore `header_up -CF-Connecting-IP` in the Caddyfile, and run
+ * deploy/cloudflare-lockdown.sh so the origin only answers Cloudflare — the
+ * header is worth nothing without that last part.
  */
 export function clientIp(request: Request, fallback?: string): string | null {
-  const cloudflare = request.headers.get("cf-connecting-ip");
-  if (cloudflare) return cloudflare.trim();
-
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0]!.trim();
 

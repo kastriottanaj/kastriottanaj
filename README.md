@@ -277,14 +277,15 @@ The list is small and the sending mailbox is a real one, which is the easy case 
 newsletter is bulk mail and gets judged like it.
 
 - **SPF, DKIM and DMARC must all pass for kastriottanaj.com.** Hostinger publishes the
-  SPF and DKIM records; add them in Cloudflare DNS and check with a test to
+  SPF and DKIM records; add them in **Hostinger's DNS zone** (hPanel → Domains → DNS
+  Zone — that is where this domain's nameservers point) and check with a test to
   `check-auth@verifier.port25.com` before the first real send.
 - **Watch the mailbox's sending limits** on the SMTP path. Hostinger caps messages per
   hour and per day on business mailboxes, which is the ceiling MailerLite exists to lift.
 - **Authenticate the domain twice** once MailerLite is live: Hostinger's records for the
   mail this box sends, MailerLite's for the campaigns. Both publish SPF and DKIM entries
-  that have to coexist in Cloudflare DNS, and a campaign that fails DKIM is a campaign in
-  the spam folder.
+  that have to coexist in Hostinger's DNS zone, and a campaign that fails DKIM is a
+  campaign in the spam folder.
 - **Never import a list you did not collect here.** One purchased list is enough to burn
   the domain that also sends your invoices.
 
@@ -370,7 +371,9 @@ draft: false
 
 ## Deploying
 
-Target: Hetzner CAX11 in Nuremberg, with Cloudflare proxying in front.
+Target: Hetzner CAX11 in Nuremberg. **DNS lives at Hostinger** (`ns1`/`ns2.dns-parking.com`)
+and the apex resolves straight to the box — there is no Cloudflare proxy in front, whatever
+step 5 below once intended. Caddy terminates TLS itself.
 
 **Once**, store a Hetzner API token (Read & Write) outside the repo:
 
@@ -386,8 +389,8 @@ Then, in order:
 # 1. Create the server (idempotent — safe to re-run)
 bash deploy/provision-hetzner.sh
 
-# 2. Add the two A records in Cloudflare as "DNS only" (grey cloud) first,
-#    so Caddy's HTTP-01 challenge can reach the box.
+# 2. Point kastriottanaj.com and www at the IP with A records — today that is
+#    Hostinger's DNS zone. Unproxied, so Caddy's HTTP-01 challenge reaches the box.
 
 # 3. Provision it
 ssh root@<ip> 'bash -s' < deploy/setup-server.sh
@@ -397,19 +400,50 @@ ssh root@<ip> 'nano /etc/kastriottanaj/env'     # set SMTP_PASSWORD
 ssh root@<ip> 'sudo -u deploy /var/www/kastriottanaj/current/deploy/deploy.sh'
 ssh root@<ip> 'systemctl enable --now kastriottanaj && systemctl reload caddy'
 
-# 5. Once HTTPS serves cleanly, flip both records to "Proxied" (orange) and set
-#    Cloudflare SSL/TLS to "Full (strict)".
-
-# 6. Optional, after the proxy is live — restrict the origin to Cloudflare
-bash deploy/cloudflare-lockdown.sh <ip>
+# 5. Optional, and NOT in use: move DNS to Cloudflare and proxy both records.
+#    Three things change together, or not at all — see "Who the visitor is" below.
 ```
 
-The grey-cloud-first ordering is not optional: with Cloudflare proxying from the
-start, Caddy cannot complete the HTTP-01 challenge and never gets a certificate.
+If you ever do adopt Cloudflare, add the records grey-cloud first: with the proxy on from
+the start, Caddy cannot complete the HTTP-01 challenge and never gets a certificate.
 
 After that, pushing to `main` deploys: GitHub Actions builds as a check, then SSHes in and
 runs `deploy.sh`. Repo secrets needed: `SSH_HOST`, `SSH_USER`, `SSH_KEY`, optionally
 `SSH_PORT`.
+
+**`deploy/Caddyfile` is not part of that.** Nothing copies it to the server — a change here
+is a no-op until it is installed by hand:
+
+```sh
+scp deploy/Caddyfile root@<ip>:/etc/caddy/Caddyfile
+ssh root@<ip> 'caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile && systemctl reload caddy'
+```
+
+### Who the visitor is
+
+Behind Caddy every socket address is `127.0.0.1`, so the visitor's IP has to come from a
+header — and exactly one is trusted.
+
+**`X-Forwarded-For` is trusted**, because Caddy ignores the client's value for every
+`X-Forwarded-*` header unless `trusted_proxies` is configured, and it is not. What reaches
+Node is Caddy's own, written from the TCP peer: one entry, not a list a visitor can prepend
+to.
+
+**`CF-Connecting-IP` is stripped** in the Caddyfile and no longer read by `clientIp()`. It
+is not an `X-Forwarded-*` header, so Caddy hands it over verbatim, and this domain resolves
+straight to the box. Until 2026-09-04 it was read *first*, which meant anyone could choose
+their own identity for the per-IP rate limit on `/api/lead` and `/api/subscribe`, and choose
+the IP recorded with every lead, every subscriber, and every MailerLite opt-in.
+
+Adopting Cloudflare later means changing three things **together**:
+
+1. read `CF-Connecting-IP` again in `clientIp()` — it is the only header Cloudflare rewrites
+   on every request
+2. drop `header_up -CF-Connecting-IP` from the Caddyfile
+3. run `deploy/cloudflare-lockdown.sh` so the origin answers only Cloudflare's ranges
+
+Doing 1 and 2 without 3 restores the hole exactly as it was. The header is worth nothing
+unless Cloudflare is the only thing that can reach port 443.
 
 The build runs **on the server**, not in CI — same ARM64 architecture that runs it.
 

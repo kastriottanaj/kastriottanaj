@@ -16,14 +16,24 @@ kastriottanaj.com {
 
 	root * /var/www/kastriottanaj/current/dist/client
 
-	# The one dynamic route. Caddy preserves the Host header and adds
-	# X-Forwarded-For / X-Forwarded-Proto, which is what lets Astro's origin
-	# check and the rate limiter see the real client and scheme.
+	# The one dynamic route. Caddy preserves the Host header and writes
+	# X-Forwarded-For / X-Forwarded-Proto itself — it ignores whatever the
+	# client sent for any X-Forwarded-* header, since no trusted_proxies is
+	# configured — which is what lets Astro's origin check and the rate limiter
+	# see the real client and scheme.
+	#
+	# CF-Connecting-IP gets no such treatment: it is not an X-Forwarded-* header,
+	# so Caddy would hand it to Node exactly as a visitor typed it. Nothing reads
+	# it any more (src/lib/request.ts), and stripping it here means nothing can
+	# start again by accident. Restore it only alongside a real Cloudflare proxy
+	# and deploy/cloudflare-lockdown.sh.
 	handle /api/* {
 		request_body {
 			max_size 64KB
 		}
-		reverse_proxy 127.0.0.1:4321
+		reverse_proxy 127.0.0.1:4321 {
+			header_up -CF-Connecting-IP
+		}
 	}
 
 	handle {
