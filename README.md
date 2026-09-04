@@ -23,7 +23,7 @@ npm run check    # astro check — types and diagnostics
 | Fonts | Astro Fonts API — Archivo, self-hosted, preloaded |
 | Email | Hostinger SMTP (STARTTLS on port 587) |
 | Storage | SQLite via `node:sqlite` — leads and newsletter subscribers |
-| Newsletter | Double opt-in, own list, sent from the same mailbox |
+| Newsletter | Double opt-in, own SQLite list, optionally handed to MailerLite |
 | Spam | Honeypot + per-IP rate limit + optional Cloudflare Turnstile |
 | SEO | `@astrojs/sitemap`, `@astrojs/rss`, JSON-LD, `robots.txt`, `llms.txt` |
 
@@ -56,6 +56,7 @@ src/
     sqlite.mjs        The one database connection
     db.ts             Lead writes
     newsletter-store.mjs   Subscribers, and who has had which issue
+    mailerlite.mjs    MailerLite API client — optional, off without a key
     mailer.mjs        SMTP transport and the shared email shell
     email.ts          Lead notification
     newsletter-email.mjs   Confirm, welcome and issue mails
@@ -67,7 +68,9 @@ src/
     modernist.css     Design system, vendored — see note below
     site.css          Page composition
 scripts/
-  send-newsletter.mjs Sends one issue to the confirmed list
+  send-newsletter.mjs Sends one issue to the confirmed list (SMTP path)
+  mailerlite-sync.mjs Hands the existing SQLite list to MailerLite, once
+  mailerlite-check.mjs Proves the key works and prints the group ids
 deploy/
   Caddyfile           Static + reverse proxy + headers
   kastriottanaj.service
@@ -96,22 +99,37 @@ as `stored as #N but not emailed`.
 Both the enhanced and no-JS paths land on `/thanks/`, so conversion tracking has one URL
 to watch.
 
+**Enquiries do not go to MailerLite.** Someone asking about a project has consented to an
+answer, not to a newsletter, and a marketing list built out of a contact form is the kind
+of thing GDPR is about. If they should be on the list, the honest route is a checkbox on
+the form that says so — which does not exist yet.
+
 ## The newsletter
 
 People subscribe from `/newsletter/`, the foot of every post, and the homepage. Every
-address goes through double opt-in, and everything is sent from the same Hostinger
-mailbox the contact form uses — no third-party sending service, no per-subscriber fee.
+address goes through double opt-in, and every submission is written to SQLite on this box
+first — that table is the backup nobody else can switch off.
+
+Where the mail comes from depends on one environment variable. Without
+`MAILERLITE_API_KEY` the site does the whole job itself, from the same Hostinger mailbox
+the contact form uses. With it, MailerLite becomes the list of record: the address lands
+in the dashboard, MailerLite sends the opt-in mail, and automations run from there.
 
 ```
 Browser ──POST /api/subscribe──▶  honeypot → rate limit → Turnstile → validate
                                              │
                                   subscribers row, status = pending
                                              │
-                                  confirmation mail with a one-use token
-                                             │
-        GET /api/newsletter/confirm ──▶ status = confirmed, welcome mail
-                                             │
-        GET /api/newsletter/unsubscribe ──▶ status = unsubscribed
+                       ┌─────────────────────┴─────────────────────┐
+              MailerLite configured                     no MailerLite key
+                       │                                           │
+        POST /subscribers, status=unconfirmed        confirmation mail from here,
+        MailerLite mails them, automation runs       one-use token in the link
+                       │                                           │
+                       │                    GET /api/newsletter/confirm ──▶ confirmed
+                       │                                           │
+                       └──────────── unsubscribe ──────────────────┘
+                        GET /api/newsletter/unsubscribe ──▶ removed in both
 ```
 
 Nothing is ever sent to an address that has not confirmed. The same answer comes back
@@ -119,10 +137,109 @@ whether an address is new, already on the list, or inside the fifteen-minute res
 cooldown — a form that says "you are already subscribed" is a form that tells strangers
 who is on your list.
 
+Nothing is pushed to MailerLite for an address that is already confirmed or inside that
+cooldown, because re-pushing as `unconfirmed` would knock a confirmed contact back to
+unconfirmed and mail them a second link. Someone filling the form again months later is
+the same trap from the other side — their confirmation happened in MailerLite, so the row
+here still reads `pending` — so a submission from an address already handed over is looked
+up in MailerLite first, and left alone if it is live there or if the lookup fails.
+
+### Connecting MailerLite
+
+Steps 1–6 are in the MailerLite dashboard, 7–9 on the server.
+
+1. **Verify the sending domain.** MailerLite will not send the confirmation mail until
+   `kastriottanaj.com` is authenticated there (its own SPF/DKIM records, alongside
+   Hostinger's). Until it is done, either leave the key unset or set
+   `MAILERLITE_OPT_IN=site` so this box keeps sending the opt-in mail.
+2. **Turn on double opt-in for the API.** Account settings → Subscribe settings →
+   **"Double opt-in for API and integrations"** → ON. Without it, an address pushed as
+   `unconfirmed` sits in the dashboard in silence and nobody ever gets a link. This is the
+   one setting that breaks signups if it is missed.
+3. **Point the confirmation page back here.** Same screen, the "confirmation thank you
+   page" tab → "Or use your own landing page" → `https://kastriottanaj.com/newsletter/confirmed/`.
+4. **Make a group** for the list — Subscribers → Groups. Its id is the number in the URL,
+   `/subscribers/groups/<id>`.
+5. **Build the welcome automation** on that group, trigger "when a subscriber joins a
+   group". The site stops sending its own welcome mail as soon as the key is set, so this
+   automation *is* the welcome from then on.
+6. **Add a "Signup source" custom field** (Subscribers → Fields, type text, key
+   `signup_source`). Signups carry the page they came from — `homepage`, `blog-footer`,
+   `bootcamp-seo-bootcamp` — which is what segments are built from later. It cannot be
+   called `source`: MailerLite reserves that for its own "added via" attribute, which says
+   `api` for every contact this site pushes and answers nothing useful. A missing field
+   costs nothing either way — the push retries without it.
+7. **Generate the API key**, Integrations → MailerLite API → Generate new token. It is
+   shown once. Two lines go into `/etc/kastriottanaj/env` — the file systemd reads, which
+   is the whole connection between the site and the account:
+
+   ```sh
+   sudo nano /etc/kastriottanaj/env       # root-owned, chmod 600 — never in the repo
+   ```
+   ```
+   MAILERLITE_API_KEY=eyJ0…
+   MAILERLITE_GROUP_ID=123456
+   ```
+
+   `EnvironmentFile` is read at service start and nowhere else, so the site keeps running
+   on its own list until it is restarted:
+
+   ```sh
+   sudo systemctl restart kastriottanaj
+   ```
+
+8. **Check the connection** before trusting a form to it:
+
+   ```sh
+   cd /var/www/kastriottanaj/current
+   set -a && source /etc/kastriottanaj/env && set +a
+   node scripts/mailerlite-check.mjs
+   ```
+
+   One API call, nothing written. It says whether the key is live, lists every group with
+   its id, marks the one this site pushes to, and exits non-zero if that id is missing or
+   names a group the account does not have — which is the failure that would otherwise
+   show up as every signup quietly 422ing.
+
+9. **Hand over the list you already have**, on the server:
+
+   ```sh
+   cd /var/www/kastriottanaj/current
+   set -a && source /etc/kastriottanaj/env && set +a
+
+   node scripts/mailerlite-sync.mjs --dry-run   # counts and a sample, sends nothing
+   node scripts/mailerlite-sync.mjs             # the real thing
+   ```
+
+   Confirmed addresses go over as `active` carrying their original signup date, and
+   addresses that unsubscribed here go over as `unsubscribed` — the half of an import
+   people forget, and the half that stops you mailing someone who already left. It is
+   idempotent, so a failed run is fixed by running it again. `--include-pending` also
+   pushes addresses that never confirmed, which makes MailerLite mail every one of them.
+
+Then subscribe yourself from `/newsletter/` and watch the address appear in the dashboard.
+
+`MAILERLITE_OPT_IN=site` is the escape hatch: it keeps this site's own confirmation mail
+and `/newsletter/confirmed/` page, and pushes to MailerLite only once an address has
+confirmed here. Useful before step 1 is done.
+
+**What the key does not change:** the SQLite table still records every signup, and the
+unsubscribe links inside mails already delivered still work — a click on one now removes
+the address from MailerLite too. The gap runs the other way. An unsubscribe made *inside*
+MailerLite is not mirrored back into SQLite, so that table drifts into claiming someone is
+still confirmed. Nothing sends from it while MailerLite is configured (see below), so
+nobody is mailed in error; closing the loop properly means a MailerLite webhook, which
+does not exist here yet.
+
 ### Writing and sending an issue
 
 An issue is one Markdown file. It becomes both the email and its web version at
 `/newsletter/archive/<slug>/`, so it is written once.
+
+**With MailerLite configured, the campaign is written in MailerLite** and the Markdown
+file's job is the archived web version. `send-newsletter.mjs` refuses a real broadcast
+while `MAILERLITE_API_KEY` is set — the same issue arriving twice is how a list learns to
+unsubscribe — and `--dry-run`, `--test` and `--force` are the ways past it.
 
 ```md
 ---
@@ -162,10 +279,12 @@ newsletter is bulk mail and gets judged like it.
 - **SPF, DKIM and DMARC must all pass for kastriottanaj.com.** Hostinger publishes the
   SPF and DKIM records; add them in Cloudflare DNS and check with a test to
   `check-auth@verifier.port25.com` before the first real send.
-- **Watch the mailbox's sending limits.** Hostinger caps messages per hour and per day on
-  business mailboxes. Past a few hundred subscribers, either raise the plan's limit or
-  move issues to a dedicated sending service — the subscriber list is yours either way,
-  and `newsletter-email.mjs` is the only file that would change.
+- **Watch the mailbox's sending limits** on the SMTP path. Hostinger caps messages per
+  hour and per day on business mailboxes, which is the ceiling MailerLite exists to lift.
+- **Authenticate the domain twice** once MailerLite is live: Hostinger's records for the
+  mail this box sends, MailerLite's for the campaigns. Both publish SPF and DKIM entries
+  that have to coexist in Cloudflare DNS, and a campaign that fails DKIM is a campaign in
+  the spam folder.
 - **Never import a list you did not collect here.** One purchased list is enough to burn
   the domain that also sends your invoices.
 
@@ -361,7 +480,9 @@ keep its mailbox password only in `/etc/kastriottanaj/env`, never in this reposi
    automatically.
 5. **Set the Hostinger mailbox password**, then send one real test enquiry end to end.
 6. **Add SPF and DKIM for the sending domain**, then subscribe yourself and walk the whole
-   newsletter loop once — confirm, receive, unsubscribe.
+   newsletter loop once — confirm, receive, unsubscribe. If MailerLite is doing the
+   sending, walk it again after connecting it: its confirmation mail, its automation, and
+   the unsubscribe link in a real campaign.
 7. **Submit the sitemap** in Search Console: `https://kastriottanaj.com/sitemap-index.xml`.
 8. **Decide how the bootcamp is delivered**, then paste the Paysera links into
    `src/content/bootcamps/seo-bootcamp.md`. Until then the page runs as a waitlist, which

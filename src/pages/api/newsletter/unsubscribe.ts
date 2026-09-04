@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { unsubscribe } from "../../../lib/newsletter-store.mjs";
+import { mailerliteConfigured, upsertSubscriber } from "../../../lib/mailerlite.mjs";
 import { methodNotAllowed } from "../../../lib/request";
 
 /**
@@ -17,12 +18,22 @@ export const prerender = false;
 export const GET: APIRoute = async ({ url }) => {
   const token = url.searchParams.get("token") ?? "";
 
-  let removed = false;
+  let removed: string | null = null;
   try {
     removed = unsubscribe(token);
   } catch (error) {
     console.error("[unsubscribe] update failed:", error);
     return new Response(null, { status: 303, headers: { Location: "/newsletter/?error=server" } });
+  }
+
+  /* Carry it to MailerLite too. These links live forever inside mails already
+     delivered, and "unsubscribed here but still on the list over there" is the
+     one outcome nobody clicking this expects. A failure is logged rather than
+     shown: the address is already off this list, and telling them it did not
+     work would only invite a second click that changes nothing. */
+  if (removed && mailerliteConfigured()) {
+    const pushed = await upsertSubscriber({ email: removed, status: "unsubscribed" });
+    if (!pushed.ok) console.error("[unsubscribe] MailerLite still has", removed);
   }
 
   return new Response(null, {

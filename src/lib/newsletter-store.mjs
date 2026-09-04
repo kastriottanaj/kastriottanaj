@@ -49,6 +49,15 @@ function db() {
   `);
   database.exec("CREATE INDEX IF NOT EXISTS idx_subscribers_status ON subscribers (status)");
 
+  // Added after the table already existed on the server, so it arrives as a
+  // migration rather than a column in the CREATE above. It records the moment
+  // an address was handed to MailerLite: from then on its real status lives
+  // there, and a row here that says `pending` says nothing about consent.
+  const columns = /** @type {any[]} */ (database.prepare("PRAGMA table_info(subscribers)").all());
+  if (!columns.some((column) => column.name === "mailerlite_at")) {
+    database.exec("ALTER TABLE subscribers ADD COLUMN mailerlite_at TEXT");
+  }
+
   // One row per (issue, subscriber). The UNIQUE constraint is what makes a
   // re-run of an interrupted send resume instead of sending twice.
   database.exec(`
@@ -79,6 +88,8 @@ function token() {
  * @typedef {object} SubscribeResult
  * @property {"created" | "resent" | "cooldown" | "already_confirmed"} outcome
  * @property {string | null} confirmToken Present only when a mail should go out.
+ * @property {boolean} handedOff Whether this address has already been pushed to
+ *   MailerLite — in which case its real status lives there, not in this row.
  */
 
 /**
@@ -93,7 +104,9 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
   const database = db();
 
   const existing = database
-    .prepare("SELECT id, status, confirm_token, confirm_sent_at FROM subscribers WHERE email = ?")
+    .prepare(
+      "SELECT id, status, confirm_token, confirm_sent_at, mailerlite_at FROM subscribers WHERE email = ?"
+    )
     .get(address);
 
   if (!existing) {
@@ -105,13 +118,13 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
       )
       .run(address, confirmToken, token(), source, ip, userAgent);
 
-    return { outcome: "created", confirmToken };
+    return { outcome: "created", confirmToken, handedOff: false };
   }
 
   if (existing.status === "confirmed") {
     // Deliberately silent: mailing "you are already subscribed" to an address
     // someone else typed is still mail that address did not ask for.
-    return { outcome: "already_confirmed", confirmToken: null };
+    return { outcome: "already_confirmed", confirmToken: null, handedOff: Boolean(existing.mailerlite_at) };
   }
 
   const cooling = database
@@ -122,7 +135,7 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
     )
     .get(existing.id, `-${RESEND_COOLDOWN_MINUTES} minutes`);
 
-  if (cooling) return { outcome: "cooldown", confirmToken: null };
+  if (cooling) return { outcome: "cooldown", confirmToken: null, handedOff: Boolean(existing.mailerlite_at) };
 
   // Pending or previously unsubscribed: issue fresh tokens and start over, so
   // links from an old or forwarded mail cannot change the new subscription.
@@ -137,7 +150,7 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
     )
     .run(confirmToken, unsubscribeToken, source, ip, userAgent, existing.id);
 
-  return { outcome: "resent", confirmToken };
+  return { outcome: "resent", confirmToken, handedOff: Boolean(existing.mailerlite_at) };
 }
 
 /**
@@ -146,7 +159,7 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
  * error. Returns null only when the token matches nothing.
  *
  * @param {string} confirmToken
- * @returns {{ email: string, unsubscribeToken: string, firstConfirmation: boolean } | null}
+ * @returns {{ email: string, source: string | null, unsubscribeToken: string, firstConfirmation: boolean } | null}
  */
 export function confirmSubscriber(confirmToken) {
   if (!confirmToken) return null;
@@ -154,7 +167,7 @@ export function confirmSubscriber(confirmToken) {
 
   const row = database
     .prepare(
-      `SELECT id, email, status, unsubscribe_token
+      `SELECT id, email, status, source, unsubscribe_token
        FROM subscribers
        WHERE confirm_token = ?
          AND (status = 'confirmed' OR confirm_sent_at >= datetime('now', ?))`
@@ -177,27 +190,39 @@ export function confirmSubscriber(confirmToken) {
 
   return {
     email: String(row.email),
+    source: row.source == null ? null : String(row.source),
     unsubscribeToken: String(row.unsubscribe_token),
     firstConfirmation,
   };
 }
 
 /**
+ * Returns the address that was removed, so the caller can carry the opt-out to
+ * MailerLite as well — a link in a mail sent from here must silence the list
+ * everywhere, not just in this table.
+ *
  * @param {string} unsubscribeToken
- * @returns {boolean} false only when the token matches no row.
+ * @returns {string | null} null only when the token matches no row.
  */
 export function unsubscribe(unsubscribeToken) {
-  if (!unsubscribeToken) return false;
+  if (!unsubscribeToken) return null;
+  const database = db();
 
-  const result = db()
+  const row = database
+    .prepare("SELECT id, email FROM subscribers WHERE unsubscribe_token = ?")
+    .get(unsubscribeToken);
+
+  if (!row) return null;
+
+  database
     .prepare(
       `UPDATE subscribers
        SET status = 'unsubscribed', unsubscribed_at = datetime('now')
-       WHERE unsubscribe_token = ?`
+       WHERE id = ?`
     )
-    .run(unsubscribeToken);
+    .run(row.id);
 
-  return Number(result.changes) > 0;
+  return String(row.email);
 }
 
 /**
@@ -230,15 +255,63 @@ export function recordSend(issue, subscriberId) {
     .run(issue, subscriberId);
 }
 
-/** @returns {{ confirmed: number, pending: number, unsubscribed: number }} */
+/**
+ * Stamps an address as handed to MailerLite. Nothing else reads this yet — it
+ * exists so the local table can be told apart later: an old row still pending
+ * because nobody clicked our link, versus one whose confirmation happened in
+ * MailerLite and was never mirrored back.
+ *
+ * @param {string} email
+ */
+export function markHandedOff(email) {
+  db()
+    .prepare("UPDATE subscribers SET mailerlite_at = datetime('now') WHERE email = ?")
+    .run(normalizeEmail(email));
+}
+
+/**
+ * The whole table, oldest first — for handing the list to MailerLite once, and
+ * for anything else that needs to read it out rather than mail it.
+ *
+ * A `pending` row that has already been handed over is left out on purpose:
+ * MailerLite holds the only true status for it, and pushing it again as
+ * `unconfirmed` would demote a contact who has since confirmed there — and mail
+ * them a second confirmation link for the trouble.
+ *
+ * @param {{ statuses?: string[] }} [options]
+ * @returns {{ email: string, status: string, created_at: string, confirmed_at: string | null, source: string | null, ip: string | null }[]}
+ */
+export function exportSubscribers({ statuses = ["confirmed"] } = {}) {
+  const placeholders = statuses.map(() => "?").join(", ");
+
+  return /** @type {any[]} */ (
+    db()
+      .prepare(
+        `SELECT email, status, created_at, confirmed_at, source, ip
+         FROM subscribers
+         WHERE status IN (${placeholders})
+           AND NOT (status = 'pending' AND mailerlite_at IS NOT NULL)
+         ORDER BY id`
+      )
+      .all(...statuses)
+  );
+}
+
+/** @returns {{ confirmed: number, pending: number, unsubscribed: number, handedToMailerlite: number }} */
 export function listStats() {
   const rows = /** @type {any[]} */ (
     db().prepare("SELECT status, COUNT(*) AS count FROM subscribers GROUP BY status").all()
   );
 
-  const stats = { confirmed: 0, pending: 0, unsubscribed: 0 };
+  const stats = { confirmed: 0, pending: 0, unsubscribed: 0, handedToMailerlite: 0 };
   for (const row of rows) {
     if (row.status in stats) stats[row.status] = Number(row.count);
   }
+
+  const handed = /** @type {any} */ (
+    db().prepare("SELECT COUNT(*) AS count FROM subscribers WHERE mailerlite_at IS NOT NULL").get()
+  );
+  stats.handedToMailerlite = Number(handed?.count ?? 0);
+
   return stats;
 }

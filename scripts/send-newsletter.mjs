@@ -8,6 +8,13 @@
 //   --test <email>   Send only to that address, and record nothing.
 //   --limit <n>      Stop after n recipients (a cautious first batch).
 //   --rate <n>       Messages per minute. Default 20.
+//   --force          Send even though MailerLite is configured. See below.
+//
+// With MAILERLITE_API_KEY set, MailerLite is the list of record and issues go
+// out as MailerLite campaigns — this script then refuses a real broadcast,
+// because the same issue arriving twice is how a list learns to unsubscribe.
+// --dry-run and --test still work, and --force is there for the day MailerLite
+// is down and the SQLite list is the one that can still be reached.
 //
 // Runs on the server, where the database and the built site both live:
 //
@@ -29,15 +36,17 @@ import { createTransport, FROM_ADDRESS } from "../src/lib/mailer.mjs";
 import { buildIssueEmail } from "../src/lib/newsletter-email.mjs";
 import { recipientsFor, recordSend, listStats } from "../src/lib/newsletter-store.mjs";
 import { databasePath } from "../src/lib/sqlite.mjs";
+import { mailerliteConfigured } from "../src/lib/mailerlite.mjs";
 
 const DIST = process.env.DIST_DIR ?? "./dist/client";
 
 function parseArgs(argv) {
-  const options = { slug: null, dryRun: false, test: null, limit: Infinity, rate: 20 };
+  const options = { slug: null, dryRun: false, test: null, limit: Infinity, rate: 20, force: false };
 
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--dry-run") options.dryRun = true;
+    else if (arg === "--force") options.force = true;
     else if (arg === "--test") options.test = argv[++i];
     else if (arg === "--limit") options.limit = Number(argv[++i]);
     else if (arg === "--rate") options.rate = Number(argv[++i]);
@@ -74,6 +83,15 @@ async function loadIssue(slug) {
 }
 
 const options = parseArgs(process.argv.slice(2));
+
+if (mailerliteConfigured() && !options.dryRun && !options.test && !options.force) {
+  fail(
+    "MAILERLITE_API_KEY is set, so MailerLite holds the list and sends the campaigns.\n" +
+      "  Sending from here as well would deliver this issue twice.\n" +
+      "  Write it as a campaign in MailerLite, or pass --force if you mean it."
+  );
+}
+
 const issue = await loadIssue(options.slug);
 
 console.log(`\n  Issue    ${issue.slug}`);
