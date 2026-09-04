@@ -1,0 +1,474 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   /newsletter/confirmed/ — built from the desktop+mobile mockup
+   (newsletter-confirmation-design.png).
+
+   The desktop drawing is a ~1250px viewport at scale 0.826 (1033px of frame),
+   pinned two ways that agree to 0.6%: the card grid measures 941 drawn px,
+   which is exactly 1136 (the measure minus gutters) at 0.8286; and the grid's
+   inset from the frame edge is 49 drawn px, which solves to a 1254px viewport
+   for a centred 1200px measure. The nav is drawn at true size rather than at
+   the content scale — its logo type returns 18.45px against the real 18px, so
+   it cannot be used as the anchor, and isn't (it comes from Base.astro).
+
+   Type is set from CAP HEIGHT, not from drawn widths: this batch's face runs
+   ~15% NARROWER than Archivo at bold weights (the drawn nav logo is 107px
+   where Archivo 800 at 18px is 125px), so sizing from advance widths would
+   undersize every heading. Archivo's real metrics, measured off the shipped
+   woff2 rather than assumed: cap 0.687em at both 400 and 800.
+
+   The phone frame is a second breakpoint, not the desktop scaled: 309px of
+   screen at 0.783 = a ~393px viewport, pinned by its buttons drawing at the
+   same 46px box as the desktop's. Sizes there are set independently
+   (h1 66 → 52, h2 38 → 28).
+
+   This file is bundled BEFORE modernist.css and site.css, so a bare
+   single-class rule loses every tie. Page classes are prefixed nc- and the
+   few real overrides are scoped under .nc-page.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.nc-page {
+  --nc-ink-soft: var(--color-neutral-700);
+  --nc-rule: color-mix(in srgb, var(--color-text) 14%, transparent);
+  --nc-card-line: color-mix(in srgb, var(--color-text) 12%, transparent);
+
+  /* Drawn: the hero photo starts at 625 of a 1250px viewport — half, exactly. */
+  --nc-hero-split: 50%;
+  /* Drawn 78px at 0.826, between the copy and the photo. */
+  --nc-hero-gap: 94px;
+}
+
+/* One inner rail for every band. Not .wrap: its `padding: 0 var(--gutter)`
+   shorthand would zero any padding-block set on the same element. */
+.nc-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────
+   Drawn on a 46px box with a 17px label — taller than the site's .btn--lg
+   (42.8px / 14px), so the page carries its own rather than overriding .btn. */
+.nc-page .nc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 26px;
+  border: 1px solid transparent;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.nc-page .nc-btn--primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+.nc-page .nc-btn--primary:hover {
+  background: var(--color-accent-600);
+  color: #fff;
+}
+
+.nc-page .nc-btn--ghost {
+  background: #fff;
+  border-color: var(--nc-card-line);
+  color: var(--color-text);
+}
+.nc-page .nc-btn--ghost:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────────
+   Two halves of the viewport. The copy sits in the left half but stays on the
+   site's measure: a box of --measure/2 pushed to the right of that half puts
+   its gutter edge exactly where every other band's content starts, at any
+   width, and the photo runs from the midpoint to the viewport edge. */
+.nc-hero {
+  display: grid;
+  grid-template-columns: var(--nc-hero-split) 1fr;
+  align-items: center;
+  background: var(--color-bg);
+  padding-block: 23px;
+}
+
+.nc-hero__text {
+  width: min(100%, calc(var(--measure) / 2));
+  margin-inline-start: auto;
+  padding-inline: var(--gutter) var(--nc-hero-gap);
+}
+
+.nc-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Drawn as a filled disc with the tick reversed out, so the sprite's
+   check-circle is used for the tick alone and the disc is the element. */
+.nc-kicker__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+.nc-kicker__badge svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nc-hero__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 66px;
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  /* Holds the drawn break — "Your next SEO / insights start / here." — and in
+     em so it survives the phone's smaller size. site.css sets
+     `body { text-wrap: pretty }`, which would rebreak all three lines. */
+  max-width: 7.1em;
+  text-wrap: wrap;
+}
+
+.nc-hero__lede {
+  margin: 26px 0 0;
+  max-width: 480px;
+  font-size: 21px;
+  line-height: 1.45;
+  color: var(--nc-ink-soft);
+  text-wrap: wrap;
+}
+
+.nc-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.nc-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 0;
+  font-size: 15px;
+  color: var(--nc-ink-soft);
+}
+.nc-hero__meta-icon {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.nc-hero__media {
+  /* Drawn 625 × 453 — and the supplied asset is 514 × 371, the same 1.38, so
+     `cover` crops nothing. */
+  aspect-ratio: 625 / 453;
+  overflow: hidden;
+}
+.nc-hero__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Promise strip ─────────────────────────────────────────────────────────
+   A 64px rule-to-rule band, three items sharing the measure. */
+.nc-promise {
+  border-block: 1px solid var(--nc-rule);
+  background: var(--color-bg);
+}
+.nc-promise__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding-block: 0;
+  list-style: none;
+}
+.nc-promise__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 64px;
+  font-size: 18px;
+  color: var(--color-text);
+}
+.nc-promise__item + .nc-promise__item {
+  border-inline-start: 1px solid var(--nc-rule);
+}
+.nc-promise__icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+/* ── What you get ──────────────────────────────────────────────────────────*/
+.nc-next {
+  background: var(--color-bg);
+  padding-block: 44px 26px;
+}
+
+.nc-next__title {
+  margin: 0 0 20px;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.nc-gains {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nc-gain {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  min-height: 131px;
+  padding: 20px 22px;
+  border: 1px solid var(--nc-card-line);
+  background: #fff;
+}
+.nc-gain__icon {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+}
+.nc-gain__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+.nc-gain__body {
+  margin: 8px 0 0;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--nc-ink-soft);
+}
+
+/* ── Start exploring ───────────────────────────────────────────────────────
+   Drawn with the intro on the left and the three topics filling the rest: the
+   topics begin 401px from the content edge. */
+.nc-explore {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 61px;
+  align-items: start;
+  margin-top: 44px;
+}
+.nc-explore__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 34px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+.nc-explore__lede {
+  margin: 12px 0 0;
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--nc-ink-soft);
+}
+
+.nc-topics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 23px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nc-topic {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 90px;
+  padding: 20px 18px;
+  border: 1px solid var(--nc-card-line);
+  background: #fff;
+}
+.nc-topic__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+.nc-page .nc-topic__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.nc-page .nc-topic__link:hover { color: var(--color-accent-700); }
+.nc-topic__link svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: transform 0.15s ease;
+}
+.nc-page .nc-topic__link:hover svg { transform: translateX(3px); }
+
+/* ── Exit band ─────────────────────────────────────────────────────────────*/
+.nc-cta {
+  background: var(--color-text);
+  color: #fff;
+}
+.nc-cta__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 113px;
+  padding-block: 22px;
+}
+.nc-cta__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.nc-cta__sub {
+  margin: 8px 0 0;
+  font-size: 19px;
+  line-height: 1.4;
+  color: color-mix(in srgb, #fff 78%, transparent);
+}
+
+/* ── Below the desktop drawing ─────────────────────────────────────────────
+   The hero's two halves stop working once the copy has no room; the photo
+   goes full width beneath it, which is what the phone frame draws. */
+@media (max-width: 1000px) {
+  .nc-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 0;
+  }
+  .nc-hero__text {
+    width: 100%;
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-block: 34px 30px;
+  }
+  .nc-hero__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .nc-explore {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+}
+
+@media (max-width: 760px) {
+  .nc-gains,
+  .nc-topics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nc-promise__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .nc-promise__item {
+    flex-direction: column;
+    gap: 6px;
+    padding-block: 12px;
+    font-size: 14px;
+    line-height: 1.25;
+    text-align: center;
+  }
+}
+
+/* ── Phone ─────────────────────────────────────────────────────────────────
+   Measured off the phone frame independently: 309px of screen at 0.783 for a
+   ~393px viewport. */
+@media (max-width: 520px) {
+  .nc-hero__title {
+    font-size: 52px;
+    line-height: 0.96;
+  }
+  .nc-hero__lede {
+    margin-top: 20px;
+    font-size: 19px;
+  }
+  .nc-kicker {
+    font-size: 14px;
+    gap: 8px;
+  }
+  .nc-kicker__badge { width: 28px; height: 28px; }
+  .nc-kicker__badge svg { width: 17px; height: 17px; }
+
+  /* Drawn as two full-width buttons, stacked. */
+  .nc-hero__actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .nc-page .nc-hero__actions .nc-btn { width: 100%; }
+
+  .nc-next { padding-block: 32px; }
+  .nc-next__title { font-size: 28px; }
+  .nc-explore__title { font-size: 26px; }
+  .nc-explore__lede { font-size: 17px; }
+
+  .nc-gain { min-height: 0; padding: 20px; }
+  .nc-cta__inner { padding-block: 26px; }
+  .nc-cta__title { font-size: 24px; }
+  .nc-cta__sub { font-size: 17px; }
+  .nc-page .nc-cta__inner .nc-btn { width: 100%; }
+}

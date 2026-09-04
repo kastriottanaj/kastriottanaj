@@ -1,8 +1,44 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { SITE } from "../../lib/site";
+import "../../styles/newsletter-confirmed.css";
 
 // noindex: where the confirmation link lands. Excluded from the sitemap too.
+
+const hero = "/assets/newsletter/newsletter-confirmed-workspace.webp";
+
+/* What the newsletter actually promises, in the order the drawing puts them. */
+const promises = [
+  { icon: "i-mail", label: "Direct from Kastriot" },
+  { icon: "i-file-text", label: "Practical, actionable ideas" },
+  { icon: "i-send", label: "Reply to any email" },
+];
+
+const gains = [
+  {
+    icon: "i-search",
+    title: "Grow your search visibility",
+    body: "SEO ideas you can put to work.",
+  },
+  {
+    icon: "i-monitor",
+    title: "Build a better website",
+    body: "Clearer pages. Better user experiences.",
+  },
+  {
+    icon: "i-zap",
+    title: "Put AI to practical use",
+    body: "Simple ways to improve your workflow.",
+  },
+];
+
+/* The three service pages the cards above describe — the drawing labels these
+   "Explore", so they go where the topic actually lives. */
+const topics = [
+  { href: "/services/seo/", title: "SEO insights" },
+  { href: "/services/web-development/", title: "Website development" },
+  { href: "/services/ai-automation/", title: "AI automation" },
+];
 ---
 
 <Base
@@ -10,23 +46,111 @@ import { SITE } from "../../lib/site";
   description="Your subscription is confirmed."
   noindex
 >
-  <div class="wrap">
-    <section class="page-head page-head--center">
-      <span class="kicker">Confirmed</span>
-      <h1 class="page-head__title">You're on the list.</h1>
-      <p class="page-head__lede">
-        That's it — no account, no password. Issues arrive from
-        kastriot@kastriottanaj.com whenever I have something worth your inbox, and every
-        one of them has a one-click unsubscribe link at the bottom.
+  <div class="nc-page">
+  <section class="nc-hero">
+    <div class="nc-hero__text">
+      <p class="nc-kicker">
+        <span class="nc-kicker__badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><use href="#i-check-circle" /></svg>
+        </span>
+        <span>Subscription confirmed</span>
       </p>
-      <div class="hero__actions">
-        <a class="btn btn-primary btn--lg" href="/newsletter/">See past issues</a>
-        <a class="btn btn-secondary btn--lg" href="/blog/">Read the insights</a>
+
+      <h1 class="nc-hero__title">Your next SEO insights start here.</h1>
+
+      <p class="nc-hero__lede">
+        You're subscribed. Get practical SEO, web development and AI tips to help you
+        build a stronger online presence.
+      </p>
+
+      <div class="nc-hero__actions">
+        <a class="nc-btn nc-btn--primary" href="/newsletter/">Explore past issues</a>
+        <a class="nc-btn nc-btn--ghost" href="/blog/">Read the blog</a>
       </div>
-      <p class="hero__meta">
-        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
-        <span>Got a question already? Just reply to any email — it comes straight to me.</span>
+
+      <p class="nc-hero__meta">
+        <svg class="nc-hero__meta-icon" aria-hidden="true"><use href="#i-mail" /></svg>
+        <span>No account needed. Unsubscribe in one click.</span>
       </p>
-    </section>
+    </div>
+
+    {/* Bleeds to the right viewport edge — the drawing splits the hero in half. */}
+    <div class="nc-hero__media">
+      <img
+        src={hero}
+        alt="A laptop, a mug reading “Better websites. A brighter internet.” and a notebook with “Ideas to a stronger online presence.”"
+        width="514"
+        height="371"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  </section>
+
+  <section class="nc-promise">
+    <ul class="nc-wrap nc-promise__list">
+      {
+        promises.map((item) => (
+          <li class="nc-promise__item">
+            <svg class="nc-promise__icon" aria-hidden="true"><use href={`#${item.icon}`} /></svg>
+            <span>{item.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="nc-next">
+    <div class="nc-wrap">
+      <h2 class="nc-next__title">Make your next move a smarter one.</h2>
+
+      <ul class="nc-gains">
+        {
+          gains.map((gain) => (
+            <li class="nc-gain">
+              <svg class="nc-gain__icon" aria-hidden="true"><use href={`#${gain.icon}`} /></svg>
+              <div>
+                <h3 class="nc-gain__title">{gain.title}</h3>
+                <p class="nc-gain__body">{gain.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="nc-explore">
+        <div class="nc-explore__intro">
+          <h2 class="nc-explore__title">Start exploring</h2>
+          <p class="nc-explore__lede">Dive into the topics you're most interested in.</p>
+        </div>
+
+        <ul class="nc-topics">
+          {
+            topics.map((topic) => (
+              <li class="nc-topic">
+                <h3 class="nc-topic__title">{topic.title}</h3>
+                <a class="nc-topic__link" href={topic.href}>
+                  Explore
+                  <svg aria-hidden="true"><use href="#i-arrow-right" /></svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="nc-cta">
+    <div class="nc-wrap nc-cta__inner">
+      <div class="nc-cta__copy">
+        <p class="nc-cta__title">Your first good read is one click away.</p>
+        <p class="nc-cta__sub">
+          Browse the latest newsletter issues and find ideas you can use today.
+        </p>
+      </div>
+      <a class="nc-btn nc-btn--primary" href="/newsletter/">Explore past issues</a>
+    </div>
+  </section>
   </div>
 </Base>
