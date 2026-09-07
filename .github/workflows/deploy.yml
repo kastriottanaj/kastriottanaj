@@ -26,6 +26,10 @@ jobs:
       - run: npm run build
       - run: npx astro check
 
+      # A page that ships without a sitemap entry is invisible where it costs
+      # most, and nobody notices for months. Non-zero here blocks the deploy.
+      - run: npm run check:sitemap
+
   deploy:
     name: Deploy to Hetzner
     needs: build
