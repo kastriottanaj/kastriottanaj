@@ -290,7 +290,10 @@
           body,
         });
 
-        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) {
+          throw Object.assign(new Error("contact failed"), { code: result.error });
+        }
 
         try {
           sessionStorage.setItem("meta-lead-event", eventId);
@@ -305,7 +308,7 @@
         button.textContent = label;
         showStatus(
           "That didn't send.",
-          "Something went wrong on the way. Please reach me on LinkedIn and I'll pick it up there."
+          LEAD_MESSAGES[error.code] || LEAD_MESSAGES.server
         );
       }
     });

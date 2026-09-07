@@ -187,7 +187,7 @@ const [firstName, ...surname] = SITE.name.split(" ");
         <script
           type="application/ld+json"
           is:inline
-          set:html={JSON.stringify(entry)}
+          set:html={JSON.stringify(entry).replaceAll("<", "\\u003c")}
         />
       ))
     }

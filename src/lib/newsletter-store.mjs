@@ -170,7 +170,7 @@ export function confirmSubscriber(confirmToken) {
       `SELECT id, email, status, source, unsubscribe_token
        FROM subscribers
        WHERE confirm_token = ?
-         AND (status = 'confirmed' OR confirm_sent_at >= datetime('now', ?))`
+         AND (status = 'confirmed' OR (status = 'pending' AND confirm_sent_at >= datetime('now', ?)))`
     )
     .get(confirmToken, `-${CONFIRM_TOKEN_LIFETIME_HOURS} hours`);
 
