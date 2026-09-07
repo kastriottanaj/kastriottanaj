@@ -113,7 +113,11 @@ elif diff -q "$CADDY_LIVE" "$CADDY_REPO" >/dev/null; then
   echo "  matches deploy/Caddyfile"
 else
   echo "!! ${CADDY_LIVE} DIFFERS from deploy/Caddyfile — the repo version is NOT live."
-  diff "$CADDY_LIVE" "$CADDY_REPO" | sed 's/^/     /'
+  # `|| true`: diff exits 1 when the files differ, which is the whole reason we
+  # are in this branch — and under `set -euo pipefail` that killed the script
+  # here, so the instructions below never printed and a deploy that had already
+  # succeeded reported failure.
+  diff "$CADDY_LIVE" "$CADDY_REPO" | sed 's/^/     /' || true
   echo
   echo "   Install it as root:"
   echo "     cp -a ${CADDY_LIVE} ${CADDY_LIVE}.bak.\$(date +%Y%m%d-%H%M%S)"
