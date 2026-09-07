@@ -1,6 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import { SITE } from "../lib/site";
+import { shareCard } from "../lib/og.mjs";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import IconSprite from "../components/IconSprite.astro";
@@ -16,6 +17,24 @@ interface Props {
   description: string;
   /** Absolute or root-relative image for og:image. Defaults to the hero. */
   image?: string;
+  /** Alt text for og:image — what a crawler reads out where the card cannot load. */
+  imageAlt?: string;
+  /**
+   * og:type. "website" suits a page that simply is; "article" is for anything
+   * with a publication date behind it, and unlocks the article:* tags below.
+   */
+  ogType?: "website" | "article" | "profile";
+  /**
+   * Dates and taxonomy for og:type="article". Ignored on any other type — the
+   * article: namespace means nothing there.
+   */
+  article?: {
+    publishedTime: Date;
+    modifiedTime?: Date;
+    /** The one section the piece belongs to, e.g. "SEO". */
+    section?: string;
+    tags?: readonly string[];
+  };
   /** Set on pages that should stay out of the index (e.g. /thanks). */
   noindex?: boolean;
   /** JSON-LD objects, serialised into the head. */
@@ -34,6 +53,11 @@ const {
   title,
   description,
   image = SITE.ogImage,
+  // A page that brought no image of its own gets the default card, so it gets
+  // the default card's alt text with it rather than an unlabelled picture.
+  imageAlt = image === SITE.ogImage ? SITE.ogImageAlt : undefined,
+  ogType = "website",
+  article,
   noindex = false,
   schema = [],
   preloadImage,
@@ -41,11 +65,22 @@ const {
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
-const ogImage = new URL(image, SITE.url).href;
+
+// Crawlers resolve nothing: og:image has to be an absolute URL, and it has to
+// be a format the crawler can open, which is why this goes through shareCard()
+// rather than using the WebP the page itself renders.
+const card = shareCard(image);
+const ogImage = new URL(card.url, SITE.url).href;
+
+// og:type="profile" wants the name in two halves rather than one string.
+const [firstName, ...surname] = SITE.name.split(" ");
 ---
 
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article# profile: https://ogp.me/ns/profile#"
+>
   <head>
     <!-- Google tag (gtag.js) -->
     <script is:inline>
@@ -96,13 +131,51 @@ const ogImage = new URL(image, SITE.url).href;
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+
+    {/* og:image is the four-tag structured form. The dimensions are what let
+        Facebook and LinkedIn lay out the large card on the first scrape instead
+        of posting a text-only one and fixing it a fetch later. */}
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    {card.type && <meta property="og:image:type" content={card.type} />}
+    {card.width && <meta property="og:image:width" content={String(card.width)} />}
+    {card.height && <meta property="og:image:height" content={String(card.height)} />}
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+
+    {
+      ogType === "article" && article && (
+        <>
+          <meta property="article:published_time" content={article.publishedTime.toISOString()} />
+          {article.modifiedTime && (
+            <meta property="article:modified_time" content={article.modifiedTime.toISOString()} />
+          )}
+          <meta property="article:author" content={`${SITE.url}/about/`} />
+          {article.section && <meta property="article:section" content={article.section} />}
+          {/* One meta per tag: og arrays are repeated tags, not a joined list. */}
+          {article.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
+
+    {
+      ogType === "profile" && (
+        <>
+          <meta property="profile:first_name" content={firstName} />
+          <meta property="profile:last_name" content={surname.join(" ")} />
+        </>
+      )
+    }
+
+    {/* X reads the og: tags for everything but the card shape, so only the tags
+        that have no og: equivalent are repeated here. */}
     <meta name="twitter:card" content="summary_large_image" />
+    {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
 
     <meta name="theme-color" content="#f3f2f2" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Blog`} href="/rss.xml" />

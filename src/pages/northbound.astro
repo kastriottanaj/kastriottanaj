@@ -1,10 +1,18 @@
 ---
 import { SITE } from "../lib/site";
+import { shareCard } from "../lib/og.mjs";
 import "../styles/northbound.css";
 import "../styles/northbound-polish.css";
 
 // Falls back to the committed 1080p web encode; the 4K master is gitignored.
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
+
+// This page writes its own <head> rather than going through Base, so its Open
+// Graph tags are here too — under its own brand, not Kastriot's. The card comes
+// off the hero poster, the only still frame the page has.
+const description = "Private, tailor-made journeys through Shkodër and Northern Albania.";
+const card = shareCard("/video/shkoder-poster.jpg");
+const ogImage = new URL(card.url, SITE.url).href;
 
 const heroVideoUrl = import.meta.env.PUBLIC_HERO_VIDEO_URL || "/video/shkoder-web-1080p.mp4";
 const heroPosterUrl = import.meta.env.PUBLIC_HERO_POSTER_URL || "/video/shkoder-poster.jpg";
@@ -22,12 +30,27 @@ const journeys = [
 ];
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Private, tailor-made journeys through Shkodër and Northern Albania." />
+  <meta name="description" content={description} />
   <meta name="theme-color" content="#17231d" /><title>Northbound Albania — Private journeys into the wild north</title>
   <link rel="canonical" href={canonical} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Northbound Albania" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content="Northbound Albania — Private journeys into the wild north" />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:secure_url" content={ogImage} />
+  <meta property="og:image:type" content={card.type} />
+  <meta property="og:image:width" content={String(card.width)} />
+  <meta property="og:image:height" content={String(card.height)} />
+  <meta property="og:image:alt" content="An aerial view of Rozafa Castle above Shkodër, its stone walls and ramparts ringed by pines" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image:alt" content="An aerial view of Rozafa Castle above Shkodër, its stone walls and ramparts ringed by pines" />
   {heroPosterUrl && <link rel="preload" as="image" href={heroPosterUrl} fetchpriority="high" />}
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Italiana&display=swap" rel="stylesheet" />

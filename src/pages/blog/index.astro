@@ -60,7 +60,13 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 const featuredTag = featured?.data.tags.at(-1);
 ---
 
-<Base title={title} description={description} image={heroImage} schema={schema}>
+<Base
+  title={title}
+  description={description}
+  image={heroImage}
+  imageAlt="A laptop showing a search dashboard beside a notebook of automation flowcharts"
+  schema={schema}
+>
   <div class="blog-page">
     <div class="blog-wrap">
       <section class="blog-hero" aria-labelledby="blog-title">

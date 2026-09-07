@@ -12,7 +12,9 @@
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",
     "check": "astro check",
-    "check:sitemap": "node scripts/check-sitemap.mjs"
+    "check:sitemap": "node scripts/check-sitemap.mjs",
+    "og:images": "node scripts/build-og-images.mjs",
+    "check:og": "node scripts/check-og-images.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.2",

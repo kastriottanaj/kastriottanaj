@@ -62,7 +62,7 @@ kastriottanaj.com {
 	# Consequence of the 30 days: swapping a video or image *in place* now
 	# leaves returning visitors on the old file until it expires. Give the
 	# replacement a new filename, or the reference a ?v= suffix.
-	@public path /video/* /assets/* /favicon.ico
+	@public path /video/* /assets/* /og/* /favicon.ico
 	header @public Cache-Control "public, max-age=2592000"
 
 	header {

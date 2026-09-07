@@ -22,7 +22,7 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 // `image` goes to the layout as og:image. Without it a shared post fell back to
 // the site-wide default, so every post previewed as the same generic card.
-const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags, image } =
+const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags, image, imageAlt } =
   post.data;
 
 const url = `${SITE.url}/blog/${post.id}/`;
@@ -63,6 +63,15 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
   title={metaTitle ?? `${title} | ${SITE.name}`}
   description={metaDescription ?? description}
   image={image}
+  imageAlt={imageAlt}
+  ogType="article"
+  article={{
+    publishedTime: pubDate,
+    modifiedTime: updatedDate,
+    // Tags are written broadest first, so the first one is the section.
+    section: tags[0],
+    tags,
+  }}
   schema={schema}
 >
   <div class="wrap">

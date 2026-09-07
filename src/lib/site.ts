@@ -21,6 +21,9 @@ export const SITE = {
     "https://wa.me/38348111611?text=Hi%20Kastriot%20%E2%80%94%20I%20came%20from%20kastriottanaj.com%20and%20I%27d%20like%20to%20talk%20about%20a%20project.",
   linkedin: "https://www.linkedin.com/in/seo-kastriot-tanaj/",
   ogImage: "/assets/ai-seo.webp",
+  /** Alt text for that card, for every page that does not bring its own. */
+  ogImageAlt:
+    "A laptop on a dark desk showing an organic traffic chart climbing, beside a notebook and a mug",
 } as const;
 
 /** Social profiles, in the order they're shown everywhere. The nav, the footer,

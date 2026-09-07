@@ -5,6 +5,9 @@ import Base from "../../../layouts/Base.astro";
 import NewsletterForm from "../../../components/NewsletterForm.astro";
 import { SITE } from "../../../lib/site";
 
+/** Every issue shares the one card — the issues have no art of their own. */
+const NEWSLETTER_CARD = "/assets/newsletter/kastriot-tanaj-newsletter.webp";
+
 /**
  * The web version of an issue — the "read it in your browser" link at the foot
  * of every email, and a page a subscriber can share with someone who is not one.
@@ -58,7 +61,15 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 });
 ---
 
-<Base title={`${title} | ${SITE.name}`} description={description} schema={schema}>
+<Base
+  title={`${title} | ${SITE.name}`}
+  description={description}
+  image={NEWSLETTER_CARD}
+  imageAlt="A laptop showing a content outline next to a notebook of SEO experiment notes and a cup of coffee"
+  ogType="article"
+  article={{ publishedTime: pubDate, section: "Newsletter" }}
+  schema={schema}
+>
   <div class="wrap">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">Home</a> <span aria-hidden="true">/</span>

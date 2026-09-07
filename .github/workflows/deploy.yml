@@ -30,6 +30,10 @@ jobs:
       # most, and nobody notices for months. Non-zero here blocks the deploy.
       - run: npm run check:sitemap
 
+      # Same shape of mistake one layer over: a share card that 404s or is the
+      # wrong format posts to LinkedIn as a grey box, and the page looks fine.
+      - run: npm run check:og
+
   deploy:
     name: Deploy to Hetzner
     needs: build
