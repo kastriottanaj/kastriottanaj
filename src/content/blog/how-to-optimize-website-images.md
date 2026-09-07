@@ -1,8 +1,12 @@
 ---
 title: "How to Optimize Website Images"
 description: "I will go straight to the point with the tools I use, why you should change your images from png to webp, why you should compress them."
+metaTitle: "How to Optimize Website Images for SEO and Page Speed"
+metaDescription: "Learn how to optimize website images for faster loading and better SEO using WebP, compression, clear filenames and alt text. Follow the steps."
 pubDate: 2026-09-07
 tags: ["SEO", "Page speed"]
+image: "/assets/blog/how-to-optimize-website-images.webp"
+imageAlt: "An image editor converting a mountain lake photo to WebP, beside a compression slider"
 draft: false
 ---
 
