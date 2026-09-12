@@ -42,7 +42,7 @@ faq:
 
 <!-- This entry carries the metadata and the structured lists only: the card on
      /use-cases/, the meta description and the llms.txt line. The page itself is
-     hand-built at src/pages/use-cases/ecommerce.astro from Kastriot's mockup,
+     hand-built at src/pages/use-cases/albanien-shop.astro from Kastriot's mockup,
      because the photographic hero, the metric ribbon, the client-results panel
      and the evidence gallery are structure rather than prose. Editing the copy
      means editing that file — but `problems`, `plays` and `faq` above are read

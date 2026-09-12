@@ -10,7 +10,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
      not also be generated here — two routes emitting the same URL collide.
      Declared inside: Astro hoists getStaticPaths into its own scope, so it
      cannot see module-level consts. */
-  const bespoke = new Set(["real-estate", "ecommerce"]);
+  const bespoke = new Set(["real-estate", "albanien-shop"]);
 
   const useCases = await getCollection(
     "useCases",

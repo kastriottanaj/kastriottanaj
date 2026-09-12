@@ -2,6 +2,11 @@
 /**
  * E-commerce — hand-built use case, backed by the Albanien.Shop engagement.
  *
+ * It lives at /use-cases/albanien-shop/: the client is the slug, as Kastriot
+ * asked, and the industry is the title. It shipped for a few hours as
+ * /use-cases/ecommerce/, so public/use-cases/ecommerce/index.html holds the
+ * redirect stub for that path.
+ *
  * Built from the design mockup at ~/Desktop/use-case-mockup.png. The mockup
  * draws a 1007px browser frame standing for a ~1202px viewport (scale ≈ 0.838,
  * solved from the client-results panel measuring 951.5 drawn px — the site's
@@ -35,13 +40,13 @@ import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 import { EVIDENCE as evidence } from "../../lib/albanien-shop-evidence";
-import "../../styles/ecommerce.css";
+import "../../styles/albanien-shop.css";
 
-const entry = await getEntry("useCases", "ecommerce");
-if (!entry) throw new Error("src/content/use-cases/ecommerce.md is missing.");
+const entry = await getEntry("useCases", "albanien-shop");
+if (!entry) throw new Error("src/content/use-cases/albanien-shop.md is missing.");
 
 const { title, description, audience, problems, plays, faq, services } = entry.data;
-const url = `${SITE.url}/use-cases/ecommerce/`;
+const url = `${SITE.url}/use-cases/albanien-shop/`;
 
 const hero = "/assets/use-cases/albanien-shop-shopify-seo.webp";
 const heroAlt =

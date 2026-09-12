@@ -8,7 +8,7 @@ import { SITE } from "../lib/site";
 const bespokeImages: Record<string, string[]> = {
   "real-estate": AS_REAL_ESTATE_IMAGES,
   // The hero photograph leads, then the screenshots in the order the page shows them.
-  ecommerce: ["/assets/use-cases/albanien-shop-shopify-seo.webp", ...ALBANIEN_SHOP_IMAGES],
+  "albanien-shop": ["/assets/use-cases/albanien-shop-shopify-seo.webp", ...ALBANIEN_SHOP_IMAGES],
 };
 
 export async function GET() {

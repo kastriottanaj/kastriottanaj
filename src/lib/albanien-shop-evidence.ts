@@ -1,5 +1,5 @@
 /**
- * The Albanien.Shop screenshots behind /use-cases/ecommerce/.
+ * The Albanien.Shop screenshots behind /use-cases/albanien-shop/.
  *
  * Same contract as as-real-estate-evidence.ts: shared between the page that
  * renders them and sitemap-use-cases.xml, which lists them for Google Images,
