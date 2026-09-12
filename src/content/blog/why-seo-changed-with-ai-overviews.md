@@ -7,6 +7,8 @@ pubDate: 2026-06-18
 tags: ["SEO", "AI search"]
 image: "/assets/blog/why-seo-changed-with-ai-overviews.webp"
 imageAlt: "A laptop showing a Google results page led by a generated answer"
+cluster: "seo-bootcamp"
+related: ["seo-and-geo", "automating-client-reporting-with-python"]
 ---
 
 The first thing most people notice about AI Overviews is the traffic. An informational

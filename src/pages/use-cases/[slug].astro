@@ -169,7 +169,7 @@ if (faq.length) {
                 <h3 class="service__title">{service.data.navLabel ?? service.data.title}</h3>
                 <p class="service__desc">{service.data.short}</p>
                 <a class="arrow-link arrow-link--sm service__more" href={`/services/${service.id}/`}>
-                  Learn more →
+                  Learn more<span class="sr-only"> about {service.data.title}</span> →
                 </a>
               </div>
             ))}

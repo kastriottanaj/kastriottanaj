@@ -297,7 +297,9 @@ const schema = [
     </section>
 
     <!-- ── What the process gives you ───────────────────────────────────── -->
-    <section class="process-values" aria-label="What the process gives you">
+    <section class="process-values" aria-labelledby="values-title">
+      <!-- Hidden: the cards are the design, but without an h2 they hang off the h1. -->
+      <h2 class="sr-only" id="values-title">What the process gives you</h2>
       <ul class="process-wrap process-values__list">
         {
           values.map((value) => (
@@ -350,7 +352,8 @@ const schema = [
     </section>
 
     <!-- ── Where the phases get applied ─────────────────────────────────── -->
-    <section class="process-offer" aria-label="Where the process gets applied">
+    <section class="process-offer" aria-labelledby="offer-title">
+      <h2 class="sr-only" id="offer-title">Where the process gets applied</h2>
       <div class="process-wrap process-offer__grid">
         {
           offers.map((offer) => (

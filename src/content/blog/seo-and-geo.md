@@ -7,6 +7,8 @@ pubDate: 2026-09-03
 tags: ["SEO", "AI search"]
 image: "/assets/blog/seo-and-geo.webp"
 imageAlt: "SEO and GEO"
+cluster: "seo-bootcamp"
+related: ["why-seo-changed-with-ai-overviews", "local-seo-checklist-for-service-businesses"]
 draft: false
 ---
 

@@ -7,6 +7,8 @@ pubDate: 2026-07-09
 tags: ["Automation", "Python", "Reporting"]
 image: "/assets/blog/automating-client-reporting-with-python.webp"
 imageAlt: "A laptop on a desk at night showing a reporting script mid-run"
+cluster: "seo-bootcamp"
+related: ["why-seo-changed-with-ai-overviews", "local-seo-checklist-for-service-businesses"]
 ---
 
 Client reporting is the work that quietly eats an agency. It is not hard, it is not

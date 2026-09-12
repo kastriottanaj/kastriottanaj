@@ -55,7 +55,7 @@ const itemList = {
               <h3 class="service__title">{useCase.data.navLabel ?? useCase.data.title}</h3>
               <p class="service__desc">{useCase.data.short}</p>
               <a class="arrow-link arrow-link--sm service__more" href={`/use-cases/${useCase.id}/`}>
-                Learn more →
+                Learn more<span class="sr-only"> about {useCase.data.title}</span> →
               </a>
             </div>
           ))

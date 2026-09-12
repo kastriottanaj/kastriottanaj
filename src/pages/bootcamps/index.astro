@@ -61,17 +61,41 @@ const schema = [
   {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: bootcamps.map((bootcamp, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
-        "@type": "Course",
-        name: bootcamp.data.title,
-        description: bootcamp.data.description,
-        url: `${SITE.url}/bootcamps/${bootcamp.id}/`,
-        provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
-      },
-    })),
+    itemListElement: bootcamps.map((bootcamp, i) => {
+      const url = `${SITE.url}/bootcamps/${bootcamp.id}/`;
+      const { workload, currency, tiers } = bootcamp.data;
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Course",
+          name: bootcamp.data.title,
+          description: bootcamp.data.description,
+          url,
+          provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+          /* Google requires an instance and offers on every Course, nested ones
+             included — the course pages carry the same two blocks. */
+          hasCourseInstance: [
+            {
+              "@type": "CourseInstance",
+              courseMode: "online",
+              ...(workload ? { courseWorkload: workload } : {}),
+            },
+          ],
+          offers: tiers.map((tier) => ({
+            "@type": "Offer",
+            name: tier.name,
+            price: tier.price,
+            priceCurrency: currency,
+            category: "Paid",
+            availability: tier.checkout
+              ? "https://schema.org/InStock"
+              : "https://schema.org/PreOrder",
+            url: tier.checkout ?? `${url}#enrol`,
+          })),
+        },
+      };
+    }),
   },
 ];
 ---
