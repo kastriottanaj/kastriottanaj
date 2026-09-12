@@ -41,6 +41,11 @@ const related = services
 
 const url = `${SITE.url}/use-cases/${useCase.id}/`;
 
+/* Display copy for the H1 only. At heading size a hyphenated word wraps at
+   the hyphen ("E-" / "commerce"), so it gets a non-breaking hyphen on the
+   page while the <title>, schema and llms.txt keep the plain ASCII one. */
+const heading = title.replace(/-/g, "\u2011");
+
 const schema: Record<string, unknown>[] = [
   {
     "@context": "https://schema.org",
@@ -87,7 +92,7 @@ if (faq.length) {
 
     <header class="page-head">
       <span class="kicker">Use case</span>
-      <h1 class="page-head__title">{title}</h1>
+      <h1 class="page-head__title">{heading}</h1>
       <p class="page-head__lede">{description}</p>
       <div class="hero__actions">
         <a class="btn btn-primary btn--lg" href="/contact/">Book a strategy call</a>
@@ -190,8 +195,11 @@ if (faq.length) {
     }
   </div>
 
+  {/* Generic copy on purpose: every industry rendered here shares this route,
+      and the real-estate line that used to sit here belongs to a page that now
+      builds itself. */}
   <CtaBanner
-    title="Selling property and relying on the portals?"
-    lede="Tell me what your site looks like and I'll tell you where the demand is leaking."
+    title="Not sure which of these is costing you?"
+    lede="Send me the site and I'll tell you where the demand is leaking — and what I'd fix first."
   />
 </Base>

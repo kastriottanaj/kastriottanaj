@@ -324,6 +324,7 @@ body:has(.services-page) .whatsapp-fab { display: none; }
 
 .services-industry { margin-top: 25px; }
 .services-industry > .services-eyebrow { margin-bottom: 6px; }
+.services-industry__card + .services-industry__card { margin-top: 8px; }
 
 .services-industry__card {
   min-height: 66px;
