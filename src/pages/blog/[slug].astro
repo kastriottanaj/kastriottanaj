@@ -3,8 +3,10 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import ClusterLinks from "../../components/ClusterLinks.astro";
 import NewsletterForm from "../../components/NewsletterForm.astro";
 import { SITE } from "../../lib/site";
+import { getCluster } from "../../lib/clusters";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -22,8 +24,12 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 // `image` goes to the layout as og:image. Without it a shared post fell back to
 // the site-wide default, so every post previewed as the same generic card.
-const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags, image, imageAlt } =
+const { title, description, metaTitle, metaDescription, pubDate, updatedDate, tags, image, imageAlt, cluster, related } =
   post.data;
+
+/* A post in a cluster ends on that cluster's offer instead of the site-wide
+   one — it has just spent the whole page on the subject the hub teaches. */
+const clusterCta = getCluster(cluster);
 
 const url = `${SITE.url}/blog/${post.id}/`;
 
@@ -112,6 +118,8 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
       </div>
     </article>
 
+    <ClusterLinks current={post.id} cluster={cluster} related={related} />
+
     <NewsletterForm
       source={`post-${post.id}`}
       compact
@@ -120,8 +128,19 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
     />
   </div>
 
-  <CtaBanner
-    title="Want this kind of thinking applied to your site?"
-    lede="Tell me what you're working on and I'll tell you where I'd start."
-  />
+  {
+    clusterCta ? (
+      <CtaBanner
+        title={clusterCta.ctaTitle}
+        lede={clusterCta.ctaLede}
+        ghostLabel={clusterCta.ctaLabel}
+        ghostHref={clusterCta.hubHref}
+      />
+    ) : (
+      <CtaBanner
+        title="Want this kind of thinking applied to your site?"
+        lede="Tell me what you're working on and I'll tell you where I'd start."
+      />
+    )
+  }
 </Base>

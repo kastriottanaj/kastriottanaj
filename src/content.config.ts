@@ -26,6 +26,19 @@ const blog = defineCollection({
     image: z.string().optional(),
     /** Required alongside `image`: the pictures carry meaning, not decoration. */
     imageAlt: z.string().optional(),
+    /**
+     * Topic cluster this post belongs to, keyed into `src/lib/clusters.ts`.
+     * It drives the sibling links, the link back to the cluster's commercial
+     * page, and the CTA band at the foot of the post.
+     */
+    cluster: z.string().optional(),
+    /**
+     * Sibling posts to link, most relevant first, by slug. Editorial order —
+     * the rest of the cluster fills in behind them. A slug that matches no
+     * post fails the build; one that matches an unpublished post is skipped
+     * until it ships, so a cluster can be scaffolded before it is written.
+     */
+    related: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),
 });

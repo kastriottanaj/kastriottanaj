@@ -1,0 +1,153 @@
+---
+import { getCollection } from "astro:content";
+import { getCluster } from "../lib/clusters";
+
+interface Props {
+  /** Slug of the post being rendered, so it never links to itself. */
+  current: string;
+  cluster?: string;
+  related?: string[];
+  /** How many sibling links to show. Three keeps the block scannable. */
+  limit?: number;
+}
+
+const { current, cluster: clusterId, related = [], limit = 3 } = Astro.props;
+
+const cluster = getCluster(clusterId);
+
+/* Every post, drafts included: a `related` slug pointing at a post that has not
+   shipped yet is a normal state while a cluster is being built, but one
+   pointing at nothing is a typo, and it should not reach production as a dead
+   link. Astro only builds pages for published posts, so the published set is
+   what may actually be linked. */
+const all = await getCollection("blog");
+const published = all.filter((p) => !p.data.draft && p.id !== current);
+const knownIds = new Set(all.map((p) => p.id));
+
+const missing = related.filter((id) => !knownIds.has(id));
+if (missing.length) {
+  throw new Error(
+    `${current}: related post${missing.length > 1 ? "s" : ""} not found — ${missing.join(", ")}. ` +
+      `Check the slug against src/content/blog/.`,
+  );
+}
+
+const byId = new Map(published.map((p) => [p.id, p]));
+
+/* Explicit picks first, in the order they were written, then the rest of the
+   cluster newest first so a new sibling surfaces without editing every post. */
+const picks = related.map((id) => byId.get(id)).filter((p) => p !== undefined);
+const pickedIds = new Set(picks.map((p) => p.id));
+
+const fill = clusterId
+  ? published
+      .filter((p) => p.data.cluster === clusterId && !pickedIds.has(p.id))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  : [];
+
+const siblings = [...picks, ...fill].slice(0, limit);
+const show = siblings.length > 0 || cluster !== undefined;
+---
+
+{
+  show && (
+    <aside class="cluster" aria-labelledby="cluster-title">
+      {siblings.length > 0 && (
+        <>
+          <h2 class="cluster__title" id="cluster-title">
+            {cluster?.relatedTitle ?? "Keep reading"}
+          </h2>
+          <ul class="cluster__list">
+            {siblings.map((post) => (
+              <li class="cluster__item">
+                <a class="cluster__link" href={`/blog/${post.id}/`}>
+                  {post.data.title}
+                </a>
+                <p class="cluster__lede">{post.data.description}</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {cluster && (
+        <p class="cluster__hub">
+          <a class="cluster__hub-link" href={cluster.hubHref}>
+            {cluster.hubTitle}
+          </a>
+          <span class="cluster__hub-lede">{cluster.hubLede}</span>
+        </p>
+      )}
+    </aside>
+  )
+}
+
+<style>
+  .cluster {
+    max-width: var(--measure-narrow, 68ch);
+    margin: 3.5rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  }
+
+  .cluster__title {
+    margin: 0 0 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-text) 62%, transparent);
+  }
+
+  .cluster__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .cluster__link {
+    font-family: var(--font-heading, inherit);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .cluster__link:hover,
+  .cluster__link:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .cluster__lede {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  }
+
+  .cluster__hub {
+    margin: 2rem 0 0;
+    padding: 1.25rem 1.4rem;
+    border-radius: 10px;
+    background: var(--color-surface, #eae9e9);
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .cluster__hub-link {
+    font-family: var(--font-heading, inherit);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .cluster__hub-lede {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  }
+</style>
