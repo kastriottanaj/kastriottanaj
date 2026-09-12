@@ -1,0 +1,578 @@
+---
+/**
+ * E-commerce — hand-built use case, backed by the Albanien.Shop engagement.
+ *
+ * Built from the design mockup at ~/Desktop/use-case-mockup.png. The mockup
+ * draws a 1007px browser frame standing for a ~1202px viewport (scale ≈ 0.838,
+ * solved from the client-results panel measuring 951.5 drawn px — the site's
+ * 1136px measure — and confirmed by the panel's symmetric 28px inset, which is
+ * exactly what a centred 1200px measure draws at that viewport). Its nav is
+ * drawn at true size (the logo type returns 17.5px against the real 18px), so
+ * the scale comes from the content, never the chrome. Its phone frame pins to
+ * the same scale through its buttons drawing the same box as the desktop's.
+ *
+ * The drawn face sets lowercase like Archivo but caps and digits ~15% narrower,
+ * so running text is sized from drawn word widths and the figures from their
+ * drawn heights. The hero copy, the section headings and the cards each start
+ * at a different inset in the drawing; everything here composes on
+ * --measure / --gutter instead, so the nav, the bands and the CTA share one
+ * left edge.
+ *
+ * Every other entry in the `useCases` collection renders through [slug].astro,
+ * and that route deliberately skips this one (see the filter there). `problems`,
+ * `plays` and `faq` still come from the markdown frontmatter, so the words stay
+ * editable without touching this file. The mockup ends at the CTA band; the
+ * evidence gallery, the brief and the FAQ sit between its results panel and its
+ * services row in the shared case-study style, so the Service and FAQPage
+ * schema survive the redesign.
+ *
+ * Every figure below is read off a screenshot in /assets/albanien-shop-evidence/
+ * — see src/lib/albanien-shop-evidence.ts for which. Do not round, restate or
+ * refresh a number without changing the screenshot beside it.
+ */
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
+import { SITE } from "../../lib/site";
+import { EVIDENCE as evidence } from "../../lib/albanien-shop-evidence";
+import "../../styles/ecommerce.css";
+
+const entry = await getEntry("useCases", "ecommerce");
+if (!entry) throw new Error("src/content/use-cases/ecommerce.md is missing.");
+
+const { title, description, audience, problems, plays, faq, services } = entry.data;
+const url = `${SITE.url}/use-cases/ecommerce/`;
+
+const hero = "/assets/use-cases/albanien-shop-shopify-seo.webp";
+const heroAlt =
+  "Hands smoothing a shipping label onto a cardboard parcel at a wooden desk, beside an open laptop, a roll of kraft tape and a stack of boxes waiting to go out";
+
+/* Service ids resolved against the collection, so a typo cannot ship a 404. */
+const allServices = await getCollection("services");
+const related = services
+  .map((id) => allServices.find((service) => service.id === id))
+  .filter((service): service is CollectionEntry<"services"> => Boolean(service));
+
+/* ── The numbers, each tied to the screenshot it came from ──────────────── */
+
+/* Over the photograph: evidence.merchantOverview, the 28-day view. */
+const overlay = {
+  delta: "+43.1%",
+  label: "Merchant Center clicks",
+  detail: "2.71K clicks · 14 Aug–10 Sep 2026",
+  compare: "Compared with the previous 28 days",
+};
+
+/* Three sources, so each cell names its own window rather than the ribbon
+   claiming one. */
+const metrics = [
+  { value: "6,237", label: "Google Search clicks", source: "3-month report · Jun–Sep 2026" }, // evidence.clicks
+  { value: "304", label: "Products approved", source: "Merchant Center · 10 Sep 2026" }, // evidence.merchantOverview
+  { value: "279", label: "Good mobile URLs", source: "Core Web Vitals · 10 Sep 2026" }, // evidence.coreWebVitals
+];
+
+const values = [
+  { icon: "i-search", title: "Reach the right shoppers", body: "Target the searches that matter to your store." },
+  { icon: "i-tag", title: "Keep products eligible", body: "Resolve issues that limit your product listings." },
+  { icon: "i-cog", title: "Make your store easier to use", body: "Improve mobile pages and automate routine tasks." },
+];
+
+/* The client-results panel. Merchant Center on the left from the 10 Sep
+   overview; the two Search Console figures from the three-month reports. */
+const panel = {
+  approved: "304",
+  total: "306",
+  status: "1 not approved · 1 under review",
+  asOf: "As shown in the 10 Sep 2026 overview",
+  resolved: "Misrepresentation concern resolved",
+  resolvedBy: "Acknowledged in Google support correspondence.",
+  impressions: "237K", // evidence.performance
+  aiImpressions: "16.8K", // evidence.generativeAi
+  window: "Search Console · 3-month reports, Jun–Sep 2026",
+  listings: { valid: "415", invalid: "8" }, // evidence.merchantListings
+  snippets: { valid: "181", invalid: "1" }, // evidence.productSnippets
+  markupDate: "Search Console structured data · 10 Sep 2026",
+};
+
+/* The mockup's services row. Merchant Center work has no service page of its
+   own — it is scoped and priced per store — so that card goes to the contact
+   form rather than to a page that would have to be invented for it. */
+const offers = [
+  {
+    icon: "i-search",
+    title: "E-commerce SEO",
+    body: "Technical SEO, collection pages and product structured data.",
+    cta: "Explore SEO",
+    href: "/services/seo/",
+  },
+  {
+    icon: "i-tag",
+    title: "Merchant Center support",
+    body: "Product data, disapprovals and account issue resolution.",
+    cta: "Discuss your listings",
+    href: "/contact/",
+  },
+  {
+    icon: "i-cog",
+    title: "Shopify & automation",
+    body: "Store improvements and workflows that reduce manual tasks.",
+    cta: "Explore automation",
+    href: "/services/ai-automation/",
+  },
+];
+
+/* Read off evidence.statusNotApproved, the not-approved series over the 28
+   days to 10 Sep: the chart under "The brief" is plotted from these. */
+const chartStats = [
+  { figure: "75 – 125", label: "products disapproved through August" },
+  { figure: "304 of 306", label: "approved by 10 Sep" },
+  { figure: "+43.1%", label: "Merchant Center clicks, 28 days" },
+  { figure: "2.71K", label: "clicks from Merchant Center listings" },
+];
+
+/* Gallery order is the story's order: search first, then the Merchant Center
+   recovery, then the reports that back the smaller claims. */
+const shots = [
+  { shot: evidence.performance, span: "cs-ev--6" },
+  { shot: evidence.clicks, span: "cs-ev--3" },
+  { shot: evidence.generativeAi, span: "cs-ev--3" },
+  { shot: evidence.merchantOverview, span: "cs-ev--3" },
+  { shot: evidence.merchantOverviewPrior, span: "cs-ev--3" },
+  { shot: evidence.statusApproved, span: "cs-ev--6" },
+  { shot: evidence.statusNotApproved, span: "cs-ev--3" },
+  { shot: evidence.noIssues, span: "cs-ev--3" },
+  { shot: evidence.supportEmail, span: "cs-ev--3" },
+  { shot: evidence.supportConfirmation, span: "cs-ev--3" },
+  { shot: evidence.merchantListings, span: "cs-ev--3" },
+  { shot: evidence.productSnippets, span: "cs-ev--3" },
+  { shot: evidence.coreWebVitals, span: "cs-ev--3" },
+  { shot: evidence.searchImpact, span: "cs-ev--3" },
+];
+
+const pageTitle = "E-commerce SEO Case Study: Albanien.Shop on Shopify";
+
+const schema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description,
+    url,
+    serviceType: "E-commerce SEO, Merchant Center and marketing automation",
+    areaServed: "Europe",
+    audience: { "@type": "BusinessAudience", audienceType: audience },
+    provider: { "@type": "Person", name: SITE.name, url: `${SITE.url}/` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: "Use cases", item: `${SITE.url}/use-cases/` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
+
+if (faq.length) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  image={hero}
+  imageAlt={heroAlt}
+  schema={schema}
+  preloadImage={hero}
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+  <section class="ec-hero" data-sticky-after>
+    <div class="wrap ec-hero__inner">
+      <div class="ec-hero__copy">
+        <nav class="breadcrumb ec-crumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span aria-hidden="true">/</span>
+          <a href="/use-cases/">Use cases</a> <span aria-hidden="true">/</span>
+          <span aria-current="page">E-commerce</span>
+        </nav>
+
+        <p class="ec-kicker">E-commerce SEO &amp; automation</p>
+        <h1 class="ec-hero__title">Shopify SEO that gets your products found</h1>
+        <p class="ec-hero__lede">
+          I help Shopify stores reach more shoppers through SEO, Merchant Center fixes and
+          practical automation.
+        </p>
+
+        <div class="ec-hero__actions">
+          <a class="btn btn-primary ec-btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+            Book a strategy call
+          </a>
+          <a class="ec-hero__more" href="#results">
+            See the Albanien.shop results <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <figure class="ec-hero__media">
+        {/* The LCP element, so it is a real <img> with fetchpriority rather than
+            a CSS background the parser finds late. */}
+        <img
+          class="ec-hero__img"
+          src={hero}
+          alt={heroAlt}
+          width="1672"
+          height="941"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="ec-hero__scrim" aria-hidden="true"></div>
+        <figcaption class="ec-stat">
+          <span class="ec-stat__brand">Albanien.shop</span>
+          <span class="ec-stat__delta">{overlay.delta}</span>
+          <span class="ec-stat__label">{overlay.label}</span>
+          <span class="ec-stat__detail">{overlay.detail}</span>
+          <span class="ec-stat__detail">{overlay.compare}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── Metric ribbon ──────────────────────────────────────────────────── -->
+  <section class="ec-ribbon" aria-label="Headline results">
+    <ul class="wrap ec-metrics">
+      {
+        metrics.map((metric) => (
+          <li class="ec-metric">
+            <p class="ec-metric__value">{metric.value}</p>
+            <p class="ec-metric__label">{metric.label}</p>
+            <p class="ec-metric__source">{metric.source}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ── What it does, and what it did ──────────────────────────────────── -->
+  <section class="ec-results">
+    <div class="wrap">
+      <h2 class="ec-h2">More visibility. Fewer roadblocks.</h2>
+      <ul class="ec-values">
+        {
+          values.map((value) => (
+            <li class="ec-value">
+              <svg class="ec-value__icon" aria-hidden="true"><use href={`#${value.icon}`} /></svg>
+              <div>
+                <h3 class="ec-value__title">{value.title}</h3>
+                <p class="ec-value__body">{value.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <article class="ec-panel" id="results" aria-labelledby="ec-panel-title">
+        <p class="ec-panel__kicker">Albanien.shop · Client results</p>
+        <h2 class="ec-panel__title" id="ec-panel-title">
+          Product approvals restored. Search visibility measured.
+        </h2>
+        <p class="ec-panel__lede">
+          A Shopify store serving Albanian communities across borders, with results documented
+          in Google's reports.
+        </p>
+
+        <div class="ec-panel__grid">
+          <div class="ec-panel__col ec-panel__col--merchant">
+            <p class="ec-panel__source-name">Merchant Center</p>
+            <p class="ec-panel__big">
+              <b>{panel.approved} of {panel.total}</b> <span>products approved</span>
+            </p>
+            <p class="ec-panel__status">{panel.status}</p>
+            <p class="ec-panel__note">{panel.asOf}</p>
+            <p class="ec-panel__resolved">
+              <svg class="ec-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="12" />
+                <path d="m7 12.5 3.2 3.2L17 9" />
+              </svg>
+              <span>
+                <span class="ec-panel__resolved-title">{panel.resolved}</span>
+                <span class="ec-panel__resolved-by">{panel.resolvedBy}</span>
+              </span>
+            </p>
+          </div>
+
+          <div class="ec-panel__col">
+            <p class="ec-panel__figure">{panel.impressions}</p>
+            <p class="ec-panel__figure-label">Google Search impressions</p>
+          </div>
+
+          <div class="ec-panel__col">
+            <p class="ec-panel__figure">{panel.aiImpressions}</p>
+            <p class="ec-panel__figure-label">Generative AI feature impressions</p>
+          </div>
+
+          <p class="ec-panel__note ec-panel__note--window">{panel.window}</p>
+        </div>
+
+        <div class="ec-panel__foot">
+          <div class="ec-panel__markup">
+            <p>
+              <span>Merchant listing markup:</span>
+              <b>{panel.listings.valid} valid · {panel.listings.invalid} invalid</b>
+            </p>
+            <p class="ec-panel__note">{panel.markupDate}</p>
+          </div>
+          <p class="ec-panel__markup ec-panel__markup--snippets">
+            <span>Product snippet markup:</span>
+            <b>{panel.snippets.valid} valid · {panel.snippets.invalid} invalid</b>
+          </p>
+          <a class="ec-panel__link" href="#evidence">
+            View the source reports <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── The evidence ───────────────────────────────────────────────────── -->
+  <section class="cs-section wrap" id="evidence">
+    <p class="cs-eyebrow">The evidence</p>
+    <h2 class="cs-h2">Every number here, screenshotted from the source</h2>
+    <p class="cs-lede">
+      Google Search Console's three-month reports run 10 June to 8 September 2026; the
+      Merchant Center overview is the 28 days to 10 September, alongside the product-status
+      history for the same window; the structured-data and Core Web Vitals reports are as
+      Google last updated them on 10 September. Nothing recreated, nothing rounded up.
+    </p>
+
+    <div class="cs-ev-grid">
+      {
+        shots.map(({ shot, span }) => (
+          <figure class:list={["cs-ev", span]}>
+            <img
+              src={shot.src}
+              alt={shot.alt}
+              width={shot.width}
+              height={shot.height}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <b>{shot.strong}</b> — {shot.caption}
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── The brief / what I did / the chart ─────────────────────────────── -->
+  <section class="cs-section wrap" id="breakdown">
+    <div class="cs-body">
+      <div>
+        <p class="cs-eyebrow">The brief</p>
+        <h2 class="cs-h2">A full catalogue Google would not list</h2>
+        <p class="cs-lede cs-lede--brief">
+          Albanien.Shop is a family-run Shopify store in Monheim am Rhein, between Düsseldorf
+          and Cologne. It sells what an Albanian household abroad wants and cannot find in a
+          German shop — a plis or a qeleshe, the national team's jersey, a flag for the car and
+          one for the balcony, a qifteli, a bust of Skanderbeg — to Albanians and Kosovars
+          across Germany, Austria and Switzerland. The catalogue and the customers were there.
+          What was not there was Google Shopping: a Misrepresentation flag on the Merchant
+          Center account had the whole range sitting in "not approved" for weeks, which is a
+          shop that ranks and still cannot show a single product where shoppers compare
+          prices.
+        </p>
+
+        <p class="cs-eyebrow cs-eyebrow--muted">What I did</p>
+        <ol class="cs-steps">
+          {
+            plays.map((play, i) => (
+              <li class="cs-step">
+                <span class="cs-step__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 class="cs-step__title">{play.title}</h3>
+                  <p class="cs-step__body">{play.detail}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="cs-chart">
+        <p class="cs-chart__cap">Products not approved · 14 Aug – 10 Sep 2026</p>
+        <p class="cs-chart__big">0 not approved since 7 Sep</p>
+        {/* Hand-plotted against the Merchant Center not-approved series in the
+            gallery above: around 75 in mid-August, stepping to 100 and then to
+            the low 120s, a dip to 75 at the start of September, back to 100,
+            and the drop to zero on 7 September. */}
+        <svg
+          class="cs-chart__svg"
+          viewBox="0 0 520 190"
+          role="img"
+          aria-label="Products not approved in Merchant Center: around 75 in mid-August 2026, rising to the low 120s through late August, dipping to 75 at the start of September and falling to zero on 7 September"
+        >
+          <defs>
+            <linearGradient id="ec-fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ec3013" stop-opacity=".22" />
+              <stop offset="100%" stop-color="#ec3013" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <g stroke="#d7d3d3" stroke-width="1">
+            <line x1="34" y1="18" x2="510" y2="18" />
+            <line x1="34" y1="65" x2="510" y2="65" />
+            <line x1="34" y1="112" x2="510" y2="112" />
+            <line x1="34" y1="158" x2="510" y2="158" />
+          </g>
+          <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#605d5d">
+            <text x="8" y="22">150</text>
+            <text x="8" y="69">100</text>
+            <text x="8" y="116">50</text>
+            <text x="8" y="162">0</text>
+            <text x="34" y="180">14 Aug</text>
+            <text x="160" y="180">22 Aug</text>
+            <text x="286" y="180">30 Aug</text>
+            <text x="412" y="180">7 Sep</text>
+          </g>
+          {/* 0 -> y158, 150 -> y18: y = 158 - (value / 150) * 140.
+              x: 14 Aug -> 40, 10 Sep -> 470, so one day is 15.9 units. */}
+          <path
+            d="M40 88 L88 88 L92 65 L136 65 L140 46 L168 44 L326 44 L328 88 L360 88 L364 65 L420 65 L423 158 L470 158 L40 158 Z"
+            fill="url(#ec-fade)"
+          />
+          <polyline
+            points="40,88 88,88 92,65 136,65 140,46 168,44 326,44 328,88 360,88 364,65 420,65 423,158 470,158"
+            fill="none"
+            stroke="#ec3013"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+          <circle cx="168" cy="44" r="4" fill="#fff" stroke="#ec3013" stroke-width="2" />
+          <circle cx="470" cy="158" r="5" fill="#fff" stroke="#ec3013" stroke-width="2.5" />
+        </svg>
+        <ul class="cs-chart__stats">
+          {
+            chartStats.map((stat) => (
+              <li>
+                <b>{stat.figure}</b> {stat.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Where it breaks, in this market generally ──────────────────────── -->
+  <section class="cs-section wrap">
+    <p class="cs-eyebrow">In your market</p>
+    <h2 class="cs-h2">Four things break on almost every specialist store</h2>
+    <p class="cs-lede">
+      Albanien.Shop had the second one in its Merchant Center form — a catalogue that ranked
+      and still could not be listed. The other three are just as common, and none of them show
+      up in a rankings report. They show up in a crawl, a feed diagnostic, and the owner's
+      evenings.
+    </p>
+    <div class="ruled-grid ruled-grid--services">
+      {
+        problems.map((problem) => (
+          <div class="service">
+            <h3 class="service__title">{problem.title}</h3>
+            <p class="service__desc">{problem.detail}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── FAQ ────────────────────────────────────────────────────────────── -->
+  {
+    faq.length > 0 && (
+      <section class="cs-section wrap">
+        <p class="cs-eyebrow">Common questions</p>
+        <h2 class="cs-h2">What store owners ask first</h2>
+        <div class="faq">
+          {faq.map((item) => (
+            <details class="faq__item">
+              <summary class="faq__q">{item.q}</summary>
+              <p class="faq__a">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ── What I can help your store with ────────────────────────────────── -->
+  <section class="ec-offers">
+    <div class="wrap">
+      <h2 class="ec-h2">What I can help your store with</h2>
+      <ul class="ec-cards">
+        {
+          offers.map((offer) => (
+            <li class="ec-card">
+              <svg class="ec-card__icon" aria-hidden="true"><use href={`#${offer.icon}`} /></svg>
+              <div>
+                <h3 class="ec-card__title">{offer.title}</h3>
+                <p class="ec-card__body">{offer.body}</p>
+                <a class="ec-card__link" href={offer.href}>
+                  {offer.cta} <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        related.length > 0 && (
+          <p class="ec-offers__all">
+            The four services behind this:{" "}
+            {related.map((service, i) => (
+              <>
+                <a href={`/services/${service.id}/`}>{service.data.navLabel ?? service.data.title}</a>
+                {i < related.length - 1 ? ", " : "."}
+              </>
+            ))}
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <CtaBanner
+    title="Find what's holding your store back"
+    lede="Let's identify the next practical step for your business."
+    ghostLabel={null}
+  />
+
+  <!-- Mobile only. Hidden until the hero scrolls away — see site.js. Without
+       JS it never appears and the floating WhatsApp button stays instead. -->
+  <div class="cs-sticky" data-sticky-cta data-visible="false">
+    <a class="btn btn-primary cs-sticky__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+      Book a call
+    </a>
+    <a
+      class="cs-sticky__wa"
+      href={SITE.whatsappUrl}
+      target="_blank"
+      rel="noopener"
+      aria-label={`Chat with ${SITE.name} on WhatsApp`}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488" />
+      </svg>
+    </a>
+  </div>
+</Base>

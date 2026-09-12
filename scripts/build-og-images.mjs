@@ -47,6 +47,7 @@ const PAGE_CARDS = [
   "/assets/services/kastriot-tanaj-digital-marketing-services.webp",
   "/assets/services/kastriot-tanaj-web-development-services.webp",
   "/assets/work/faralda-crane-hotel-amsterdam.webp",
+  "/assets/use-cases/albanien-shop-shopify-seo.webp",
   // /northbound/ is its own brand with its own <head> — its card comes from the
   // hero video's poster, the only still the page has.
   "/video/shkoder-poster.jpg",

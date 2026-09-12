@@ -1,0 +1,678 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   E-commerce use case (Albanien.Shop).
+
+   Same vocabulary as the other redesigned pages — hairline cards, red marks,
+   the flat off-white ground — around a photographic hero that, unlike the
+   Faralda one, keeps the copy on the ground and lets the photograph start at a
+   hard edge and bleed off the right of the viewport.
+
+   The mockup is drawn at 0.838 of life size: its 1007px frame stands for a
+   ~1202px viewport, which is how the client-results panel measures 951.5px —
+   the site's own --measure less its gutters — with a 28px inset either side,
+   the 33px a centred 1200px measure leaves at that width. Its nav, its hero
+   copy, its headings and its cards each start at a different inset (24, 45,
+   43, 32 drawn px), so the geometry composes on --measure / --gutter and every
+   type size is set by matching rendered ink against the drawn ink: running
+   text from drawn word widths, the figures from their drawn heights, because
+   the drawn face sets caps and digits ~15% narrower than Archivo does.
+
+   The evidence gallery, the brief, the FAQ and the sticky bar borrow the
+   .cs-* case-study kit from site.css rather than inventing a second way to
+   show a screenshot.
+
+   This sheet is bundled before site.css, so anything that restyles a house
+   class (.breadcrumb, .btn) is scoped under a page class — a bare single-class
+   rule here loses every tie.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.ec-hero) {
+  --ec-rule: #e6e4e3;
+  --ec-ink: #201e1d;
+  --ec-muted: #565554;
+  --ec-card: #fff;
+  --ec-ribbon: #f8f7f7;
+  --ec-radius: 4px;
+}
+
+.ec-h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: wrap;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+
+.ec-hero {
+  /* The photograph bleeds past the measure with a negative margin measured
+     against 100vw; clip rather than hidden so this does not become a scroll
+     container, and a scrollbar-bearing platform cannot widen the page. */
+  overflow-x: clip;
+  border-bottom: var(--rule) solid var(--ec-rule);
+}
+
+/* 407 : 729 — where the drawing puts the photograph's edge. The copy is not
+   held to the first column: the drawn H1 runs 65px past that edge over a soft
+   fade in the photograph ("products" ends at 478 drawn px, the photo starts at
+   431), so the copy spans the grid with its own cap and paints above. */
+.ec-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 407fr) minmax(0, 729fr);
+  align-items: stretch;
+}
+
+/* Every gap below is the mockup's ink-to-ink distance converted at 0.838, less
+   the half-leading each line box adds — which is why they are not the round
+   numbers the drawing suggests. The breadcrumb is the one addition: every
+   other page carries one, and the BreadcrumbList in the head mirrors it. */
+.ec-hero__copy {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  padding-block: 20px 29px;
+}
+
+/* Scoped past .breadcrumb, which is a single class in site.css and would keep
+   its 28px top padding otherwise. */
+.ec-hero .ec-crumb {
+  padding: 0;
+  margin: 0 0 14px;
+  font-size: 13px;
+}
+
+.ec-kicker {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 7px;
+}
+
+/* 46px from the drawn lowercase widths ("Shopify" 46.7, "that" 47.4); the
+   three-line ink of 134px then gives line-height 1.1. The 440px cap holds the
+   drawn break — "Shopify SEO that / gets your products / found": with the
+   tracking, the second line measures 417px and the first would take "gets"
+   at 469. */
+.ec-hero__title {
+  font-size: 46px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 440px;
+  margin: 0 0 3px;
+  text-wrap: wrap;
+}
+
+/* 17px from both drawn lines; 440px keeps "SEO," at the end of line one. */
+.ec-hero__lede {
+  font-size: 17px;
+  line-height: 1.38;
+  color: var(--ec-muted);
+  max-width: 440px;
+  margin: 0 0 13px;
+  text-wrap: wrap;
+}
+
+.ec-hero__actions { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
+
+/* 45px tall and 212px wide in the drawing: a 14px label with 38px either side. */
+.ec-hero .ec-btn {
+  min-height: 45px;
+  padding-inline: 38px;
+  font-size: 14px;
+  border-radius: 3px;
+}
+
+.ec-hero__more {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ec-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.ec-hero__more:hover { color: var(--color-accent-700); text-decoration: underline; }
+
+/* The photograph. 16:9 into a 2.3:1 box: cover, held slightly above centre so
+   the parcel and the hands stay in frame and the desk front goes. */
+.ec-hero__media {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  margin: 0;
+  min-height: 332px;
+  /* Out to the viewport's right edge: the wrap's own gutter plus whatever the
+     centred measure leaves beyond it. */
+  margin-right: calc(-1 * (max(0px, (100vw - var(--measure)) / 2) + var(--gutter)));
+  background: #2a2522;
+  overflow: hidden;
+}
+.ec-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+}
+
+/* The soft left edge the drawing gives the photograph, under the copy that
+   crosses it. */
+.ec-hero__media::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 130px;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg) 0%,
+    color-mix(in srgb, var(--color-bg) 92%, transparent) 38%,
+    color-mix(in srgb, var(--color-bg) 45%, transparent) 70%,
+    color-mix(in srgb, var(--color-bg) 0%, transparent) 100%
+  );
+}
+
+/* Darkens the bottom-right corner under the figure so white type holds
+   contrast on the parcel, and fades to nothing before it reaches the laptop. */
+.ec-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      120% 110% at 100% 100%,
+      rgba(12, 9, 8, 0.82) 0%,
+      rgba(12, 9, 8, 0.58) 32%,
+      rgba(12, 9, 8, 0.18) 58%,
+      rgba(12, 9, 8, 0) 76%
+    );
+}
+
+/* Bottom-right of the photograph, 19px up and 7px inside the content edge —
+   the photograph bleeds past the measure, the figure does not. */
+.ec-stat {
+  position: absolute;
+  right: calc(max(0px, (100vw - var(--measure)) / 2) + var(--gutter) + 7px);
+  bottom: 19px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.ec-stat__brand {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.ec-stat__delta {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 50px;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin-bottom: 8px;
+}
+.ec-stat__label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.ec-stat__detail {
+  font-size: 13px;
+  line-height: 1.6;
+  color: color-mix(in srgb, #fff 90%, transparent);
+}
+
+/* ── Metric ribbon ───────────────────────────────────────────────────────── */
+
+.ec-ribbon {
+  background: var(--ec-ribbon);
+  border-bottom: var(--rule) solid var(--ec-rule);
+}
+.ec-metrics {
+  list-style: none;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+/* The drawing indents each cell's copy 60–78px past its divider; the first
+   cell a little less, from the content edge. */
+.ec-metric {
+  padding: 10px 24px 15px 64px;
+  border-left: var(--rule) solid var(--ec-rule);
+}
+.ec-metric:first-child { border-left: 0; }
+
+/* Figures from their drawn height — the drawn digits run narrow. */
+.ec-metric__value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 1px;
+}
+.ec-metric__label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0 0 3px;
+}
+.ec-metric__source {
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--ec-muted);
+  margin: 0;
+}
+
+/* ── Values row + client-results panel ───────────────────────────────────── */
+
+.ec-results { padding-block: 18px 40px; }
+.ec-results .ec-h2 { margin-bottom: 17px; }
+
+.ec-values {
+  list-style: none;
+  margin: 0 0 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.ec-value {
+  display: flex;
+  align-items: flex-start;
+  gap: 29px;
+}
+.ec-value + .ec-value {
+  border-left: var(--rule) solid var(--ec-rule);
+  padding-left: 27px;
+}
+/* The sprite is a 24-unit box at stroke 2; the drawn mark reads at 34px, so
+   the weight is scaled back to keep the drawn hairline. */
+.ec-value__icon {
+  width: 34px; height: 34px;
+  flex: none;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ec-value__title {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0 0 3px;
+}
+.ec-value__body {
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ec-muted);
+  max-width: 220px;
+  margin: 0;
+}
+
+.ec-panel {
+  background: var(--ec-card);
+  border: var(--rule) solid var(--ec-rule);
+  border-radius: var(--ec-radius);
+  padding: 16px 26px 13px;
+  /* The hero's "See the results" jump lands the panel just under the nav. */
+  scroll-margin-top: 84px;
+}
+.ec-panel__kicker {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 4px;
+}
+.ec-panel__title {
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  text-wrap: wrap;
+}
+.ec-panel__lede {
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ec-muted);
+  margin: 0 0 20px;
+}
+
+/* 431 : 329 : 317 — the dividers as drawn, with 42px of air either side. */
+.ec-panel__grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1.03fr 1fr;
+  grid-template-rows: auto auto;
+  padding-bottom: 10px;
+  border-bottom: var(--rule) solid var(--ec-rule);
+}
+.ec-panel__col { display: flex; flex-direction: column; min-width: 0; }
+.ec-panel__col--merchant { grid-row: 1 / span 2; padding-right: 42px; }
+.ec-panel__col + .ec-panel__col {
+  border-left: var(--rule) solid var(--ec-rule);
+  padding-left: 42px;
+}
+
+.ec-panel__source-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+.ec-panel__big {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28em;
+  flex-wrap: wrap;
+}
+.ec-panel__big b { font-size: 38px; font-weight: inherit; }
+.ec-panel__big span { font-size: 20px; letter-spacing: -0.02em; }
+.ec-panel__status {
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 0 0 2px;
+}
+.ec-panel__note {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ec-muted);
+  margin: 0;
+}
+.ec-panel__resolved {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+.ec-check {
+  width: 29px; height: 29px;
+  flex: none;
+  fill: #1e8e3e;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ec-check circle { stroke: none; }
+.ec-check path { fill: none; }
+.ec-panel__resolved-title {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+  margin-top: 3px;
+}
+.ec-panel__resolved-by {
+  display: block;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ec-muted);
+  margin-top: 2px;
+}
+
+.ec-panel__figure {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin: 0 0 10px;
+}
+/* 245px holds "Google Search impressions" to one line and breaks "Generative
+   AI feature / impressions" as drawn. */
+.ec-panel__figure-label {
+  font-size: 19px;
+  line-height: 1.2;
+  color: var(--ec-muted);
+  margin: 0;
+  max-width: 245px;
+}
+/* Under both figure columns, level with the support line beside it — the
+   drawing lets this line run past the second divider, so it gets the width. */
+.ec-panel__note--window {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  /* Stretched, not end-aligned, so the divider it carries meets the one above. */
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  border-left: var(--rule) solid var(--ec-rule);
+  padding: 18px 0 0 42px;
+  font-size: 13.5px;
+}
+
+.ec-panel__foot {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  padding-top: 18px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.ec-panel__markup { margin: 0; }
+.ec-panel__markup p { margin: 0; }
+.ec-panel__markup span { margin-right: 0.35em; }
+.ec-panel__markup b { font-weight: 700; }
+.ec-panel__markup .ec-panel__note { font-size: 13.5px; margin-top: 4px; }
+.ec-panel__markup--snippets {
+  border-left: var(--rule) solid var(--ec-rule);
+  padding-left: 32px;
+}
+.ec-panel__link {
+  margin-left: auto;
+  align-self: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* Takes the bare link past the 24px target without moving it. */
+  padding-block: 8px;
+}
+.ec-panel__link:hover { text-decoration: underline; }
+
+/* ── What I can help your store with ─────────────────────────────────────── */
+
+.ec-offers {
+  padding-block: 31px 40px;
+  border-top: var(--rule) solid var(--color-divider);
+}
+.ec-offers .ec-h2 { margin-bottom: 10px; }
+
+.ec-cards {
+  list-style: none;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.ec-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 27px;
+  min-height: 103px;
+  padding: 15px 16px 10px 21px;
+  background: var(--ec-card);
+  border: var(--rule) solid var(--ec-rule);
+  border-radius: var(--ec-radius);
+}
+.ec-card__icon {
+  width: 33px; height: 33px;
+  flex: none;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ec-card__title {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0 0 4px;
+}
+/* 240px reproduces the drawn two-line breaks; the face draws a touch wider
+   than Archivo here. */
+.ec-card__body {
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--ec-muted);
+  max-width: 240px;
+  margin: 0 0 4px;
+}
+.ec-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-accent);
+  text-decoration: none;
+  padding-block: 5px;
+}
+.ec-card__link:hover { text-decoration: underline; }
+
+.ec-offers__all {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ec-muted);
+  margin: 18px 0 0;
+}
+.ec-offers__all a { color: var(--ec-ink); font-weight: 600; }
+
+/* ── Narrow ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  /* Two even columns and the copy held to its own: there is no room left for
+     the drawn overlap once the photograph is this narrow. */
+  .ec-hero__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ec-hero__copy { grid-column: 1; max-width: none; padding-right: 28px; }
+  .ec-hero__media::before { display: none; }
+  .ec-hero__title { font-size: 40px; max-width: none; }
+  .ec-hero__lede { max-width: none; }
+  .ec-stat { right: 24px; }
+  .ec-stat__delta { font-size: 42px; }
+
+  .ec-metric { padding-left: 28px; }
+  .ec-metric:first-child { padding-left: 0; }
+
+  .ec-values { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .ec-value { padding-block: 18px; border-top: var(--rule) solid var(--ec-rule); }
+  .ec-value:first-child { border-top: 0; padding-top: 0; }
+  .ec-value + .ec-value { border-left: 0; padding-left: 0; }
+  .ec-value__body { max-width: none; }
+
+  .ec-panel__grid { grid-template-columns: minmax(0, 1fr); }
+  .ec-panel__col--merchant { padding-right: 0; }
+  .ec-panel__col + .ec-panel__col {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: var(--rule) solid var(--ec-rule);
+  }
+  .ec-panel__col--merchant { grid-row: auto; }
+  .ec-panel__note--window { grid-column: 1; grid-row: auto; border-left: 0; padding: 8px 0 0; }
+
+  .ec-panel__foot { flex-wrap: wrap; gap: 14px 32px; }
+  .ec-panel__link { margin-left: 0; flex-basis: 100%; }
+
+  .ec-cards { grid-template-columns: minmax(0, 1fr); }
+  .ec-card { min-height: 0; }
+}
+
+/* The phone frame: the same 0.838 drawing, one column, the photograph full
+   bleed under the copy with the figure at its bottom-left. */
+@media (max-width: 720px) {
+  .ec-hero__inner { grid-template-columns: minmax(0, 1fr); }
+  .ec-hero__copy { padding: 18px 0 0; }
+  .ec-hero .ec-crumb { font-size: 12px; margin-bottom: 12px; }
+  .ec-hero__title { font-size: 36px; line-height: 1.06; max-width: none; margin-bottom: 6px; }
+  .ec-hero__lede { font-size: 17px; line-height: 1.4; max-width: none; margin-bottom: 16px; }
+
+  /* Stacked and full-width, as the phone frame draws them: the text link
+     becomes the outlined second button. */
+  .ec-hero__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .ec-hero .ec-btn { width: 100%; }
+  .ec-hero__more {
+    justify-content: center;
+    min-height: 45px;
+    border: 1.5px solid var(--ec-ink);
+    border-radius: 3px;
+  }
+  .ec-hero__more:hover { text-decoration: none; background: color-mix(in srgb, var(--ec-ink) 6%, transparent); }
+
+  .ec-hero__media {
+    min-height: 0;
+    aspect-ratio: 9 / 8;
+    margin: 17px calc(-1 * var(--gutter)) 0;
+  }
+  .ec-hero__img { object-position: 62% 50%; }
+  .ec-hero__scrim {
+    background: linear-gradient(180deg, rgba(12, 9, 8, 0) 40%, rgba(12, 9, 8, 0.72) 100%);
+  }
+  .ec-stat { left: var(--gutter); right: auto; bottom: 14px; }
+  .ec-stat__delta { font-size: 44px; }
+
+  .ec-metrics { grid-template-columns: minmax(0, 1fr); }
+  .ec-metric,
+  .ec-metric:first-child {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    column-gap: 0;
+    align-items: start;
+    padding: 16px 0 17px;
+    border-left: 0;
+    border-top: var(--rule) solid var(--ec-rule);
+  }
+  .ec-metric:first-child { border-top: 0; }
+  .ec-metric__value { grid-row: 1 / span 2; font-size: 28px; }
+  .ec-metric__label { font-size: 14px; margin: 3px 0 2px; }
+  .ec-metric__source { font-size: 13.5px; }
+
+  .ec-results { padding-block: 22px 32px; }
+  .ec-h2 { font-size: 18px; }
+  .ec-results .ec-h2 { margin-bottom: 8px; }
+  .ec-value { gap: 26px; }
+
+  .ec-panel { padding: 18px 18px 14px; }
+  .ec-panel__title { font-size: 22px; }
+  .ec-panel__lede { font-size: 16px; }
+  .ec-panel__big b { font-size: 34px; }
+  .ec-panel__figure { font-size: 36px; }
+  .ec-panel__figure-label { font-size: 17px; }
+  .ec-panel__markup--snippets { border-left: 0; padding-left: 0; }
+
+  .ec-offers { padding-block: 26px 32px; }
+  .ec-cards { gap: 12px; }
+  .ec-card__body { max-width: none; }
+}
