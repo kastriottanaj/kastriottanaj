@@ -196,16 +196,17 @@ const [firstName, ...surname] = SITE.name.split(" ");
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <IconSprite />
-    <Nav />
+    <IconSprite>
+      <Nav />
 
-    <main id="main">
-      <slot />
-    </main>
+      <main id="main">
+        <slot />
+      </main>
 
-    <Footer />
-    <CookieConsent />
-    <WhatsAppButton />
+      <Footer />
+      <CookieConsent />
+      <WhatsAppButton />
+    </IconSprite>
 
     <script>
       import "../scripts/site.js";
