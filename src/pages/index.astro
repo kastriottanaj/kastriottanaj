@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 
 import Base from "../layouts/Base.astro";
 import AnnouncementBar from "../components/AnnouncementBar.astro";
@@ -12,6 +12,21 @@ import { SITE, SOCIAL_URLS } from "../lib/site";
 const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
 );
+
+/* The Albanien.Shop use case leads the Featured results. It lives in the
+   useCases collection rather than work, so it cannot ride the query above;
+   the card is drawn from its entry here and links to its own page. The two
+   figures come from the screenshots in src/lib/albanien-shop-evidence.ts. */
+const featuredUseCase = await getEntry("useCases", "albanien-shop");
+if (!featuredUseCase) throw new Error("src/content/use-cases/albanien-shop.md is missing.");
+const featured = {
+  href: `/use-cases/${featuredUseCase.id}/`,
+  title: "Albanien.Shop",
+  summary:
+    "Shopify SEO and Merchant Center fixes for a store serving the Albanian diaspora: 304 of 306 products approved, 6,237 Google Search clicks in three months.",
+  image: "/assets/work/albanien-shop-thumb.webp",
+  imageAlt: "Hands smoothing a shipping label onto a cardboard parcel beside a roll of kraft tape",
+};
 
 const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
 
@@ -184,6 +199,16 @@ const website = {
     <section class="section section--ruled" id="work">
       <h2 class="kicker">Featured results</h2>
       <div class="cases">
+        <article class="case">
+          <figure class="thumb">
+            <img src={featured.image} alt={featured.imageAlt} loading="lazy" decoding="async" />
+          </figure>
+          <div class="case__body">
+            <h3 class="case__title">{featured.title}</h3>
+            <p class="case__desc">{featured.summary}</p>
+            <a class="arrow-link" href={featured.href}>View use case →</a>
+          </div>
+        </article>
         {
           cases.map((entry) => (
             <article class="case">
