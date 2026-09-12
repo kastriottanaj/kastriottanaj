@@ -129,10 +129,6 @@ ${list([
 
 - [Contact](${site}/contact/): Enquiries about SEO, digital marketing, AI automation and web development.
 ${SOCIALS.map((social) => `- [${social.label}](${social.href})`).join("\n")}
-
-## Optional
-
-- [Northbound Albania](${site}/northbound/): A standalone landing page for a separate travel brand hosted on this domain — private, tailor-made journeys through Shkodër and Northern Albania. Not part of the SEO and automation practice above.
 `;
 
   return new Response(body, {

@@ -20,21 +20,5 @@ export function GET() {
     { path: "/process/" },
     { path: "/pricing/" },
     { path: "/contact/" },
-    {
-      path: "/northbound/",
-      images: ["/video/shkoder-poster.jpg"],
-      // The hero reel is the page: Northbound sells the place, and this is the
-      // only footage of it. Duration is the encode's 30.4s truncated to whole
-      // seconds — the video sitemap spec rejects fractions.
-      video: {
-        thumbnail: `${SITE.url}/video/shkoder-poster.jpg`,
-        title: "Northbound Albania — Shkodër and the wild north",
-        description:
-          "Aerial footage of Shkodër and the mountains of Northern Albania, the setting for Northbound's private, tailor-made journeys through Theth, Koman and Valbonë.",
-        content: `${SITE.url}/video/shkoder-web-1080p.mp4`,
-        duration: 30,
-        publicationDate: "2026-08-24",
-      },
-    },
   ]);
 }

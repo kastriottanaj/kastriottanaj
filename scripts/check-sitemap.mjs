@@ -7,10 +7,10 @@
 // The collection sitemaps build themselves — sitemap-blog.xml and its siblings
 // call getCollection(), so a new .md under src/content/ is listed the moment it
 // exists. sitemap-pages.xml is different: it is a hand-written list, because
-// the homepage and /northbound/ carry curated <video> metadata that cannot be
-// derived from a route. That hand-written list is the thing a new landing page
-// gets forgotten in, and a page missing from the sitemap is invisible in the
-// one place it costs the most.
+// the homepage carries curated <video> metadata that cannot be derived from a
+// route. That hand-written list is the thing a new landing page gets forgotten
+// in, and a page missing from the sitemap is invisible in the one place it
+// costs the most.
 //
 // So rather than guess which new pages belong in a sitemap, this asserts the
 // invariant against what was actually built: every page is either listed in a

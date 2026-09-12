@@ -19,5 +19,5 @@ data/
 .vercel
 .env*
 
-# 546 MB 4K master — served from Blob storage, never from the repo
+# 546 MB 4K master left over from the retired Northbound page — never from the repo
 public/travel/
