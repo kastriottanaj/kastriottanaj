@@ -1,7 +1,7 @@
 ---
 title: "SEO Bootcamp"
 navLabel: "SEO Bootcamp"
-description: "Master a real client SEO workflow in 10 modules covering audits, content, technical SEO, AI search and reporting. Join the waitlist today."
+description: "An online SEO bootcamp built on a real client workflow: 10 self-paced modules covering audits, keywords, content, technical SEO, AI search and reporting."
 short: "The full SEO workflow — audit, fix, publish, earn links — taught in the order it actually works."
 headline: "Learn the SEO workflow I use on client sites, in the order I actually use it."
 icon: "i-search"
