@@ -106,19 +106,19 @@ guarantee: "Fourteen days. Start the course, and if it does not give you a clear
 testimonials: []
 
 faq:
-  - q: "Do I need any coding experience?"
+  - q: "Is WordPress hard to learn without any coding experience?"
     a: "No. The course explains the parts of HTML and CSS that are useful when WordPress settings are not enough, but you do not need to know how to code before starting."
   - q: "Which theme or page builder does the course use?"
     a: "The principles work with modern block themes and established page builders. I teach the WordPress concepts and the build process first, then show how to make the same decisions in the tools rather than making the course an advertisement for one theme."
-  - q: "Can I use this to build websites for clients?"
+  - q: "Can I make money building WordPress websites for clients?"
     a: "Yes. Planning, staging, testing, launch and handover are taught as a repeatable client workflow, not only as a one-off personal project."
   - q: "Will I build a complete website during the course?"
     a: "Yes. The exercises take one site from its initial plan through setup, design, content, forms, SEO, performance, security and launch. You can use your real site as the project."
   - q: "Does it cover ecommerce?"
     a: "It covers the foundation every WordPress site needs. WooCommerce and full online-store operations are large enough to deserve a separate course, so they are not presented as a small bonus module here."
-  - q: "What costs are not included?"
+  - q: "How much does it cost to build a WordPress website beyond the course?"
     a: "You will need a domain and hosting for a live website. Depending on the stack you choose, you may also decide to buy a premium theme or plugin. I show free and paid options and explain when paying is worthwhile."
-  - q: "How long will it take?"
+  - q: "How long does it take to learn WordPress and build the website?"
     a: "The lessons take around sixteen hours. Building alongside them usually takes two to four weeks, depending on how much content and design work your site needs."
   - q: "How long do I have access?"
     a: "Indefinitely, including updates when WordPress changes enough to affect the workflow."
