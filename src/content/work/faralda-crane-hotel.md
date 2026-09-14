@@ -7,6 +7,8 @@ services: ["Local SEO", "Google Business Profile"]
 thumbCaption: "Faralda Crane Hotel — building photo"
 image: "/assets/work/faralda-crane-hotel.webp"
 imageAlt: "Faralda Crane Hotel logo over the Amsterdam crane hotel"
+imageWidth: 810
+imageHeight: 504
 order: 2
 ---
 

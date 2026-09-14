@@ -60,6 +60,9 @@ const work = defineCollection({
     image: z.string().optional(),
     /** Meaningful alternative text for the card art. */
     imageAlt: z.string().optional(),
+    /** Intrinsic pixel size of the card art, for the <img> width/height. */
+    imageWidth: z.number().optional(),
+    imageHeight: z.number().optional(),
     /**
      * A recorded walkthrough of the case study. When present it stands in for
      * the placeholder thumb, and the page earns a VideoObject and a sitemap

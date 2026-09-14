@@ -1,7 +1,7 @@
 ---
 title: "SEO & Automation for E-commerce"
 navLabel: "E-commerce"
-description: "Shopify SEO for Albanien.Shop: 304 of 306 products approved in Merchant Center, 6,237 Google Search clicks in three months and 279 good mobile URLs. Book a strategy call."
+description: "Shopify SEO for Albanien.Shop: 304 of 306 products approved in Merchant Center, 6,237 Google Search clicks in three months and 279 good mobile URLs."
 short: "Rank in the words your customers actually type, stop funding the head terms Amazon owns, and take the repeat work out of every order."
 icon: "i-store"
 audience: "Online shops selling across borders — especially those built for a diaspora"

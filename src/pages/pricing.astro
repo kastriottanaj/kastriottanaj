@@ -295,7 +295,9 @@ const schema = [
     </section>
 
     <!-- ── What every package gives you ─────────────────────────────────── -->
-    <section class="pricing-values" aria-label="What every package gives you">
+    <section class="pricing-values" aria-labelledby="values-title">
+      <!-- Hidden: the cards are the design, but without an h2 they hang off the h1. -->
+      <h2 class="sr-only" id="values-title">What every package gives you</h2>
       <ul class="pricing-wrap pricing-values__list">
         {
           values.map((value) => (

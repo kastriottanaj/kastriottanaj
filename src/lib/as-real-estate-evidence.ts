@@ -65,7 +65,7 @@ export const EVIDENCE = {
     caption: "46 pages indexed · 10 not indexed",
   },
   gtmetrix: {
-    src: "/assets/as-real-estate-evidence/gt-metrix-report.jpg",
+    src: "/assets/as-real-estate-evidence/gt-metrix-report.webp",
     width: 1240,
     height: 457,
     alt: "GTmetrix report for asrealestate-rks.com generated 27 August 2026: grade A, 100% performance, 92% structure, 539ms largest contentful paint, 0ms total blocking time, 0.03 cumulative layout shift",

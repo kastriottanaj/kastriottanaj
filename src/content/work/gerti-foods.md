@@ -7,6 +7,8 @@ services: ["SEO", "On-page optimisation", "Content strategy"]
 thumbCaption: "Gerti Foods — product photo"
 image: "/assets/work/gerti-foods-logo.webp"
 imageAlt: "Gerti Foods logo"
+imageWidth: 800
+imageHeight: 395
 year: 2026
 video:
   src: "/video/gerti-foods.mp4"

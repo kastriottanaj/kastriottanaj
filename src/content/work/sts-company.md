@@ -7,6 +7,8 @@ services: ["SEO", "Content strategy", "On-page optimisation"]
 thumbCaption: "STS Bau — lightning protection installation"
 image: "/assets/work/sts-bau-logo.webp"
 imageAlt: "STS Bau Blitzschutzbau logo"
+imageWidth: 356
+imageHeight: 153
 year: 2026
 video:
   src: "/video/sts-bau.mp4"

@@ -26,6 +26,8 @@ const featured = {
     "Shopify SEO and Merchant Center fixes for a store serving the Albanian diaspora: 304 of 306 products approved, 6,237 Google Search clicks in three months.",
   image: "/assets/work/albanien-shop-logo-thumb.webp",
   imageAlt: "Albanien.Shop logo, a red double-headed eagle",
+  imageWidth: 800,
+  imageHeight: 600,
 };
 
 const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
@@ -201,7 +203,14 @@ const website = {
       <div class="cases">
         <article class="case">
           <figure class="thumb">
-            <img src={featured.image} alt={featured.imageAlt} loading="lazy" decoding="async" />
+            <img
+              src={featured.image}
+              alt={featured.imageAlt}
+              width={featured.imageWidth}
+              height={featured.imageHeight}
+              loading="lazy"
+              decoding="async"
+            />
           </figure>
           <div class="case__body">
             <h3 class="case__title">{featured.title}</h3>
@@ -217,6 +226,8 @@ const website = {
                   <img
                     src={entry.data.image}
                     alt={entry.data.imageAlt ?? `${entry.data.client} logo`}
+                    width={entry.data.imageWidth}
+                    height={entry.data.imageHeight}
                     loading="lazy"
                     decoding="async"
                   />
