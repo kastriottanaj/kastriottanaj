@@ -23,6 +23,7 @@
 import { getEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import MoreWork from "../../components/MoreWork.astro";
 import { SITE } from "../../lib/site";
 import { EVIDENCE as evidence } from "../../lib/faralda-evidence";
 import "../../styles/faralda-crane-hotel.css";
@@ -302,6 +303,8 @@ const schema = [
       </ul>
     </div>
   </section>
+
+  <MoreWork current="/work/faralda-crane-hotel/" />
 
   <CtaBanner
     title="Want results like this?"

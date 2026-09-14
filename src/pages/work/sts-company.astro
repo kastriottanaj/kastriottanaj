@@ -27,6 +27,7 @@
 import { getEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import MoreWork from "../../components/MoreWork.astro";
 import { SITE } from "../../lib/site";
 import { EVIDENCE as evidence } from "../../lib/sts-evidence";
 
@@ -574,6 +575,8 @@ const schema = [
   </section>
 
   <!-- ── Work with me ───────────────────────────────────────────────────── -->
+  <MoreWork current="/work/sts-company/" />
+
   <section class="cs-section wrap">
     <p class="cs-eyebrow">Work with me</p>
     <h2 class="cs-h2">The same three levers, for your brand</h2>

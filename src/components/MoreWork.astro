@@ -1,0 +1,87 @@
+---
+/**
+ * "More client results" — three cards linking the other case studies and use
+ * cases, plus the two index pages beneath them.
+ *
+ * Every case study used to end at the CTA band, so the only paths between
+ * them ran through /work/ and the homepage: Faralda had two incoming links
+ * site-wide, and /use-cases/ was reachable only from its own two children's
+ * breadcrumb. The cards take the three entries that follow the current page
+ * in a fixed ring (work by `order`, then use cases by `order`), so every page
+ * is linked from exactly three others rather than the same three winning
+ * everywhere.
+ *
+ * Built from the `.cs-section` / `.cs-cards` rules in site.css, which are
+ * global — the "Work with me" cards on the same pages use them — so the block
+ * sits right on the fc-* and ec-* pages too, without a stylesheet of its own.
+ */
+import { getCollection } from "astro:content";
+
+interface Props {
+  /** Path of the page being rendered, so it never links to itself. */
+  current: string;
+}
+
+const { current } = Astro.props;
+
+const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+/* The card copy is the collections' own — the summary each case study already
+   ships to /work/ and the homepage, and the one-liner each use case shows on
+   /use-cases/ — so nothing here needs editing when a result changes. */
+const ring = [
+  ...work.map((entry) => ({
+    href: `/work/${entry.id}/`,
+    kicker: "Case study",
+    title: entry.data.title,
+    body: entry.data.summary,
+    cta: "View project →",
+  })),
+  ...useCases.map((entry) => ({
+    href: `/use-cases/${entry.id}/`,
+    kicker: `Use case · ${entry.data.navLabel ?? entry.data.title}`,
+    title: entry.data.title,
+    body: entry.data.short,
+    cta: "View use case →",
+  })),
+];
+
+const at = ring.findIndex((entry) => entry.href === current);
+const others = at === -1 ? ring : [...ring.slice(at + 1), ...ring.slice(0, at)];
+const cards = others.slice(0, 3);
+---
+
+<section class="cs-section wrap" aria-labelledby="more-work-title">
+  <p class="cs-eyebrow">Keep reading</p>
+  <h2 class="cs-h2" id="more-work-title">More client results</h2>
+  <div class="cs-cards">
+    {
+      cards.map((card) => (
+        <article class="cs-card">
+          <p class="cs-card__kicker">{card.kicker}</p>
+          <h3 class="cs-card__title">{card.title}</h3>
+          <p class="cs-card__body">{card.body}</p>
+          <a class="cs-card__cta" href={card.href}>
+            {card.cta}
+          </a>
+        </article>
+      ))
+    }
+  </div>
+  <p class="more-work__all">
+    <a class="arrow-link" href="/work/">All case studies →</a>
+    <a class="arrow-link" href="/use-cases/">Use cases by industry →</a>
+  </p>
+</section>
+
+<style>
+  .more-work__all {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    margin: 26px 0 0;
+  }
+</style>

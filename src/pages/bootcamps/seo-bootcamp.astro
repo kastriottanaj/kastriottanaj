@@ -13,6 +13,11 @@ import "../../styles/seo-bootcamp.css";
    wordpress-bootcamp, so one URL is not emitted by two routes. */
 const bootcamp = await getEntry("bootcamps", "seo-bootcamp");
 if (!bootcamp) throw new Error("src/content/bootcamps/seo-bootcamp.md is missing");
+
+/* The other bootcamp, named once below the FAQ. Without it the two sales pages
+   only met through /bootcamps/, and the WordPress one had two incoming links
+   site-wide. Its own `short` line does the describing. */
+const sibling = await getEntry("bootcamps", "wordpress-bootcamp");
 const { Content } = await render(bootcamp);
 const {
   title,
@@ -474,6 +479,15 @@ if (faq.length) {
             ))}
           </div>
         </section>
+      )
+    }
+
+    {
+      sibling && (
+        <p class="sb-wrap sb-sibling">
+          Also available: <a href="/bootcamps/wordpress-bootcamp/">{sibling.data.title}</a> —{" "}
+          {sibling.data.short}
+        </p>
       )
     }
 

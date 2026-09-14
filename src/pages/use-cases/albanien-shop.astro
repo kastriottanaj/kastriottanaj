@@ -38,6 +38,7 @@
 import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import MoreWork from "../../components/MoreWork.astro";
 import { SITE } from "../../lib/site";
 import { EVIDENCE as evidence } from "../../lib/albanien-shop-evidence";
 import "../../styles/albanien-shop.css";
@@ -519,6 +520,8 @@ if (faq.length) {
       </section>
     )
   }
+
+  <MoreWork current="/use-cases/albanien-shop/" />
 
   <!-- ── What I can help your store with ────────────────────────────────── -->
   <section class="ec-offers">

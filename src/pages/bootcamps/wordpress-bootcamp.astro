@@ -13,6 +13,9 @@ import "../../styles/wordpress-bootcamp.css";
    src/pages/services/[slug].astro skips its four redesigned siblings. */
 const bootcamp = await getEntry("bootcamps", "wordpress-bootcamp");
 if (!bootcamp) throw new Error("src/content/bootcamps/wordpress-bootcamp.md is missing");
+
+/* The other bootcamp, named once below the FAQ — see seo-bootcamp.astro. */
+const sibling = await getEntry("bootcamps", "seo-bootcamp");
 const { Content } = await render(bootcamp);
 const {
   title,
@@ -466,6 +469,15 @@ if (faq.length) {
             ))}
           </div>
         </section>
+      )
+    }
+
+    {
+      sibling && (
+        <p class="wpb-wrap wpb-sibling">
+          Also available: <a href="/bootcamps/seo-bootcamp/">{sibling.data.title}</a> —{" "}
+          {sibling.data.short}
+        </p>
       )
     }
 

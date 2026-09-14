@@ -720,6 +720,19 @@ body:has(.sb-page) {
   line-height: 1.5;
 }
 
+/* The other bootcamp, one line between the FAQ and the newsletter form. */
+.sb-sibling {
+  /* 44px above from the FAQ section's own padding; match it below the line. */
+  margin: 0 auto 44px;
+  color: var(--sb-muted);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.sb-sibling a {
+  color: var(--color-accent-700);
+  font-weight: 600;
+}
+
 /* ── FAQ ─────────────────────────────────────────────────────────────────── */
 
 .sb-faq { margin-top: 20px; max-width: 820px; }
