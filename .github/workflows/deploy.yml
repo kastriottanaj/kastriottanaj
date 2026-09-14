@@ -34,6 +34,11 @@ jobs:
       # wrong format posts to LinkedIn as a grey box, and the page looks fine.
       - run: npm run check:og
 
+      # deploy/Caddyfile allows the build's inline scripts by hash. A changed
+      # inline script under an enforced policy fails silently in the browser —
+      # analytics just stop — so the mismatch has to fail here instead.
+      - run: npm run check:csp
+
   deploy:
     name: Deploy to Hetzner
     needs: build
