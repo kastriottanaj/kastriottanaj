@@ -29,6 +29,8 @@ export async function GET(context: APIContext) {
 
 ${SITE.jobTitle}, based in ${SITE.based}.
 
+The full text of every service, use case, bootcamp, case study and post is at ${site}/llms-full.txt.
+
 ## Start here
 
 ${list([
@@ -115,7 +117,9 @@ ${list([
   },
   ...posts.map((p) => ({
     url: `/blog/${p.id}/`,
-    name: p.data.title,
+    // metaTitle is the label written for a discovery surface; the on-page
+    // title can be a hook that reads strangely as a bare link name.
+    name: p.data.metaTitle ?? p.data.title,
     note: p.data.description,
   })),
 ])}
