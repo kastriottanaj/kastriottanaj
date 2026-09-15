@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
+import MoreWork from "../../components/MoreWork.astro";
 import { SITE } from "../../lib/site";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -193,6 +194,8 @@ if (faq.length) {
         </section>
       )
     }
+
+    <MoreWork variant="ruled" current={`/use-cases/${useCase.id}/`} />
   </div>
 
   {/* Generic copy on purpose: every industry rendered here shares this route,

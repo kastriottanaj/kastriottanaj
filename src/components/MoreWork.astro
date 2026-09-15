@@ -14,15 +14,23 @@
  * Built from the `.cs-section` / `.cs-cards` rules in site.css, which are
  * global — the "Work with me" cards on the same pages use them — so the block
  * sits right on the fc-* and ec-* pages too, without a stylesheet of its own.
+ *
+ * The `ruled` variant is for the generic use-case route, whose sections are
+ * `.section--ruled` blocks inside one `.wrap` with a `.kicker` for a heading.
+ * There the default's own `.wrap` would draw its rule a gutter wider than
+ * every other rule on the page, so this variant drops the wrap and the
+ * eyebrow and takes the page's classes instead — the caller places it inside
+ * its wrap, after the FAQ, where the bespoke pages put the default.
  */
 import { getCollection } from "astro:content";
 
 interface Props {
   /** Path of the page being rendered, so it never links to itself. */
   current: string;
+  variant?: "cs" | "ruled";
 }
 
-const { current } = Astro.props;
+const { current, variant = "cs" } = Astro.props;
 
 const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
 const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).sort(
@@ -54,9 +62,14 @@ const others = at === -1 ? ring : [...ring.slice(at + 1), ...ring.slice(0, at)];
 const cards = others.slice(0, 3);
 ---
 
-<section class="cs-section wrap" aria-labelledby="more-work-title">
-  <p class="cs-eyebrow">Keep reading</p>
-  <h2 class="cs-h2" id="more-work-title">More client results</h2>
+<section
+  class={variant === "ruled" ? "section section--ruled" : "cs-section wrap"}
+  aria-labelledby="more-work-title"
+>
+  {variant === "cs" && <p class="cs-eyebrow">Keep reading</p>}
+  <h2 class={variant === "ruled" ? "kicker" : "cs-h2"} id="more-work-title">
+    More client results
+  </h2>
   <div class="cs-cards">
     {
       cards.map((card) => (
