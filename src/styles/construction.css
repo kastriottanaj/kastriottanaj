@@ -22,10 +22,10 @@
    The ribbon is full-bleed with four centred cells; the panel's figure is a
    70px number, not the e-commerce page's 40; the service cards carry no
    icons; the CTA band is the house component, restyled to the drawing's
-   tighter 71px and 24px title. The panel's "View the source reports" is a
-   <details> whose summary is the drawn footer row, so the screenshots the
-   page's every number was read from are one click away without adding a
-   section the drawing does not have.
+   tighter 71px and 24px title. Under the panel sits the one section the
+   drawing does not have: the evidence gallery, in the shared .cs-* kit the
+   e-commerce page uses for its own reports, which the panel's drawn "View
+   the source reports" row links down to.
 
    This sheet is bundled before site.css, so anything that restyles a house
    class (.breadcrumb, .btn, .cta) is scoped under a page class — a bare
@@ -310,7 +310,7 @@ body:has(.ct-hero) {
 
 /* ── Values row + client-results panel ───────────────────────────────────── */
 
-.ct-results { padding-block: 22px 0; }
+.ct-results { padding-block: 22px 40px; }
 .ct-results .ct-h2 { margin-bottom: 18px; }
 
 .ct-values {
@@ -433,22 +433,17 @@ body:has(.ct-hero) {
   margin: 0;
 }
 
-/* The footer row is the summary of a <details>: closed, it is the drawn row;
-   open, it lays the four profile charts and the knowledge panel beneath. */
-.ct-panel__foot { margin: 0; }
-.ct-panel__foot summary {
+.ct-panel__foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  list-style: none;
-  cursor: pointer;
+  margin: 0;
   padding-top: 17px;
   font-size: 14px;
   line-height: 1.4;
 }
-.ct-panel__foot summary::-webkit-details-marker { display: none; }
 .ct-panel__source { color: var(--ct-muted); }
 .ct-panel__link {
   display: inline-flex;
@@ -462,10 +457,7 @@ body:has(.ct-hero) {
   white-space: nowrap;
   padding-block: 5px;
 }
-.ct-panel__foot summary:hover .ct-panel__link { color: var(--color-accent-700); }
-.ct-panel__link span { display: inline-block; transition: transform 0.15s ease; }
-.ct-panel__foot[open] .ct-panel__link span { transform: rotate(90deg); }
-.ct-panel__reports { margin-top: 18px; }
+.ct-panel__link:hover { color: var(--color-accent-700); }
 
 /* ── What I can help your business with ─────────────────────────────────── */
 
@@ -626,7 +618,7 @@ body:has(.ct-hero) .cta__btn {
   .ct-panel__lede { font-size: 15px; }
   .ct-panel__figure { font-size: 56px; }
   .ct-panel__figure-label { font-size: 17px; }
-  .ct-panel__foot summary { align-items: flex-start; }
+  .ct-panel__foot { align-items: flex-start; }
 
   .ct-offers { padding-block: 22px 14px; }
   .ct-cards { gap: 12px; }
@@ -671,5 +663,5 @@ body:has(.ct-hero) .cta__btn {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ct-sticky, .ct-panel__link span { transition: none; }
+  .ct-sticky { transition: none; }
 }

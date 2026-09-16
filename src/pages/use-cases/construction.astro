@@ -22,9 +22,10 @@
  * is the mockup and nothing more, at Kastriot's request: no brief, no market
  * problems, no FAQ, no related-results ring — so the markdown's `problems`,
  * `plays` and `faq` are not rendered here, and the schema is Service and
- * BreadcrumbList only. The one addition is invisible until asked for: the
- * panel's drawn "View the source reports" row is a <details> that opens the
- * screenshots every number on the page was read from.
+ * BreadcrumbList only. The one addition is the evidence gallery under the
+ * panel — the screenshots every number on the page was read from, in the
+ * shared case-study style, as the e-commerce page shows its own. The panel's
+ * drawn "View the source reports" row links down to it.
  *
  * Every figure below is read off a screenshot in /assets/at-bau-evidence/ —
  * see src/lib/at-bau-evidence.ts for which. Do not round, restate or refresh
@@ -100,13 +101,14 @@ const panel = {
   source: "Source: Google Business Profile",
 };
 
-/* Behind the panel's footer row, in the ribbon's order, then the listing. */
-const reports = [
-  evidence.interactions,
-  evidence.directions,
-  evidence.websiteClicks,
-  evidence.calls,
-  evidence.knowledgePanel,
+/* Gallery order is the page's order: the headline chart, then the three the
+   ribbon breaks it into, then the listing as Google shows it. */
+const shots = [
+  { shot: evidence.interactions, span: "cs-ev--6" },
+  { shot: evidence.directions, span: "cs-ev--3" },
+  { shot: evidence.websiteClicks, span: "cs-ev--3" },
+  { shot: evidence.calls, span: "cs-ev--4" },
+  { shot: evidence.knowledgePanel, span: "cs-ev--2" },
 ];
 
 /* The mockup's services row. */
@@ -286,32 +288,43 @@ const whatsappPath =
           </div>
         </div>
 
-        <details class="ct-panel__foot">
-          <summary>
-            <span class="ct-panel__source">{panel.source}</span>
-            <span class="ct-panel__link">View the source reports <span aria-hidden="true">→</span></span>
-          </summary>
-          <div class="ct-panel__reports cs-ev-grid">
-            {
-              reports.map((shot) => (
-                <figure class:list={["cs-ev", shot === evidence.knowledgePanel ? "cs-ev--2" : "cs-ev--3"]}>
-                  <img
-                    src={shot.src}
-                    alt={shot.alt}
-                    width={shot.width}
-                    height={shot.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <figcaption>
-                    <b>{shot.strong}</b> — {shot.caption}
-                  </figcaption>
-                </figure>
-              ))
-            }
-          </div>
-        </details>
+        <p class="ct-panel__foot">
+          <span class="ct-panel__source">{panel.source}</span>
+          <a class="ct-panel__link" href="#evidence">
+            View the source reports <span aria-hidden="true">→</span>
+          </a>
+        </p>
       </article>
+    </div>
+  </section>
+
+  <!-- ── The evidence ───────────────────────────────────────────────────── -->
+  <section class="cs-section wrap" id="evidence">
+    <p class="cs-eyebrow">The evidence</p>
+    <h2 class="cs-h2">Every number here, screenshotted from the source</h2>
+    <p class="cs-lede">
+      Google Business Profile's own performance charts for AT Bau, April to mid-September
+      2026, and the listing as Google shows it. Nothing recreated, nothing rounded up.
+    </p>
+
+    <div class="cs-ev-grid">
+      {
+        shots.map(({ shot, span }) => (
+          <figure class:list={["cs-ev", span]}>
+            <img
+              src={shot.src}
+              alt={shot.alt}
+              width={shot.width}
+              height={shot.height}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <b>{shot.strong}</b> — {shot.caption}
+            </figcaption>
+          </figure>
+        ))
+      }
     </div>
   </section>
 
