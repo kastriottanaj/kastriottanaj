@@ -372,10 +372,12 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
 .community__figure img { width: 100%; height: auto; }
 
 /* ── Featured results ────────────────────────────────────────────────────── */
+/* 200px lands five results on one row at the measure; 260 held four, and a
+   fifth wrapped alone. */
 .cases {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 .case {
   border: var(--rule) solid var(--color-divider);

@@ -207,6 +207,22 @@ const schema = [
               <a href="/use-cases/real-estate/">View project →</a>
             </div>
           </article>
+
+          {/* Read off the Business Profile screenshots behind
+              /use-cases/construction/ — see src/lib/at-bau-evidence.ts. */}
+          <article class="work-card">
+            <img
+              src="/assets/work/at-bau-card.webp"
+              width="686"
+              height="172"
+              alt="AT BAU logo over grey herringbone paving, from the homepage built for the firm"
+            />
+            <div class="work-card__body">
+              <h3>AT Bau</h3>
+              <p>344 Business Profile interactions</p>
+              <a href="/use-cases/construction/">View project →</a>
+            </div>
+          </article>
         </div>
       </section>
     </div>
@@ -410,10 +426,12 @@ const schema = [
   .work-feature__body a:hover,
   .work-card__body a:hover { text-decoration: underline; }
 
+  /* Five across since AT Bau joined the row (2026-09-16); the mockup drew
+     four, and a fifth wrapping alone read worse than a tighter row. */
   .work-card-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 19px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
     margin-top: 15px;
   }
   /* The mockup's 167px card, expressed as a floor rather than a fixed height:
@@ -474,7 +492,7 @@ const schema = [
     .work-hero__visual { width: 100%; }
     .work-hero__title { font-size: 30px; }
     .work-feature { grid-template-columns: 49.25% minmax(0, 1fr); }
-    .work-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .work-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .work-benefit { padding-inline: 14px; gap: 12px; }
     .work-benefit br { display: none; }
   }

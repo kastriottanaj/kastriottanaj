@@ -30,6 +30,21 @@ const featured = {
   imageHeight: 600,
 };
 
+/* The AT Bau use case follows it, for the same reason. The figures come from
+   the Business Profile screenshots in src/lib/at-bau-evidence.ts. */
+const atBau = await getEntry("useCases", "construction");
+if (!atBau) throw new Error("src/content/use-cases/construction.md is missing.");
+const second = {
+  href: `/use-cases/${atBau.id}/`,
+  title: "AT Bau",
+  summary:
+    "A new website and local SEO for a Remscheid construction firm: 344 Business Profile interactions, 229 direction requests and a 5.0 rating from 24 reviews.",
+  image: "/assets/work/at-bau-logo-thumb.webp",
+  imageAlt: "AT BAU logo over grey herringbone paving, from the homepage built for the firm",
+  imageWidth: 800,
+  imageHeight: 600,
+};
+
 const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
@@ -216,6 +231,23 @@ const website = {
             <h3 class="case__title">{featured.title}</h3>
             <p class="case__desc">{featured.summary}</p>
             <a class="arrow-link" href={featured.href}>View use case →</a>
+          </div>
+        </article>
+        <article class="case">
+          <figure class="thumb">
+            <img
+              src={second.image}
+              alt={second.imageAlt}
+              width={second.imageWidth}
+              height={second.imageHeight}
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="case__body">
+            <h3 class="case__title">{second.title}</h3>
+            <p class="case__desc">{second.summary}</p>
+            <a class="arrow-link" href={second.href}>View use case →</a>
           </div>
         </article>
         {

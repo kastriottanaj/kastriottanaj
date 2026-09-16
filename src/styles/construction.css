@@ -520,6 +520,18 @@ body:has(.ct-hero) .cta__btn {
   border-radius: 3px;
 }
 
+/* ── Footer: the drawing's 47px row, as the /work/ page also sets it ─────── */
+
+/* The row itself is the drawn 47px; the 96px beneath it stays, reserved for
+   the floating WhatsApp button that would otherwise sit on the social icons. */
+body:has(.ct-hero) .footer__inner {
+  min-height: 47px;
+  align-items: center;
+  padding-top: 12px;
+}
+body:has(.ct-hero) .footer__copy,
+body:has(.ct-hero) .footer__link { font-size: 12px; }
+
 /* ── Phone action bar: the WhatsApp mark, then a "Contact" button ────────── */
 
 .ct-sticky { display: none; }
