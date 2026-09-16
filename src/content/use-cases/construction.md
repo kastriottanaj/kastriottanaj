@@ -17,8 +17,10 @@ problems:
   - title: "The quote goes to whoever answered"
     detail: "A tradesperson takes calls on site, with one hand on a machine. The call that goes to voicemail at ten is a job that went to the next firm on the map by lunch, and a contact form read that evening competes with a WhatsApp answered in four minutes."
 plays:
+  - title: "A website built around the searches, not the org chart"
+    detail: "I built atbau-nrw.de from the ground up: a home page that says what the firm does and where, in the first line; a services page that names each trade — Tiefbau, paving and patios, garden and landscape construction, fences, earthworks, demolition, pools and ponds — in the words a customer uses; and a phone number, opening hours and address on every page, matching the Business Profile to the letter."
   - title: "A page for the service that carries its own demand"
-    detail: "Excavator hire is its own search — \"Bagger mieten Remscheid\" — so it got its own page, titled the way the customer types it, with the mini and compact machines listed, the with-or-without-operator question answered, and the things people actually ask before they book: can I drive it myself, how short-notice, what are the safety rules. Winter service the same. The rest of the trade sits on a services page that names each one in the words a customer uses."
+    detail: "Excavator hire is its own search — \"Bagger mieten Remscheid\" — so it got its own page, titled the way the customer types it, with the mini and compact machines listed, the with-or-without-operator question answered, and the things people actually ask before they book: can I drive it myself, how short-notice, what are the safety rules. Winter service the same."
   - title: "The Business Profile as the front door"
     detail: "Category, services, hours, photos of real jobs and a 5.0 rating from 24 reviews. For April to mid-September 2026 the profile's own reporting shows 344 interactions: 229 direction requests, 103 clicks through to the site and 8 calls tapped straight from the listing."
   - title: "Markup that ties the site to the map"
@@ -47,20 +49,11 @@ faq:
     a: "Yes, and it is worth reading properly. AT Bau's profile peaked in May, when gardens get built, dipped in July and recovered in August as the autumn jobs were booked — that shape is the trade, not the search work, and the September point on this page is half a month. The answer to it is a counter-seasonal service with its own page, so the site has something to rank for in the months the excavator sits. AT Bau's is winter service."
 ---
 
-## Why this market is different
-
-Trade demand is local, urgent and specific. The search has a town in it or "in der Nähe" after it, it happens on a phone, and Google answers it with a map and three businesses rather than ten blue links. So the fight is not for a ranking in the ordinary sense — it is for one of three map positions inside a radius of about twenty kilometres, decided by category, distance, reviews and how completely the profile and the website agree with each other.
-
-The second difference is that the customer is choosing between four firms who can all do the job. The trade is rarely the differentiator. Being findable, reviewable and reachable at the moment they look is.
-
-## What the AT Bau profile shows
-
-[AT Bau](https://www.atbau-nrw.de/) is a Bauunternehmen in Remscheid — civil engineering, garden and landscape construction, paving, pools, earthworks, excavator hire and winter service. I built the website and did the local search work behind it. The Business Profile's own reporting for April to mid-September 2026: **344 interactions**, of which 229 were direction requests, 103 were clicks through to the site and 8 were calls tapped from the listing itself — the number a customer dials after reading the site is not counted there. Behind that sits a 5.0 rating from 24 reviews.
-
-Two things in those numbers deserve a proper read. Directions is the largest figure because plant hire is a collect-it business: someone asking Google for the route to the yard has already decided. And the month-by-month line has the shape of the trade — a May peak when the gardens get built, a July dip, an August recovery — not the shape of a campaign. Local search does not create demand in a trade. It decides which firm the demand reaches.
-
-## What working together looks like
-
-The first two weeks are diagnosis: the profile read against what the competitors in the same map pack carry, the site crawled as Google sees it, and an honest look at what happens to a call that goes unanswered on site. That produces a short list, cheapest and highest-impact first, and the pages get built one service at a time, starting with the one that carries its own demand.
-
-The content-led version of this work is the [STS Bau case study](/work/sts-company/) — a German trade specialist taken from a flat line to 343 ranking keywords on the back of a knowledge hub. This page is the local version: the same method, pointed at a map instead of a topic.
+<!-- This entry carries the metadata only: the card on /use-cases/, the meta
+     description, the image sitemap entries and the llms.txt line. The page
+     itself is hand-built at src/pages/use-cases/construction.astro from
+     Kastriot's mockup, and is the mockup and nothing more — so unlike the
+     other two bespoke use cases it renders none of the `problems`, `plays` or
+     `faq` above. They stay here as the written-up version of the engagement,
+     and would render again if the entry ever fell back to the generic route.
+     Editing the page copy means editing that file. -->

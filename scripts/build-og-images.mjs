@@ -48,6 +48,7 @@ const PAGE_CARDS = [
   "/assets/services/kastriot-tanaj-web-development-services.webp",
   "/assets/work/faralda-crane-hotel-amsterdam.webp",
   "/assets/use-cases/albanien-shop-shopify-seo.webp",
+  "/assets/use-cases/at-bau-website.webp",
   // Case-study evidence. Wide, thin exports rather than art, so they letterbox
   // rather than crop — see `fit` below.
   "/assets/sts-evidence/organic-traffic.jpg",

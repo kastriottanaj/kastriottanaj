@@ -2,6 +2,7 @@ import { getCollection } from "astro:content";
 import { sitemapResponse } from "../lib/sitemap";
 import { EVIDENCE_IMAGES as AS_REAL_ESTATE_IMAGES } from "../lib/as-real-estate-evidence";
 import { EVIDENCE_IMAGES as ALBANIEN_SHOP_IMAGES } from "../lib/albanien-shop-evidence";
+import { EVIDENCE_IMAGES as AT_BAU_IMAGES } from "../lib/at-bau-evidence";
 import { SITE } from "../lib/site";
 
 /** Content images a hand-built use-case page renders, keyed by its slug. */
@@ -9,6 +10,8 @@ const bespokeImages: Record<string, string[]> = {
   "real-estate": AS_REAL_ESTATE_IMAGES,
   // The hero photograph leads, then the screenshots in the order the page shows them.
   "albanien-shop": ["/assets/use-cases/albanien-shop-shopify-seo.webp", ...ALBANIEN_SHOP_IMAGES],
+  // The profile charts and the knowledge panel, in the order the page shows them.
+  construction: AT_BAU_IMAGES,
 };
 
 export async function GET() {
