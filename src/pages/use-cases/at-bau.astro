@@ -15,7 +15,13 @@
  * panel, three service cards, the CTA band. The drawing is at 0.803 of life
  * size — its 991px frame stands for a ~1234px viewport, solved from the panel
  * measuring the site's 1136px measure and confirmed by the hero button
- * drawing the house 42px — and construction.css carries every size from it.
+ * drawing the house 42px — and at-bau.css carries every size from it.
+ *
+ * It lives at /use-cases/at-bau/: the client is the slug, as Kastriot asked on
+ * 2026-09-16, and the industry is the title — the Albanien.Shop pattern. It
+ * shipped for an afternoon as /use-cases/construction/, so
+ * public/use-cases/construction/index.html holds the redirect stub for that
+ * path.
  *
  * Every other entry in the `useCases` collection renders through [slug].astro,
  * and that route deliberately skips this one (see the filter there). The page
@@ -36,13 +42,13 @@ import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 import { EVIDENCE as evidence } from "../../lib/at-bau-evidence";
-import "../../styles/construction.css";
+import "../../styles/at-bau.css";
 
-const entry = await getEntry("useCases", "construction");
-if (!entry) throw new Error("src/content/use-cases/construction.md is missing.");
+const entry = await getEntry("useCases", "at-bau");
+if (!entry) throw new Error("src/content/use-cases/at-bau.md is missing.");
 
 const { title, description, audience } = entry.data;
-const url = `${SITE.url}/use-cases/construction/`;
+const url = `${SITE.url}/use-cases/at-bau/`;
 
 /* The hero photograph: the AT Bau homepage Kastriot built, cropped to its
    paving and logo (the site's nav sits below the crop). The uncropped
@@ -92,9 +98,14 @@ const values = [
 const panel = {
   kicker: "AT Bau · Client results",
   title: "344 interactions. Documented in Google.",
-  lede: "A website and local SEO for a construction and plant-hire firm in Remscheid, Germany.",
+  lede: "I built the website and ran the local SEO for a construction and plant-hire firm in Remscheid, Germany.",
   workTitle: "The work behind the listing",
-  work: ["Dedicated service pages", "Google Business Profile improvements", "Local business structured data"],
+  work: [
+    "A new website, built from the ground up",
+    "Dedicated service pages",
+    "Google Business Profile improvements",
+    "Local business structured data",
+  ],
   figure: "344", // evidence.interactions
   figureLabel: "Business Profile interactions",
   figureNote: "Apr–mid-Sep 2026",

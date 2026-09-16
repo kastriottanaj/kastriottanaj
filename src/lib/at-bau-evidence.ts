@@ -1,5 +1,5 @@
 /**
- * The AT Bau screenshots behind /use-cases/construction/.
+ * The AT Bau screenshots behind /use-cases/at-bau/.
  *
  * Same contract as as-real-estate-evidence.ts: shared between the page that
  * renders them and sitemap-use-cases.xml, which lists them for Google Images,

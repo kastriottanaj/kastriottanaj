@@ -32,8 +32,8 @@ const featured = {
 
 /* The AT Bau use case follows it, for the same reason. The figures come from
    the Business Profile screenshots in src/lib/at-bau-evidence.ts. */
-const atBau = await getEntry("useCases", "construction");
-if (!atBau) throw new Error("src/content/use-cases/construction.md is missing.");
+const atBau = await getEntry("useCases", "at-bau");
+if (!atBau) throw new Error("src/content/use-cases/at-bau.md is missing.");
 const second = {
   href: `/use-cases/${atBau.id}/`,
   title: "AT Bau",

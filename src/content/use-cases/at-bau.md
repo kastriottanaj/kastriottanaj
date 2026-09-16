@@ -51,7 +51,7 @@ faq:
 
 <!-- This entry carries the metadata only: the card on /use-cases/, the meta
      description, the image sitemap entries and the llms.txt line. The page
-     itself is hand-built at src/pages/use-cases/construction.astro from
+     itself is hand-built at src/pages/use-cases/at-bau.astro from
      Kastriot's mockup, and is the mockup and nothing more — so unlike the
      other two bespoke use cases it renders none of the `problems`, `plays` or
      `faq` above. They stay here as the written-up version of the engagement,
