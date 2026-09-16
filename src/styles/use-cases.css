@@ -1,0 +1,586 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Use cases index — /use-cases/.
+
+   Built from the design mockup at ~/Desktop/design-mockup.png (2026-09-16),
+   the fourth drawing in the e-commerce / AT Bau family: copy beside a
+   photograph that fades in from the left and bleeds off the right, a
+   selected-client strip, three industry cards, a three-column services row
+   over the Albanien.shop client-results panel, the CTA band.
+
+   The drawing is at 0.770 of life size: its 939px frame stands for a ~1219px
+   viewport, solved from the card grid measuring 875 drawn px — the site's
+   1136px measure — with a symmetric 32px drawn inset, the 41.5px a centred
+   measure leaves at that width. Two independent checks agree: the nav logo
+   type returns 17.6px against the real 18, and the CTA band's title solves to
+   21.95px against the house component's 22. Every size here is drawn ink
+   divided by that scale; the type on this page really is larger than its
+   siblings' (a 58px H1 where AT Bau has 46). Running text is sized from drawn
+   word widths (this face sets lowercase like Archivo 800 but draws caps
+   ~17% taller), so headings anchor on their baselines and the drawn cap tops
+   sit a few px lower than ours. The geometry composes on --measure / --gutter
+   rather than the drawing's own insets, per the house rule.
+
+   The phone frame is a loose second drawing — its type scales element by
+   element (H1 at 0.59 of the desktop's, hero lede at 1.09) — so it is read
+   for layout and line breaks at a 390px viewport (0.692), not for sizes.
+
+   This sheet is bundled before site.css, so anything that restyles a house
+   class (.btn, .cta) is scoped under a page class — a bare single-class rule
+   here loses every tie.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body:has(.uc-hero) {
+  --uc-rule: #e2e0df;
+  --uc-border: #dcdbda;
+  --uc-ink: #1c1b1b;
+  --uc-muted: #545252;
+  --uc-faint: #605e5e;
+  --uc-card: #fff;
+  --uc-radius: 4px;
+}
+
+.uc-kicker {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+/* The drawn links carry a 2px stem where the 800 titles carry 3–4 and the
+   body 1: semi-bold, and a size or two above the copy beside them. */
+.uc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.uc-link:hover { color: var(--color-accent-700); text-decoration: underline; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+
+.uc-hero {
+  /* The photograph bleeds past the measure with a negative margin measured
+     against 100vw; clip rather than hidden so this does not become a scroll
+     container. */
+  overflow-x: clip;
+  border-bottom: var(--rule) solid var(--uc-border);
+}
+
+/* 517 : 619 — the photograph's fade starts 517px into the measure, where the
+   H1's first line ends. The copy spans the grid under its own caps and paints
+   above the fade (z-index 2 over the fade's 1). */
+.uc-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 517fr) minmax(0, 619fr);
+  align-items: stretch;
+}
+
+.uc-hero__copy {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  padding-block: 36px 40px;
+}
+
+.uc-hero .uc-kicker { margin-bottom: 19px; }
+
+/* 58px from the drawn word widths (every lowercase word within 2%); the
+   baselines pitch at exactly 1.0. 560px holds the drawn break — "SEO &
+   automation / for more leads, / less admin." — since the H1 with "for"
+   runs 605. */
+.uc-hero__title {
+  font-size: 58px;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  max-width: 560px;
+  margin: 0 0 12px;
+  text-wrap: wrap;
+}
+/* The drawing's third line — "less admin." holds its own line even though
+   "less" would fit after "leads,". */
+.uc-hero__title em {
+  display: block;
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+/* 500px breaks after "construction" (446 without "businesses", 552 with). */
+.uc-hero__lede {
+  font-size: 20px;
+  line-height: 1.36;
+  color: #454444;
+  max-width: 500px;
+  margin: 0 0 19px;
+  text-wrap: wrap;
+}
+
+.uc-hero__actions { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+
+/* 251 × 53 in the drawing, with a 17.5px label. */
+.uc-hero .uc-btn {
+  min-height: 53px;
+  padding-inline: 40px;
+  font-size: 17.5px;
+  border-radius: 3px;
+}
+
+.uc-hero__more {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--uc-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 53px;
+}
+.uc-hero__more:hover { color: var(--color-accent-700); text-decoration: underline; }
+
+/* The photograph starts 36px below the band's top and runs to its rule;
+   16:9 into a 660 × 384 box shows all of it. */
+.uc-hero__media {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  margin: 36px 0 0;
+  margin-right: calc(-1 * (max(0px, (100vw - var(--measure)) / 2) + var(--gutter)));
+  background: #b9b3ad;
+  overflow: hidden;
+}
+.uc-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* The soft left edge — 65px in the drawing, ground to photograph. */
+.uc-hero__media::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 70px;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg) 0%,
+    color-mix(in srgb, var(--color-bg) 85%, transparent) 30%,
+    color-mix(in srgb, var(--color-bg) 35%, transparent) 65%,
+    color-mix(in srgb, var(--color-bg) 0%, transparent) 100%
+  );
+}
+
+/* A little weight under the caption so white holds on the pale desk. */
+.uc-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 9, 9, 0) 60%, rgba(10, 9, 9, 0.45) 100%);
+}
+
+/* Bottom-right of the photograph, ending on the measure's right edge. */
+.uc-hero__caption {
+  position: absolute;
+  right: calc(max(0px, (100vw - var(--measure)) / 2) + var(--gutter));
+  bottom: 22px;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+
+/* ── Selected client work ────────────────────────────────────────────────── */
+
+.uc-clients {
+  border-bottom: var(--rule) solid var(--uc-border);
+}
+.uc-clients__inner {
+  min-height: 61px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 67px;
+  row-gap: 8px;
+}
+.uc-clients__label {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 10.5px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #59575d;
+  margin: 0;
+}
+.uc-clients__name {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--uc-ink);
+  text-decoration: none;
+}
+.uc-clients__name:hover { color: var(--color-accent-700); text-decoration: underline; }
+/* The drawn divider: 25px tall, 47px past "AT Bau" and 45px before the link. */
+.uc-clients__results {
+  font-size: 18px;
+  line-height: 1.2;
+  margin-left: -20px;
+  padding-left: 45px;
+  border-left: var(--rule) solid var(--uc-border);
+  min-height: 25px;
+}
+
+/* ── Find your use case ──────────────────────────────────────────────────── */
+
+.uc-cases { padding-block: 28px 20px; }
+.uc-cases .uc-kicker { margin-bottom: 15px; }
+
+/* Section headings — 43px and 40px from the drawn words. */
+.uc-h2 {
+  font-size: 43px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin: 0 0 5px;
+  text-wrap: wrap;
+}
+
+.uc-cases__lede {
+  font-size: 20px;
+  line-height: 1.36;
+  color: #505252;
+  margin: 0 0 15px;
+}
+
+.uc-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* 371 × 247 as drawn, the link pinned 21px above the floor whatever the body
+   runs to — card three has two lines and its link sits where the others' do. */
+.uc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 247px;
+  padding: 14px 20px 21px 25px;
+  background: var(--uc-card);
+  border: var(--rule) solid var(--uc-border);
+  border-radius: var(--uc-radius);
+}
+/* The drawn ink is ~40px tall, which is a 50px Lucide box; the stroke is
+   scaled back from the supplied 1.7 to keep the drawn 3px weight. Pulled 3px
+   left so the ink, not the box, sits on the text's edge. */
+.uc-card__icon {
+  width: 50px;
+  height: 50px;
+  margin: -3px 0 0 -4px;
+  flex: none;
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.uc-card__title {
+  font-size: 19.5px;
+  line-height: 1.2;
+  margin: 3px 0 0;
+}
+.uc-card__promise {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 7px 0 0;
+}
+/* 290px reproduces all three drawn breaks (265 / 262 / 257 without the next
+   word, 307 / 312 / 327 with it). */
+.uc-card__body {
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--uc-muted);
+  max-width: 290px;
+  margin: 6px 0 10px;
+  text-wrap: wrap;
+}
+.uc-card__link {
+  margin-top: auto;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.uc-cases__other {
+  font-size: 17px;
+  line-height: 1.4;
+  color: #48494e;
+  margin: 8px 0 0;
+}
+.uc-cases__other a {
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.uc-cases__other a:hover { color: var(--color-accent-700); }
+
+/* ── Get found. Make contact easy. Save time. ────────────────────────────── */
+
+.uc-services {
+  padding-block: 35px 0;
+  border-top: var(--rule) solid var(--uc-rule);
+}
+.uc-services .uc-h2 { font-size: 40px; margin-bottom: 14px; }
+
+.uc-offers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  /* The dividers as drawn: 358px and 750px into the measure — not thirds. */
+  grid-template-columns: 358fr 392fr 386fr;
+}
+/* The first cell starts on the content edge; the others 48px past their
+   divider, which runs the cell's full 94px. */
+.uc-offer + .uc-offer {
+  border-left: var(--rule) solid var(--uc-rule);
+  padding-left: 48px;
+}
+.uc-offer__title {
+  font-size: 19px;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+/* 262px holds the drawn two-line breaks (255 / 231 / 227 without the next
+   word, 280 / 272 / 269 with it). */
+.uc-offer__body {
+  font-size: 18px;
+  line-height: 1.22;
+  color: var(--uc-muted);
+  max-width: 262px;
+  margin: 0 0 4px;
+  text-wrap: wrap;
+}
+.uc-offer__link {
+  font-size: 19.5px;
+  line-height: 1.2;
+}
+
+/* ── Client-results panel ────────────────────────────────────────────────── */
+
+.uc-panel {
+  display: grid;
+  /* The divider 719px into the panel as drawn, with 76px of air past it. */
+  grid-template-columns: 690fr 390fr;
+  margin-top: 20px;
+  padding: 21px 28px 14px;
+  background: var(--uc-card);
+  border: var(--rule) solid var(--uc-border);
+  border-radius: var(--uc-radius);
+}
+.uc-panel__copy { padding-top: 3px; }
+.uc-panel .uc-kicker { margin-bottom: 8px; }
+.uc-panel__title {
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0 0 9px;
+  text-wrap: wrap;
+}
+.uc-panel__lede {
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--uc-muted);
+  margin: 0 0 8px;
+}
+.uc-panel__link {
+  font-size: 17px;
+  line-height: 1.2;
+}
+.uc-panel__figure-col {
+  border-left: var(--rule) solid var(--uc-rule);
+  padding-left: 76px;
+}
+/* 48px from the drawn digit height — digits, like caps, draw narrower than
+   their height says, so the width solve (40) is the one to distrust. */
+.uc-panel__figure {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin: 5px 0 0;
+}
+.uc-panel__figure-label {
+  font-size: 19px;
+  line-height: 1.2;
+  margin: 0;
+}
+.uc-panel__source,
+.uc-panel__note {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--uc-faint);
+  margin: 0;
+}
+.uc-panel__source { margin-top: 1px; }
+
+/* ── CTA band: the house component at the drawing's 77px ────────────────── */
+
+body:has(.uc-hero) .cta { margin-top: 12px; }
+body:has(.uc-hero) .cta__inner { padding-block: 13px 10px; }
+body:has(.uc-hero) .cta__title { font-size: 22px; line-height: 1.15; margin-bottom: 7px; }
+body:has(.uc-hero) .cta__lede { font-size: 15.5px; line-height: 1.4; }
+/* Drawn 218 × 43 with the label in ink, not the house accent. */
+body:has(.uc-hero) .cta__btn {
+  color: var(--uc-ink);
+  min-height: 43px;
+  padding: 0 26px;
+  font-size: 15.5px;
+  border-radius: 3px;
+}
+
+/* ── Phone action bar ────────────────────────────────────────────────────── */
+
+.uc-sticky { display: none; }
+
+/* ── Narrow ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+  .uc-hero__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .uc-hero__copy { grid-column: 1; max-width: none; padding-right: 28px; }
+  .uc-hero__media::before { display: none; }
+  .uc-hero__title { font-size: 44px; max-width: none; }
+  .uc-hero__lede { max-width: none; }
+  .uc-hero__caption { right: 24px; }
+
+  .uc-clients__inner { column-gap: 32px; }
+  .uc-clients__results { margin-left: 0; padding-left: 32px; }
+
+  .uc-h2 { font-size: 36px; }
+  .uc-services .uc-h2 { font-size: 34px; }
+
+  .uc-grid { grid-template-columns: minmax(0, 1fr); }
+  .uc-card { min-height: 0; }
+  .uc-card__body { max-width: none; }
+
+  .uc-offers { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .uc-offer { padding: 18px 0; border-top: var(--rule) solid var(--uc-rule); }
+  .uc-offer:first-child { border-top: 0; padding-top: 0; }
+  .uc-offer + .uc-offer { border-left: 0; padding-left: 0; }
+  .uc-offer__body { max-width: none; }
+
+  .uc-panel { grid-template-columns: minmax(0, 1fr); }
+  .uc-panel__figure-col {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: var(--rule) solid var(--uc-rule);
+  }
+}
+
+/* The phone frame: one column, the photograph full bleed under the copy
+   at the drawn 5:3, the industry link as a centred line, a "Contact" bar. */
+@media (max-width: 720px) {
+  .uc-hero__inner { grid-template-columns: minmax(0, 1fr); }
+  .uc-hero__copy { padding: 26px 0 0; }
+  .uc-hero .uc-kicker { margin-bottom: 12px; }
+  /* 36px holds the drawn three lines down to a 375px viewport (321 / 376). */
+  .uc-hero__title { font-size: 36px; line-height: 1.15; max-width: none; margin-bottom: 14px; }
+  /* 18px reproduces the drawn breaks — "…online stores and / construction
+     businesses get found online / and reduce repetitive work." — where 17px
+     pulls "and" up a line. */
+  .uc-hero__lede { font-size: 18px; line-height: 1.42; max-width: none; margin-bottom: 24px; }
+
+  .uc-hero__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .uc-hero .uc-btn { width: 100%; }
+  .uc-hero__more { justify-content: center; min-height: 24px; margin-top: 20px; }
+
+  /* Into the one column, on its own row: left at column 2 it would open an
+     implicit column beside the copy and collapse the copy's to nothing. */
+  .uc-hero__media {
+    grid-column: 1;
+    grid-row: 2;
+    aspect-ratio: 5 / 3;
+    margin: 34px calc(-1 * var(--gutter)) 0;
+  }
+  .uc-hero__caption { right: var(--gutter); bottom: 19px; }
+
+  /* The phone drawing goes straight from the photograph to the use cases;
+     the two clients are a card and the panel away. */
+  .uc-clients { display: none; }
+
+  .uc-cases { padding-top: 35px; }
+  .uc-cases .uc-kicker { margin-bottom: 13px; }
+  /* 31px keeps "What kind of business / do you run?" at 375 (327 / 383). */
+  .uc-h2 { font-size: 31px; line-height: 1.15; margin-bottom: 4px; }
+  /* 280px breaks before "in" as drawn (268 without it, 285 with). */
+  .uc-cases__lede { font-size: 17px; line-height: 1.5; max-width: 280px; margin-bottom: 12px; }
+  .uc-card { padding: 22px 24px 24px 27px; }
+
+  .uc-services { padding-top: 30px; }
+  .uc-services .uc-h2 { font-size: 30px; }
+
+  .uc-panel { padding: 20px 20px 18px; }
+  .uc-panel__title { font-size: 23px; }
+  .uc-panel__lede { font-size: 17px; }
+  .uc-panel__figure { font-size: 44px; }
+  .uc-panel__figure-label { font-size: 18px; }
+
+  body:has(.uc-hero) .cta__inner { padding-block: 22px 20px; }
+
+  .uc-sticky {
+    position: fixed;
+    z-index: 950;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    padding: 14px var(--gutter) calc(18px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-bg) 97%, transparent);
+    border-top: var(--rule) solid var(--uc-border);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .uc-sticky[data-visible="false"] {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .uc-sticky .uc-sticky__btn {
+    flex: 1;
+    min-height: 53px;
+    font-size: 17.5px;
+    border-radius: 3px;
+  }
+
+  body:has(.uc-sticky[data-visible="true"]) .whatsapp-fab { display: none; }
+  body:has(.uc-sticky) .footer__inner {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uc-sticky { transition: none; }
+}

@@ -1,8 +1,32 @@
 ---
+/**
+ * Use cases index — /use-cases/.
+ *
+ * Built from the design mockup at ~/Desktop/design-mockup.png (2026-09-16):
+ * the e-commerce / AT Bau family's architecture as a hub page — copy beside a
+ * photograph fading in from the left, a selected-client strip, one card per
+ * industry, the three services in a ruled row over the Albanien.shop
+ * client-results panel, the CTA band. The drawing is at 0.770 of life size
+ * (its 939px frame stands for a ~1219px viewport, solved from the card grid
+ * measuring the site's 1136px measure and confirmed by the CTA band's title
+ * solving to the house 22px), and use-cases.css carries every size from it.
+ *
+ * The cards carry the drawing's copy, keyed by use-case slug so a card can
+ * only point at a page that exists; a use case added to the collection
+ * without an entry here falls back to its markdown `navLabel`, `short` and
+ * `icon` rather than breaking the build. The order is the collection's, and
+ * the ItemList schema follows the same order.
+ *
+ * The panel's figures are the Albanien.shop page's own — read off
+ * evidence.merchantOverview in src/lib/albanien-shop-evidence.ts, the 10 Sep
+ * 2026 Merchant Center overview. Do not round, restate or refresh a number
+ * here without changing it there too.
+ */
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
+import "../../styles/use-cases.css";
 
 const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -11,6 +35,95 @@ const useCases = (await getCollection("useCases", ({ data }) => !data.draft)).so
 const title = `SEO & Automation Use Cases by Industry — ${SITE.name}`;
 const description =
   "See how SEO, web development and AI automation solve industry-specific challenges, from real estate to e-commerce. Explore the use cases.";
+
+const hero = {
+  src: "/assets/use-cases/seo-automation-use-cases.webp",
+  alt: "A wooden desk by a bright window: an open laptop, a small cardboard parcel, a set of house keys and two rolled architectural drawings — one object each for estate agents, online stores and construction firms",
+  width: 1672,
+  height: 941,
+};
+
+/* The drawing's copy for each industry card, by slug. */
+const cardCopy: Record<
+  string,
+  { icon: string; title: string; promise: string; body: string; cta: string }
+> = {
+  "real-estate": {
+    icon: "i-house",
+    title: "Real estate",
+    promise: "Get more direct enquiries.",
+    body: "Reach buyers and sellers through local search, with less reliance on property portals.",
+    cta: "Explore real estate",
+  },
+  "albanien-shop": {
+    icon: "i-shopping-bag",
+    title: "E-commerce",
+    promise: "Get your products found.",
+    body: "Improve product visibility, resolve listing issues and simplify repeat store tasks.",
+    cta: "Explore e-commerce",
+  },
+  "at-bau": {
+    icon: "i-wrench",
+    title: "Construction & trades",
+    promise: "Turn local searches into calls.",
+    body: "Help nearby customers find your services and request a quote.",
+    cta: "Explore construction",
+  },
+};
+
+const cards = useCases.map((useCase) => {
+  const copy = cardCopy[useCase.id];
+  const label = useCase.data.navLabel ?? useCase.data.title;
+  return {
+    href: `/use-cases/${useCase.id}/`,
+    icon: copy?.icon ?? useCase.data.icon,
+    title: copy?.title ?? label,
+    promise: copy?.promise,
+    body: copy?.body ?? useCase.data.short,
+    cta: copy?.cta ?? `Explore ${label.toLowerCase()}`,
+  };
+});
+
+/* The strip under the hero: the two client-backed use cases, then /work/. */
+const clients = [
+  { label: "Albanien.shop", href: "/use-cases/albanien-shop/" },
+  { label: "AT Bau", href: "/use-cases/at-bau/" },
+];
+
+const offers = [
+  {
+    title: "SEO",
+    body: "Reach people already searching for what you offer.",
+    cta: "Explore SEO",
+    href: "/services/seo/",
+  },
+  {
+    title: "Web development",
+    body: "Give visitors a fast, clear path from interest to enquiry.",
+    cta: "Explore websites",
+    href: "/services/web-development/",
+  },
+  {
+    title: "AI automation",
+    body: "Reduce repetitive admin and keep follow-ups moving.",
+    cta: "Explore automation",
+    href: "/services/ai-automation/",
+  },
+];
+
+/* evidence.merchantOverview — 306 products, 304 approved, 1 not approved,
+   1 under review, as the 10 Sep 2026 overview shows them. */
+const panel = {
+  kicker: "Albanien.shop · Client results",
+  title: "Getting a Shopify catalogue back on Google.",
+  lede: "Merchant Center issue resolution and SEO for a specialist online store.",
+  cta: "See the Albanien.shop case study",
+  href: "/use-cases/albanien-shop/",
+  figure: "304 of 306",
+  figureLabel: "products approved",
+  source: "Google Merchant Center · 10 Sep 2026",
+  note: "1 not approved · 1 under review",
+};
 
 const breadcrumbs = {
   "@context": "https://schema.org",
@@ -33,46 +146,142 @@ const itemList = {
 };
 ---
 
-<Base title={title} description={description} schema={[breadcrumbs, itemList]}>
-  <div class="wrap">
-    <header class="page-head">
-      <span class="kicker">Use cases</span>
-      <h1 class="page-head__title">Built for your industry</h1>
-      <p class="page-head__lede">
-        The services are the same four everywhere. What changes is which problem is
-        costing you money — and that is almost entirely a function of the market you sell
-        into. These pages say what I'd look at first in yours.
-      </p>
-    </header>
+<Base
+  title={title}
+  description={description}
+  image={hero.src}
+  imageAlt={hero.alt}
+  schema={[breadcrumbs, itemList]}
+  preloadImage={hero.src}
+>
+  <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+  <section class="uc-hero" data-sticky-after>
+    <div class="wrap uc-hero__inner">
+      <div class="uc-hero__copy">
+        <p class="uc-kicker">SEO &amp; automation by industry</p>
+        <h1 class="uc-hero__title">SEO &amp; automation for more leads, <em>less admin.</em></h1>
+        <p class="uc-hero__lede">
+          I help estate agents, online stores and construction businesses get found online
+          and reduce repetitive work.
+        </p>
 
-    <section class="section section--ruled">
-      <h2 class="sr-only">All use cases</h2>
-      <div class="ruled-grid ruled-grid--services">
+        <div class="uc-hero__actions">
+          <a class="btn btn-primary uc-btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+            Book a strategy call
+          </a>
+          <a class="uc-hero__more" href="#use-cases">
+            Explore your industry <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <figure class="uc-hero__media">
+        {/* The LCP element, so it is a real <img> with fetchpriority rather than
+            a CSS background the parser finds late. */}
+        <img
+          class="uc-hero__img"
+          src={hero.src}
+          alt={hero.alt}
+          width={hero.width}
+          height={hero.height}
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="uc-hero__scrim" aria-hidden="true"></div>
+        <figcaption class="uc-hero__caption">SEO · Websites · Automation</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── Selected client work ───────────────────────────────────────────── -->
+  <nav class="uc-clients" aria-label="Selected client work">
+    <div class="wrap uc-clients__inner">
+      <p class="uc-clients__label">Selected client work</p>
+      {clients.map((client) => <a class="uc-clients__name" href={client.href}>{client.label}</a>)}
+      <a class="uc-link uc-clients__results" href="/work/">
+        See client results <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Find your use case ─────────────────────────────────────────────── -->
+  <section class="uc-cases" id="use-cases" aria-labelledby="uc-cases-title">
+    <div class="wrap">
+      <p class="uc-kicker">Find your use case</p>
+      <h2 class="uc-h2" id="uc-cases-title">What kind of business do you run?</h2>
+      <p class="uc-cases__lede">Start with the challenges that matter in your industry.</p>
+
+      <ul class="uc-grid">
         {
-          useCases.map((useCase) => (
-            <div class="service">
-              <svg class="icon" aria-hidden="true"><use href={`#${useCase.data.icon}`} /></svg>
-              <h3 class="service__title">{useCase.data.navLabel ?? useCase.data.title}</h3>
-              <p class="service__desc">{useCase.data.short}</p>
-              <a class="arrow-link arrow-link--sm service__more" href={`/use-cases/${useCase.id}/`}>
-                Learn more<span class="sr-only"> about {useCase.data.title}</span> →
+          cards.map((card) => (
+            <li class="uc-card">
+              <svg class="uc-card__icon" aria-hidden="true"><use href={`#${card.icon}`} /></svg>
+              <h3 class="uc-card__title">{card.title}</h3>
+              {card.promise && <p class="uc-card__promise">{card.promise}</p>}
+              <p class="uc-card__body">{card.body}</p>
+              <a class="uc-link uc-card__link" href={card.href}>
+                {card.cta} <span aria-hidden="true">→</span>
               </a>
-            </div>
+            </li>
           ))
         }
-      </div>
-    </section>
+      </ul>
 
-    <section class="section section--ruled">
-      <h2 class="kicker">Not listed?</h2>
-      <p class="section__lede">
-        Most of the work is industry-agnostic underneath — a crawl is a crawl, and a lead
-        that goes unanswered is lost in every market. If yours has no page here yet, the <a
-          href="/services/">services</a> cover the same ground, and the <a href="/work/"
-        >case studies</a> show how it lands in practice.
+      <p class="uc-cases__other">
+        Don’t see your industry? <a href="/contact/">Tell me about your business <span aria-hidden="true">→</span></a>
       </p>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <CtaBanner />
+  <!-- ── Services + client results ──────────────────────────────────────── -->
+  <section class="uc-services" aria-labelledby="uc-services-title">
+    <div class="wrap">
+      <h2 class="uc-h2" id="uc-services-title">Get found. Make contact easy. Save time.</h2>
+
+      <ul class="uc-offers">
+        {
+          offers.map((offer) => (
+            <li class="uc-offer">
+              <h3 class="uc-offer__title">{offer.title}</h3>
+              <p class="uc-offer__body">{offer.body}</p>
+              <a class="uc-link uc-offer__link" href={offer.href}>
+                {offer.cta} <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <article class="uc-panel" aria-labelledby="uc-panel-title">
+        <div class="uc-panel__copy">
+          <p class="uc-kicker">{panel.kicker}</p>
+          <h3 class="uc-panel__title" id="uc-panel-title">{panel.title}</h3>
+          <p class="uc-panel__lede">{panel.lede}</p>
+          <a class="uc-link uc-panel__link" href={panel.href}>
+            {panel.cta} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="uc-panel__figure-col">
+          <p class="uc-panel__figure">{panel.figure}</p>
+          <p class="uc-panel__figure-label">{panel.figureLabel}</p>
+          <p class="uc-panel__source">{panel.source}</p>
+          <p class="uc-panel__note">{panel.note}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <CtaBanner
+    title="More enquiries. Less repetitive work."
+    lede="Let’s find the next practical step for your business."
+    ghostLabel={null}
+  />
+
+  <!-- Mobile only. Hidden until the hero scrolls away — see site.js. Without
+       JS it never appears and the floating WhatsApp button stays instead. -->
+  <div class="uc-sticky" data-sticky-cta data-visible="false">
+    <a class="btn btn-primary uc-sticky__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+      Contact
+    </a>
+  </div>
 </Base>
