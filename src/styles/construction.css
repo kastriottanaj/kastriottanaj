@@ -1,605 +1,675 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    Construction & trades use case (AT Bau) — /use-cases/construction/.
 
-   Drawn in the case-study vocabulary already in site.css — the .cs-* hero
-   type, the 34px section heading, the 66px section rhythm — so this sheet
-   covers only where the drawing departs from it: a light, hairlined metric
-   ribbon instead of the ink one; the hero screenshot card with the review
-   card hung off its corner; bordered value and service cards; the grouped bar
-   chart; and the evidence column beside it.
+   The third drawing of this page (~/Desktop/design-mockup.png, 2026-09-16),
+   and the one that shipped: the e-commerce page's architecture — copy over a
+   photograph that bleeds off the right with a figure in its corner, a metric
+   ribbon, a values row over the client-results panel, three service cards,
+   the CTA band — redrawn for a trade firm. The stylesheet is built on
+   albanien-shop.css's solved parts (the bleed, the fade, the scrim, the
+   panel grid) with this drawing's sizes.
 
-   The mockup (~/Desktop/construction-use-case-redesign.png) draws a 2156px
-   browser frame standing for a ~1310px viewport — scale 1.647, solved from
-   the ribbon measuring 1871 drawn px, the site's 1136px measure — and
-   confirmed by the drawn H1 (60px caps → 53px, the .cs-hero__title max of 52)
-   and the drawn h2 (33px against .cs-h2's 34). Every size below is that
-   drawing's ink divided by 1.647; the geometry composes on --measure /
-   --gutter rather than the drawing's own insets, per the house rule.
+   The mockup is drawn at 0.803 of life size: its 991px frame stands for a
+   ~1234px viewport, which is how the panel measures 912px — the site's
+   1136px measure — and how the hero button draws the house 42px and the H1
+   the e-commerce page's 46px. Its nav is drawn at true size (the logo type
+   returns 17.5px), so the scale comes from the content. The phone frame is
+   a second drawing at 0.863 (its nav is drawn 7% larger), for a ~377px
+   viewport. Every size here is the drawn ink divided by its scale, and the
+   geometry composes on --measure / --gutter rather than the drawing's own
+   insets, per the house rule.
 
-   The section rules are full-bleed because that is what it draws (the
-   .cs-section rule stops at the measure), and the sections sit on white while
-   the hero and footer keep the page's off-white — also as drawn. The phone
-   frames are a second drawing at the same 1.647 (their buttons draw the same
-   77px box as the desktop's), for a ~352px viewport; their sizes are read
-   the same way and applied under 720px, with .ct-phone / .ct-desktop
-   swapping the copy that the two drawings word differently.
+   The ribbon is full-bleed with four centred cells; the panel's figure is a
+   70px number, not the e-commerce page's 40; the service cards carry no
+   icons; the CTA band is the house component, restyled to the drawing's
+   tighter 71px and 24px title. The panel's "View the source reports" is a
+   <details> whose summary is the drawn footer row, so the screenshots the
+   page's every number was read from are one click away without adding a
+   section the drawing does not have.
 
    This sheet is bundled before site.css, so anything that restyles a house
-   class (.breadcrumb, .btn, .cs-*) is scoped under a page class — a bare
+   class (.breadcrumb, .btn, .cta) is scoped under a page class — a bare
    single-class rule here loses every tie.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 body:has(.ct-hero) {
-  --ct-rule: #d9d6d6;
-  --ct-ink: #141414;
-  --ct-muted: color-mix(in srgb, var(--color-text) 66%, transparent);
-  --ct-green: #1f9d55;
-  --ct-star: #f5b400;
-  --ct-radius: 8px;
+  --ct-rule: #e2e0df;
+  --ct-ink: #1c1b1b;
+  --ct-muted: #5b5958;
+  --ct-card: #fff;
+  --ct-ribbon: #fbfbfb;
+  --ct-radius: 4px;
 }
 
-/* The kicker as the drawing sets it: bold, tracked, in the accent — the
-   .kicker of the generic pages rather than the mono .cs-eyebrow. */
+.ct-h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: wrap;
+}
+
 .ct-kicker {
-  display: block;
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
   font-size: 12px;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.08em;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin: 0 0 10px;
-}
-
-/* Section chrome: full-bleed hairline, the .cs-section rhythm inside. */
-.ct-band { background: #fff; }
-.ct-section { border-top: var(--rule) solid var(--ct-rule); }
-.ct-section > .wrap { padding-block: 66px; }
-/* The drawn headings hold one line at 34px — 563px for the longest. */
-.ct-section .cs-h2 { max-width: 20em; }
-/* Copy the two drawings word differently: one span each, the other hidden. */
-.ct-phone { display: none; }
-
-/* The drawn ledes run a point smaller than .cs-lede. */
-.ct-lede {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--ct-muted);
-  max-width: 58ch;
-  margin: 0;
+  margin: 0 0 8px;
 }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 
-/* The drawing puts the card's edge at 530 : 567 with a 40px gap; equal
-   columns (548 each) are the nearest split that holds "AT Bau's Google
-   listing" on one line in Archivo, which sets it 8px wider than the drawn face. */
-.ct-hero .cs-hero {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 40px;
-  padding-bottom: 64px;
+.ct-hero {
+  /* The photograph bleeds past the measure with a negative margin measured
+     against 100vw; clip rather than hidden so this does not become a scroll
+     container. */
+  overflow-x: clip;
 }
-.ct-hero .ct-kicker { margin-bottom: 18px; }
-/* The drawn face sets this H1 ~4% narrower than Archivo: "AT Bau's Google
-   listing" is 559px at the .cs-hero__title 52px and breaks in the 548px
-   column, so it is set at 50px, where it holds the drawn four lines. */
-.ct-hero .cs-hero__title { font-size: clamp(29px, 4.6vw, 50px); max-width: none; }
-.ct-hero__sub {
-  font-size: 17.5px;
-  line-height: 1.45;
-  color: color-mix(in srgb, var(--color-text) 85%, transparent);
-  max-width: 30em;
-  margin: 0 0 30px;
-}
-.ct-hero__sub b { color: var(--color-text); font-weight: 700; }
-/* 78 drawn px: 47, against the .cs-actions 52. */
-.ct-hero .cs-actions .btn { min-height: 48px; }
 
-.ct-contact {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px 14px;
-  margin: 24px 0 0;
-  font-size: 13px;
-  line-height: 1.3;
+/* 433 : 703 — where the drawing starts the photograph's fade. The copy is
+   not held to the first column: the lede runs 455px, over the fade, so it
+   spans the grid with its own cap and paints above. */
+.ct-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 433fr) minmax(0, 703fr);
+  align-items: stretch;
 }
-.ct-contact__wa {
+
+/* z-index 2: the photograph's fade sits at 1 and comes later in the DOM, so
+   at 1 the copy that crosses it would paint underneath. */
+.ct-hero__copy {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  z-index: 2;
+  max-width: 455px;
+  padding-block: 20px 18px;
+}
+
+/* Scoped past .breadcrumb, whose single-class rule in site.css would keep
+   its 28px top padding otherwise. */
+.ct-hero .ct-crumb {
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 13px;
+}
+
+/* 46px from the drawn ink (line one 416px, line three 370px); the drawn
+   leading is a bare 1.02. 440px holds the drawn break — "Local SEO that
+   gets / construction / companies found". */
+.ct-hero__title {
+  font-size: 46px;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  max-width: 440px;
+  margin: 0 0 6px;
+  text-wrap: wrap;
+}
+
+.ct-hero__lede {
+  font-size: 17px;
+  line-height: 1.39;
+  color: var(--ct-muted);
+  max-width: 455px;
+  margin: 0 0 13px;
+  text-wrap: wrap;
+}
+
+.ct-hero__actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+
+/* 42px tall and 228px wide in the drawing. */
+.ct-hero .ct-btn {
+  min-height: 42px;
+  padding-inline: 44px;
+  font-size: 14px;
+  border-radius: 3px;
+}
+
+.ct-hero__more {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ct-ink);
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 700;
-  color: var(--color-text);
-  text-decoration: none;
+  min-height: 42px;
 }
-.ct-contact__wa:hover { color: var(--color-accent-700); text-decoration: underline; }
-.ct-contact__wa svg { width: 18px; height: 18px; fill: currentColor; }
-.ct-contact__for {
-  padding-left: 14px;
-  border-left: var(--rule) solid var(--ct-rule);
-  color: var(--ct-muted);
-  max-width: 300px;
-}
+.ct-hero__more:hover { color: var(--color-accent-700); text-decoration: underline; }
 
-/* The screenshot card. The screenshot's own ground is #141414, so the card
-   is that colour and the export simply continues into the caption row. */
-.ct-shot {
+.ct-hero__wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ct-ink);
+  text-decoration: none;
+  min-height: 24px;
+}
+.ct-hero__wa:hover { color: var(--color-accent-700); text-decoration: underline; }
+.ct-hero__wa svg { width: 19px; height: 19px; fill: currentColor; }
+
+/* The photograph: the AT Bau site's paving and logo, cropped above its nav.
+   3:1 into the hero's ~2:1 box, so cover trims the sides and the logo stays
+   centred. */
+.ct-hero__media {
+  grid-column: 2;
+  grid-row: 1;
   position: relative;
   margin: 0;
-}
-.ct-shot__card {
-  background: var(--ct-ink);
-  border-radius: var(--ct-radius);
-  padding: 16px 16px 0;
+  min-height: 369px;
+  margin-right: calc(-1 * (max(0px, (100vw - var(--measure)) / 2) + var(--gutter)));
+  background: #b7b4b1;
   overflow: hidden;
 }
-.ct-shot__img { display: block; width: 100%; height: auto; }
-.ct-shot__cap {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 4px 16px;
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.72);
+.ct-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
 }
 
-/* Hung 18px past the card's left edge and 24px below its bottom, as drawn. */
-.ct-review {
+/* The soft left edge the drawing gives the photograph — 200px of it, wider
+   than the e-commerce page's, because pale paving needs the longer run to
+   disappear into the ground. */
+.ct-hero__media::before {
+  content: "";
   position: absolute;
-  left: -18px;
-  bottom: -24px;
-  width: 199px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 8px;
-  align-items: center;
-  padding: 14px 12px 14px 14px;
-  background: #fff;
-  border-radius: var(--ct-radius);
-  box-shadow: 0 12px 32px rgba(20, 20, 20, 0.14), 0 2px 6px rgba(20, 20, 20, 0.08);
+  inset: 0 auto 0 0;
+  width: 200px;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg) 0%,
+    color-mix(in srgb, var(--color-bg) 92%, transparent) 30%,
+    color-mix(in srgb, var(--color-bg) 45%, transparent) 65%,
+    color-mix(in srgb, var(--color-bg) 0%, transparent) 100%
+  );
 }
-.ct-review__score {
+
+/* Darkens the right and the bottom under the figure so white type holds on
+   grey stone; the drawing's right third is near-black. */
+.ct-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      125% 120% at 100% 100%,
+      rgba(10, 9, 9, 0.88) 0%,
+      rgba(10, 9, 9, 0.66) 30%,
+      rgba(10, 9, 9, 0.28) 58%,
+      rgba(10, 9, 9, 0) 78%
+    );
+}
+
+/* Bottom-right of the photograph: 24px up, and 25px past the content edge —
+   the drawing lets the figure follow the bleed a little. */
+.ct-stat {
+  position: absolute;
+  right: calc(max(0px, (100vw - var(--measure)) / 2) + var(--gutter) - 25px);
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.ct-stat__brand {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: 34px;
-  letter-spacing: -0.04em;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.ct-stat__figure {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 50px;
   line-height: 1;
-  margin: 0;
+  letter-spacing: -0.035em;
+  margin-bottom: 10px;
 }
-.ct-review__stars {
-  display: block;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  color: var(--ct-star);
-}
-.ct-review__count {
-  display: block;
-  font-size: 12.5px;
-  font-weight: 700;
+.ct-stat__label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
   line-height: 1.3;
-  white-space: nowrap;
-  margin-top: 4px;
+  margin-bottom: 5px;
 }
-.ct-review__who {
-  display: block;
-  font-size: 12px;
-  line-height: 1.3;
-  white-space: nowrap;
-  color: var(--ct-muted);
-  margin-top: 1px;
-}
-
-/* ── Ribbon ──────────────────────────────────────────────────────────────── */
-
-.ct-ribbon > .wrap { padding-block: 26px 32px; }
-.ct-ribbon__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 6px 16px;
-  margin: 0 0 16px;
+.ct-stat__detail {
   font-size: 13px;
-  color: var(--ct-muted);
-}
-.ct-ribbon__top b { color: var(--color-text); font-weight: 700; }
-.ct-verified {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-}
-.ct-verified::before {
-  content: "";
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--ct-green);
+  line-height: 1.4;
+  color: color-mix(in srgb, #fff 90%, transparent);
 }
 
+/* ── Metric ribbon ───────────────────────────────────────────────────────── */
+
+/* Full-bleed, four even cells across the viewport, everything centred. */
+.ct-ribbon {
+  background: var(--ct-ribbon);
+  border-top: var(--rule) solid var(--ct-rule);
+  border-bottom: var(--rule) solid var(--ct-rule);
+}
 .ct-metrics {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
   list-style: none;
   margin: 0;
   padding: 0;
-  border: var(--rule) solid var(--ct-rule);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-.ct-metric { padding: 20px 22px 18px; }
-.ct-metric + .ct-metric { border-left: var(--rule) solid var(--ct-rule); }
+.ct-metric {
+  padding: 16px 16px 18px;
+  text-align: center;
+  border-left: var(--rule) solid var(--ct-rule);
+}
+.ct-metric:first-child { border-left: 0; }
 .ct-metric__value {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: 36px;
-  letter-spacing: -0.035em;
+  font-size: 28px;
   line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.ct-metric__stars {
+  font-size: 19px;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+}
+.ct-metric__label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0 0 6px;
+}
+.ct-metric__source {
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--ct-muted);
   margin: 0;
 }
-.ct-metric--lead .ct-metric__value { color: var(--color-accent); }
-.ct-metric__label {
-  font-size: 13px;
-  line-height: 1.4;
+.ct-metric__reviews {
+  font-size: 15px;
+  line-height: 1.3;
   color: var(--ct-muted);
-  margin: 10px 0 0;
+  margin: 0;
 }
 
-/* ── Bordered card rows: what moved, and work with me ────────────────────── */
+/* ── Values row + client-results panel ───────────────────────────────────── */
 
-.ct-cards {
+.ct-results { padding-block: 22px 0; }
+.ct-results .ct-h2 { margin-bottom: 18px; }
+
+.ct-values {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  list-style: none;
-  margin: 40px 0 0;
-  padding: 0;
-  border: var(--rule) solid var(--ct-rule);
 }
-.ct-card { padding: 32px 28px; }
-.ct-card + .ct-card { border-left: var(--rule) solid var(--ct-rule); }
-.ct-card__icon {
-  display: block;
-  width: 16px; height: 16px;
+/* The drawing indents the first cell 19px from the content edge and the
+   others 50px past their divider. */
+.ct-value {
+  display: flex;
+  align-items: flex-start;
+  gap: 38px;
+  padding-left: 19px;
+}
+.ct-value + .ct-value {
+  border-left: var(--rule) solid var(--ct-rule);
+  padding-left: 50px;
+}
+.ct-value__icon {
+  width: 34px; height: 34px;
+  flex: none;
   fill: none;
   stroke: var(--color-accent);
-  stroke-width: 2;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.ct-card__title {
-  font-size: 17px;
+.ct-value__title {
+  font-size: 16px;
   line-height: 1.3;
-  letter-spacing: -0.015em;
-  margin: 24px 0 0;
+  margin: 0 0 4px;
 }
-.ct-card__body {
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--ct-muted);
-  margin: 12px 0 0;
-}
-.ct-card__link {
-  display: inline-block;
-  margin-top: 22px;
+.ct-value__body {
   font-size: 15px;
-  font-weight: 700;
-  color: var(--color-accent-700);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.ct-card__link:hover { color: var(--color-accent-600); }
-
-/* ── Month by month ──────────────────────────────────────────────────────── */
-
-/* 684 : 400 with a 52px gap. */
-.ct-mbm {
-  display: grid;
-  grid-template-columns: minmax(0, 1.71fr) minmax(0, 1fr);
-  gap: 52px;
-  align-items: start;
-  margin-top: 32px;
+  line-height: 1.45;
+  color: var(--ct-muted);
+  max-width: 230px;
+  margin: 0;
 }
 
-.ct-chart {
+.ct-panel {
+  background: var(--ct-card);
   border: var(--rule) solid var(--ct-rule);
-  padding: 24px 24px 20px;
+  border-radius: var(--ct-radius);
+  padding: 15px 26px 21px;
+  /* The hero's "See the AT Bau results" jump lands the panel under the nav. */
+  scroll-margin-top: 84px;
 }
-.ct-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 28px;
-  list-style: none;
-  margin: 0 0 22px;
-  padding: 0;
-  font-size: 13px;
-}
-.ct-legend li { display: inline-flex; align-items: center; gap: 9px; }
-.ct-legend li::before {
-  content: "";
-  width: 11px; height: 11px;
-  background: var(--color-accent);
-}
-.ct-legend li:nth-child(2)::before { background: var(--ct-ink); }
-
-/* The plot is a 226px box: four gridlines behind, six month groups in front,
-   each bar's height a custom property set inline as value / 60. */
-.ct-plot {
-  position: relative;
-  height: 226px;
-  margin-left: 30px;
-}
-.ct-grid {
-  position: absolute;
-  inset: 0;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.ct-grid li {
-  position: absolute;
-  left: 0; right: 0;
-  border-top: var(--rule) solid var(--ct-rule);
-  font-size: 11px;
-  line-height: 1;
-  color: var(--ct-muted);
-}
-.ct-grid li:nth-child(1) { bottom: 0; }
-.ct-grid li:nth-child(2) { bottom: 33.333%; }
-.ct-grid li:nth-child(3) { bottom: 66.667%; }
-.ct-grid li:nth-child(4) { bottom: 100%; }
-.ct-grid li::before {
-  content: attr(data-v);
-  position: absolute;
-  right: calc(100% + 10px);
-  top: -6px;
-}
-.ct-groups {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.ct-group {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 3px;
-}
-.ct-bar {
-  position: relative;
-  width: 26px;
-  height: calc(var(--v) * 100%);
-  background: var(--color-accent);
-}
-.ct-bar--web { background: var(--ct-ink); }
-/* September is half a month, and drawn at half strength to say so. */
-.ct-group--partial .ct-bar--dir { background: #f7988c; }
-.ct-group--partial .ct-bar--web { background: #8f8c8c; }
-.ct-bar b {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 5px);
-  transform: translateX(-50%);
+.ct-panel__kicker {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
   font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--color-accent);
+  margin: 0 0 8px;
 }
-.ct-bar--web b { color: var(--color-text); }
-.ct-group--partial .ct-bar--web b { color: var(--ct-muted); }
-.ct-axis {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  list-style: none;
-  margin: 10px 0 0 30px;
-  padding: 0;
-  font-size: 12.5px;
-  color: var(--ct-muted);
-  text-align: center;
+.ct-panel__title {
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  text-wrap: wrap;
 }
-.ct-chart__note {
-  font-size: 12.5px;
+.ct-panel__lede {
+  font-size: 16px;
   line-height: 1.4;
   color: var(--ct-muted);
-  margin: 16px 0 0;
-}
-.ct-mbm__read {
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--ct-muted);
-  margin: 22px 0 0;
+  margin: 0 0 22px;
 }
 
-.ct-evidence__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  margin: 0 0 14px;
-  font-size: 14px;
-}
-.ct-evidence__head b { font-weight: 700; }
-.ct-evidence__head span { color: var(--ct-muted); }
-.ct-tiles {
+/* 644 : 414 — the divider as drawn, with 56px of air past it. */
+.ct-panel__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: 1.55fr 1fr;
+  padding-bottom: 24px;
+  border-bottom: var(--rule) solid var(--ct-rule);
+}
+.ct-panel__work-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0 0 10px;
+}
+.ct-panel__list {
   list-style: none;
   margin: 0;
   padding: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ct-muted);
 }
-.ct-tile {
-  margin: 0;
-  background: #131313;
-  border-radius: 6px;
-  overflow: hidden;
+.ct-panel__figure-col {
+  border-left: var(--rule) solid var(--ct-rule);
+  padding-left: 56px;
 }
-.ct-tile img { display: block; width: 100%; height: auto; }
-.ct-tile figcaption {
-  padding: 8px 10px 10px;
-  font-size: 12.5px;
+.ct-panel__figure {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 70px;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin: 0 0 10px;
+}
+.ct-panel__figure-label {
+  font-size: 19px;
+  line-height: 1.2;
+  color: var(--ct-muted);
+  margin: 0 0 5px;
+}
+.ct-panel__figure-note {
+  font-size: 15px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.82);
-}
-.ct-panel {
-  margin: 15px 0 0;
-  padding: 11px;
-  border: var(--rule) solid var(--ct-rule);
-}
-.ct-panel img { display: block; width: 100%; height: auto; border-radius: 4px; }
-
-/* ── CTA band ────────────────────────────────────────────────────────────
-   Drawn 160px tall with a 33px title, which is half again the house .cta,
-   so it is its own band: copy left, the two buttons right, all centred. */
-
-.ct-cta { background: var(--color-accent); color: #fff; }
-.ct-cta ::selection { background: rgba(255, 255, 255, 0.3); }
-.ct-cta :focus-visible { outline-color: #fff; }
-/* The drawing runs the lede to within a pixel of the first button, so the
-   row never wraps on desktop: the copy yields and the buttons keep their
-   drawn 177 + 13 + 258. */
-.ct-cta > .ct-cta__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  /* Outranks .wrap's padding shorthand, which would zero this. */
-  padding-block: 45px;
-}
-.ct-cta__copy { flex: 1 1 auto; min-width: 0; }
-.ct-cta__actions { flex: none; }
-/* Drawn at 33px, but Archivo sets the line 11% wider than the drawn face
-   (704px against 634), so 31px is where it holds the drawn single line
-   beside the buttons. */
-.ct-cta__title {
-  font-size: 31px;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  margin: 0 0 8px;
-  color: #fff;
-}
-.ct-cta__lede {
-  font-size: 15.5px;
-  line-height: 1.5;
-  /* body's text-wrap: pretty would break this one-liner in two. */
-  text-wrap: wrap;
+  color: var(--ct-muted);
   margin: 0;
-  color: rgba(255, 255, 255, 0.92);
 }
-.ct-cta__actions { display: flex; gap: 13px; }
-.ct-cta__btn,
-.ct-cta__ghost {
+
+/* The footer row is the summary of a <details>: closed, it is the drawn row;
+   open, it lays the four profile charts and the knowledge panel beneath. */
+.ct-panel__foot { margin: 0; }
+.ct-panel__foot summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  list-style: none;
+  cursor: pointer;
+  padding-top: 17px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.ct-panel__foot summary::-webkit-details-marker { display: none; }
+.ct-panel__source { color: var(--ct-muted); }
+.ct-panel__link {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 9px;
-  min-height: 47px;
-  /* Archivo sets the labels ~10% wider than the drawn face; 16px lands the
-     two buttons on their drawn 177 and 258. */
-  padding: 0 16px;
+  gap: 8px;
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  padding-block: 5px;
+}
+.ct-panel__foot summary:hover .ct-panel__link { color: var(--color-accent-700); }
+.ct-panel__link span { display: inline-block; transition: transform 0.15s ease; }
+.ct-panel__foot[open] .ct-panel__link span { transform: rotate(90deg); }
+.ct-panel__reports { margin-top: 18px; }
+
+/* ── What I can help your business with ─────────────────────────────────── */
+
+.ct-offers { padding-block: 22px 14px; }
+.ct-offers .ct-h2 { margin-bottom: 8px; }
+
+.ct-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.ct-card {
+  min-height: 116px;
+  padding: 17px 20px 12px 26px;
+  background: var(--ct-card);
+  border: var(--rule) solid var(--ct-rule);
+  border-radius: var(--ct-radius);
+}
+.ct-card__title {
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0 0 10px;
+}
+/* 250px reproduces the drawn two-line breaks. */
+.ct-card__body {
   font-size: 15px;
-  letter-spacing: -0.01em;
-  text-decoration: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  line-height: 1.4;
+  color: var(--ct-muted);
+  max-width: 250px;
+  margin: 0 0 6px;
 }
-.ct-cta__btn { background: #fff; color: var(--color-accent-700); }
-.ct-cta__btn:hover { background: var(--color-neutral-200); }
-.ct-cta__ghost { border: var(--rule) solid rgba(255, 255, 255, 0.85); color: #fff; }
-.ct-cta__ghost:hover { background: rgba(255, 255, 255, 0.14); }
-.ct-cta__ghost svg { width: 14px; height: 14px; fill: currentColor; }
+.ct-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding-block: 5px;
+}
+.ct-card__link:hover { color: var(--color-accent-700); }
 
-/* ── Responsive ──────────────────────────────────────────────────────────── */
+/* ── CTA band: the house component at the drawing's 71px ────────────────── */
 
-@media (max-width: 900px) {
-  /* Restated here because the two-column rule above outranks site.css's own
-     single-column fallback for .cs-hero. */
-  .ct-hero .cs-hero { grid-template-columns: minmax(0, 1fr); }
-  .ct-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ct-metric:nth-child(3n + 1) { border-left: 0; }
-  .ct-metric:nth-child(n + 4) { border-top: var(--rule) solid var(--ct-rule); }
-  .ct-cards { grid-template-columns: minmax(0, 1fr); }
-  .ct-card + .ct-card { border-left: 0; border-top: var(--rule) solid var(--ct-rule); }
-  .ct-mbm { grid-template-columns: minmax(0, 1fr); gap: 36px; }
-  .ct-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body:has(.ct-hero) .cta__inner { padding-block: 14px 12px; }
+body:has(.ct-hero) .cta__title { font-size: 24px; line-height: 1.15; margin-bottom: 3px; }
+body:has(.ct-hero) .cta__lede { font-size: 15px; }
+/* Drawn 198 × 40 with the label in ink, not the house accent. */
+body:has(.ct-hero) .cta__btn {
+  color: var(--ct-ink);
+  min-height: 40px;
+  padding: 0 24px;
+  font-size: 14px;
+  border-radius: 3px;
 }
 
-@media (max-width: 720px) {
-  .ct-phone { display: initial; }
-  .ct-desktop { display: none; }
-  .ct-section > .wrap { padding-block: 28px 36px; }
+/* ── Phone action bar: the WhatsApp mark, then a "Contact" button ────────── */
 
-  /* The phone frame: a 31px title on a 1.02 line, the shorter lede, two
-     full-width bars, then the rating as a bordered row. No WhatsApp line. */
-  .ct-hero .cs-hero { gap: 19px; padding-bottom: 27px; }
-  .ct-hero .ct-kicker { margin-bottom: 12px; }
-  .ct-hero .cs-hero__title { font-size: 31px; line-height: 1.02; letter-spacing: -0.03em; }
-  .ct-hero__sub { font-size: 15px; line-height: 1.5; margin-bottom: 22px; }
-  .ct-shot__card { display: none; }
-  .ct-review {
-    position: static;
-    width: auto;
-    gap: 10px;
-    box-shadow: none;
-    border: var(--rule) solid var(--ct-rule);
-    border-radius: 3px;
-    background: transparent;
-    padding: 10px 15px;
-  }
-  .ct-review__score { font-size: 26px; }
-  .ct-review__count,
-  .ct-review__who { display: inline; font-size: 12.5px; font-weight: 400; color: var(--ct-muted); }
-  .ct-review__count { margin-top: 0; }
-  .ct-review__stars { margin-bottom: 4px; }
+.ct-sticky { display: none; }
 
-  /* Frame 1 runs the hero straight into "What actually moved"; frame 2 opens
-     on the ribbon and the chart. Visual order only — the DOM keeps the
-     desktop order, and nothing in the ribbon takes focus. */
-  .ct-band { display: flex; flex-direction: column; }
-  .ct-moved { order: 0; border-top: 0; }
-  .ct-ribbon { order: 1; border-top: var(--rule) solid var(--ct-rule); }
-  .ct-months { order: 2; }
-  .ct-offers { order: 3; }
+/* ── Narrow ──────────────────────────────────────────────────────────────── */
 
-  .ct-ribbon > .wrap { padding-block: 24px 28px; }
-  .ct-ribbon__top { font-size: 12.5px; margin-bottom: 12px; }
+@media (max-width: 1000px) {
+  .ct-hero__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ct-hero__copy { grid-column: 1; max-width: none; padding-right: 28px; }
+  .ct-hero__media::before { display: none; }
+  .ct-hero__title { font-size: 40px; max-width: none; }
+  .ct-hero__lede { max-width: none; }
+  .ct-stat { right: 24px; }
+  .ct-stat__figure { font-size: 42px; }
+
   .ct-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ct-metric { padding: 18px 15px 16px; }
-  .ct-metric:nth-child(3n + 1) { border-left: var(--rule) solid var(--ct-rule); }
   .ct-metric:nth-child(odd) { border-left: 0; }
-  .ct-metric:nth-child(n + 4) { border-top: 0; }
   .ct-metric:nth-child(n + 3) { border-top: var(--rule) solid var(--ct-rule); }
-  .ct-metric--hero { display: none; }
-  .ct-metric__value { font-size: 27px; }
-  .ct-metric__label { font-size: 12.5px; line-height: 1.3; margin-top: 8px; }
 
-  .ct-section .cs-h2 { font-size: 23px; line-height: 1.3; margin-bottom: 12px; }
-  .ct-lede { font-size: 15px; }
-  .ct-cards { margin-top: 28px; }
-  .ct-card { padding: 24px 20px 26px; }
+  .ct-values { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .ct-value { padding: 18px 0; border-top: var(--rule) solid var(--ct-rule); }
+  .ct-value:first-child { border-top: 0; padding-top: 0; }
+  .ct-value + .ct-value { border-left: 0; padding-left: 0; }
+  .ct-value__body { max-width: none; }
 
-  /* The chart stands unboxed on the phone, with the 126px plot the frame
-     draws, no value labels and no footnote. */
-  .ct-mbm { margin-top: 14px; gap: 28px; }
-  .ct-chart { border: 0; padding: 0; }
-  .ct-legend { font-size: 12px; gap: 8px 24px; margin-bottom: 18px; }
-  .ct-plot { height: 126px; margin-left: 24px; }
-  .ct-axis { margin: 10px 0 0 24px; font-size: 11.5px; }
-  .ct-bar { width: 13px; }
-  .ct-bar b { display: none; }
-  .ct-chart__note { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .ct-mbm__read { margin-top: 20px; }
+  .ct-panel__grid { grid-template-columns: minmax(0, 1fr); }
+  .ct-panel__figure-col {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: var(--rule) solid var(--ct-rule);
+  }
 
-  .ct-cta > .ct-cta__inner { flex-wrap: wrap; padding-block: 36px; gap: 22px; }
-  .ct-cta__title { font-size: 24px; line-height: 1.2; }
-  .ct-cta__lede { font-size: 14px; }
-  .ct-cta__actions { width: 100%; flex-direction: column; gap: 10px; }
-  .ct-cta__btn,
-  .ct-cta__ghost { width: 100%; }
+  .ct-cards { grid-template-columns: minmax(0, 1fr); }
+  .ct-card { min-height: 0; }
 }
 
-@media (max-width: 400px) {
-  .ct-tiles { grid-template-columns: minmax(0, 1fr); }
+/* The phone frame: one column, the photograph full bleed under the copy
+   with the figure at its bottom-left, the results link as a centred line. */
+@media (max-width: 720px) {
+  .ct-hero__inner { grid-template-columns: minmax(0, 1fr); }
+  .ct-hero__copy { padding: 18px 0 0; }
+  .ct-hero .ct-crumb { font-size: 12px; margin-bottom: 12px; }
+  .ct-hero__title { font-size: 32px; line-height: 1.03; max-width: none; margin-bottom: 8px; }
+  .ct-hero__lede { font-size: 17px; line-height: 1.4; max-width: none; margin-bottom: 16px; }
+
+  .ct-hero__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .ct-hero .ct-btn { width: 100%; min-height: 46px; }
+  .ct-hero__more { justify-content: center; min-height: 44px; }
+  .ct-hero__wa { margin-top: 6px; font-size: 15px; }
+  .ct-hero__wa svg { width: 22px; height: 22px; }
+
+  /* Into the one column, on its own row: left at column 2 it would open an
+     implicit column beside the copy and collapse the copy's to nothing. */
+  .ct-hero__media {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    aspect-ratio: 20 / 19;
+    margin: 20px calc(-1 * var(--gutter)) 0;
+  }
+  .ct-hero__img { object-position: 50% 50%; }
+  .ct-hero__scrim {
+    background: linear-gradient(180deg, rgba(10, 9, 9, 0) 38%, rgba(10, 9, 9, 0.78) 100%);
+  }
+  .ct-stat { left: var(--gutter); right: auto; bottom: 18px; }
+  .ct-stat__figure { font-size: 46px; }
+
+  .ct-metrics { grid-template-columns: minmax(0, 1fr); }
+  .ct-metric,
+  .ct-metric:first-child {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    column-gap: 0;
+    align-items: start;
+    text-align: left;
+    padding: 14px var(--gutter) 15px;
+    border-left: 0;
+    border-top: var(--rule) solid var(--ct-rule);
+  }
+  .ct-metric:first-child { border-top: 0; }
+  .ct-metric__value { grid-row: 1 / span 2; font-size: 28px; margin: 0; display: block; }
+  .ct-metric__stars { display: block; font-size: 14px; margin-top: 4px; }
+  .ct-metric__label { font-size: 14px; margin: 3px 0 2px; }
+  .ct-metric__source,
+  .ct-metric__reviews { font-size: 13px; }
+
+  .ct-results { padding-top: 22px; }
+  .ct-h2 { font-size: 20px; }
+  .ct-results .ct-h2 { margin-bottom: 8px; }
+  .ct-value { gap: 24px; }
+
+  .ct-panel { padding: 18px 18px 14px; }
+  .ct-panel__title { font-size: 22px; }
+  .ct-panel__lede { font-size: 15px; }
+  .ct-panel__figure { font-size: 56px; }
+  .ct-panel__figure-label { font-size: 17px; }
+  .ct-panel__foot summary { align-items: flex-start; }
+
+  .ct-offers { padding-block: 22px 14px; }
+  .ct-cards { gap: 12px; }
+  .ct-card__body { max-width: none; }
+
+  body:has(.ct-hero) .cta__inner { padding-block: 22px 20px; }
+
+  .ct-sticky {
+    position: fixed;
+    z-index: 950;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-bg) 97%, transparent);
+    border-top: var(--rule) solid var(--ct-rule);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .ct-sticky[data-visible="false"] {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .ct-sticky__wa {
+    width: 44px; height: 44px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ct-ink);
+  }
+  .ct-sticky__wa svg { width: 30px; height: 30px; fill: currentColor; }
+  .ct-sticky__wa:hover { color: var(--color-accent-700); }
+  .ct-sticky__btn { flex: 1; min-height: 46px; font-size: 16px; border-radius: 3px; }
+
+  body:has(.ct-sticky[data-visible="true"]) .whatsapp-fab { display: none; }
+  body:has(.ct-sticky) .footer__inner {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-sticky, .ct-panel__link span { transition: none; }
 }

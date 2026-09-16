@@ -631,7 +631,12 @@ body:has(.ec-hero) {
   }
   .ec-hero__more:hover { text-decoration: none; background: color-mix(in srgb, var(--ec-ink) 6%, transparent); }
 
+  /* Into the one column, on its own row: left at column 2 it opened an
+     implicit column beside the copy and collapsed the copy's to 0px — the
+     phone hero shipped squeezed into the gutter until 2026-09-16. */
   .ec-hero__media {
+    grid-column: 1;
+    grid-row: 2;
     min-height: 0;
     aspect-ratio: 9 / 8;
     margin: 17px calc(-1 * var(--gutter)) 0;

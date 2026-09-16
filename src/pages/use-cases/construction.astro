@@ -7,33 +7,32 @@
  * atbau-nrw.de and ran the local search work behind it, and this page is what
  * the Business Profile reported for the six months to mid-September 2026.
  *
- * Built from the design mockup at ~/Desktop/construction-use-case-redesign.png,
- * which is drawn in the case-study vocabulary already on the real-estate and
- * Albanien.Shop pages: its 2156px frame stands for a ~1310px viewport (scale
- * 1.647, solved from the ribbon measuring the site's 1136px measure and
- * confirmed by the drawn H1 and h2 landing on .cs-hero__title's 52px and
- * .cs-h2's 34px). The hero, headings, steps and sticky bar are the .cs-* kit;
- * construction.css covers only where the drawing departs from it.
+ * Built from the design mockup at ~/Desktop/design-mockup.png — the third
+ * drawing of this page, and the one that shipped. It is the e-commerce page's
+ * architecture (see albanien-shop.astro) redrawn for a trade firm: copy over
+ * the AT Bau site's own paving photograph bleeding off the right, a figure in
+ * its corner, a four-cell ribbon, the values row over the client-results
+ * panel, three service cards, the CTA band. The drawing is at 0.803 of life
+ * size — its 991px frame stands for a ~1234px viewport, solved from the panel
+ * measuring the site's 1136px measure and confirmed by the hero button
+ * drawing the house 42px — and construction.css carries every size from it.
  *
  * Every other entry in the `useCases` collection renders through [slug].astro,
  * and that route deliberately skips this one (see the filter there). The page
- * is the mockup and nothing more, at Kastriot's request on 2026-09-16: no
- * brief, no market problems, no FAQ, no related-results ring — so the
- * markdown's `problems`, `plays` and `faq` are not rendered here, and the
- * schema is Service and BreadcrumbList only (a FAQPage needs a visible FAQ).
- * The phone frames differ from the desktop drawing in more than layout —
- * their own kicker and lede wording, no WhatsApp line, the rating as a row
- * under the buttons, "What actually moved" ahead of the ribbon, an unboxed
- * chart with a "Directions" legend — and each of those is reproduced below
- * with a phone/desktop pair rather than one compromise.
+ * is the mockup and nothing more, at Kastriot's request: no brief, no market
+ * problems, no FAQ, no related-results ring — so the markdown's `problems`,
+ * `plays` and `faq` are not rendered here, and the schema is Service and
+ * BreadcrumbList only. The one addition is invisible until asked for: the
+ * panel's drawn "View the source reports" row is a <details> that opens the
+ * screenshots every number on the page was read from.
  *
  * Every figure below is read off a screenshot in /assets/at-bau-evidence/ —
- * see src/lib/at-bau-evidence.ts for which. The monthly bars are read off the
- * same charts and sum to the totals they report. Do not round, restate or
- * refresh a number without changing the screenshot beside it.
+ * see src/lib/at-bau-evidence.ts for which. Do not round, restate or refresh
+ * a number without changing the screenshot beside it.
  */
 import { getEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
+import CtaBanner from "../../components/CtaBanner.astro";
 import { SITE } from "../../lib/site";
 import { EVIDENCE as evidence } from "../../lib/at-bau-evidence";
 import "../../styles/construction.css";
@@ -44,89 +43,90 @@ if (!entry) throw new Error("src/content/use-cases/construction.md is missing.")
 const { title, description, audience } = entry.data;
 const url = `${SITE.url}/use-cases/construction/`;
 
-/* The share card: the one image of AT Bau that is not a thin chart export, so
-   it fills the card rather than letterboxing. Not on the page itself, which is
-   why sitemap-use-cases.xml does not list it. */
-const site = {
+/* The hero photograph: the AT Bau homepage Kastriot built, cropped to its
+   paving and logo (the site's nav sits below the crop). The uncropped
+   screenshot is the share card, where the whole page is the point. */
+const hero = {
+  src: "/assets/use-cases/at-bau-paving.webp",
+  alt: "The AT BAU logo — AT in black with a red sweep, BAU beneath — over a herringbone of grey paving stones, from the homepage of atbau-nrw.de",
+  width: 1920,
+  height: 640,
+  /* The phone frame shows the middle third of the paving with the logo
+     sitting higher, clear of the figure at the bottom-left. */
+  phone: "/assets/use-cases/at-bau-paving-phone.webp",
+  phoneMedia: "(max-width: 720px)",
+};
+const share = {
   src: "/assets/use-cases/at-bau-website.webp",
   alt: "The AT Bau homepage: the AT BAU logo over a herringbone of grey paving stones, with the navigation Startseite, Leistungen, Jetzt Anfragen, Maschinenverleih, Über uns, Galerie and Kontakt",
-  width: 1920,
-  height: 959,
 };
 
 /* ── The numbers, each tied to the screenshot it came from ──────────────── */
 
-/* One source and one window for every cell, so the ribbon can state both
-   once. The rating is the knowledge panel's; the rest are the profile's own
-   performance charts. */
+/* Over the photograph: evidence.interactions. */
+const stat = {
+  brand: "AT Bau · Remscheid",
+  figure: "344",
+  label: "Business Profile interactions",
+  detail: "Apr–mid-Sep 2026",
+};
+
+/* One source and one window for every cell, named on each as drawn. */
+const source = "AT Bau · Google Business Profile · Apr–mid-Sep 2026";
 const metrics = [
-  { value: "344", label: "Business Profile interactions", lead: true }, // evidence.interactions
   { value: "229", label: "Direction requests" }, // evidence.directions
   { value: "103", label: "Website clicks" }, // evidence.websiteClicks
-  { value: "8", label: "Calls from the listing" }, // evidence.calls
-  { value: "5.0", label: "Rating from 24 Google reviews", hero: true }, // evidence.knowledgePanel
+  { value: "8", label: "Calls from the profile" }, // evidence.calls
 ];
+/* evidence.knowledgePanel — the rating cell is its own shape. */
+const rating = { value: "5.0", reviews: "AT Bau · 24 Google reviews" };
 
 const values = [
-  {
-    icon: "i-file-text",
-    title: "A page for the search that pays",
-    body: "Excavator hire is its own search — “Bagger mieten Remscheid” — so the site I built gives it its own page, written the way customers type it.",
-  },
-  {
-    icon: "i-pin",
-    title: "The Business Profile as the front door",
-    body: "Categories, services, hours and real job photos. 229 people asked Google for the route to the yard.",
-  },
-  {
-    icon: "i-link",
-    title: "A site Google can tie to the map",
-    body: "LocalBusiness markup matching the listing to the letter: address, coordinates, phone and hours.",
-  },
+  { icon: "i-search", title: "Get found nearby", body: "Reach people searching for your trade and location." },
+  { icon: "i-phone", title: "Make contact easy", body: "Turn service-page visits into calls and quote requests." },
+  { icon: "i-bar-chart", title: "Track real actions", body: "See profile calls, website clicks and direction requests." },
 ];
 
-/* Read off evidence.directions and evidence.websiteClicks, month by month,
-   against their 15-unit and 6-unit gridlines. They sum to 229 and 103 — the
-   totals each chart reports. September is the first half of the month. */
-const months = [
-  { label: "Apr", directions: 34, clicks: 18 },
-  { label: "May", directions: 60, clicks: 24 },
-  { label: "Jun", directions: 44, clicks: 21 },
-  { label: "Jul", directions: 20, clicks: 17 },
-  { label: "Aug", directions: 53, clicks: 19 },
-  { label: "Sep*", directions: 18, clicks: 4, partial: true },
+/* The client-results panel. */
+const panel = {
+  kicker: "AT Bau · Client results",
+  title: "344 interactions. Documented in Google.",
+  lede: "A website and local SEO for a construction and plant-hire firm in Remscheid, Germany.",
+  workTitle: "The work behind the listing",
+  work: ["Dedicated service pages", "Google Business Profile improvements", "Local business structured data"],
+  figure: "344", // evidence.interactions
+  figureLabel: "Business Profile interactions",
+  figureNote: "Apr–mid-Sep 2026",
+  source: "Source: Google Business Profile",
+};
+
+/* Behind the panel's footer row, in the ribbon's order, then the listing. */
+const reports = [
+  evidence.interactions,
+  evidence.directions,
+  evidence.websiteClicks,
+  evidence.calls,
+  evidence.knowledgePanel,
 ];
-const chartMax = 60;
-const chartSummary = months
-  .map((m) => `${m.label.replace("*", "")}: ${m.directions} direction requests, ${m.clicks} website clicks`)
-  .join("; ");
 
-/* The four charts, in the ribbon's order. The knowledge panel sits beneath
-   them in its own frame, as drawn. */
-const shots = [evidence.interactions, evidence.directions, evidence.websiteClicks, evidence.calls];
-
-/* The mockup's services row: the three services the engagement drew on, in
-   the trade's own terms. */
+/* The mockup's services row. */
 const offers = [
   {
-    icon: "i-search",
-    title: "SEO",
-    body: "Technical, on-page and local SEO that wins the map pack in the towns you drive to.",
-    cta: "See SEO services",
+    title: "Local SEO",
+    body: "Local pages, Business Profile optimisation and technical fixes.",
+    cta: "Explore SEO",
     href: "/services/seo/",
   },
   {
-    icon: "i-code",
-    title: "Web Development",
-    body: "Fast service pages that give every trade its own chance to rank and get called.",
-    cta: "See web development",
+    title: "Web development",
+    body: "Fast service pages that make it easy to get in touch.",
+    cta: "Explore websites",
     href: "/services/web-development/",
   },
   {
-    icon: "i-bot",
-    title: "AI Automation",
-    body: "Missed calls texted back, forms into WhatsApp, quotes chased on day three.",
-    cta: "See automation",
+    title: "AI automation",
+    body: "Connect enquiry forms and follow-ups to your workflow.",
+    cta: "Explore automation",
     href: "/services/ai-automation/",
   },
 ];
@@ -156,291 +156,205 @@ const schema: Record<string, unknown>[] = [
   },
 ];
 
+const whatsappPath =
+  "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488";
 ---
 
-<Base title={pageTitle} description={description} image={site.src} imageAlt={site.alt} schema={schema}>
+<Base
+  title={pageTitle}
+  description={description}
+  image={share.src}
+  imageAlt={share.alt}
+  schema={schema}
+  preloadImage={hero.src}
+  preloadImageMedia="(min-width: 721px)"
+>
   <!-- ── Hero ───────────────────────────────────────────────────────────── -->
   <section class="ct-hero" data-sticky-after>
-    <div class="wrap cs-hero">
-      <div class="cs-hero__copy">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="wrap ct-hero__inner">
+      <div class="ct-hero__copy">
+        <nav class="breadcrumb ct-crumb" aria-label="Breadcrumb">
           <a href="/">Home</a> <span aria-hidden="true">/</span>
           <a href="/use-cases/">Use cases</a> <span aria-hidden="true">/</span>
           <span aria-current="page">Construction &amp; trades</span>
         </nav>
 
-        <p class="ct-kicker">
-          Use case · <span class="ct-desktop">Local SEO for construction</span
-          ><span class="ct-phone">Construction</span> &amp; trades
-        </p>
-        <h1 class="cs-hero__title">
-          Local SEO that turned AT Bau’s Google listing into 344 customer actions
-        </h1>
-        <p class="ct-hero__sub ct-desktop">
-          I built the website and ran the Business Profile and local search for a construction
-          and plant-hire firm in Remscheid, Germany. April to mid-September 2026:{" "}
-          <b>229 direction requests, 103 website clicks and 8 calls</b> straight from the
-          listing.
-        </p>
-        <p class="ct-hero__sub ct-phone">
-          I built the website and ran the local search for a construction and plant-hire firm
-          in Remscheid: 229 direction requests, 103 website clicks and 8 calls from the
-          listing.
+        <p class="ct-kicker">Local SEO for construction &amp; trades</p>
+        <h1 class="ct-hero__title">Local SEO that gets construction companies found</h1>
+        <p class="ct-hero__lede">
+          I help contractors, landscapers and plant-hire firms turn local searches into calls,
+          website visits and quote requests.
         </p>
 
-        <div class="cs-actions">
-          <a class="btn btn-primary" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+        <div class="ct-hero__actions">
+          <a class="btn btn-primary ct-btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
             Book a strategy call
           </a>
-          <a class="btn btn-secondary" href="#evidence">See the proof</a>
+          <a class="ct-hero__more" href="#results">
+            See the AT Bau results <span aria-hidden="true">→</span>
+          </a>
         </div>
 
-        <p class="ct-contact ct-desktop">
-          <a class="ct-contact__wa" href={SITE.whatsappUrl} target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488" />
-            </svg>
-            WhatsApp {SITE.phoneDisplay}
-          </a>
-          <span class="ct-contact__for">For contractors, landscapers, groundworks and plant-hire firms</span>
-        </p>
+        <a class="ct-hero__wa" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d={whatsappPath} /></svg>
+          WhatsApp {SITE.phoneDisplay}
+        </a>
       </div>
 
-      <figure class="ct-shot">
-        <div class="ct-shot__card">
-          {/* The LCP element on desktop, so it is a real <img> with priority; on
-              a phone the card is hidden and the review row below stands in. */}
+      <figure class="ct-hero__media">
+        {/* The LCP element, so it is a real <img> with fetchpriority rather than
+            a CSS background the parser finds late. */}
+        <picture>
+          <source media={hero.phoneMedia} srcset={hero.phone} width="1152" height="620" />
           <img
-            class="ct-shot__img"
-            src={evidence.interactions.src}
-            alt={evidence.interactions.alt}
-            width={evidence.interactions.width}
-            height={evidence.interactions.height}
+            class="ct-hero__img"
+            src={hero.src}
+            alt={hero.alt}
+            width={hero.width}
+            height={hero.height}
             fetchpriority="high"
             decoding="async"
           />
-          <p class="ct-shot__cap">
-            <span>AT Bau</span>
-            <span>Apr – Sep 2026</span>
-          </p>
-        </div>
-        <figcaption class="ct-review">
-          <p class="ct-review__score">5.0</p>
-          <span>
-            <span class="ct-review__stars" aria-hidden="true">★★★★★</span>
-            <span class="ct-review__count">24 Google reviews</span>
-            <span class="ct-review__who">
-              <span class="ct-phone">&nbsp;· </span>AT Bau<span class="ct-desktop"> · Remscheid</span>
-            </span>
-          </span>
+        </picture>
+        <div class="ct-hero__scrim" aria-hidden="true"></div>
+        <figcaption class="ct-stat">
+          <span class="ct-stat__brand">{stat.brand}</span>
+          <span class="ct-stat__figure">{stat.figure}</span>
+          <span class="ct-stat__label">{stat.label}</span>
+          <span class="ct-stat__detail">{stat.detail}</span>
         </figcaption>
       </figure>
     </div>
   </section>
 
-  <div class="ct-band">
-    <!-- ── Results ribbon ───────────────────────────────────────────────── -->
-    <section class="ct-ribbon" aria-label="Headline results">
-      <div class="wrap">
-        <p class="ct-ribbon__top">
-          <span class="ct-verified">
-            <span>Verified in Google Business Profile<span class="ct-phone"> · Apr–Sep 2026</span></span>
-          </span>
-          <span class="ct-desktop"><b>AT Bau</b>, Remscheid · 1 April – mid-September 2026</span>
+  <!-- ── Metric ribbon ──────────────────────────────────────────────────── -->
+  <section class="ct-ribbon" aria-label="Headline results">
+    <ul class="ct-metrics">
+      {
+        metrics.map((metric) => (
+          <li class="ct-metric">
+            <p class="ct-metric__value">{metric.value}</p>
+            <p class="ct-metric__label">{metric.label}</p>
+            <p class="ct-metric__source">{source}</p>
+          </li>
+        ))
+      }
+      <li class="ct-metric">
+        <p class="ct-metric__value">
+          {rating.value}
+          <span class="ct-metric__stars" aria-label="five stars">★★★★★</span>
         </p>
-        <ul class="ct-metrics">
-          {
-            metrics.map((metric) => (
-              <li
-                class:list={[
-                  "ct-metric",
-                  metric.lead && "ct-metric--lead",
-                  metric.hero && "ct-metric--hero",
-                ]}
-              >
-                <p class="ct-metric__value">{metric.value}</p>
-                <p class="ct-metric__label">{metric.label}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
+        <p class="ct-metric__reviews">{rating.reviews}</p>
+      </li>
+    </ul>
+  </section>
 
-    <!-- ── What moved ───────────────────────────────────────────────────── -->
-    <section class="ct-section ct-moved">
-      <div class="wrap">
-        <p class="ct-kicker">What actually moved</p>
-        <h2 class="cs-h2">Three changes did most of the work</h2>
-        <p class="ct-lede">
-          Trade searches have a town in them and get answered with a map. Each change was aimed
-          at one of those three map spots.
-        </p>
-        <ul class="ct-cards">
-          {
-            values.map((value) => (
-              <li class="ct-card">
-                <svg class="ct-card__icon" aria-hidden="true"><use href={`#${value.icon}`} /></svg>
-                <h3 class="ct-card__title">{value.title}</h3>
-                <p class="ct-card__body">{value.body}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
-
-    <!-- ── Month by month, and the evidence ─────────────────────────────── -->
-    <section class="ct-section ct-months" id="evidence">
-      <div class="wrap">
-        <p class="ct-kicker">Month by month</p>
-        <h2 class="cs-h2">The listing follows the building season</h2>
-
-        <div class="ct-mbm">
-          <div>
-            <div class="ct-chart" role="img" aria-label={`Direction requests and website clicks from the AT Bau Business Profile by month, April to mid-September 2026. ${chartSummary}.`}>
-              <ul class="ct-legend" aria-hidden="true">
-                <li><span class="ct-desktop">Direction requests</span><span class="ct-phone">Directions</span></li>
-                <li>Website clicks</li>
-              </ul>
-              <div class="ct-plot" aria-hidden="true">
-                <ul class="ct-grid">
-                  <li data-v="0"></li>
-                  <li data-v="20"></li>
-                  <li data-v="40"></li>
-                  <li data-v="60"></li>
-                </ul>
-                <ol class="ct-groups">
-                  {
-                    months.map((m) => (
-                      <li class:list={["ct-group", m.partial && "ct-group--partial"]}>
-                        <span class="ct-bar ct-bar--dir" style={`--v:${(m.directions / chartMax).toFixed(4)}`}>
-                          <b>{m.directions}</b>
-                        </span>
-                        <span class="ct-bar ct-bar--web" style={`--v:${(m.clicks / chartMax).toFixed(4)}`}>
-                          <b>{m.clicks}</b>
-                        </span>
-                      </li>
-                    ))
-                  }
-                </ol>
+  <!-- ── What it does, and what it did ──────────────────────────────────── -->
+  <section class="ct-results">
+    <div class="wrap">
+      <h2 class="ct-h2">More local visibility. Easier enquiries.</h2>
+      <ul class="ct-values">
+        {
+          values.map((value) => (
+            <li class="ct-value">
+              <svg class="ct-value__icon" aria-hidden="true"><use href={`#${value.icon}`} /></svg>
+              <div>
+                <h3 class="ct-value__title">{value.title}</h3>
+                <p class="ct-value__body">{value.body}</p>
               </div>
-              <ol class="ct-axis" aria-hidden="true">
-                {months.map((m) => <li>{m.label}</li>)}
-              </ol>
-              <p class="ct-chart__note" aria-hidden="true">
-                * September covers half a month. Monthly values read from the Business Profile
-                charts.
-              </p>
-            </div>
-            <p class="ct-mbm__read">
-              Directions lead because plant hire is a collect-it business — someone asking for
-              the route to the yard has already decided. The May peak, July dip and August
-              recovery are the shape of the trade. Local search doesn’t create that demand; it
-              decides which firm it reaches.
-            </p>
-          </div>
+            </li>
+          ))
+        }
+      </ul>
 
-          <aside class="ct-evidence" aria-labelledby="ct-evidence-title">
-            <p class="ct-evidence__head">
-              <b id="ct-evidence-title">The evidence</b>
-              <span>Screenshots from the source</span>
-            </p>
-            <ul class="ct-tiles">
-              {
-                shots.map((shot) => (
-                  <li>
-                    <figure class="ct-tile">
-                      <img
-                        src={shot.src}
-                        alt={shot.alt}
-                        width={shot.width}
-                        height={shot.height}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <figcaption>{shot.strong}</figcaption>
-                    </figure>
-                  </li>
-                ))
-              }
+      <article class="ct-panel" id="results" aria-labelledby="ct-panel-title">
+        <p class="ct-panel__kicker">{panel.kicker}</p>
+        <h2 class="ct-panel__title" id="ct-panel-title">{panel.title}</h2>
+        <p class="ct-panel__lede">{panel.lede}</p>
+
+        <div class="ct-panel__grid">
+          <div>
+            <h3 class="ct-panel__work-title">{panel.workTitle}</h3>
+            <ul class="ct-panel__list">
+              {panel.work.map((item) => <li>{item}</li>)}
             </ul>
-            <figure class="ct-panel">
-              <img
-                src={evidence.knowledgePanel.src}
-                alt={evidence.knowledgePanel.alt}
-                width={evidence.knowledgePanel.width}
-                height={evidence.knowledgePanel.height}
-                loading="lazy"
-                decoding="async"
-              />
-            </figure>
-          </aside>
+          </div>
+          <div class="ct-panel__figure-col">
+            <p class="ct-panel__figure">{panel.figure}</p>
+            <p class="ct-panel__figure-label">{panel.figureLabel}</p>
+            <p class="ct-panel__figure-note">{panel.figureNote}</p>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ── Work with me ─────────────────────────────────────────────────── -->
-    <section class="ct-section ct-offers">
-      <div class="wrap">
-        <p class="ct-kicker">Work with me</p>
-        <h2 class="cs-h2">The same levers, for your trade business</h2>
-        <ul class="ct-cards">
-          {
-            offers.map((offer) => (
-              <li class="ct-card">
-                <svg class="ct-card__icon" aria-hidden="true"><use href={`#${offer.icon}`} /></svg>
-                <h3 class="ct-card__title">{offer.title}</h3>
-                <p class="ct-card__body">{offer.body}</p>
-                <a class="ct-card__link" href={offer.href}>{offer.cta}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <!-- ── CTA band ─────────────────────────────────────────────────────── -->
-  <section class="ct-cta">
-    <div class="wrap ct-cta__inner">
-      <div class="ct-cta__copy">
-        <h2 class="ct-cta__title">Losing jobs to the firm above you on the map?</h2>
-        <p class="ct-cta__lede">
-          Send me your site and Business Profile. I’ll tell you where the calls are leaking
-          and what to fix first.
-        </p>
-      </div>
-      <div class="ct-cta__actions">
-        <a class="ct-cta__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
-          Book a strategy call
-        </a>
-        <a class="ct-cta__ghost" href={SITE.whatsappUrl} target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488" />
-          </svg>
-          WhatsApp {SITE.phoneDisplay}
-        </a>
-      </div>
+        <details class="ct-panel__foot">
+          <summary>
+            <span class="ct-panel__source">{panel.source}</span>
+            <span class="ct-panel__link">View the source reports <span aria-hidden="true">→</span></span>
+          </summary>
+          <div class="ct-panel__reports cs-ev-grid">
+            {
+              reports.map((shot) => (
+                <figure class:list={["cs-ev", shot === evidence.knowledgePanel ? "cs-ev--2" : "cs-ev--3"]}>
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    width={shot.width}
+                    height={shot.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>
+                    <b>{shot.strong}</b> — {shot.caption}
+                  </figcaption>
+                </figure>
+              ))
+            }
+          </div>
+        </details>
+      </article>
     </div>
   </section>
 
+  <!-- ── What I can help your business with ────────────────────────────── -->
+  <section class="ct-offers">
+    <div class="wrap">
+      <h2 class="ct-h2">What I can help your business with</h2>
+      <ul class="ct-cards">
+        {
+          offers.map((offer) => (
+            <li class="ct-card">
+              <h3 class="ct-card__title">{offer.title}</h3>
+              <p class="ct-card__body">{offer.body}</p>
+              <a class="ct-card__link" href={offer.href}>
+                {offer.cta} <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBanner
+    title="Get your construction business found."
+    lede="Let’s review your website and Google Business Profile."
+    ghostLabel={null}
+  />
+
   <!-- Mobile only. Hidden until the hero scrolls away — see site.js. Without
        JS it never appears and the floating WhatsApp button stays instead. -->
-  <div class="cs-sticky" data-sticky-cta data-visible="false">
-    <a class="btn btn-primary cs-sticky__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
-      Book a strategy call
-    </a>
+  <div class="ct-sticky" data-sticky-cta data-visible="false">
     <a
-      class="cs-sticky__wa"
+      class="ct-sticky__wa"
       href={SITE.whatsappUrl}
       target="_blank"
       rel="noopener"
       aria-label={`Chat with ${SITE.name} on WhatsApp`}
     >
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.8 11.8 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.9 11.9 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.465 3.488" />
-      </svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d={whatsappPath} /></svg>
+    </a>
+    <a class="btn btn-primary ct-sticky__btn" href={SITE.whatsappUrl} target="_blank" rel="noopener">
+      Contact
     </a>
   </div>
 </Base>

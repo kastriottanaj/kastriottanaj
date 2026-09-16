@@ -10,8 +10,13 @@ const bespokeImages: Record<string, string[]> = {
   "real-estate": AS_REAL_ESTATE_IMAGES,
   // The hero photograph leads, then the screenshots in the order the page shows them.
   "albanien-shop": ["/assets/use-cases/albanien-shop-shopify-seo.webp", ...ALBANIEN_SHOP_IMAGES],
-  // The profile charts and the knowledge panel, in the order the page shows them.
-  construction: AT_BAU_IMAGES,
+  // The paving photograph leads, then the profile charts and the knowledge
+  // panel behind the panel's "View the source reports".
+  construction: [
+    "/assets/use-cases/at-bau-paving.webp",
+    "/assets/use-cases/at-bau-paving-phone.webp",
+    ...AT_BAU_IMAGES,
+  ],
 };
 
 export async function GET() {
