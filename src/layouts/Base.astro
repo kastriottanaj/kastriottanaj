@@ -177,6 +177,13 @@ const [firstName, ...surname] = SITE.name.split(" ");
     <meta name="twitter:card" content="summary_large_image" />
     {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
 
+    {/* SVG first for browsers that take it (crisp at any size); the .ico carries
+        16/32/48 bitmaps for the ones that don't, and Safari wants a full-bleed
+        PNG it can mask itself. */}
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <meta name="theme-color" content="#f3f2f2" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Blog`} href="/rss.xml" />
 
