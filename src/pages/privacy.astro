@@ -13,7 +13,7 @@ import { SITE, COMPANY, META_PIXEL_ID } from "../lib/site";
  * and be linked, not rank. `noindex, follow` still lets crawlers read it.
  */
 
-const updated = "22 September 2026";
+const updated = "23 September 2026";
 ---
 
 <Base
@@ -51,22 +51,10 @@ const updated = "22 September 2026";
         Post sent there reaches our registered agent rather than us directly, so email is much
         the faster route for anything about your data.
       </p>
-      <p>
-        <mark
-          >REVIEW — most likely YES, confirm with a lawyer. The controller is a United States
-          company, so it sits outside the EU/EEA and Article 27 applies unless the 27(2) exemption
-          fits. That exemption needs processing to be <em>occasional</em>. Clients are mostly in
-          the EU and the site runs a standing lead form and newsletter, which is regular and
-          deliberate rather than occasional — so the exemption looks like a poor fit here and an
-          EU representative is probably required. Name them here once appointed.</mark
-        >
-      </p>
-      <p>
-        <mark
-          >REVIEW: do not publish until the filed certificate is back from Delaware. Naming an
-          entity that does not legally exist yet is worse than naming none.</mark
-        >
-      </p>
+
+      {/* TODO(legal): an EU representative under Art. 27 is probably required — a standing lead
+          form and newsletter aimed largely at EU clients is not the "occasional" processing the
+          27(2) exemption needs. Name them here once appointed. See TODO.md. */}
 
       <h2>The contact form</h2>
       <p>
@@ -216,13 +204,11 @@ const updated = "22 September 2026";
       <p>
         If you think we have handled your data badly you can complain to a data protection
         supervisory authority — in the EU, the one where you live or work.
-        <mark
-          >REVIEW: with a US controller and no EU establishment there is no single lead authority;
-          complaints go to the authority where the complainant lives, or to the one in the member
-          state where an Article 27 representative is based. Settle the representative question
-          above first, then word this to match.</mark
-        >
       </p>
+
+      {/* TODO(legal): with a US controller and no EU establishment there is no single lead
+          authority. Once the Art. 27 question is settled, name the authority of the member
+          state where the representative sits. See TODO.md. */}
 
       <h2>Changes</h2>
       <p>

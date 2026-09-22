@@ -5,7 +5,7 @@ import { SITE, COMPANY } from "../lib/site";
 /** noindex for the same reason as /privacy/: it has to exist and be linked,
     not rank. */
 
-const updated = "22 September 2026";
+const updated = "23 September 2026";
 ---
 
 <Base
@@ -41,12 +41,6 @@ const updated = "22 September 2026";
         For anything that is not formal service — questions, complaints, requests about your data —
         use <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a>, which
         reaches a person rather than a mail handler.
-      </p>
-      <p>
-        <mark
-          >REVIEW: do not publish until the filed certificate is back from Delaware. Until then
-          the company is not yet a legal person and cannot be the contracting party.</mark
-        >
       </p>
 
       <h2>The site is information, not an offer</h2>
@@ -127,13 +121,11 @@ const updated = "22 September 2026";
           >Nothing here limits liability for death or personal injury caused by negligence, for
           fraud, or for anything else that cannot lawfully be limited.</strong
         > Liability for paid work is governed by our written agreement.
-        <mark
-          >REVIEW: have a lawyer confirm this clause survives both {COMPANY.jurisdiction} law and
-          the consumer protections of the European countries you sell into — liability caps are
-          the part most often struck out. An LLC limits your personal exposure; it does not make
-          this clause enforceable on its own.</mark
-        >
       </p>
+
+      {/* TODO(legal): have a lawyer confirm this cap survives Delaware law and the consumer
+          protections of the European countries we sell into — caps are the clause most often
+          struck out. See TODO.md. */}
 
       <h2>Privacy</h2>
       <p>
@@ -158,13 +150,9 @@ const updated = "22 September 2026";
         of the country you live in.</strong> Mandatory consumer rights there apply whatever this
         page says, and you may be able to bring proceedings in your own local courts.
       </p>
-      <p>
-        <mark
-          >REVIEW: Delaware is the natural default now the company is formed there, but have a
-          lawyer confirm it against where your clients actually are. Most of your work is in
-          Europe, and a Delaware forum clause is of limited practical use against an EU consumer.</mark
-        >
-      </p>
+
+      {/* TODO(legal): Delaware is the natural default now the company is formed there, but a
+          Delaware forum clause is of limited practical use against an EU consumer. TODO.md. */}
 
       <h2>Contact</h2>
       <p>
