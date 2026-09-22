@@ -39,6 +39,35 @@ kastriottanaj.com {
 		}
 	}
 
+	# Astro's canonical form carries a trailing slash, and <link rel="canonical">
+	# says so — but try_files below happily serves /privacy AND /privacy/ as 200,
+	# so both forms exist and a crawler can treat them as two URLs. Redirect the
+	# bare form to the canonical one.
+	#
+	# The exclusions: anything already ending in "/", anything with a file
+	# extension (/favicon.ico, /llms.txt, /sitemap-index.xml, /_astro/*.css) and
+	# the API, which is a POST target and must never be redirected — a 301 would
+	# turn a form submission into a GET and lose the body.
+	# Split on whether there is a query string: {path} drops it, so redirecting
+	# /pricing?utm_source=… with {path}/ alone would silently lose the campaign
+	# tags. Appending "?{query}" unconditionally would instead leave a bare "?"
+	# on every other redirect, which is a third URL variant.
+	@bare_path {
+		not path */
+		not path *.*
+		not path /api/*
+		expression {query} == ""
+	}
+	redir @bare_path {path}/ 301
+
+	@bare_path_query {
+		not path */
+		not path *.*
+		not path /api/*
+		expression {query} != ""
+	}
+	redir @bare_path_query {path}/?{query} 301
+
 	handle {
 		# Astro emits directory-style routes: /services/seo/ -> …/index.html
 		try_files {path} {path}/index.html {path}.html
