@@ -1,5 +1,6 @@
 body:has(.services-page) {
-  --services-red: #ec3013;
+  /* Was a second copy of the brand red, and drifted out of the AA fix. */
+  --services-red: var(--color-accent);
   --services-ink: #201e1d;
   --services-muted: #565554;
   --services-rule: #d4d2d0;

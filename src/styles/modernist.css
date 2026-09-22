@@ -11,7 +11,13 @@
   --color-bg: #f3f2f2;
   --color-surface: #eae9e9;
   --color-text: #201e1d;
-  --color-accent: #ec3013;
+  /* Darkened from #ec3013 on 2026-09-22: the old red measured 3.76:1 against
+     --color-bg, so every accent link, kicker, primary button label and the
+     11px promo bar sat under the 4.5:1 AA floor. Hue and saturation are held;
+     only lightness moved, so the brand still reads as the same red.
+     Pinned against --color-surface (#eae9e9), not --color-bg: cards are the
+     darker ground, so they are what the accent has to clear. */
+  --color-accent: #c62810;
   --color-accent-2: #e15b47;
   --color-divider: color-mix(in srgb, #201e1d 40%, transparent);
 
@@ -32,7 +38,9 @@
   --color-accent-300: #ffc4b8;
   --color-accent-400: #ff9783;
   --color-accent-500: #ff563c;
-  --color-accent-600: #dd2b0f;
+  /* Moved with it: ~29 rules use 600 as the hover of an accent surface, and a
+     hover has to stay darker than the base it lifts from. */
+  --color-accent-600: #b3240e;
   --color-accent-700: #ae1800;
   --color-accent-800: #7c1405;
   --color-accent-900: #4d170e;

@@ -79,7 +79,7 @@ export function renderEmail({ preheader = "", bodyHtml, footerHtml = "" }) {
   .email-body ul, .email-body ol { margin:0 0 16px; padding-left:22px; }
   .email-body li { margin:0 0 8px; }
   .email-body a { color:#ae1800; }
-  .email-body blockquote { margin:0 0 16px; padding:2px 0 2px 16px; border-left:3px solid #ec3013; color:#605d5d; }
+  .email-body blockquote { margin:0 0 16px; padding:2px 0 2px 16px; border-left:3px solid #c62810; color:#605d5d; }
   .email-body code { background:#eae9e9; padding:1px 5px; font-size:14px; }
   .email-body pre { background:#201e1d; color:#f3f2f2; padding:16px; overflow-x:auto; font-size:13px; }
   .email-body pre code { background:transparent; color:inherit; padding:0; }
