@@ -1,0 +1,164 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE, COMPANY } from "../lib/site";
+
+/** noindex for the same reason as /privacy/: it has to exist and be linked,
+    not rank. */
+
+const updated = "23 September 2026";
+---
+
+<Base
+  title={`Terms & Conditions — ${SITE.name}`}
+  description="The terms you accept by using this site, and how they relate to paid work, bootcamps and the newsletter."
+  noindex
+>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Legal</span>
+      <h1 class="page-head__title">Terms &amp; Conditions</h1>
+      <p class="page-head__lede">
+        The terms you accept by using this site, and where a separate agreement takes over
+        instead.
+      </p>
+      <p class="post__date">Last updated: {updated}</p>
+    </header>
+
+    <div class="prose prose--narrow">
+      <h2>Who these terms are with</h2>
+      <p>
+        This site is operated by <strong>{COMPANY.legalName}</strong>, a{" "}
+        {COMPANY.jurisdiction} {COMPANY.entityType} trading as {SITE.name} at kastriottanaj.com —
+        "we" and "us"
+        throughout. Using the site means accepting these terms. If you do not accept them, please
+        stop using it.
+      </p>
+      <p>
+        Formal legal notices may be served on our registered agent:<br />
+        {COMPANY.registeredAgent}, {COMPANY.registeredOffice}.
+      </p>
+      <p>
+        For anything that is not formal service — questions, complaints, requests about your data —
+        use <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a>, which
+        reaches a person rather than a mail handler.
+      </p>
+
+      <h2>The site is information, not an offer</h2>
+      <p>
+        The services, packages, prices and results described here are for information. Nothing on
+        this site is a binding offer, and publishing a price does not oblige us to accept a
+        project at it.
+      </p>
+      <p>
+        Paid work begins only when we have both agreed a scope in writing — a proposal, statement
+        of work or contract. <strong>Where that agreement and these terms disagree, that
+        agreement wins.</strong>
+      </p>
+
+      <h2>Case studies and results</h2>
+      <p>
+        The outcomes shown in case studies and use cases happened for those clients, in their
+        markets, with their budgets and constraints. They are evidence of what we have done, not a
+        forecast of what your project will do. Search and advertising results depend on factors
+        outside our control, and we do not guarantee rankings, traffic or revenue.
+      </p>
+
+      <h2>Using the site</h2>
+      <p>You agree not to:</p>
+      <ul>
+        <li>submit false information or somebody else's personal details through the forms;</li>
+        <li>attempt to break, overload or gain unauthorised access to the site or its server;</li>
+        <li>scrape it in a way that degrades it for other people;</li>
+        <li>use the contact form or newsletter to send unsolicited commercial messages.</li>
+      </ul>
+      <p>
+        Forms are rate-limited and protected against automated abuse. We may block access that
+        breaches these terms.
+      </p>
+
+      <h2>Intellectual property</h2>
+      <p>
+        The text, design, code, images and video on this site are ours, or used with permission,
+        and are protected by copyright. Client names and logos belong to their owners and appear
+        with their agreement.
+      </p>
+      <p>
+        You may read, link to and quote short extracts with attribution. You may not republish
+        substantial parts, or pass the work off as your own, without written permission. Rights in
+        work produced under a client engagement are governed by that engagement, not by this page.
+      </p>
+
+      <h2>The newsletter</h2>
+      <p>
+        Subscribing is free and confirmed by email before anything is sent. Every issue carries an
+        unsubscribe link that works immediately. We may change how often it goes out, or stop
+        sending it.
+      </p>
+
+      <h2>Bootcamps and the community</h2>
+      <p>
+        Bootcamps and the community are described here ahead of opening, and those descriptions may
+        change before they launch. Joining either is subject to its own terms and pricing at the
+        time you enrol, together with the terms of any third-party platform it runs on — the
+        community is planned for Skool, which has its own terms and privacy policy.
+      </p>
+
+      <h2>Links to other sites</h2>
+      <p>
+        Links to other sites are there because they were useful. We do not control them and are not
+        responsible for their content, their terms or how they handle your data.
+      </p>
+
+      <h2>Availability and liability</h2>
+      <p>
+        We keep the site up and accurate, but we do not promise it will be uninterrupted, error-free,
+        or right at every moment. It is provided as it is.
+      </p>
+      <p>
+        To the extent the law allows, we are not liable for indirect or consequential loss, lost
+        profit, lost revenue or lost data arising from your use of this site.
+        <strong
+          >Nothing here limits liability for death or personal injury caused by negligence, for
+          fraud, or for anything else that cannot lawfully be limited.</strong
+        > Liability for paid work is governed by our written agreement.
+      </p>
+
+      {/* TODO(legal): have a lawyer confirm this cap survives Delaware law and the consumer
+          protections of the European countries we sell into — caps are the clause most often
+          struck out. See TODO.md. */}
+
+      <h2>Privacy</h2>
+      <p>
+        How this site handles personal data is set out in the <a href="/privacy/">Privacy Policy</a>,
+        which forms part of these terms.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update these terms. The date at the top shows when they last changed, and the version
+        published here is the one that applies to your visit.
+      </p>
+
+      <h2>Governing law</h2>
+      <p>
+        These terms are governed by the laws of the State of {COMPANY.jurisdiction},{" "}
+        {COMPANY.country}, and the courts of {COMPANY.jurisdiction} have jurisdiction over any
+        dispute arising from them.
+      </p>
+      <p>
+        <strong>If you are a consumer in the EU or the UK, this does not take away the protections
+        of the country you live in.</strong> Mandatory consumer rights there apply whatever this
+        page says, and you may be able to bring proceedings in your own local courts.
+      </p>
+
+      {/* TODO(legal): Delaware is the natural default now the company is formed there, but a
+          Delaware forum clause is of limited practical use against an EU consumer. TODO.md. */}
+
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms:
+        <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a>.
+      </p>
+    </div>
+  </div>
+</Base>

@@ -26,6 +26,22 @@ export const SITE = {
     "A laptop on a dark desk showing an organic traffic chart climbing, beside a notebook and a mug",
 } as const;
 
+/** The legal entity behind the site. The Delaware certificate of formation
+    names Marketing Chains LLC; kastriottanaj.com is how it trades.
+
+    `registeredOffice` is the registered agent's address, which exists to accept
+    service of process. It is NOT a business address and must not be published
+    as a contact address — a data subject writing there reaches a mail-handling
+    company, not Kastriot. */
+export const COMPANY = {
+  legalName: "Marketing Chains LLC",
+  entityType: "limited liability company",
+  jurisdiction: "Delaware",
+  country: "United States",
+  registeredAgent: "Resident Agents Inc.",
+  registeredOffice: "8 The Green STE R, Dover, DE 19901, United States",
+} as const;
+
 /** Social profiles, in the order they're shown everywhere. The nav, the footer,
     /about/ and every schema.org `sameAs` read this one list, so a new channel
     is added here and nowhere else. `icon` is a sprite id from IconSprite. */
