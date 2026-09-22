@@ -681,7 +681,7 @@ textarea.input { min-height: 100px; }
 .details { display: flex; flex-direction: column; gap: 20px; }
 .details__label {
   font-size: 12px;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
   margin: 0 0 4px;
 }
 .details__value { font-weight: 600; font-size: 14.5px; margin: 0; }
@@ -741,7 +741,7 @@ textarea.input { min-height: 100px; }
 .newsletter__note {
   font-size: 12.5px;
   line-height: 1.6;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
   max-width: 56ch;
   margin: 14px 0 0;
 }
@@ -777,7 +777,7 @@ textarea.input { min-height: 100px; }
 .footer__copy,
 .footer__link {
   font-size: 13px;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
   text-decoration: none;
   margin: 0;
 }
@@ -902,7 +902,7 @@ textarea.input { min-height: 100px; }
   gap: 8px;
   padding-top: 28px;
   font-size: 12.5px;
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
 }
 .breadcrumb a { color: inherit; text-decoration: none; }
 .breadcrumb a:hover { color: var(--color-accent-700); text-decoration: underline; }
@@ -1056,7 +1056,7 @@ textarea.input { min-height: 100px; }
   font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
   margin: 0 0 4px;
 }
 .post__title a,
@@ -1220,7 +1220,7 @@ textarea.input { min-height: 100px; }
 }
 .quote__role {
   font-size: 12.5px;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
 }
 
 /* ── Pricing tiers ───────────────────────────────────────────────────────
@@ -1235,7 +1235,7 @@ textarea.input { min-height: 100px; }
   font-weight: 400;
   font-size: 12.5px;
   letter-spacing: 0.01em;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
   margin-top: 4px;
 }
 .tier__features {
@@ -1294,7 +1294,7 @@ textarea.input { min-height: 100px; }
   font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
   margin: 0;
 }
 .course-card .service__title a { color: inherit; text-decoration: none; }

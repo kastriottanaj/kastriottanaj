@@ -690,3 +690,8 @@ body:has(.wd-page) .cta__ghost {
   .wd-hero__veil { display: none; }
   .wd-hero { background: none; color: var(--wd-ink); }
 }
+
+/* On the dark sections the darkened --color-accent drops to ~3.2:1. accent-500
+   is the shade meant for this ground — same fix as .community__kicker in
+   site.css. Scoped, because the base selector is also used on light. */
+.wd-hero .wd-eyebrow { color: var(--color-accent-500); }

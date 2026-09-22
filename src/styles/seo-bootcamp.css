@@ -909,3 +909,8 @@ body:has(.sb-page) {
   .sb-card__icon { width: 40px; height: 40px; }
   .sb-tier__price { font-size: 27px; }
 }
+
+/* On the dark sections the darkened --color-accent drops to ~3.2:1. accent-500
+   is the shade meant for this ground — same fix as .community__kicker in
+   site.css. Scoped, because the base selector is also used on light. */
+.sb-flow .sb-step__num { color: var(--color-accent-500); }

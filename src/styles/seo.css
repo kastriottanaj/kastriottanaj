@@ -677,3 +677,9 @@ body:has(.seo-page) .cta__btn {
   .seo-case { background: none; color: var(--seo-ink); }
   .seo-case__title { color: var(--seo-ink); }
 }
+
+/* On the dark sections the darkened --color-accent drops to ~3.2:1. accent-500
+   is the shade meant for this ground — same fix as .community__kicker in
+   site.css. Scoped, because the base selector is also used on light. */
+.seo-hero .seo-eyebrow,
+.seo-case .seo-eyebrow { color: var(--color-accent-500); }

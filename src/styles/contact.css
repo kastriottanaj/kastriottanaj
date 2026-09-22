@@ -1,8 +1,8 @@
 /* Contact page — composed directly from the supplied desktop/mobile mockup. */
 
 body:has(.contact-page) {
-  --contact-accent: #f12612;
-  --contact-accent-dark: #e91d0b;
+  --contact-accent: var(--color-accent);
+  --contact-accent-dark: var(--color-accent-600);
   --contact-border: #dedede;
   --contact-paper: #fafafa;
   --contact-ink: #101111;

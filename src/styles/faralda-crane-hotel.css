@@ -398,3 +398,8 @@ body:has(.fc-hero) {
 @media (prefers-reduced-motion: reduce) {
   .fc-sticky { transition: none; }
 }
+
+/* On the dark sections the darkened --color-accent drops to ~3.2:1. accent-500
+   is the shade meant for this ground — same fix as .community__kicker in
+   site.css. Scoped, because the base selector is also used on light. */
+.fc-hero .fc-kicker { color: var(--color-accent-500); }

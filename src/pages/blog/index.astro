@@ -188,7 +188,7 @@ const featuredTag = featured?.data.tags.at(-1);
      render at its 1:1 scale, so the numbers are literal rather than rounded to
      the system's spacing scale — same approach the /work/ index takes. */
   body:has(.blog-page) {
-    --blog-red: #e82e0f;
+    --blog-red: var(--color-accent);
     --blog-ink: #202020;
     --blog-muted: #5f5f5f;
     --blog-meta: #6f6e6e;

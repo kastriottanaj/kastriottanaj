@@ -841,3 +841,9 @@ body:has(.process-page) .whatsapp-fab { display: none; }
   .process-hero, .process-case { background: none; color: var(--process-ink); }
   .process-hero__title, .process-case h3 { color: var(--process-ink); }
 }
+
+/* On the dark sections the darkened --color-accent drops to ~3.2:1. accent-500
+   is the shade meant for this ground — same fix as .community__kicker in
+   site.css. Scoped, because the base selector is also used on light. */
+.process-hero .process-eyebrow,
+.process-case .process-eyebrow { color: var(--color-accent-500); }
