@@ -1,0 +1,210 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE, META_PIXEL_ID } from "../lib/site";
+
+/**
+ * Written against what the code actually does, not a generic template:
+ * every processor and field named below is one the site really touches.
+ * When a data flow changes, this page changes with it — in particular
+ * src/pages/api/lead.ts, src/lib/db.ts, src/lib/newsletter-store.mjs,
+ * src/lib/mailerlite.mjs, src/lib/meta-capi.ts and src/layouts/Base.astro.
+ *
+ * noindex, like /thanks/ and the newsletter utility pages: this has to exist
+ * and be linked, not rank. `noindex, follow` still lets crawlers read it.
+ */
+
+const updated = "22 September 2026";
+---
+
+<Base
+  title={`Privacy Policy — ${SITE.name}`}
+  description="What this site collects, why, who processes it, how long it is kept, and the rights you have over it."
+  noindex
+>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Legal</span>
+      <h1 class="page-head__title">Privacy Policy</h1>
+      <p class="page-head__lede">
+        What this site collects, why it collects it, who else sees it, and what you can ask me
+        to do about it.
+      </p>
+      <p class="post__date">Last updated: {updated}</p>
+    </header>
+
+    <div class="prose prose--narrow">
+      <h2>Who is responsible</h2>
+      <p>
+        This site is run by {SITE.name}, {SITE.jobTitle}, based in {SITE.locality}, {SITE.countryName}.
+        I am the data controller for everything described here.
+      </p>
+      <p>
+        Email: <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a><br />
+        Phone: <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a>
+      </p>
+      <p>
+        <mark
+          >REVIEW: if you trade under a registered business name, add it and the registered
+          address here — GDPR Article 13 requires the controller's identity and contact
+          details, and a personal name alone is usually not enough.</mark
+        >
+      </p>
+      <p>
+        <mark
+          >REVIEW: {SITE.countryName} is outside the EU/EEA. If you offer services to people in
+          the EU, check whether Article 27 obliges you to appoint an EU representative, and name
+          them here if so.</mark
+        >
+      </p>
+
+      <h2>The contact form</h2>
+      <p>
+        When you send the form on the contact page I receive your name, email address, the
+        service you selected and your message. Along with it the server records your IP address,
+        your browser's user-agent string and the page that referred you.
+      </p>
+      <p>
+        That record is written to a database on my own server and emailed to me. The email is a
+        notification; the database is the copy that lasts, so a bounce or a spam folder is never
+        the difference between you writing to me and me never knowing.
+      </p>
+      <p>
+        <strong>Why:</strong> to answer you and to take steps you asked for before a possible
+        contract. The IP, user-agent and referrer are kept for security and abuse prevention,
+        which is my legitimate interest in keeping the form usable.
+      </p>
+
+      <h2>The newsletter</h2>
+      <p>
+        Subscribing stores your email address, the page you subscribed from, your IP address,
+        your user-agent and the relevant timestamps. Nothing is ever sent to an address that has
+        not confirmed itself: you receive a confirmation link first, and the subscription only
+        becomes real when you click it.
+      </p>
+      <p>
+        Confirmed subscribers are also passed to <strong>MailerLite</strong>, which delivers the
+        emails on my behalf. Every email carries an unsubscribe link, and unsubscribing takes
+        effect immediately.
+      </p>
+      <p><strong>Why:</strong> your consent, which you can withdraw at any time.</p>
+
+      <h2>Analytics and advertising cookies</h2>
+      <p>
+        Nothing optional runs until you choose. The banner you saw on your first visit sets
+        Google Consent Mode to denied by default, and the Meta Pixel's script is not even
+        downloaded until you accept — so rejecting is not a promise, it is the absence of a
+        request.
+      </p>
+      <p>If you accept, two things are switched on:</p>
+      <ul>
+        <li>
+          <strong>Google Analytics 4</strong> — how people find and move through the site, in
+          aggregate.
+        </li>
+        <li>
+          <strong>Meta Pixel</strong> (ID {META_PIXEL_ID}) — measuring and personalising
+          advertising.
+        </li>
+      </ul>
+      <p>
+        With advertising consent given, a lead you submit is also sent to Meta's Conversions API
+        from my server. Your email address and name are hashed before they leave the server, so
+        Meta receives an irreversible fingerprint rather than the values themselves. Your IP
+        address and user-agent are sent as they are, together with Meta's own <code>_fbp</code>
+        and <code>_fbc</code> cookies where they exist. Without advertising consent, none of this
+        is sent.
+      </p>
+      <p>
+        <strong>Why:</strong> your consent. You can change it at any time with the
+        <strong>Cookie settings</strong> link in the footer of every page.
+      </p>
+
+      <h2>Spam protection and server logs</h2>
+      <p>
+        Every form carries a hidden field that real people never fill in, and submissions are
+        rate-limited per IP address. Cloudflare Turnstile may also be used to tell people from
+        bots; where it is, Cloudflare receives your IP address and a token for that check alone.
+      </p>
+      <p>
+        The web server keeps standard access logs — IP address, timestamp, the URL requested, the
+        referrer and the user-agent — which roll over automatically.
+      </p>
+      <p><strong>Why:</strong> my legitimate interest in keeping the site up and free of abuse.</p>
+
+      <h2>What this site does not do</h2>
+      <ul>
+        <li>
+          Fonts are served from this domain. Visiting a page sends no request to Google Fonts and
+          discloses nothing to them.
+        </li>
+        <li>I do not sell personal data, and I do not buy it.</li>
+        <li>There is no automated decision-making and no profiling that produces legal effects.</li>
+      </ul>
+
+      <h2>Who else processes your data</h2>
+      <ul>
+        <li><strong>Hetzner</strong> — the server the site and its database run on (Germany).</li>
+        <li><strong>Hostinger</strong> — outgoing email for form notifications and confirmations.</li>
+        <li><strong>MailerLite</strong> — newsletter delivery.</li>
+        <li><strong>Google</strong> — Analytics, only with consent.</li>
+        <li><strong>Meta</strong> — Pixel and Conversions API, only with consent.</li>
+        <li><strong>Cloudflare</strong> — Turnstile bot checks, where enabled.</li>
+      </ul>
+      <p>
+        Some of these are outside the EU/EEA. Where that is the case, transfers rely on the
+        European Commission's Standard Contractual Clauses or an adequacy decision.
+        <mark
+          >REVIEW: confirm the transfer mechanism each provider actually offers you, and name it
+          here.</mark
+        >
+      </p>
+
+      <h2>How long it is kept</h2>
+      <ul>
+        <li>
+          <strong>Contact form enquiries</strong> — <mark>REVIEW: confirm a period, e.g. 24
+          months</mark> after our last contact, then deleted.
+        </li>
+        <li>
+          <strong>Newsletter subscribers</strong> — until you unsubscribe. Unconfirmed
+          subscriptions are discarded rather than kept.
+        </li>
+        <li><strong>Server access logs</strong> — rolled over on a short cycle, not archived.</li>
+        <li>
+          <strong>Analytics and advertising data</strong> — held by Google and Meta under their own
+          retention settings.
+        </li>
+      </ul>
+
+      <h2>Your rights</h2>
+      <p>
+        Under the GDPR you can ask me to give you a copy of your data, correct it, delete it,
+        restrict or object to how it is used, or hand it to another provider in a portable form.
+        Where processing rests on consent, you can withdraw that consent at any time — for cookies
+        through the footer link, for the newsletter through any unsubscribe link — and withdrawing
+        it does not affect what was lawful beforehand.
+      </p>
+      <p>
+        Email <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a> and I will
+        answer within one month.
+      </p>
+      <p>
+        If you think I have handled your data badly you can complain to a data protection
+        supervisory authority — in the EU, the one where you live or work.
+        <mark
+          >REVIEW: name the authority you fall under as controller, and link it.</mark
+        >
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this policy changes, the date at the top changes with it. Material changes to anything
+        resting on your consent will be asked for again rather than assumed.
+      </p>
+
+      <p>
+        See also the <a href="/terms/">Terms &amp; Conditions</a>.
+      </p>
+    </div>
+  </div>
+</Base>
