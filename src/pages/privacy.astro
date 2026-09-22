@@ -9,8 +9,8 @@ import { SITE, COMPANY, META_PIXEL_ID } from "../lib/site";
  * src/pages/api/lead.ts, src/lib/db.ts, src/lib/newsletter-store.mjs,
  * src/lib/mailerlite.mjs, src/lib/meta-capi.ts and src/layouts/Base.astro.
  *
- * noindex, like /thanks/ and the newsletter utility pages: this has to exist
- * and be linked, not rank. `noindex, follow` still lets crawlers read it.
+ * Indexable and in sitemap-pages.xml. A published privacy policy is a trust
+ * signal worth letting people find, and the footer links it from every page.
  */
 
 const updated = "23 September 2026";
@@ -19,7 +19,6 @@ const updated = "23 September 2026";
 <Base
   title={`Privacy Policy — ${SITE.name}`}
   description="What this site collects, why, who processes it, how long it is kept, and the rights you have over it."
-  noindex
 >
   <div class="wrap">
     <header class="page-head">

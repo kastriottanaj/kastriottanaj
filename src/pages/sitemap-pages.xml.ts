@@ -20,5 +20,7 @@ export function GET() {
     { path: "/process/" },
     { path: "/pricing/" },
     { path: "/contact/" },
+    { path: "/privacy/" },
+    { path: "/terms/" },
   ]);
 }

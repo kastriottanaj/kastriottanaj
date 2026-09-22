@@ -2,8 +2,7 @@
 import Base from "../layouts/Base.astro";
 import { SITE, COMPANY } from "../lib/site";
 
-/** noindex for the same reason as /privacy/: it has to exist and be linked,
-    not rank. */
+/** Indexable and in sitemap-pages.xml, for the same reason as /privacy/. */
 
 const updated = "23 September 2026";
 ---
@@ -11,7 +10,6 @@ const updated = "23 September 2026";
 <Base
   title={`Terms & Conditions — ${SITE.name}`}
   description="The terms you accept by using this site, and how they relate to paid work, bootcamps and the newsletter."
-  noindex
 >
   <div class="wrap">
     <header class="page-head">

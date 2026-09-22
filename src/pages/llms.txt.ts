@@ -133,6 +133,11 @@ ${list([
 
 - [Contact](${site}/contact/): Enquiries about SEO, digital marketing, AI automation and web development.
 ${SOCIALS.map((social) => `- [${social.label}](${social.href})`).join("\n")}
+
+## Legal
+
+- [Privacy Policy](${site}/privacy/): What the site collects, why, which processors see it, how long it is kept, and the rights you have over it.
+- [Terms & Conditions](${site}/terms/): The terms for using the site, and how they relate to paid work, bootcamps and the newsletter.
 `;
 
   return new Response(body, {
