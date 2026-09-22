@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { SITE, META_PIXEL_ID } from "../lib/site";
+import { SITE, COMPANY, META_PIXEL_ID } from "../lib/site";
 
 /**
  * Written against what the code actually does, not a generic template:
@@ -26,7 +26,7 @@ const updated = "22 September 2026";
       <span class="kicker">Legal</span>
       <h1 class="page-head__title">Privacy Policy</h1>
       <p class="page-head__lede">
-        What this site collects, why it collects it, who else sees it, and what you can ask me
+        What this site collects, why it collects it, who else sees it, and what you can ask us
         to do about it.
       </p>
       <p class="post__date">Last updated: {updated}</p>
@@ -35,8 +35,10 @@ const updated = "22 September 2026";
     <div class="prose prose--narrow">
       <h2>Who is responsible</h2>
       <p>
-        This site is run by {SITE.name}, {SITE.jobTitle}, based in {SITE.locality}, {SITE.countryName}.
-        I am the data controller for everything described here.
+        This site is operated by <strong>{COMPANY.legalName}</strong>, a{" "}
+        {COMPANY.jurisdiction} {COMPANY.entityType} trading as {SITE.name} at kastriottanaj.com.
+        The company is the data controller for everything described here. {SITE.name} runs it
+        from {SITE.locality}, {SITE.countryName}, and the servers are in Germany.
       </p>
       <p>
         Email: <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a><br />
@@ -44,34 +46,44 @@ const updated = "22 September 2026";
       </p>
       <p>
         <mark
-          >REVIEW: if you trade under a registered business name, add it and the registered
-          address here — GDPR Article 13 requires the controller's identity and contact
-          details, and a personal name alone is usually not enough.</mark
+          >REVIEW: add a postal address you actually receive mail at. Do NOT use the registered
+          agent's address ({COMPANY.registeredOffice}) — that is a service-of-process address
+          shared by thousands of companies, and a data subject writing there reaches a mail
+          handler, not you. Article 13 wants a contact point that works.</mark
         >
       </p>
       <p>
         <mark
-          >REVIEW: {SITE.countryName} is outside the EU/EEA. If you offer services to people in
-          the EU, check whether Article 27 obliges you to appoint an EU representative, and name
-          them here if so.</mark
+          >REVIEW: the controller is now a United States company, so it sits outside the EU/EEA
+          and Article 27 still applies — forming in Delaware sharpened this question rather than
+          settling it. An EU representative is required unless the Article 27(2) exemption fits:
+          processing that is occasional, excludes large-scale special-category data, and is
+          unlikely to risk people's rights. A lead form and a newsletter may well fit, but that is
+          a lawyer's call, not a guess. Name the representative here if one is appointed.</mark
+        >
+      </p>
+      <p>
+        <mark
+          >REVIEW: do not publish until the filed certificate is back from Delaware. Naming an
+          entity that does not legally exist yet is worse than naming none.</mark
         >
       </p>
 
       <h2>The contact form</h2>
       <p>
-        When you send the form on the contact page I receive your name, email address, the
+        When you send the form on the contact page we receive your name, email address, the
         service you selected and your message. Along with it the server records your IP address,
         your browser's user-agent string and the page that referred you.
       </p>
       <p>
-        That record is written to a database on my own server and emailed to me. The email is a
+        That record is written to a database on our own server and emailed to us. The email is a
         notification; the database is the copy that lasts, so a bounce or a spam folder is never
-        the difference between you writing to me and me never knowing.
+        the difference between you writing to us and us never knowing.
       </p>
       <p>
         <strong>Why:</strong> to answer you and to take steps you asked for before a possible
         contract. The IP, user-agent and referrer are kept for security and abuse prevention,
-        which is my legitimate interest in keeping the form usable.
+        which is our legitimate interest in keeping the form usable.
       </p>
 
       <h2>The newsletter</h2>
@@ -83,7 +95,7 @@ const updated = "22 September 2026";
       </p>
       <p>
         Confirmed subscribers are also passed to <strong>MailerLite</strong>, which delivers the
-        emails on my behalf. Every email carries an unsubscribe link, and unsubscribing takes
+        emails on our behalf. Every email carries an unsubscribe link, and unsubscribing takes
         effect immediately.
       </p>
       <p><strong>Why:</strong> your consent, which you can withdraw at any time.</p>
@@ -108,7 +120,7 @@ const updated = "22 September 2026";
       </ul>
       <p>
         With advertising consent given, a lead you submit is also sent to Meta's Conversions API
-        from my server. Your email address and name are hashed before they leave the server, so
+        from our server. Your email address and name are hashed before they leave the server, so
         Meta receives an irreversible fingerprint rather than the values themselves. Your IP
         address and user-agent are sent as they are, together with Meta's own <code>_fbp</code>
         and <code>_fbc</code> cookies where they exist. Without advertising consent, none of this
@@ -129,7 +141,7 @@ const updated = "22 September 2026";
         The web server keeps standard access logs — IP address, timestamp, the URL requested, the
         referrer and the user-agent — which roll over automatically.
       </p>
-      <p><strong>Why:</strong> my legitimate interest in keeping the site up and free of abuse.</p>
+      <p><strong>Why:</strong> our legitimate interest in keeping the site up and free of abuse.</p>
 
       <h2>What this site does not do</h2>
       <ul>
@@ -137,7 +149,7 @@ const updated = "22 September 2026";
           Fonts are served from this domain. Visiting a page sends no request to Google Fonts and
           discloses nothing to them.
         </li>
-        <li>I do not sell personal data, and I do not buy it.</li>
+        <li>We do not sell personal data, and we do not buy it.</li>
         <li>There is no automated decision-making and no profiling that produces legal effects.</li>
       </ul>
 
@@ -178,21 +190,24 @@ const updated = "22 September 2026";
 
       <h2>Your rights</h2>
       <p>
-        Under the GDPR you can ask me to give you a copy of your data, correct it, delete it,
+        Under the GDPR you can ask us to give you a copy of your data, correct it, delete it,
         restrict or object to how it is used, or hand it to another provider in a portable form.
         Where processing rests on consent, you can withdraw that consent at any time — for cookies
         through the footer link, for the newsletter through any unsubscribe link — and withdrawing
         it does not affect what was lawful beforehand.
       </p>
       <p>
-        Email <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a> and I will
+        Email <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a> and we will
         answer within one month.
       </p>
       <p>
-        If you think I have handled your data badly you can complain to a data protection
+        If you think we have handled your data badly you can complain to a data protection
         supervisory authority — in the EU, the one where you live or work.
         <mark
-          >REVIEW: name the authority you fall under as controller, and link it.</mark
+          >REVIEW: with a US controller and no EU establishment there is no single lead authority;
+          complaints go to the authority where the complainant lives, or to the one in the member
+          state where an Article 27 representative is based. Settle the representative question
+          above first, then word this to match.</mark
         >
       </p>
 

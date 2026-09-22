@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { SITE } from "../lib/site";
+import { SITE, COMPANY } from "../lib/site";
 
 /** noindex for the same reason as /privacy/: it has to exist and be linked,
     not rank. */
@@ -27,21 +27,32 @@ const updated = "22 September 2026";
     <div class="prose prose--narrow">
       <h2>Who these terms are with</h2>
       <p>
-        This site is operated by {SITE.name}, {SITE.jobTitle}, based in {SITE.locality},
-        {SITE.countryName} — "I" and "me" throughout. Using the site means accepting these terms.
-        If you do not accept them, please stop using it.
+        This site is operated by <strong>{COMPANY.legalName}</strong>, a{" "}
+        {COMPANY.jurisdiction} {COMPANY.entityType} trading as {SITE.name} at kastriottanaj.com —
+        "we" and "us"
+        throughout. Using the site means accepting these terms. If you do not accept them, please
+        stop using it.
+      </p>
+      <p>
+        Formal legal notices may be served on our registered agent:<br />
+        {COMPANY.registeredAgent}, {COMPANY.registeredOffice}.
+      </p>
+      <p>
+        For anything that is not formal service — questions, complaints, requests about your data —
+        use <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a>, which
+        reaches a person rather than a mail handler.
       </p>
       <p>
         <mark
-          >REVIEW: if you trade under a registered business name, name it and its registered
-          address here so the contracting party is unambiguous.</mark
+          >REVIEW: do not publish until the filed certificate is back from Delaware. Until then
+          the company is not yet a legal person and cannot be the contracting party.</mark
         >
       </p>
 
       <h2>The site is information, not an offer</h2>
       <p>
         The services, packages, prices and results described here are for information. Nothing on
-        this site is a binding offer, and publishing a price does not oblige me to accept a
+        this site is a binding offer, and publishing a price does not oblige us to accept a
         project at it.
       </p>
       <p>
@@ -53,9 +64,9 @@ const updated = "22 September 2026";
       <h2>Case studies and results</h2>
       <p>
         The outcomes shown in case studies and use cases happened for those clients, in their
-        markets, with their budgets and constraints. They are evidence of what I have done, not a
+        markets, with their budgets and constraints. They are evidence of what we have done, not a
         forecast of what your project will do. Search and advertising results depend on factors
-        outside my control, and I do not guarantee rankings, traffic or revenue.
+        outside our control, and we do not guarantee rankings, traffic or revenue.
       </p>
 
       <h2>Using the site</h2>
@@ -67,13 +78,13 @@ const updated = "22 September 2026";
         <li>use the contact form or newsletter to send unsolicited commercial messages.</li>
       </ul>
       <p>
-        Forms are rate-limited and protected against automated abuse. I may block access that
+        Forms are rate-limited and protected against automated abuse. We may block access that
         breaches these terms.
       </p>
 
       <h2>Intellectual property</h2>
       <p>
-        The text, design, code, images and video on this site are mine, or used with permission,
+        The text, design, code, images and video on this site are ours, or used with permission,
         and are protected by copyright. Client names and logos belong to their owners and appear
         with their agreement.
       </p>
@@ -86,7 +97,7 @@ const updated = "22 September 2026";
       <h2>The newsletter</h2>
       <p>
         Subscribing is free and confirmed by email before anything is sent. Every issue carries an
-        unsubscribe link that works immediately. I may change how often it goes out, or stop
+        unsubscribe link that works immediately. We may change how often it goes out, or stop
         sending it.
       </p>
 
@@ -100,26 +111,27 @@ const updated = "22 September 2026";
 
       <h2>Links to other sites</h2>
       <p>
-        Links to other sites are there because they were useful. I do not control them and am not
+        Links to other sites are there because they were useful. We do not control them and are not
         responsible for their content, their terms or how they handle your data.
       </p>
 
       <h2>Availability and liability</h2>
       <p>
-        I keep the site up and accurate, but I do not promise it will be uninterrupted, error-free,
+        We keep the site up and accurate, but we do not promise it will be uninterrupted, error-free,
         or right at every moment. It is provided as it is.
       </p>
       <p>
-        To the extent the law allows, I am not liable for indirect or consequential loss, lost
+        To the extent the law allows, we are not liable for indirect or consequential loss, lost
         profit, lost revenue or lost data arising from your use of this site.
         <strong
           >Nothing here limits liability for death or personal injury caused by negligence, for
           fraud, or for anything else that cannot lawfully be limited.</strong
         > Liability for paid work is governed by our written agreement.
         <mark
-          >REVIEW: have a lawyer confirm this clause is enforceable in your jurisdiction and
-          against the consumers you sell to — liability caps are the part most often struck
-          out.</mark
+          >REVIEW: have a lawyer confirm this clause survives both {COMPANY.jurisdiction} law and
+          the consumer protections of the European countries you sell into — liability caps are
+          the part most often struck out. An LLC limits your personal exposure; it does not make
+          this clause enforceable on its own.</mark
         >
       </p>
 
@@ -131,16 +143,26 @@ const updated = "22 September 2026";
 
       <h2>Changes</h2>
       <p>
-        I may update these terms. The date at the top shows when they last changed, and the version
+        We may update these terms. The date at the top shows when they last changed, and the version
         published here is the one that applies to your visit.
       </p>
 
       <h2>Governing law</h2>
       <p>
+        These terms are governed by the laws of the State of {COMPANY.jurisdiction},{" "}
+        {COMPANY.country}, and the courts of {COMPANY.jurisdiction} have jurisdiction over any
+        dispute arising from them.
+      </p>
+      <p>
+        <strong>If you are a consumer in the EU or the UK, this does not take away the protections
+        of the country you live in.</strong> Mandatory consumer rights there apply whatever this
+        page says, and you may be able to bring proceedings in your own local courts.
+      </p>
+      <p>
         <mark
-          >REVIEW: name the governing law and the courts that have jurisdiction. Selling to EU
-          consumers limits how far you can override the protections of their home country, so
-          this is worth getting right rather than guessing.</mark
+          >REVIEW: Delaware is the natural default now the company is formed there, but have a
+          lawyer confirm it against where your clients actually are. Most of your work is in
+          Europe, and a Delaware forum clause is of limited practical use against an EU consumer.</mark
         >
       </p>
 
