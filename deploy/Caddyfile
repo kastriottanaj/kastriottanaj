@@ -75,10 +75,10 @@ kastriottanaj.com {
 	# browser console lists what would have been.
 	#
 	# What each source is for:
-	#   script-src   the site's own bundles, the three inline scripts the build
-	#                ships (hashed — see below), gtag.js, Meta's fbevents.js and
-	#                Turnstile (wired in ContactForm.astro, off until a site key
-	#                is set).
+	#   script-src   the site's own bundles, the inline scripts the build ships
+	#                (hashed — see below), gtag.js, Meta's fbevents.js and
+	#                Turnstile (wired in ContactForm.astro; live since
+	#                2026-09-22, when the site key was set on the server).
 	#   style-src    Astro inlines small component CSS as <style> blocks whose
 	#                hashes change with every stylesheet edit, so inline styles
 	#                stay allowed. No style="" attributes ship.
@@ -92,6 +92,13 @@ kastriottanaj.com {
 	#                third-party cookies are blocked; Turnstile renders in one.
 	#   form-action  every form posts to /api/*.
 	#
+	# The fourth hash is Turnstile's loader. It is only emitted when
+	# PUBLIC_TURNSTILE_SITE_KEY is set, which is true on the server and false in
+	# CI and on a laptop — so `npm run check:csp` cannot see it locally and this
+	# hash went missing until the enforced policy blocked the live widget
+	# (2026-09-22). Run check:csp ON THE SERVER after changing anything that
+	# renders only when a PUBLIC_* var is present.
+	#
 	# The inline-script hashes are checked against the build on every deploy
 	# by scripts/check-csp.mjs: a changed inline script fails CI with the new
 	# hash, so this policy cannot drift from the HTML it governs. Nonces are
@@ -102,7 +109,7 @@ kastriottanaj.com {
 		Referrer-Policy "strict-origin-when-cross-origin"
 		X-Frame-Options "SAMEORIGIN"
 		Permissions-Policy "geolocation=(), microphone=(), camera=()"
-		Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-s8JG7eCbj5RAVVu+KU2+Dr6I9KzStfZH/x5s2aGFsp8=' 'sha256-6kZfrylAQz+H9lfJnHb9A5Mv1MwMN4xnitj+Y65DDro=' 'sha256-nlgIKvGkdJmXVqnWffSgngtox7XZSzh8ss1z4ENOwvk=' https://www.googletagmanager.com https://connect.facebook.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://*.google.com https://*.g.doubleclick.net; font-src 'self'; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://*.google.com https://*.g.doubleclick.net; frame-src https://www.facebook.com https://challenges.cloudflare.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-s8JG7eCbj5RAVVu+KU2+Dr6I9KzStfZH/x5s2aGFsp8=' 'sha256-6kZfrylAQz+H9lfJnHb9A5Mv1MwMN4xnitj+Y65DDro=' 'sha256-nlgIKvGkdJmXVqnWffSgngtox7XZSzh8ss1z4ENOwvk=' 'sha256-NdIalgNehnfftVlM9SAj7Z7qfEDo3QwqqLQDTIGbg+8=' https://www.googletagmanager.com https://connect.facebook.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://*.google.com https://*.g.doubleclick.net; font-src 'self'; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://*.google.com https://*.g.doubleclick.net; frame-src https://www.facebook.com https://challenges.cloudflare.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
 		-Server
 	}
 
