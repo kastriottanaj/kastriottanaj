@@ -45,21 +45,20 @@ const updated = "22 September 2026";
         Phone: <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a>
       </p>
       <p>
-        <mark
-          >REVIEW: add a postal address you actually receive mail at. Do NOT use the registered
-          agent's address ({COMPANY.registeredOffice}) — that is a service-of-process address
-          shared by thousands of companies, and a data subject writing there reaches a mail
-          handler, not you. Article 13 wants a contact point that works.</mark
-        >
+        Registered office: {COMPANY.registeredOffice}, c/o {COMPANY.registeredAgent}
+      </p>
+      <p>
+        Post sent there reaches our registered agent rather than us directly, so email is much
+        the faster route for anything about your data.
       </p>
       <p>
         <mark
-          >REVIEW: the controller is now a United States company, so it sits outside the EU/EEA
-          and Article 27 still applies — forming in Delaware sharpened this question rather than
-          settling it. An EU representative is required unless the Article 27(2) exemption fits:
-          processing that is occasional, excludes large-scale special-category data, and is
-          unlikely to risk people's rights. A lead form and a newsletter may well fit, but that is
-          a lawyer's call, not a guess. Name the representative here if one is appointed.</mark
+          >REVIEW — most likely YES, confirm with a lawyer. The controller is a United States
+          company, so it sits outside the EU/EEA and Article 27 applies unless the 27(2) exemption
+          fits. That exemption needs processing to be <em>occasional</em>. Clients are mostly in
+          the EU and the site runs a standing lead form and newsletter, which is regular and
+          deliberate rather than occasional — so the exemption looks like a poor fit here and an
+          EU representative is probably required. Name them here once appointed.</mark
         >
       </p>
       <p>
@@ -155,27 +154,44 @@ const updated = "22 September 2026";
 
       <h2>Who else processes your data</h2>
       <ul>
-        <li><strong>Hetzner</strong> — the server the site and its database run on (Germany).</li>
+        <li>
+          <strong>Hetzner</strong> — the server the site and its database run on. Germany, so the
+          data itself never leaves the EU.
+        </li>
         <li><strong>Hostinger</strong> — outgoing email for form notifications and confirmations.</li>
-        <li><strong>MailerLite</strong> — newsletter delivery.</li>
-        <li><strong>Google</strong> — Analytics, only with consent.</li>
-        <li><strong>Meta</strong> — Pixel and Conversions API, only with consent.</li>
-        <li><strong>Cloudflare</strong> — Turnstile bot checks, where enabled.</li>
+        <li>
+          <strong>MailerLite</strong> — newsletter delivery. Established in Lithuania, and its own
+          sub-processors are in the EU.
+        </li>
+        <li><strong>Google</strong> — Analytics, only with consent. United States.</li>
+        <li>
+          <strong>Meta</strong> — Pixel and Conversions API, only with consent. United States.
+        </li>
+        <li><strong>Cloudflare</strong> — Turnstile bot checks. United States.</li>
       </ul>
       <p>
-        Some of these are outside the EU/EEA. Where that is the case, transfers rely on the
-        European Commission's Standard Contractual Clauses or an adequacy decision.
+        The processors that hold your data at rest — the server and the newsletter platform — are
+        in the EU, so the contact form and the subscriber list stay inside it. The analytics,
+        advertising and bot-check providers are in the United States, and those transfers rest on
+        the data processing terms each one publishes, which incorporate the European Commission's
+        Standard Contractual Clauses. Nothing reaches Google or Meta at all unless you accept the
+        optional cookies.
+      </p>
+      <p>
         <mark
-          >REVIEW: confirm the transfer mechanism each provider actually offers you, and name it
-          here.</mark
+          >REVIEW: Hetzner's data processing agreement is not automatic — it has to be accepted
+          with a checkbox in the customer portal, and until that is done there is no Article 28
+          contract covering the server that holds every lead and subscriber. Accept it, then
+          delete this note. (MailerLite's is already in force: theirs forms part of the Terms of
+          Use, so agreeing to those concluded it.)</mark
         >
       </p>
 
       <h2>How long it is kept</h2>
       <ul>
         <li>
-          <strong>Contact form enquiries</strong> — <mark>REVIEW: confirm a period, e.g. 24
-          months</mark> after our last contact, then deleted.
+          <strong>Contact form enquiries</strong> — 24 months after our last contact with you,
+          then deleted.
         </li>
         <li>
           <strong>Newsletter subscribers</strong> — until you unsubscribe. Unconfirmed
