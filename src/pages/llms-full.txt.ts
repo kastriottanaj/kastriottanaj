@@ -1,6 +1,6 @@
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
-import { SITE } from "../lib/site";
+import { SITE, COMPANY, LEGAL_UPDATED } from "../lib/site";
 
 /**
  * The full text of the site's content pages, as one markdown file — the
@@ -80,7 +80,7 @@ export async function GET(context: APIContext) {
 
 ${SITE.jobTitle}, based in ${SITE.based}.
 
-This file is the full text of every service, use case, bootcamp, case study and blog post on ${site}, in that order. The site map with one line per page is at ${site}/llms.txt. Each entry below opens with its canonical URL.
+This file is the full text of every service, use case, bootcamp, case study and blog post on ${site}, in that order, followed by the legal pages. The site map with one line per page is at ${site}/llms.txt. Each entry below opens with its canonical URL.
 ${divider}${[
     ...services.map((s) =>
       entry({
@@ -156,6 +156,93 @@ ${divider}${[
         body: p.body,
       })
     ),
+    // Unlike everything above, these two are not content-collection markdown —
+    // the prose lives in src/pages/privacy.astro and terms.astro as JSX, so
+    // there is no `body` to read. These summaries are therefore maintained by
+    // hand: change either page and change the matching entry here. Entity
+    // details and the date come from src/lib/site.ts, so those cannot drift.
+    entry({
+      title: "Privacy Policy",
+      url: "/privacy/",
+      meta: ["Type: Legal", `Last updated: ${LEGAL_UPDATED}`],
+      lede: "What this site collects, why it collects it, who else sees it, and what you can ask us to do about it.",
+      body: `## Who is responsible
+
+${COMPANY.legalName}, a ${COMPANY.jurisdiction} ${COMPANY.entityType} trading as ${SITE.name} at kastriottanaj.com, is the data controller. ${SITE.name} runs it from ${SITE.locality}, ${SITE.countryName}, and the servers are in Germany. Contact: kastriot@kastriottanaj.com or ${SITE.phoneDisplay}. Registered office: ${COMPANY.registeredOffice}, c/o ${COMPANY.registeredAgent} — post there reaches the registered agent rather than us, so email is faster.
+
+## The contact form
+
+Collects name, email, the service selected and the message, and records IP address, user-agent and referrer alongside it. Written to a database on our own server and emailed as a notification; the database is the copy that lasts. Lawful basis: steps taken at your request before a possible contract, with the technical fields kept for security and abuse prevention as a legitimate interest.
+
+## The newsletter
+
+Stores the email address, the page subscribed from, IP address, user-agent and timestamps. Double opt-in — nothing is sent to an address that has not confirmed itself. Confirmed subscribers are passed to MailerLite, which delivers the emails. Lawful basis: consent, withdrawable at any time, and every email carries a working unsubscribe link.
+
+## Analytics and advertising cookies
+
+Nothing optional runs before you choose. Google Consent Mode defaults to denied and the Meta Pixel's script is not downloaded at all until you accept, so rejecting is the absence of a request rather than a promise. Accepting switches on Google Analytics 4 and the Meta Pixel. With advertising consent, a submitted lead is also sent to Meta's Conversions API from the server: email address and name are SHA-256 hashed before they leave, while IP address and user-agent are sent as they are, along with Meta's _fbp and _fbc cookies where present. Consent can be changed at any time through the Cookie settings link in the footer.
+
+## Spam protection and server logs
+
+Every form carries a hidden field real people never fill in, and submissions are rate-limited per IP address. Cloudflare Turnstile distinguishes people from bots. The web server keeps standard access logs — IP, timestamp, URL, referrer, user-agent — which roll over automatically. Lawful basis: legitimate interest in keeping the site usable and free of abuse.
+
+## What this site does not do
+
+Fonts are served from this domain, so visiting a page sends no request to Google Fonts. Personal data is neither sold nor bought. There is no automated decision-making and no profiling producing legal effects.
+
+## Who else processes the data
+
+Hetzner hosts the server and database in Germany. MailerLite delivers the newsletter from Lithuania, with EU-only sub-processors. Hostinger relays outgoing email. Google (Analytics), Meta (Pixel and Conversions API) and Cloudflare (Turnstile) are in the United States. The processors holding data at rest are in the EU, so leads and the subscriber list stay inside it; the US providers rest on the Standard Contractual Clauses in their published processing terms, and neither Google nor Meta is reached without consent. Article 28 agreements are in force with Hetzner and MailerLite.
+
+## How long it is kept
+
+Contact form enquiries: 24 months after the last contact, then deleted. Newsletter subscribers: until they unsubscribe, with unconfirmed subscriptions discarded rather than kept. Server access logs roll over on a short cycle and are not archived. Analytics and advertising data sit under Google's and Meta's own retention settings.
+
+## Your rights
+
+Access, rectification, erasure, restriction, objection and portability, plus withdrawal of consent at any time — through the footer link for cookies, through any unsubscribe link for the newsletter — without affecting what was lawful beforehand. Requests to kastriot@kastriottanaj.com are answered within one month. Complaints can go to a data protection supervisory authority, in the EU the one where you live or work.`,
+    }),
+    entry({
+      title: "Terms & Conditions",
+      url: "/terms/",
+      meta: ["Type: Legal", `Last updated: ${LEGAL_UPDATED}`],
+      lede: "The terms you accept by using this site, and where a separate agreement takes over instead.",
+      body: `## Who these terms are with
+
+${COMPANY.legalName}, a ${COMPANY.jurisdiction} ${COMPANY.entityType} trading as ${SITE.name} at kastriottanaj.com. Formal legal notices may be served on the registered agent, ${COMPANY.registeredAgent}, ${COMPANY.registeredOffice}; anything that is not formal service should go to kastriot@kastriottanaj.com, which reaches a person.
+
+## The site is information, not an offer
+
+Services, packages, prices and results described on the site are informational. Nothing there is a binding offer, and publishing a price does not oblige us to accept a project at it. Paid work begins only once a scope is agreed in writing, and where that agreement and these terms disagree, the agreement wins.
+
+## Case studies and results
+
+Outcomes shown happened for those clients, in their markets, with their budgets and constraints. They are evidence of past work, not a forecast. Search and advertising results depend on factors outside our control, and no rankings, traffic or revenue are guaranteed.
+
+## Using the site
+
+You agree not to submit false information or another person's details, attempt to break, overload or gain unauthorised access to the site or its server, scrape it in ways that degrade it for others, or use the forms to send unsolicited commercial messages. Forms are rate-limited and protected against automated abuse, and access that breaches these terms may be blocked.
+
+## Intellectual property
+
+Text, design, code, images and video are ours or used with permission, and are protected by copyright. Client names and logos belong to their owners and appear with agreement. Reading, linking and short quotation with attribution are fine; republishing substantial parts is not. Rights in work produced under a client engagement are governed by that engagement.
+
+## Newsletter, bootcamps and the community
+
+Subscribing is free and confirmed by email first, with a working unsubscribe link in every issue. Bootcamps and the community are described ahead of opening and those descriptions may change; joining either is subject to its own terms and pricing at the time, together with the terms of any third-party platform it runs on.
+
+## Links, availability and liability
+
+Links to other sites are not under our control and we are not responsible for their content or data handling. The site is provided as it is, with no promise that it will be uninterrupted or error-free. To the extent the law allows, we are not liable for indirect or consequential loss, lost profit, lost revenue or lost data. Nothing limits liability for death or personal injury caused by negligence, for fraud, or for anything else that cannot lawfully be limited. Liability for paid work is governed by the written agreement.
+
+## Governing law
+
+The laws of the State of ${COMPANY.jurisdiction}, ${COMPANY.country}, with the courts of ${COMPANY.jurisdiction} having jurisdiction. Consumers in the EU or the UK keep the mandatory protections of the country they live in whatever this page says, and may be able to bring proceedings in their own local courts.
+
+## Privacy
+
+How the site handles personal data is set out in the Privacy Policy at ${site}/privacy/, which forms part of these terms.`,
+    }),
   ].join(divider)}
 `;
 

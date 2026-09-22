@@ -42,6 +42,10 @@ export const COMPANY = {
   registeredOffice: "8 The Green STE R, Dover, DE 19901, United States",
 } as const;
 
+/** The date shown on /privacy/ and /terms/, and repeated in llms-full.txt.
+    Bump it whenever either page's substance changes. */
+export const LEGAL_UPDATED = "23 September 2026";
+
 /** Social profiles, in the order they're shown everywhere. The nav, the footer,
     /about/ and every schema.org `sameAs` read this one list, so a new channel
     is added here and nowhere else. `icon` is a sprite id from IconSprite. */

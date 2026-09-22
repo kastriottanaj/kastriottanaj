@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { SITE, COMPANY, META_PIXEL_ID } from "../lib/site";
+import { SITE, COMPANY, META_PIXEL_ID, LEGAL_UPDATED } from "../lib/site";
 
 /**
  * Written against what the code actually does, not a generic template:
@@ -13,7 +13,7 @@ import { SITE, COMPANY, META_PIXEL_ID } from "../lib/site";
  * signal worth letting people find, and the footer links it from every page.
  */
 
-const updated = "23 September 2026";
+const updated = LEGAL_UPDATED;
 ---
 
 <Base

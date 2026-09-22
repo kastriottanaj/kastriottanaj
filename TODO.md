@@ -126,6 +126,23 @@ ssh root@46.224.183.175 'cd /var/www/kastriottanaj/current && sudo -u deploy npm
 Locally that same check now reports the Turnstile hash as "unused, could be
 dropped". That advice is wrong. It exits 0, so CI stays green.
 
+### 3.2b The legal pages appear in three places, one of them by hand
+
+`/privacy/` and `/terms/` are indexable, so `check:sitemap` requires each to be
+in **both** a sitemap and `llms.txt` — dropping `noindex` without adding both
+fails the build. Three files move together: the page, `sitemap-pages.xml.ts`,
+and `llms.txt.ts`.
+
+`llms-full.txt` is the exception nothing enforces. Every other entry there reads
+its body from a content collection, but these two are `.astro` prose with no
+`body` to read, so the summaries in `llms-full.txt.ts` are **maintained by
+hand**. Change either page and change the matching entry. Entity details and the
+date interpolate from `src/lib/site.ts` (`COMPANY`, `LEGAL_UPDATED`), so those
+cannot drift — only the narrative can.
+
+Bump `LEGAL_UPDATED` in `src/lib/site.ts` whenever either page's substance
+changes; it feeds both pages and `llms-full.txt`.
+
 ### 3.3 `/etc/kastriottanaj/env` must be mode 640
 
 Owner `root`, group `deploy`. At 600 the deploy user cannot read it, the
