@@ -642,8 +642,7 @@ body:has(.services-page) .footer__inner {
     font-size: 9.5px;
   }
 
-  .services-cta,
-  body:has(.services-page) .footer {
+  .services-cta {
     display: none;
   }
 
