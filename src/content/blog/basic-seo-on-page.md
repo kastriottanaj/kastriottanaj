@@ -5,6 +5,8 @@ metaTitle: "Basic On Page SEO: A Beginner's Guide"
 metaDescription: "Learn basic on page SEO — search intent, natural keyword placement, meta title and description, and heading structure. Read the beginner guide."
 pubDate: 2026-09-23
 tags: ["SEO", "On Page SEO"]
+image: "/assets/blog/basic-seo-on-page.webp"
+imageAlt: "A laptop showing a wireframed landing page next to a page of search results, beside a notebook of hand-drawn page layouts"
 cluster: "seo-bootcamp"
 related: ["seo-and-geo", "local-seo-checklist-for-service-businesses"]
 draft: false
