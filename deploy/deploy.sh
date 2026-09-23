@@ -44,26 +44,28 @@ retry() {
 
 rollback() {
   echo "!! deployment failed — rolling back to ${PREVIOUS:0:8}"
-  git reset --hard "$PREVIOUS"
-  npm ci --no-audit --no-fund
-  npm run build
-  sudo systemctl restart "$SERVICE"
+  # Handle each stage explicitly: a second failure must stop recovery and
+  # report it, never recurse into rollback or claim the old release is live.
+  if ! {
+    git reset --hard "$PREVIOUS" &&
+    npm ci --no-audit --no-fund &&
+    npm run build &&
+    npm run check:csp &&
+    sudo systemctl restart "$SERVICE" &&
+    sleep 2 &&
+    systemctl is-active --quiet "$SERVICE"
+  }; then
+    echo "!! rollback failed — manual recovery required. Check: journalctl -u ${SERVICE} -n 50" >&2
+    exit 1
+  fi
   echo "!! rolled back. Check: journalctl -u ${SERVICE} -n 50"
   exit 1
 }
 
 cd "$APP_ROOT"
 
-log "Fetching ${BRANCH}"
-retry git fetch --prune origin
-PREVIOUS="$(git rev-parse HEAD)"
-git reset --hard "origin/${BRANCH}"
-echo "  ${PREVIOUS:0:8} -> $(git rev-parse --short HEAD)"
-
-log "Dependencies"
-npm ci --no-audit --no-fund
-
-log "Building"
+# Load before changing the checkout or dependencies so an early failure can
+# rebuild the previous release with the same production environment.
 # PUBLIC_* vars are baked into the HTML, so they must be present at build time.
 # Test readability, not just existence: the file is root:deploy 640, and a bare
 # -f check passes for a file this user cannot actually open.
@@ -74,10 +76,25 @@ if [[ -r /etc/kastriottanaj/env ]]; then
 else
   echo "  note: /etc/kastriottanaj/env not readable — building without PUBLIC_* vars"
 fi
-npm run build
+
+log "Fetching ${BRANCH}"
+retry git fetch --prune origin
+PREVIOUS="$(git rev-parse HEAD)"
+git reset --hard "origin/${BRANCH}" || rollback
+echo "  ${PREVIOUS:0:8} -> $(git rev-parse --short HEAD)"
+
+log "Dependencies"
+npm ci --no-audit --no-fund || rollback
+
+log "Building"
+npm run build || rollback
+
+# The server's PUBLIC_* values can add scripts that the CI build never saw.
+log "Checking production CSP"
+npm run check:csp || rollback
 
 log "Restarting ${SERVICE}"
-sudo systemctl restart "$SERVICE"
+sudo systemctl restart "$SERVICE" || rollback
 
 # Give it a moment, then prove it actually came up.
 sleep 2
