@@ -6,7 +6,7 @@ metaDescription: "Learn basic on page SEO — search intent, natural keyword pla
 pubDate: 2026-09-23
 tags: ["SEO", "On Page SEO"]
 image: "/assets/blog/basic-seo-on-page.webp"
-imageAlt: "A laptop showing a wireframed landing page next to a page of search results, beside a notebook of hand-drawn page layouts"
+imageAlt: "A laptop showing a landing page wireframe with a yellow call-to-action button next to search results, and a notebook of layout sketches"
 cluster: "seo-bootcamp"
 related: ["seo-and-geo", "local-seo-checklist-for-service-businesses"]
 draft: false
