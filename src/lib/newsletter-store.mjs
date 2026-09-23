@@ -154,6 +154,23 @@ export function subscribe({ email, source = null, ip = null, userAgent = null })
 }
 
 /**
+ * Release the resend reservation after delivery fails. The token guards against
+ * a late failure clearing the cooldown for a newer request; confirmed and
+ * unsubscribed rows must also keep their current state.
+ *
+ * @param {string} email
+ * @param {string} confirmToken
+ */
+export function releaseConfirmationAttempt(email, confirmToken) {
+  db()
+    .prepare(
+      `UPDATE subscribers SET confirm_sent_at = NULL
+       WHERE email = ? AND confirm_token = ? AND status = 'pending'`
+    )
+    .run(normalizeEmail(email), confirmToken);
+}
+
+/**
  * Turns a pending row into a confirmed one. Idempotent: clicking the link twice
  * is a normal thing for people to do, and the second click must not read as an
  * error. Returns null only when the token matches nothing.
