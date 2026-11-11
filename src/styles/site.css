@@ -34,6 +34,9 @@ body { -webkit-font-smoothing: antialiased; text-wrap: pretty; }
   white-space: nowrap;
 }
 
+/* Keeps a name, or a "(Delaware, USA)", whole when the line it sits on wraps. */
+.nowrap { white-space: nowrap; }
+
 /* Kept out of flow rather than display:none so <use> stays reliable. */
 .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
@@ -223,6 +226,14 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
   font-size: 13px;
   color: color-mix(in srgb, var(--color-text) 65%, transparent);
 }
+/* The founder line under the location. It is a sentence rather than a label, so
+   it can wrap: the icon stays beside its first line instead of centring against
+   all of them, and the two rows sit closer together than the row above sits to
+   the buttons. Its links take the colour the prose links use. Scoped to the
+   modifier because .hero__meta is shared with /thanks/ and the use-case pages. */
+.hero .hero__meta--founder { margin-top: 8px; align-items: flex-start; }
+.hero__meta--founder .icon { margin-top: 2.5px; }
+.hero__meta--founder a { color: var(--color-accent-700); text-underline-offset: 2px; }
 .hero__figure { width: 100%; border: var(--rule) solid var(--color-divider); }
 .hero__figure img { width: 100%; height: auto; }
 
@@ -485,6 +496,27 @@ section[id], main[id], #top { scroll-margin-top: 76px; }
   margin: 0;
 }
 .service__more { margin-top: auto; align-self: flex-start; }
+
+/* ── Companies & products ────────────────────────────────────────────────── */
+/* Cells of the ruled grid, like Services, but each carries a role line between
+   the name and the description. The link sinks to the foot so the two cards'
+   links line up whatever the length of the copy above them. */
+.venture {
+  background: var(--color-bg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.venture__title { font-size: 18px; margin: 0; }
+.venture__role { font-size: 13.5px; font-weight: 600; margin: 0; }
+.venture__desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: 0 0 6px;
+}
+.venture__more { margin-top: auto; align-self: flex-start; }
 
 /* ── Process ─────────────────────────────────────────────────────────────── */
 .steps {
@@ -782,6 +814,13 @@ textarea.input { min-height: 100px; }
   margin: 0;
 }
 .footer__link:hover { color: var(--color-accent-700); }
+/* The copyright with, under it, who the commercial side belongs to. Both lines
+   are .footer__copy, so the pages that restyle that class restyle these too.
+   The block yields width to the links before they wrap onto a row of their own,
+   and the sentence is capped so it breaks over two lines rather than one long
+   one. */
+.footer__legal { flex: 1 1 320px; display: flex; flex-direction: column; gap: 4px; }
+.footer__company { max-width: 58ch; }
 .footer__links { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; }
 /* The channels, as marks rather than four more words in the link row. They sit
    a shade darker than the text links beside them: a 17px glyph at the text

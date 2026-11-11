@@ -42,6 +42,19 @@ export const COMPANY = {
   registeredOffice: "8 The Green STE R, Dover, DE 19901, United States",
 } as const;
 
+/** Where the homepage sends people to learn about the company and the product
+    it owns. The hero credentials line and the "Companies & Products I Run"
+    cards both read these, so an address is changed here and nowhere else.
+
+    `company.href` currently points at https://vercel.app, which is Vercel's own
+    domain: it 308-redirects to https://vercel.com (checked 11 Nov 2026), so it
+    sends people to the host rather than to anything about the company. Swap in
+    the company's own page once it has one. */
+export const VENTURES = {
+  company: { name: COMPANY.legalName, href: "https://vercel.app" },
+  visifluent: { name: "Visifluent", domain: "visifluent.com", href: "https://visifluent.com" },
+} as const;
+
 /** The date shown on /privacy/ and /terms/, and repeated in llms-full.txt.
     Bump it whenever either page's substance changes. */
 export const LEGAL_UPDATED = "23 September 2026";
