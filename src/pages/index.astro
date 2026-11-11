@@ -7,7 +7,7 @@ import CommunityBand from "../components/CommunityBand.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import ContactForm from "../components/ContactForm.astro";
 import NewsletterForm from "../components/NewsletterForm.astro";
-import { SITE, SOCIAL_URLS } from "../lib/site";
+import { COMPANY, SITE, SOCIAL_URLS, VENTURES } from "../lib/site";
 
 const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -44,6 +44,28 @@ const second = {
   imageWidth: 800,
   imageHeight: 600,
 };
+
+/* The companies behind the work, shown under the Featured results. Both links
+   leave the site, so the cards open them in a new tab. */
+const ventures = [
+  {
+    name: VENTURES.company.name,
+    role: "Founder & Managing Member",
+    summary:
+      "My Delaware-registered company providing B2B SEO consulting, web development, digital marketing education, and proprietary SaaS tools.",
+    linkLabel: "View corporate profile →",
+    href: VENTURES.company.href,
+  },
+  {
+    name: VENTURES.visifluent.name,
+    role: "Creator & Lead Developer",
+    ownedBy: COMPANY.legalName,
+    summary:
+      "An all-in-one SEO and AI visibility platform built to audit websites, track daily Google rankings, and monitor brand mentions across ChatGPT, Perplexity, Claude, and Gemini.",
+    linkLabel: "Explore Visifluent →",
+    href: VENTURES.visifluent.href,
+  },
+];
 
 const services = (await getCollection("services")).sort((a, b) => a.data.order - b.data.order);
 
@@ -141,6 +163,20 @@ const website = {
         <p class="hero__meta">
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin" /></svg>
           <span>Based in {SITE.based}</span>
+        </p>
+        <p class="hero__meta hero__meta--founder">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-building" /></svg>
+          {/* Each {" "} is load-bearing: compressHTML drops the whitespace at a line
+              break next to an element or expression, which would run "of" into the
+              link and the link into "(Delaware". The .nowrap spans are the units a
+              narrow screen may not split — the name, "(Delaware, USA)" and
+              "& Visifluent (visifluent.com)" — so the line breaks between them. */}
+          <span>
+            Founder &amp; Operator of{" "}
+            <a class="nowrap" href={VENTURES.company.href} target="_blank" rel="noopener noreferrer">{COMPANY.legalName}</a>{" "}
+            <span class="nowrap">({COMPANY.jurisdiction}, USA)</span>{" "}
+            <span class="nowrap">&amp; <a href={VENTURES.visifluent.href} target="_blank" rel="noopener noreferrer">{VENTURES.visifluent.name} ({VENTURES.visifluent.domain})</a></span>
+          </span>
         </p>
       </div>
       <div class="hero__figure hero__figure--video">
@@ -272,6 +308,31 @@ const website = {
                 <p class="case__desc">{entry.data.summary}</p>
                 <a class="arrow-link" href={`/work/${entry.id}/`}>View project →</a>
               </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Companies & products ─────────────────────────────────────────── -->
+    <section class="section section--ruled" id="ventures">
+      <h2 class="kicker">Companies &amp; Products I Run</h2>
+      <div class="ruled-grid ruled-grid--wide">
+        {
+          ventures.map((venture) => (
+            <article class="venture">
+              <h3 class="venture__title">{venture.name}</h3>
+              <p class="venture__role">
+                {venture.role}{" "}
+                {venture.ownedBy && <span class="nowrap">(Owned by {venture.ownedBy})</span>}
+              </p>
+              <p class="venture__desc">{venture.summary}</p>
+              <a
+                class="arrow-link venture__more"
+                href={venture.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >{venture.linkLabel}</a>
             </article>
           ))
         }
