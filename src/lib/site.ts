@@ -46,7 +46,7 @@ export const COMPANY = {
     it owns. The hero credentials line and the "Companies & Products I Run"
     cards both read these, so an address is changed here and nowhere else. */
 export const VENTURES = {
-  company: { name: COMPANY.legalName, href: "https://marketingchains.vercel.app" },
+  company: { name: COMPANY.legalName, href: "https://marketingchains.com" },
   visifluent: { name: "Visifluent", domain: "visifluent.com", href: "https://visifluent.com" },
 } as const;
 
