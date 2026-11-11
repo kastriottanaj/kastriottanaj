@@ -44,14 +44,9 @@ export const COMPANY = {
 
 /** Where the homepage sends people to learn about the company and the product
     it owns. The hero credentials line and the "Companies & Products I Run"
-    cards both read these, so an address is changed here and nowhere else.
-
-    `company.href` currently points at https://vercel.app, which is Vercel's own
-    domain: it 308-redirects to https://vercel.com (checked 11 Nov 2026), so it
-    sends people to the host rather than to anything about the company. Swap in
-    the company's own page once it has one. */
+    cards both read these, so an address is changed here and nowhere else. */
 export const VENTURES = {
-  company: { name: COMPANY.legalName, href: "https://vercel.app" },
+  company: { name: COMPANY.legalName, href: "https://marketingchains.vercel.app" },
   visifluent: { name: "Visifluent", domain: "visifluent.com", href: "https://visifluent.com" },
 } as const;
 
