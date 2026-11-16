@@ -1,6 +1,6 @@
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
-import { SITE, COMPANY, LEGAL_UPDATED } from "../lib/site";
+import { SITE, COMPANY, COMMUNITY, VENTURES, LEGAL_UPDATED } from "../lib/site";
 
 /**
  * The full text of the site's content pages, as one markdown file — the
@@ -156,11 +156,12 @@ ${divider}${[
         body: p.body,
       })
     ),
-    // Unlike everything above, these two are not content-collection markdown —
-    // the prose lives in src/pages/privacy.astro and terms.astro as JSX, so
-    // there is no `body` to read. These summaries are therefore maintained by
-    // hand: change either page and change the matching entry here. Entity
-    // details and the date come from src/lib/site.ts, so those cannot drift.
+    // Unlike everything above, these three are not content-collection markdown —
+    // the prose lives in src/pages/privacy.astro, terms.astro and imprint.astro
+    // as JSX, so there is no `body` to read. These summaries are therefore
+    // maintained by hand: change any of the pages and change the matching entry
+    // here. Entity details and the date come from src/lib/site.ts, so those
+    // cannot drift.
     entry({
       title: "Privacy Policy",
       url: "/privacy/",
@@ -242,6 +243,28 @@ The laws of the State of ${COMPANY.jurisdiction}, ${COMPANY.country}, with the c
 ## Privacy
 
 How the site handles personal data is set out in the Privacy Policy at ${site}/privacy/, which forms part of these terms.`,
+    }),
+    entry({
+      title: "Imprint",
+      url: "/imprint/",
+      // No date: the imprint changes when COMPANY does, not on its own schedule.
+      meta: ["Type: Legal"],
+      lede: "Who operates this site, and how to reach them.",
+      body: `## Who operates this site
+
+${COMPANY.legalName}, a ${COMPANY.jurisdiction} ${COMPANY.entityType} trading as ${SITE.name} at kastriottanaj.com. ${SITE.name} is its founder and managing member. Commercial services, courses, and SaaS products are operated and billed through ${COMPANY.legalName} (${COMPANY.jurisdiction}, USA): the services described on the site, the bootcamps, the ${COMMUNITY.name} community on Skool, and ${VENTURES.visifluent.name} (${VENTURES.visifluent.domain}), the platform the company owns. The company's own site is ${VENTURES.company.href}.
+
+## Contact
+
+kastriot@kastriottanaj.com, ${SITE.phoneDisplay}. Based in ${SITE.based}.
+
+## Registered office
+
+${COMPANY.registeredAgent}, ${COMPANY.registeredOffice}. Formal legal notices may be served on the registered agent at that address; email is much the faster route for anything else.
+
+## Legal pages
+
+Terms & Conditions at ${site}/terms/ and Privacy Policy at ${site}/privacy/.`,
     }),
   ].join(divider)}
 `;
