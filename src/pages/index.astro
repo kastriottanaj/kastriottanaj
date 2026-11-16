@@ -7,7 +7,7 @@ import CommunityBand from "../components/CommunityBand.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import ContactForm from "../components/ContactForm.astro";
 import NewsletterForm from "../components/NewsletterForm.astro";
-import { COMPANY, SITE, SOCIAL_URLS, VENTURES } from "../lib/site";
+import { COMMUNITY, COMPANY, SITE, SOCIAL_URLS, VENTURES } from "../lib/site";
 
 const cases = (await getCollection("work", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -168,14 +168,16 @@ const website = {
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-building" /></svg>
           {/* Each {" "} is load-bearing: compressHTML drops the whitespace at a line
               break next to an element or expression, which would run "of" into the
-              link and the link into "(Delaware". The .nowrap spans are the units a
-              narrow screen may not split — the name, "(Delaware, USA)" and
-              "& Visifluent (visifluent.com)" — so the line breaks between them. */}
+              link and the link into "(Delaware". The .nowrap elements are the units
+              a narrow screen may not split — the company name, "(Delaware, USA),",
+              Visifluent, and "& AI SEO - Marketing Hub (Skool community)" — so the
+              line breaks between them. */}
           <span>
             Founder &amp; Operator of{" "}
             <a class="nowrap" href={VENTURES.company.href} target="_blank" rel="noopener noreferrer">{COMPANY.legalName}</a>{" "}
-            <span class="nowrap">({COMPANY.jurisdiction}, USA)</span>{" "}
-            <span class="nowrap">&amp; <a href={VENTURES.visifluent.href} target="_blank" rel="noopener noreferrer">{VENTURES.visifluent.name} ({VENTURES.visifluent.domain})</a></span>
+            <span class="nowrap">({COMPANY.jurisdiction}, USA),</span>{" "}
+            <a class="nowrap" href={VENTURES.visifluent.href} target="_blank" rel="noopener noreferrer">{VENTURES.visifluent.name} ({VENTURES.visifluent.domain})</a>{" "}
+            <span class="nowrap">&amp; <a href={COMMUNITY.href} target="_blank" rel="noopener noreferrer">{COMMUNITY.name}</a> (Skool community)</span>
           </span>
         </p>
       </div>

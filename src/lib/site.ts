@@ -96,6 +96,8 @@ export const META_PIXEL_ID = "1616830733405682";
     the band both send people to its Skool page, in a new tab since it is
     another site, so the address is changed here and nowhere else. */
 export const COMMUNITY = {
+  /** The community's name, as it is titled on Skool. */
+  name: "AI SEO - Marketing Hub",
   /** Kept short: it is set in caps and has to survive a phone-width strip. */
   shortName: "SEO Community",
   strip: "Opening soon · SEO automation community on Skool",
