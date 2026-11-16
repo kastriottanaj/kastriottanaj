@@ -1,0 +1,81 @@
+---
+import Base from "../layouts/Base.astro";
+import { COMMUNITY, COMPANY, SITE, VENTURES } from "../lib/site";
+
+/**
+ * Who operates the site, in the one place a visitor looks for it. Every fact
+ * here is one the site already states elsewhere — the entity and the registered
+ * agent in /terms/ and /privacy/, the contact details in /privacy/ — and all of
+ * it is read from src/lib/site.ts, so nothing is typed twice and nothing can
+ * drift from those pages.
+ *
+ * Indexable and in sitemap-pages.xml and llms.txt, like /privacy/ and /terms/,
+ * and linked from the footer on every page. It carries no "last updated" date:
+ * it changes when the company's details do, which moves COMPANY, not this file.
+ */
+
+const companySite = new URL(VENTURES.company.href).host;
+---
+
+<Base
+  title={`Imprint — ${SITE.name}`}
+  description={`Who operates this site: ${COMPANY.legalName}, a ${COMPANY.jurisdiction} ${COMPANY.entityType}, with its contact details and registered agent.`}
+>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Legal</span>
+      <h1 class="page-head__title">Imprint</h1>
+      <p class="page-head__lede">Who operates this site, and how to reach them.</p>
+    </header>
+
+    <div class="prose prose--narrow">
+      {/* TODO(legal): what is published here is what the site already says elsewhere.
+          Not included: the Delaware file number, any tax or VAT ID, and a business
+          address where the company can be served — the registered agent's address
+          below is not one. Confirm with a lawyer what an imprint has to carry for a
+          Delaware company selling into the EU (Germany's DDG §5 in particular), then
+          add it here. See TODO.md. */}
+
+      <h2>Who operates this site</h2>
+      <p>
+        This site is operated by <strong>{COMPANY.legalName}</strong>, a{" "}
+        {COMPANY.jurisdiction} {COMPANY.entityType} trading as {SITE.name} at kastriottanaj.com.{" "}
+        {SITE.name} is its founder and managing member.
+      </p>
+      <p>
+        Commercial services, courses, and SaaS products are operated and billed through{" "}
+        {COMPANY.legalName} ({COMPANY.jurisdiction}, USA). That covers the SEO, digital marketing,
+        AI automation and web development services described on this site, the bootcamps, the{" "}
+        {COMMUNITY.name} community on Skool, and {VENTURES.visifluent.name}{" "}
+        ({VENTURES.visifluent.domain}), the platform the company owns.
+      </p>
+      <p>
+        The company's own site is{" "}
+        <a href={VENTURES.company.href} target="_blank" rel="noopener noreferrer">{companySite}</a>.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Email: <a href="mailto:kastriot@kastriottanaj.com">kastriot@kastriottanaj.com</a><br />
+        Phone: <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a><br />
+        Based in {SITE.based}
+      </p>
+
+      <h2>Registered office</h2>
+      <p>
+        {COMPANY.registeredAgent}, {COMPANY.registeredOffice}
+      </p>
+      <p>
+        Formal legal notices may be served on our registered agent at that address. Post sent
+        there reaches the agent rather than us directly, so email is much the faster route for
+        anything else.
+      </p>
+
+      <h2>Legal pages</h2>
+      <p>
+        The terms for using this site are in the <a href="/terms/">Terms &amp; Conditions</a>, and
+        how it handles personal data is in the <a href="/privacy/">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+</Base>

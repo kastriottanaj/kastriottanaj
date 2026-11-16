@@ -1,6 +1,6 @@
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
-import { SITE, SOCIALS } from "../lib/site";
+import { COMPANY, SITE, SOCIALS } from "../lib/site";
 
 /** A plain-text map of the site for language models — see llmstxt.org. */
 export async function GET(context: APIContext) {
@@ -138,6 +138,7 @@ ${SOCIALS.map((social) => `- [${social.label}](${social.href})`).join("\n")}
 
 - [Privacy Policy](${site}/privacy/): What the site collects, why, which processors see it, how long it is kept, and the rights you have over it.
 - [Terms & Conditions](${site}/terms/): The terms for using the site, and how they relate to paid work, bootcamps and the newsletter.
+- [Imprint](${site}/imprint/): Who operates the site — ${COMPANY.legalName}, a ${COMPANY.jurisdiction} ${COMPANY.entityType} — with its contact details and registered agent.
 `;
 
   return new Response(body, {

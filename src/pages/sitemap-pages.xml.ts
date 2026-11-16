@@ -22,5 +22,6 @@ export function GET() {
     { path: "/contact/" },
     { path: "/privacy/" },
     { path: "/terms/" },
+    { path: "/imprint/" },
   ]);
 }

@@ -58,6 +58,21 @@ The pages name Marketing Chains LLC as controller and contracting party. Under
 stamped copy arrives, so this is sound today. Confirm the filing was accepted
 when the paperwork lands.
 
+### 1.7 Imprint — what it has to carry
+
+`/imprint/` names Marketing Chains LLC as the operator, with its contact details
+and registered agent, all taken from facts the site already states elsewhere. It
+leaves out what the site does not publish anywhere: the Delaware file number, any
+tax or VAT ID, and a business address where the company can be served — the
+registered agent's address is for service of process, not a place to reach
+Kastriot. Whether an imprint is required for a Delaware company selling into the
+EU, and what it must carry (Germany's DDG §5 is the strictest), belongs with the
+questions above. `marketingchains.com` and `visifluent.com` have no imprint page
+either (checked 16 November 2026).
+
+**If more is needed:** add it to `src/pages/imprint.astro` and the matching entry
+in `llms-full.txt.ts`. The entity details come from `COMPANY` in `src/lib/site.ts`.
+
 ---
 
 ## 2. Worth doing, no deadline
@@ -128,20 +143,21 @@ dropped". That advice is wrong. It exits 0, so CI stays green.
 
 ### 3.2b The legal pages appear in three places, one of them by hand
 
-`/privacy/` and `/terms/` are indexable, so `check:sitemap` requires each to be
+`/privacy/`, `/terms/` and `/imprint/` are indexable, so `check:sitemap` requires each to be
 in **both** a sitemap and `llms.txt` — dropping `noindex` without adding both
 fails the build. Three files move together: the page, `sitemap-pages.xml.ts`,
 and `llms.txt.ts`.
 
 `llms-full.txt` is the exception nothing enforces. Every other entry there reads
-its body from a content collection, but these two are `.astro` prose with no
+its body from a content collection, but these three are `.astro` prose with no
 `body` to read, so the summaries in `llms-full.txt.ts` are **maintained by
-hand**. Change either page and change the matching entry. Entity details and the
+hand**. Change any of them and change the matching entry. Entity details and the
 date interpolate from `src/lib/site.ts` (`COMPANY`, `LEGAL_UPDATED`), so those
 cannot drift — only the narrative can.
 
-Bump `LEGAL_UPDATED` in `src/lib/site.ts` whenever either page's substance
-changes; it feeds both pages and `llms-full.txt`.
+Bump `LEGAL_UPDATED` in `src/lib/site.ts` whenever the Privacy Policy's or the
+Terms' substance changes; it feeds those two pages and `llms-full.txt`. The
+imprint carries no date.
 
 ### 3.3 `/etc/kastriottanaj/env` must be mode 640
 
