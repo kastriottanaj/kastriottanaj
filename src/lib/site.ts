@@ -92,16 +92,15 @@ export const SOCIAL_URLS = SOCIALS.map((s) => s.href);
     HTML, and the Conversions API posts server events against the same ID. */
 export const META_PIXEL_ID = "1616830733405682";
 
-/** The Skool community, announced on the homepage before it opens. Until there
-    is a Skool URL to send people to, both CTAs point at the on-site waitlist —
-    swap `waitlistHref` for the Skool link on launch and the strip, the band and
-    the nav all follow. */
+/** The Skool community, announced on the homepage while it opens. The strip and
+    the band both send people to its Skool page, in a new tab since it is
+    another site, so the address is changed here and nowhere else. */
 export const COMMUNITY = {
   /** Kept short: it is set in caps and has to survive a phone-width strip. */
   shortName: "SEO Community",
   strip: "Opening soon · SEO automation community on Skool",
   stripCta: "Join the waitlist",
-  waitlistHref: "/#waitlist",
+  href: "https://www.skool.com/ai-seo-marketing-club-6607/about",
 } as const;
 
 export const NAV = [
